@@ -1,0 +1,18 @@
+{
+	"source": "https://github.com/color-js/color.js",
+	"paths": [
+		"_includes/partials",
+		"_includes/page.njk",
+		"_includes/plain.njk",
+		"_data/eleventyComputed.js",
+		["_build/eleventy.js", "_build/eleventy-original.js"],
+		"_build/filters.js"
+	],
+	"scripts": [
+		"build:html",
+		"watch:html"
+	],
+	"packages": [
+		"@11ty/eleventy"
+	]
+}

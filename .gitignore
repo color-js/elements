@@ -7,3 +7,12 @@ Thumbs.db
 # Build artifacts
 lib
 !lib/README.md
+**/index.html
+
+# Copied
+_build/filters.js
+_includes/partials
+_includes/page.njk
+_data/eleventyComputed.js
+_includes/plain.njk
+_build/eleventy-original.js

@@ -1,12 +1,19 @@
 {
-  "name": "color-elements",
+  "name": "color-ui",
   "version": "0.0.1",
-  "description": "A set of web components for working with color",
+  "description": "A set of web components for working with color. A Color.js project.",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "build:website": "",
+    "prebuild": "node _build/copy-config.js",
     "build:lib": "cp node_modules/colorjs.io lib/colorjs.io",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "run-s build:lib build:html",
+    "watch": "run-p watch:*",
+    "prepack": "npm run build",
+    "release": "release-it",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:html": "npx @11ty/eleventy --config=_build/eleventy.js",
+    "watch:html": "npx @11ty/eleventy --config=_build/eleventy.js --serve"
   },
   "repository": {
     "type": "git",
@@ -14,6 +21,7 @@
   },
   "keywords": [
     "color",
+    "color.js",
     "web components"
   ],
   "author": "Lea Verou",
@@ -24,5 +32,10 @@
   "homepage": "https://github.com/color-js/elements#readme",
   "dependencies": {
     "colorjs.io": "^0.5.0"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0-alpha.6",
+    "npm-run-all": "^4.1.5",
+    "release-it": "^17.2.0"
   }
 }
