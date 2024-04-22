@@ -1,0 +1,9 @@
+node_modules
+
+# OS droppings
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+lib
+!lib/README.md

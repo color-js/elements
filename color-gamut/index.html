@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html data-route="/elements/color-gamut/">
+<head>
+<title>&lt;color-gamut&gt; &bull; Color.js</title>
+<meta name="viewport" content="width=device-width" />
+<link rel="shortcut icon" href="../../logo.svg">
+<link rel="stylesheet" href="../../assets/css/style.css">
+
+<script src="../../color.js" type="module"></script>
+
+
+
+
+
+</head>
+<body class=" cn-ignore ">
+
+
+<header>
+	<nav>
+	<a href=".." class="logo"><h1 class="logo"><img src="../../logo.svg" alt="Color.js"></h1></a>
+	<a href="../../get/">Get<span class="wide"> Color.js</span></a>
+<div class="menu">
+	<a href="../../docs/">Docs</a>
+	<ul>
+		<li><a href="../../docs/the-color-object.html">The Color object</a></li>
+<li><a href="../../docs/spaces.html">Supported color spaces</a></li>
+<li><a href="../../docs/color-difference.html">Color difference</a></li>
+<li><a href="../../docs/manipulation.html">Color manipulation</a></li>
+<li><a href="../../docs/contrast.html">Contrast</a></li>
+<li><a href="../../docs/gamut-mapping.html">Gamut Mapping</a></li>
+<li><a href="../../docs/interpolation.html">Interpolation</a></li>
+<li><a href="../../docs/adaptation.html">Chromatic Adaptation</a></li>
+<li><a href="../../docs/output.html">Output</a></li>
+<li><a href="../../docs/procedural.html">Procedural, tree-shakable API</a></li>
+
+	</ul>
+</div>
+<a href="../../api/">API</a>
+<a href="../../notebook/">Play!</a>
+<a href="../../apps/">Demos</a>
+<a href="../../test/" class="footer">Tests</a>
+<a href="https://github.com/LeaVerou/color.js">GitHub</a>
+<a href="https://github.com/LeaVerou/color.js/issues/new" class="footer">File bug</a>
+
+</nav>
+	<h1>&lt;color-gamut&gt;</h1>
+</header>
+
+<main class="">
+
+<script src="color-gamut.js" type="module"></script>
+<h1>&lt;color-gamut&gt;</h1>
+<p>Gamut indicator. Used internally by <code>&lt;css-color&gt;</code></p>
+<h2>Usage</h2>
+<p>Static (only read once):</p>
+<pre><code class="language-html">&lt;color-gamut&gt;red&lt;/color-gamut&gt;
+</code></pre>
+<p>Produces <color-gamut>red</color-gamut></p>
+<p>Dynamic:</p>
+<pre><code class="language-js">colorGamutElement.color = colorValue;
+</code></pre>
+<h2>Demo</h2>
+<style>
+	#params {
+		background: linear-gradient(to right, var(--start-color), var(--end-color)) no-repeat top / 100% 1em;
+		padding-top: 1.5em;
+	}
+
+	#colors_container_h {
+		display: flex;
+		height: 1em;
+		margin-bottom: 1em;
+
+		color-gamut {
+			flex: 1;
+			border-radius: 0;
+
+			&::part(label) {
+				display: none;
+			}
+		}
+	}
+</style>
+<form id=params>
+<code>oklch(<input type=number id=l value=50>% <input type=number id=min_c value=30>&ndash;<input type=number id=max_c value=40>% <input type=number id=h value=50>)</code>
+<p><label>Chroma increments: <input type=number id=c_step value="0.2" min="0">%</label>
+</form>
+<script type=module>
+params.addEventListener("input", e => {
+	let c_range = {min: Number(min_c.value), max: Number(max_c.value)};
+	let step = Number(c_step.value);
+	let colors = [];
+	let start = `oklch(${l.value}% ${c_range.min.toLocaleString("en")}% ${h.value})`;
+	let end = `oklch(${l.value}% ${c_range.max.toLocaleString("en")}% ${h.value})`;
+
+	params.style.setProperty("--start-color", start);
+	params.style.setProperty("--end-color", end);
+
+	for (let c = c_range.min; c<= c_range.max; c+=step) {
+		colors.push(`oklch(${l.value}% ${c.toLocaleString("en")}% ${h.value})`);
+	}
+
+	let html = colors.map(color => `
+		<color-gamut title="${color}">${color}</color-gamut>`).join("\n");
+	colors_container_h.innerHTML = html;
+	colors_container.innerHTML = html;
+});
+params.dispatchEvent(new Event("input"));
+</script>
+<p>No label:</p>
+<div id=colors_container_h></div>
+<p>Default display:</p>
+<div id=colors_container></div>
+
+</main>
+
+
+<aside class="carbon">
+	<script async src="//cdn.carbonads.com/carbon.js?serve=CEAIPK7J&placement=colorjsio" id="_carbonads_js"></script>
+</aside>
+
+<footer>
+	Created by <a href="http://lea.verou.me">Lea Verou</a> (co-editor of CSS Color 4 and 5)
+	and <a href="https://svgees.us">Chris Lilley</a> (co-editor of CSS Color 3, 4, and 5; W3C representative to ICC).
+
+	Co-maintained by <a href="https://github.com/facelessuser">Isaac Muse</a>,
+	<a href="https://github.com/jgerigmeyer">Jonny Gerig Meyer</a>,
+	and
+	<a href="https://github.com/MysteryBlokHed">Adam Thompson-Sharpe</a>,
+	with lots of help from a <a href="https://github.com/color-js/color.js/graphs/contributors">community of contributors</a>.
+
+	<nav>
+		<a href="../../get/">Get<span class="wide"> Color.js</span></a>
+<div class="menu">
+	<a href="../../docs/">Docs</a>
+	<ul>
+		<li><a href="../../docs/the-color-object.html">The Color object</a></li>
+<li><a href="../../docs/spaces.html">Supported color spaces</a></li>
+<li><a href="../../docs/color-difference.html">Color difference</a></li>
+<li><a href="../../docs/manipulation.html">Color manipulation</a></li>
+<li><a href="../../docs/contrast.html">Contrast</a></li>
+<li><a href="../../docs/gamut-mapping.html">Gamut Mapping</a></li>
+<li><a href="../../docs/interpolation.html">Interpolation</a></li>
+<li><a href="../../docs/adaptation.html">Chromatic Adaptation</a></li>
+<li><a href="../../docs/output.html">Output</a></li>
+<li><a href="../../docs/procedural.html">Procedural, tree-shakable API</a></li>
+
+	</ul>
+</div>
+<a href="../../api/">API</a>
+<a href="../../notebook/">Play!</a>
+<a href="../../apps/">Demos</a>
+<a href="../../test/" class="footer">Tests</a>
+<a href="https://github.com/LeaVerou/color.js">GitHub</a>
+<a href="https://github.com/LeaVerou/color.js/issues/new" class="footer">File bug</a>
+
+	</nav>
+</footer>
+
+<script src="../../assets/js/prism.js"></script>
+<script src="https://blissfuljs.com/bliss.shy.js"></script>
+<script src="https://live.prismjs.com/src/prism-live.mjs?load=javascript" async type=module></script>
+<script src="../../assets/js/index.js" type="module"></script>
+
+</body>
+</html>

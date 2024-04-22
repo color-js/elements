@@ -1,0 +1,28 @@
+{
+  "name": "color-elements",
+  "version": "0.0.1",
+  "description": "A set of web components for working with color",
+  "main": "index.js",
+  "scripts": {
+    "build:website": "",
+    "build:lib": "cp node_modules/colorjs.io lib/colorjs.io",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/color-js/elements.git"
+  },
+  "keywords": [
+    "color",
+    "web components"
+  ],
+  "author": "Lea Verou",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/color-js/elements/issues"
+  },
+  "homepage": "https://github.com/color-js/elements#readme",
+  "dependencies": {
+    "colorjs.io": "^0.5.0"
+  }
+}

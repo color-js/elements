@@ -1,0 +1,2 @@
+node_modules/* lib/:splat 200
+assets/* https://colorjs.io/assets/:splat 200

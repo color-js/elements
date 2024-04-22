@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html data-route="/elements/color-slider/">
+<head>
+<title>&lt;color-slider&gt; &bull; Color.js</title>
+<meta name="viewport" content="width=device-width" />
+<link rel="shortcut icon" href="../../logo.svg">
+<link rel="stylesheet" href="../../assets/css/style.css">
+
+<script src="../../color.js" type="module"></script>
+
+
+
+
+
+</head>
+<body class=" cn-ignore ">
+
+
+<header>
+	<nav>
+	<a href=".." class="logo"><h1 class="logo"><img src="../../logo.svg" alt="Color.js"></h1></a>
+	<a href="../../get/">Get<span class="wide"> Color.js</span></a>
+<div class="menu">
+	<a href="../../docs/">Docs</a>
+	<ul>
+		<li><a href="../../docs/the-color-object.html">The Color object</a></li>
+<li><a href="../../docs/spaces.html">Supported color spaces</a></li>
+<li><a href="../../docs/color-difference.html">Color difference</a></li>
+<li><a href="../../docs/manipulation.html">Color manipulation</a></li>
+<li><a href="../../docs/contrast.html">Contrast</a></li>
+<li><a href="../../docs/gamut-mapping.html">Gamut Mapping</a></li>
+<li><a href="../../docs/interpolation.html">Interpolation</a></li>
+<li><a href="../../docs/adaptation.html">Chromatic Adaptation</a></li>
+<li><a href="../../docs/output.html">Output</a></li>
+<li><a href="../../docs/procedural.html">Procedural, tree-shakable API</a></li>
+
+	</ul>
+</div>
+<a href="../../api/">API</a>
+<a href="../../notebook/">Play!</a>
+<a href="../../apps/">Demos</a>
+<a href="../../test/" class="footer">Tests</a>
+<a href="https://github.com/LeaVerou/color.js">GitHub</a>
+<a href="https://github.com/LeaVerou/color.js/issues/new" class="footer">File bug</a>
+
+</nav>
+	<h1>&lt;color-slider&gt;</h1>
+</header>
+
+<main class="">
+
+<script src="color-slider.js" type="module"></script>
+<h1>&lt;color-slider&gt;</h1>
+<p>Creates a slider with a gradient background, primarily intended for color picking.</p>
+<h2>Usage</h2>
+<p>There are many ways to use this component, depending on what you need.
+E.g. if all you need is styling sliders with arbitrary gradients, you can just use the CSS file and a few classes and CSS variables.</p>
+<p>The actual component does a lot more:</p>
+<ul>
+<li>It takes care of applying the right <code>min</code> and <code>max</code> values to the slider</li>
+<li>It automatically generates the start and end colors,</li>
+<li>It provides a <code>color</code> property with the actual color value.</li>
+<li>It can provide a spinner as a tooltip that shows the actual value selected</li>
+</ul>
+<h3>Zero hassle, little control</h3>
+<p>First, include the component:</p>
+<pre><code class="language-html">&lt;script src=&quot;https://colorjs.io/elements/color-slider/color-slider.js&quot; type=&quot;module&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>Then, just use the element:</p>
+<pre><code class="language-html">&lt;color-slider space=&quot;oklch&quot; component=&quot;h&quot; colorvalue=&quot;red&quot;&gt;&lt;/color-slider&gt;
+</code></pre>
+<p>This will automatically use the whole reference range of that component in the specified color space.
+If you don’t want to show the whole range you can also specify <code>componentmin</code> and <code>componentmax</code> attributes.</p>
+<pre><code class="language-html">&lt;color-slider space=&quot;oklch&quot; component=&quot;l&quot; colorvalue=&quot;red&quot; min=&quot;.3&quot; max=&quot;.95&quot;&gt;&lt;/color-slider&gt;
+</code></pre>
+<h3>Minimal hassle, more control</h3>
+<p>If your use case does not involve interpolating across a single component, or you already have the colors you want to plot from and to, you can also do that:</p>
+<pre><code class="language-html">&lt;color-slider space=&quot;oklch&quot; colormin=&quot;gold&quot; colormax=&quot;oklch(65% 0.15 210)&quot;&gt;&lt;/color-slider&gt;
+</code></pre>
+<h3>Styling-only usage</h3>
+<p>If you just want the styling and are fine dealing with the lower level details on your own, you <em>can</em> just use the CSS file:</p>
+<pre><code class="language-css">@import url(&quot;https://colorjs.io/elements/color-slider/style.css&quot;);
+</code></pre>
+<p>Then use a <code>color-slider</code> class on your slider element, and the following CSS variables:</p>
+<ul>
+<li><code>--start-color</code>: the start color of the gradient</li>
+<li><code>--end-color</code>: the end color of the gradient</li>
+<li><code>--color-space</code>: the color space of the gradient (default: <code>oklch</code>)</li>
+<li><code>--intermediate-colors</code>: <em>(optional)</em> any intermediate colors.</li>
+</ul>
+<p>OR:</p>
+<ul>
+<li><code>--gradient</code> if you want to override the whole gradient.</li>
+</ul>
+
+
+</main>
+
+
+<aside class="carbon">
+	<script async src="//cdn.carbonads.com/carbon.js?serve=CEAIPK7J&placement=colorjsio" id="_carbonads_js"></script>
+</aside>
+
+<footer>
+	Created by <a href="http://lea.verou.me">Lea Verou</a> (co-editor of CSS Color 4 and 5)
+	and <a href="https://svgees.us">Chris Lilley</a> (co-editor of CSS Color 3, 4, and 5; W3C representative to ICC).
+
+	Co-maintained by <a href="https://github.com/facelessuser">Isaac Muse</a>,
+	<a href="https://github.com/jgerigmeyer">Jonny Gerig Meyer</a>,
+	and
+	<a href="https://github.com/MysteryBlokHed">Adam Thompson-Sharpe</a>,
+	with lots of help from a <a href="https://github.com/color-js/color.js/graphs/contributors">community of contributors</a>.
+
+	<nav>
+		<a href="../../get/">Get<span class="wide"> Color.js</span></a>
+<div class="menu">
+	<a href="../../docs/">Docs</a>
+	<ul>
+		<li><a href="../../docs/the-color-object.html">The Color object</a></li>
+<li><a href="../../docs/spaces.html">Supported color spaces</a></li>
+<li><a href="../../docs/color-difference.html">Color difference</a></li>
+<li><a href="../../docs/manipulation.html">Color manipulation</a></li>
+<li><a href="../../docs/contrast.html">Contrast</a></li>
+<li><a href="../../docs/gamut-mapping.html">Gamut Mapping</a></li>
+<li><a href="../../docs/interpolation.html">Interpolation</a></li>
+<li><a href="../../docs/adaptation.html">Chromatic Adaptation</a></li>
+<li><a href="../../docs/output.html">Output</a></li>
+<li><a href="../../docs/procedural.html">Procedural, tree-shakable API</a></li>
+
+	</ul>
+</div>
+<a href="../../api/">API</a>
+<a href="../../notebook/">Play!</a>
+<a href="../../apps/">Demos</a>
+<a href="../../test/" class="footer">Tests</a>
+<a href="https://github.com/LeaVerou/color.js">GitHub</a>
+<a href="https://github.com/LeaVerou/color.js/issues/new" class="footer">File bug</a>
+
+	</nav>
+</footer>
+
+<script src="../../assets/js/prism.js"></script>
+<script src="https://blissfuljs.com/bliss.shy.js"></script>
+<script src="https://live.prismjs.com/src/prism-live.mjs?load=javascript" async type=module></script>
+<script src="../../assets/js/index.js" type="module"></script>
+
+</body>
+</html>
