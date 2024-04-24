@@ -1,4 +1,4 @@
-import Color from "../../src/index.js";
+import Color from "../common/color.js";
 
 let styleURL = new URL("./color-swatch.css", import.meta.url);
 

@@ -1,0 +1,14 @@
+html {
+	color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+	html {
+		background: hsl(220 5% 20%);
+	}
+}
+
+color-swatch {
+	display: block;
+	margin: 1em 0;
+}

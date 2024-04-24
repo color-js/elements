@@ -1,6 +1,6 @@
 import Color from "../common/color.js";
 
-let styleURL = new URL("./style.css", import.meta.url);
+let styleURL = new URL("./color-gamut.css", import.meta.url);
 
 export default class ColorGamut extends HTMLElement {
 	#label;
