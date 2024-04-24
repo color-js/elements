@@ -3,27 +3,6 @@
 
 Creates a slider with a gradient background, primarily intended for color picking.
 
-## Installation
-
-The quick and dirty way is straight from the CDN (kindly provided by [Netlify](https://www.netlify.com/)):
-
-```html
-<script src="https://colorjs.io/elements/color-slider/color-slider.js" type="module"></script>
-```
-
-You can also install it via npm.
-There is no separate package currently, you just install the whole `colorjs.io` package:
-
-```bash
-npm install colorjs.io
-```
-
-Then, you use the `colorjs.io/elements` import:
-
-```js
-import {ColorSlider} from "colorjs.io/elements";
-```
-
 ## Usage
 
 There are many ways to use this component, depending on what you need.

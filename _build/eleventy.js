@@ -1,3 +1,5 @@
+import markdownIt from "markdown-it";
+import markdownItAttrs from "markdown-it-attrs";
 import configOriginal from "./eleventy-original.js";
 import * as filters from "./filters-extra.js";
 
@@ -5,6 +7,14 @@ let data = {
 	"permalink": "{{ page.filePathStem | replace('README', '') | replace('index', '') }}/index.html",
 	"body_classes": "cn-ignore"
 };
+
+let md = markdownIt({
+	html: true,
+	linkify: true,
+	typographer: true,
+})
+.disable("code")
+.use(markdownItAttrs);
 
 export default config => {
 	let ret = configOriginal(config);
@@ -16,6 +26,12 @@ export default config => {
 	for (let f in filters) {
 		config.addFilter(f, filters[f]);
 	}
+
+	config.setLibrary("md", md);
+
+	config.addPairedShortcode("md", children => {
+		return md.render(children);
+	});
 
 	return ret;
 };
