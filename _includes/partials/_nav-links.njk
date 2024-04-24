@@ -1,0 +1,12 @@
+<a href="https://colorjs.io">Color.js</a>
+<div class="menu">
+	<a href="{{ page | relative }}">Elements</a>
+	<ul>
+		{% for name in components %}
+			<li><a href="{{ page | relative }}/src/{{ name }}.js"><code>&lt;{{ name }}&gt;</code></a></span>
+		{% endfor %}
+	</ul>
+</div>
+
+<a href="https://github.com/color-js/elements">GitHub</a>
+<a href="https://github.com/color-js/elements/issues/new" class="footer">File bug</a>

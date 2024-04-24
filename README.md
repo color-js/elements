@@ -1,4 +1,4 @@
-# Color.js Web Components
+# Color Elements
 
 These are some highly experimental color-related web components.
 Use at your own risk, the API can change at any point.
@@ -38,9 +38,14 @@ import "color-elements/COMPONENT_NAME";
 
 Then just start using it!
 
-## Components
+## All elements
 
-- [`<css-color>`](./src/css-color)
-- [`<color-swatch>`](./src/color-swatch)
-- [`<color-gamut>`](./src/color-gamut)
-- [`<color-slider>`](./src/color-slider)
+- [`<color-swatch>`](src/color-swatch/)
+- [`<css-color>`](src/css-color/)
+- [`<color-gamut>`](src/color-gamut/)
+
+### Upcoming:
+
+- [`<color-slider>`](src/color-slider/)
+- `<color-picker>`
+- `<color-plane>`

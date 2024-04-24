@@ -12,7 +12,7 @@ index.html
 
 # Copied
 _build/filters.js
-_includes/partials
+_includes/partials/_nav.njk
 _includes/page.njk
 _data/eleventyComputed.js
 _includes/plain.njk

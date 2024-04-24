@@ -1,5 +1,4 @@
-# `&lt;color-slider>`
-<script src="color-slider.js" type="module"></script>
+# `<color-slider>`
 
 Creates a slider with a gradient background, primarily intended for color picking.
 

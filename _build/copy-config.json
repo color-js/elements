@@ -1,7 +1,7 @@
 {
 	"source": "https://github.com/color-js/color.js",
 	"paths": [
-		"_includes/partials",
+		"_includes/partials/_nav.njk",
 		"_includes/page.njk",
 		"_includes/plain.njk",
 		"_data/eleventyComputed.js",
