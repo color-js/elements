@@ -5,27 +5,42 @@ Use at your own risk, the API can change at any point.
 
 ## Usage
 
-```html
-<script src="https://colorjs.io/elements/COMPONENT_NAME/COMPONENT_NAME.js"></script>
-```
-
-or include all components at once:
+To include all components at once:
 
 ```html
-<script src="https://colorjs.io/elements/index.js"></script>
+<script src="https://elements.colorjs.io/index.js"></script>
 ```
 
 or if using a bundler:
 
-```js
-import "colorjs.io/elements";
+```bash
+npm i color-elements
 ```
+
+and then:
+
+```js
+import "color-elements";
+```
+
+To cherry-pick individual components, follow the instructions within the component’s page, but it generally looks like this:
+
+```html
+<script src="https://elements.colorjs.io/src/COMPONENT_NAME/COMPONENT_NAME.js"></script>
+```
+
+or
+
+```js
+import "color-elements/COMPONENT_NAME";
+```
+
 
 Then just start using it!
 
 ## Components
 
-- [`<css-color>`](./css-color/)
-- [`<color-swatch>`](./color-swatch/)
-- [`<color-gamut>`](./color-gamut/)
-- [`<color-slider>`](./color-slider/)
+- [`<css-color>`](./src/css-color)
+- [`<color-swatch>`](./src/color-swatch)
+- [`<color-gamut>`](./src/color-gamut)
+- [`<color-slider>`](./src/color-slider)
