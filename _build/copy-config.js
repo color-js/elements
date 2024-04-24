@@ -12,8 +12,18 @@ let commands = [
 	`git clone ${ config.source } ${ TEMP_REPO }`,
 	...config.paths.map(path => {
 		let [current_path, new_path] = Array.isArray(path) ? path : [path, path];
+		let new_path_dir = new_path.split("/").slice(0, -1).join("/");
 
-		return `rm -rf ./${new_path} && cp -r ${TEMP_REPO}/${ current_path } ./${ new_path }`;
+		let commands = [
+			`rm -rf ./${new_path}`,
+			`cp -r ${TEMP_REPO}/${ current_path } ./${ new_path }`,
+		];
+
+		if (new_path_dir) {
+			commands.splice(1, 0, `mkdir -p ./${new_path_dir}`);
+		}
+
+		return commands.join(" && ");
 	}),
 ];
 
