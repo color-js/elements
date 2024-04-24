@@ -1,12 +1,12 @@
 {
-  "name": "color-ui",
+  "name": "color-elements",
   "version": "0.0.1",
   "description": "A set of web components for working with color. A Color.js project.",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "prebuild": "node _build/copy-config.js",
-    "build:lib": "cp node_modules/colorjs.io lib/colorjs.io",
+    "build:lib": "cp -r node_modules/colorjs.io lib/colorjs.io",
     "build": "run-s build:lib build:html",
     "watch": "run-p watch:*",
     "prepack": "npm run build",

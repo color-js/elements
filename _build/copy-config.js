@@ -4,6 +4,9 @@ import config from "./copy-config.json" with { type: "json" };
 
 const TEMP_REPO = "_build/.colorjs.io";
 
+// Cleanup past attempts
+exec(`rm -rf ${ TEMP_REPO }`);
+
 // Copy files from source repo
 let commands = [
 	`git clone ${ config.source } ${ TEMP_REPO }`,

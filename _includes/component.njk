@@ -1,0 +1,28 @@
+---js
+{
+	layout: "page.njk",
+	body_classes: "cn-ignore component-page",
+	eleventyComputed: {
+		name: function (data) {
+			let url = data.page.url;
+			if (url.includes("/src/")) {
+				return url.match(/\/src\/([^/]+)/)[1];
+			}
+		},
+		tag: function (data) {
+			let name = data.name;
+			if (name) {
+				return `<${name}>`;
+			}
+		},
+		title: function (data) {
+			return data.title ?? data.tag;
+		},
+	}
+}
+---
+
+<script src="../html-demo/html-demo.js" type="module"></script>
+<script src="{{ name }}.js" type="module"></script>
+
+{{ content | safe }}
