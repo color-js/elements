@@ -33,7 +33,6 @@ export default class ChannelSlider extends HTMLElement {
 		if (this.color) {
 			this.initialColor = this.color;
 			this._el.slider.stops = [this.minColor, this.maxColor];
-			console.log(this.minColor, this.maxColor , this.color + "")
 		}
 
 		this._el.slider.addEventListener("input", this);

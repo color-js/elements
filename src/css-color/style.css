@@ -37,6 +37,10 @@
 	}
 }
 
+::slotted(input) {
+	font: inherit;
+}
+
 :host(:not([for])) #swatch {
 	display: block;
 	inline-size: 2em;

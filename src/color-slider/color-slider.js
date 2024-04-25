@@ -103,7 +103,6 @@ export default class ColorSlider extends HTMLElement {
 				for (let i=1; i<stops.length; i++) {
 					let start = stops[i - 1];
 					let end = stops[i];
-					console.log(start + "", end + "")
 					let range = start.range(end, { space: this.space, hue: "longer" });
 					scales.push(range);
 				}

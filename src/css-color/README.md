@@ -1,40 +1,66 @@
-<h1>&lt;css-color></h1>
+# `<css-color>`
 
-<script src="./css-color.js" type="module"></script>
-<h2>Static</h2>
+## Examples
+
+### Static
+
+```html
 <css-color>oklch(70% 0.25 138)</css-color>
-<css-color swatch="large">oklch(70% 0.25 138)</css-color>
+```
 
-<h2>Editable</h2>
+```html
+<css-color swatch="large">oklch(70% 0.25 138)</css-color>
+```
+
+### Editable
+
+```html
 <css-color>
 	<input value="oklch(70% 0.25 138)" />
 </css-color>
+```
+
+```html
 <css-color swatch="large">
 	<input value="oklch(70% 0.25 138)" />
 </css-color>
+```
 
-<h2>With name</h2>
+### With name
+
+```html
 <css-color>
 	<label slot="before" for=c1>Accent color:</label>
 	<input value="oklch(70% 0.25 138)" id=c1 />
 </css-color>
+```
+
+```html
 <css-color swatch="large">
 	<label slot="before" id=c2>Accent color:</label>
 	<input value="oklch(70% 0.25 138)" id=c2 />
 </css-color>
+```
 
-<h2>Bound to CSS property</h2>
+### Bound to CSS property
+
+```html
 <css-color swatch="large" property="--color-red">
 	<input />
 </css-color>
+```
 
-<h2>Update via JS</h2>
-<h3>Static</h3>
+### Update via JS
+
+#### Static
+
 <css-color id="dynamic_static">oklch(70% 0.25 138)</css-color>
 <script type="module">
 	dynamic_static.color = "oklch(60% 0.15 0)"
 </script>
-<h3>Editable</h3>
+
+### Editable
+
 <css-color id="dynamic_editable">
 	<input value="oklch(70% 0.25 138)" />
 </css-color>

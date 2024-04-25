@@ -228,11 +228,12 @@ export default class CSSColor extends HTMLElement {
 		else {
 			try {
 				colorString = this.#color.display({inGamut: false});
-
 			}
 			catch (e) {
 				colorString = this.value;
 			}
+
+			console.log(colorString)
 		}
 
 		if (this.value === colorString) {
