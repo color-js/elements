@@ -15,12 +15,6 @@
 				return `<${name}>`;
 			}
 		},
-		constructor_name: function (data) {
-			let name = data.name;
-			if (name) {
-				return name.replace(/(^|-)[a-z]/g, $0 => $0.toUpperCase());
-			}
-		},
 		title: function (data) {
 			return data.title ?? data.tag;
 		},
@@ -29,7 +23,7 @@
 }
 ---
 
-<script src="{{ name }}.js" type="module"></script>
+<script src="{{ page | relative }}/index.js" type="module"></script>
 
 {{ content | safe }}
 
@@ -61,7 +55,7 @@ import "color-elements/{{ name }}";
 or:
 
 ```js
-import { {{ constructor_name }} } from "color-elements";
+import { {{ name | tag_to_class }} } from "color-elements";
 ```
 {% endmd %}
 </section>

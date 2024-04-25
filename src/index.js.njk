@@ -1,0 +1,7 @@
+---
+permalink: "index.js"
+layout: null
+---
+{% for name in components -%}
+export { default as {{ name | tag_to_class }} } from "./src/{{ name }}/{{ name }}.js";
+{% endfor %}
