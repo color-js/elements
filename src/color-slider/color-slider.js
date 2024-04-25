@@ -23,10 +23,6 @@ export default class ColorSlider extends HTMLElement {
 	connectedCallback() {
 		this.attributeChangedCallback();
 
-		if (this.color) {
-			this.initialColor = this.color;
-		}
-
 		this._el.slider.addEventListener("input", this);
 
 		if (!this.#initialized) {
@@ -67,12 +63,23 @@ export default class ColorSlider extends HTMLElement {
 		}
 	}
 
+	get progress () {
+		return this.progressAt(this.value);
+	}
+
+	progressAt (p) {
+		return (p - this.min) / (this.max - this.min);
+	}
+
 	colorAt (p) {
 		let bands = this.scales?.length;
 
 		if (bands <= 0) {
 			return null;
 		}
+
+		// Map to the 0-1 range
+		p = this.progressAt(p);
 
 		// FIXME the values outside of [0, 1] should be scaled
 		if (p >= 1) {
@@ -91,11 +98,26 @@ export default class ColorSlider extends HTMLElement {
 	}
 
 	static attributes = {
+		min: {
+			type: Number,
+			propagateTo: (element) => element._el.slider,
+			default: 0,
+		},
+		max: {
+			type: Number,
+			propagateTo: (element) => element._el.slider,
+			default: 1,
+		},
 		value: {
 			type: Number,
-			default: 0.5,
+			default: el => (el.min + el.max) / 2,
 			propagateTo: (element) => element._el.slider,
 			get: (element) => Number(element._el.slider.value),
+		},
+		step: {
+			type: Number,
+			propagateTo: (element) => element._el.slider,
+			default: el => (el.max - el.min) / 1000,
 		},
 		stops: {
 			type: Array,
@@ -103,7 +125,6 @@ export default class ColorSlider extends HTMLElement {
 			default: el => []
 		},
 		space: {
-			type: String,
 			default () {
 				return this.stops[0]?.space;
 			},

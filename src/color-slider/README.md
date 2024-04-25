@@ -40,6 +40,16 @@ You can also set the `value` attribute to specify an initial color other than th
 <color-swatch></color-swatch>
 ```
 
+You can use a different min and max value and it’s just linearly mapped to the stops:
+
+```html
+<color-slider space="oklch"
+              stops="oklch(85% 50% 80), oklch(65% 50% 180)"
+			  min="-50" max="50" value="20"
+              oninput="this.nextElementSibling.textContent = this.color"></color-slider>
+<color-swatch></color-swatch>
+```
+
 ### Styling-only usage
 
 If you just want the styling and are fine dealing with the lower level details on your own, you *can* just use the CSS file:
