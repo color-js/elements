@@ -1,0 +1,29 @@
+.color-slider-label {
+	position: relative;
+}
+
+& + input[type=number] {
+	position: absolute;
+	margin-top: -4em;
+	left: calc(100% * var(--percentage));
+	transform: translateX(-50%);
+	padding: .2em .5em;
+	width: 3em;
+	border: 0;
+	border-radius: .3em;
+	text-align: center;
+	color: white;
+	background: rgba(0,0,0,.8);
+	font: inherit;
+	font-size: 120%;
+	transition: .3s left cubic-bezier(.17,.67,.49,1.48) ;
+}
+
+	/* Prevent input from moving all over the place as we type */
+	& + input[type=number]:focus {
+		transition-delay: .5s;
+	}
+
+	label:not(:focus-within):not(:hover) > .color-slider + input[type=number] {
+		display: none;
+	}

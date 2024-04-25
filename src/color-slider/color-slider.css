@@ -1,0 +1,41 @@
+.color-slider {
+	--gradient: linear-gradient(to right var(--in-space, ), var(--stops));
+	--transparency: repeating-conic-gradient(transparent 0 25%, rgb(0 0 0 / .05) 0 50%) 0 0 / 1.5em 1.5em content-box border-box;
+
+	@supports (background: linear-gradient(in oklch, red, tan)) {
+		--in-space: in var(--color-space);
+	}
+
+	display: block;
+	margin: 0 1em auto 0;
+	width: 100%;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+
+	background: var(--gradient), var(--transparency);
+	height: 2.2em;
+	border-radius: .3em;
+	box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+
+	&::-webkit-slider-thumb {
+		width: 1em;
+		height: 2.3em;
+		-webkit-appearance: none;
+		border-radius: .15em;
+		border: 1px solid black;
+		box-shadow: 0 0 0 1px white;
+	}
+
+	&::-moz-range-thumb {
+		width: 1em;
+		height: 2.3em;
+		border-radius: .15em;
+		border: 1px solid black;
+		box-shadow: 0 0 0 1px white;
+		background: transparent;
+	}
+
+	&::-moz-range-track {
+		background: none;
+	}
+}
