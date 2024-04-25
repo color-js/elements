@@ -24,8 +24,18 @@ Basic example:
 In fact, you can combine it with a [`<color-swatch>`](../color-swatch/):
 
 ```html
-<color-slider space="hsl"
-              stops="red, yellow, lime, aqua, blue, magenta, red"
+<color-slider space="oklch"
+              stops="oklch(80% 50% 70), oklch(65% 50% 180)"
+              oninput="this.nextElementSibling.textContent = this.color"></color-slider>
+<color-swatch></color-swatch>
+```
+
+You can also set the `value` attribute to specify an initial color other than the midpoint:
+
+```html
+<color-slider space="oklch"
+              stops="oklch(85% 50% 80), oklch(65% 50% 180)"
+			  value="0.1"
               oninput="this.nextElementSibling.textContent = this.color"></color-slider>
 <color-swatch></color-swatch>
 ```
@@ -38,14 +48,7 @@ If you just want the styling and are fine dealing with the lower level details o
 @import url("https://colorjs.io/elements/color-slider/color-slider.css");
 ```
 
-Then use a `color-slider` class on your slider element, and the following CSS variables:
-
-- `--stops`: the start color of the gradient
-- `--color-space`: the color space of the gradient (default: `oklch`)
-
-OR:
-- `--gradient` if you want to override the whole gradient.
-
+Then use a `color-slider` class on your slider element, and use [CSS variables](#css-variables) to set the gradient (either `--stops` + `--color-space` or `--gradient`).
 
 ## Reference
 
@@ -56,6 +59,23 @@ OR:
 | `space` | `space` | `ColorSpace` &#124; `string` | `oklch` | The color space to use for interpolation. |
 | `color` | `color` | `Color` &#124; `string` | `oklch(50 50% 180)` | The current color value. |
 | `stops` | `stops` | `String` &#124; `Array<Color>` | `oklch(0 50% 180)` | Comma-separated list of color stops |
+
+### CSS variables
+
+If you’re using the component, these are mostly set automatically.
+If you’re only using the CSS file, you should set these yourself.
+
+| Variable | Type | Description |
+|----------|---------------|-------------|
+| `--stops` | `<color>#` | Comma-separated list of color stops |
+| `--color-space` | `<ident>` | The color space to use for interpolation |
+| `--gradient` | `<image>` | The gradient to use as the background |
+
+### Events
+
+| Name | Description |
+|------|-------------|
+| `input` | Fired when the color changes and once during initialization |
 
 ## Planned features
 

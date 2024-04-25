@@ -1,19 +1,4 @@
-function defineInstanceProperty (Class, name, getValue) {
-
-	Object.defineProperty(Class.prototype, name, {
-		get () {
-			Object.defineProperty(this, name, {
-				value: getValue(this),
-				writable: true,
-				configurable: true,
-				enumerable: false,
-			});
-
-			return this[name];
-		},
-		configurable: true,
-	});
-}
+import { defineInstanceProperty } from "./util.js";
 
 export default function (Class, attributes = Class.attributes) {
 	defineInstanceProperty(Class, "_props", el => ({}));
@@ -129,24 +114,8 @@ export class Attribute {
 		return element.getAttribute(this.name);
 	}
 
-	getTarget (element) {
-		if (this.retarget) {
-			let target = typeof this.passthrough === "function" ? this.retarget.call(element) : this.retarget;
-			return target[this.name];
-		}
-
-		return element;
-	}
-
 	get (element) {
 		let name = this.name;
-		if (this.retarget) {
-			let target = this.getTarget(element);
-			if (target && target !== this) {
-				return target[name];
-			}
-		}
-
 		let value = element._props[name];
 
 		if (value === undefined) {
@@ -167,19 +136,6 @@ export class Attribute {
 		if (value === undefined) {
 			value = this.fromAttribute(element);
 			source = "attribute";
-		}
-
-		if (this.retarget) {
-			let target = this.getTarget(element);
-			if (target && target !== this) {
-				if (source === "property") {
-					target[name] = value;
-				}
-				else {
-					target.setAttribute(name, value);
-				}
-			}
-			return;
 		}
 
 		let oldValue = element._props[name];
@@ -237,6 +193,26 @@ export class Attribute {
 			}
 		}
 
-		element.changed?.(name, change);
+		if (this.propagateTo) {
+			let elements = typeof this.propagateTo === "function" ? this.propagateTo.call(element, element) : this.propagateTo;
+			elements = Array.isArray(elements) ? elements : [elements];
+
+			for (let element of elements) {
+				if (source === "property") {
+					element[name] = value;
+				}
+				else {
+					let attributeValue = change.attributeValue;
+					if (attributeValue === null) {
+						element.removeAttribute(name);
+					}
+					else {
+						element.setAttribute(name, attributeValue);
+					}
+				}
+			}
+		}
+
+		element.propChangedCallback?.(name, change);
 	}
 }

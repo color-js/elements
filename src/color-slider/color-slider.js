@@ -1,23 +1,13 @@
-/*
-<label v-for="(meta, i) in coord_meta" class="color-slider-label">
-	{{ meta.name }} ({{ meta.min }}-{{ meta.max }})
-	<input class="color-slider" type="range" v-model.number="coords[i]" :style="`--stops: ${ slider_steps[i] }`" :min="meta.min" :max="meta.max" :step="meta.step" />
-	<input type="number" v-model.number="coords[i]" class="autosize" :style="`--percentage: ${coords[i] / (meta.max - meta.min) }`" :min="meta.min" :max="meta.max" :step="meta.step" />
-</label>
 
-<label class="color-slider-label">Alpha (0-100)
-	<input class="color-slider" type="range" v-model.number="alpha"
-	:style="`--stops: ${ slider_steps[coord_meta.length] }`" />
-	<input type="number" class="autosize" v-model.number="alpha" :style="`--percentage: ${alpha / 100}`" max="100" />
-</label>*/
-import defineAttributes from "../common/attributes.js";
-import * as dom from "../common/dom.js";
 import Color from "../common/color.js";
+import * as dom from "../common/dom.js";
+import defineAttributes from "../common/attributes.js";
+import defineFormAssociated from "../common/form-associated.js";
 
 let styleURL = new URL("./color-slider.css", import.meta.url);
 
 export default class ColorSlider extends HTMLElement {
-	_slots = {};
+	#initialized = false;
 
 	constructor () {
 		super();
@@ -38,6 +28,12 @@ export default class ColorSlider extends HTMLElement {
 		}
 
 		this._el.slider.addEventListener("input", this);
+
+		if (!this.#initialized) {
+			this.#initialized = true;
+
+			this._el.slider.dispatchEvent(new Event("input"));
+		}
 	}
 
 	disconnectedCallback() {
@@ -45,11 +41,11 @@ export default class ColorSlider extends HTMLElement {
 	}
 
 	handleEvent(event) {
-		this.color = this.colorAt(this._el.slider.value);
+		this.color = this.colorAt(this.value);
 		this.dispatchEvent(new event.constructor(event.type, {...event}));
 	}
 
-	changed (name, change) {
+	propChangedCallback (name, change) {
 		if (name === "stops" || name === "space") {
 			// FIXME will fail if there are none values
 			if (name === "stops") {
@@ -78,26 +74,33 @@ export default class ColorSlider extends HTMLElement {
 			return null;
 		}
 
+		// FIXME the values outside of [0, 1] should be scaled
+		if (p >= 1) {
+			return this.scales.at(-1)(p);
+		}
+		else if (p <= 0) {
+			return this.scales[0](p);
+		}
+
 		let band = 1 / bands;
-		p = p / bands;
 		let scaleIndex = Math.max(0, Math.min(Math.floor(p / band), bands - 1));
 		let scale = this.scales[scaleIndex];
-		let color = scale(p % band);
-		// TODO handle values outside [0, 1]
+		let color = scale((p % band) * bands);
+
 		return color;
 	}
 
 	static attributes = {
+		value: {
+			type: Number,
+			default: 0.5,
+			propagateTo: (element) => element._el.slider,
+			get: (element) => Number(element._el.slider.value),
+		},
 		stops: {
 			type: Array,
 			itemType: Color,
 			default: el => []
-		},
-		color: {
-			type: Color,
-			default () {
-				return this.colorAt(0.5);
-			}
 		},
 		space: {
 			type: String,
@@ -117,14 +120,15 @@ export default class ColorSlider extends HTMLElement {
 				return value?.id;
 			}
 		},
-		value: {
-			retarget () {
-				return this._el.slider;
-			}
-		}
 	}
 }
 
 defineAttributes(ColorSlider);
+defineFormAssociated(ColorSlider, {
+	getSource: el => el._el.slider,
+	role: "slider",
+	valueProp: "value",
+	changeEvent: "input",
+});
 
 customElements.define("color-slider", ColorSlider);
