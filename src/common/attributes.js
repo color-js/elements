@@ -52,6 +52,10 @@ export default function (Class, attributes = Class.attributes) {
 const callableBuiltins = new Set([String, Number, Boolean, Array, Object, Function, Symbol, BigInt]);
 export class Attribute {
 	constructor (name, spec) {
+		if (spec instanceof Attribute) {
+			return spec;
+		}
+
 		this.name = name;
 		Object.assign(this, spec);
 	}
@@ -120,7 +124,7 @@ export class Attribute {
 
 		if (value === undefined) {
 			if (typeof this.default === "function") {
-				return this.default.call(element);
+				return this.default.call(element, element);
 			}
 
 			return this.default;

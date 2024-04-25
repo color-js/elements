@@ -1,6 +1,8 @@
 [
 	"color-swatch",
 	"css-color",
-	"color-gamut",
-	"color-slider"
+	"color-slider",
+	"channel-slider",
+	"color-picker",
+	"color-gamut"
 ]

@@ -1,11 +1,23 @@
 .color-slider-label {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: .3em;
 	position: relative;
+
+	em {
+		opacity: 60%;
+	}
 }
 
-& + input[type=number] {
+color-slider {
+	grid-column: 1 / -1;
+}
+
+input[type=number] {
+	--_tooltip-background: hsl(0 0 0 / 80%);
 	position: absolute;
-	margin-top: -4em;
-	left: calc(100% * var(--percentage));
+	margin-top: -1em;
+	left: calc(100% * var(--progress));
 	transform: translateX(-50%);
 	padding: .2em .5em;
 	width: 3em;
@@ -13,17 +25,32 @@
 	border-radius: .3em;
 	text-align: center;
 	color: white;
-	background: rgba(0,0,0,.8);
+	background: var(--_tooltip-background);
 	font: inherit;
 	font-size: 120%;
-	transition: .3s left cubic-bezier(.17,.67,.49,1.48) ;
-}
+	transition: .3s left cubic-bezier(.17,.67,.49,1.48);
+	field-sizing: content;
+	color-scheme: dark;
+
+	@supports (field-sizing: content) {
+		width: auto;
+	}
 
 	/* Prevent input from moving all over the place as we type */
-	& + input[type=number]:focus {
+	&:focus {
 		transition-delay: .5s;
 	}
 
-	label:not(:focus-within):not(:hover) > .color-slider + input[type=number] {
+	&::-webkit-inner-spin-button {
+		opacity: 1;
+		background: var(--_tooltip-background);
+		color-scheme: dark;
+	}
+
+	&:is(label:not(:focus-within):not(:hover) > *) {
 		display: none;
 	}
+}
+
+
+

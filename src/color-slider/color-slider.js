@@ -2,9 +2,11 @@
 import Color from "../common/color.js";
 import * as dom from "../common/dom.js";
 import defineAttributes from "../common/attributes.js";
+import {defineComputed} from "../common/util.js";
 import defineFormAssociated from "../common/form-associated.js";
 
-let styleURL = new URL("./color-slider.css", import.meta.url);
+export const tagName = "color-slider";
+let styleURL = new URL(`./${tagName}.css`, import.meta.url);
 
 export default class ColorSlider extends HTMLElement {
 	#initialized = false;
@@ -48,17 +50,12 @@ export default class ColorSlider extends HTMLElement {
 				this._el.slider.style.setProperty("--stops", change.attributeValue ?? change.value);
 			}
 			else if (name === "space") {
-				this._el.slider.style.setProperty("--color-space", change.attributeValue ?? change.value);
-			}
-
-			let stops = this.stops;
-			this.scales = [];
-
-			for (let i=1; i<stops.length; i++) {
-				let start = stops[i - 1];
-				let end = stops[i];
-				let range = start.range(end, { space: this.space });
-				this.scales.push(range);
+				let space = this.space;
+				let str = space.id;
+				if (space.isPolar) {
+					str += " longer hue";
+				}
+				this._el.slider.style.setProperty("--color-space", str);
 			}
 		}
 	}
@@ -95,6 +92,26 @@ export default class ColorSlider extends HTMLElement {
 		let color = scale((p % band) * bands);
 
 		return color;
+	}
+
+	static computed = {
+		scales: {
+			get () {
+				let stops = this.stops;
+				let scales = [];
+
+				for (let i=1; i<stops.length; i++) {
+					let start = stops[i - 1];
+					let end = stops[i];
+					console.log(start + "", end + "")
+					let range = start.range(end, { space: this.space, hue: "longer" });
+					scales.push(range);
+				}
+
+				return scales;
+			},
+			dependencies: ["stops", "space"],
+		}
 	}
 
 	static attributes = {
@@ -145,6 +162,7 @@ export default class ColorSlider extends HTMLElement {
 }
 
 defineAttributes(ColorSlider);
+defineComputed(ColorSlider);
 defineFormAssociated(ColorSlider, {
 	getSource: el => el._el.slider,
 	role: "slider",
@@ -152,4 +170,4 @@ defineFormAssociated(ColorSlider, {
 	changeEvent: "input",
 });
 
-customElements.define("color-slider", ColorSlider);
+customElements.define(tagName, ColorSlider);
