@@ -16,6 +16,13 @@ Basic example:
 
 ```html
 <color-slider space="hsl"
+              stops="oklch(90% 50% 100), darkcyan, indigo"></color-slider>
+```
+
+You can listen to the `input` event and grab the `color` property to get the current color value:
+
+```html
+<color-slider space="hsl"
               stops="red, yellow, lime, aqua, blue, magenta, red"
               oninput="this.nextElementSibling.textContent = this.color"></color-slider>
 <output></output>
@@ -55,7 +62,14 @@ You can use a different min and max value and it’s just linearly mapped to the
 If you just want the styling and are fine dealing with the lower level details on your own, you *can* just use the CSS file:
 
 ```css
-@import url("https://colorjs.io/elements/color-slider/color-slider.css");
+@import url("https://elements.colorjs.io/src/color-slider/color-slider.css");
+```
+
+```html
+<style>
+    @import url("color-slider.css");
+</style>
+<input type="range" class="color-slider" style="--stops: oklch(85% 50% 180), gold" />
 ```
 
 Then use a `color-slider` class on your slider element, and use [CSS variables](#css-variables) to set the gradient (either `--stops` + `--color-space` or `--gradient`).
@@ -68,7 +82,10 @@ Then use a `color-slider` class on your slider element, and use [CSS variables](
 |-----------|----------|---------------|---------------|-------------|
 | `space` | `space` | `ColorSpace` &#124; `string` | `oklch` | The color space to use for interpolation. |
 | `color` | `color` | `Color` &#124; `string` | `oklch(50 50% 180)` | The current color value. |
-| `stops` | `stops` | `String` &#124; `Array<Color>` | `oklch(0 50% 180)` | Comma-separated list of color stops |
+| `stops` | `stops` | `String` &#124; `Array<Color>` | - | Comma-separated list of color stops |
+| `min` | `min` | `number` | 0 | The minimum value for the slider. |
+| `max` | `max` | `number` | 1 | The maximum value for the slider. |
+| `value` | `value` | `number` | `(this.min + this.max) / 2` | The current value of the slider. |
 
 ### CSS variables
 

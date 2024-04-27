@@ -1,9 +1,9 @@
 .color-slider {
-	--gradient: linear-gradient(to right var(--in-space), var(--stops));
+	--gradient: linear-gradient(to right var(--in-space, ), var(--stops));
 	--transparency: repeating-conic-gradient(transparent 0 25%, rgb(0 0 0 / .05) 0 50%) 0 0 / 1.5em 1.5em content-box border-box;
 
 	@supports (background: linear-gradient(in oklch, red, tan)) {
-		--in-space: in var(--color-space);
+		--in-space: in var(--color-space, oklab) var(--hue-interpolation, );
 	}
 
 	display: block;
@@ -12,7 +12,7 @@
 	-moz-appearance: none;
 	-webkit-appearance: none;
 
-	background: var(--gradient), var(--transparency);
+	background: var(--gradient, linear-gradient(transparent, transparent)), var(--transparency);
 	height: 2.2em;
 	border-radius: .3em;
 	box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
