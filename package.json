@@ -6,8 +6,7 @@
   "type": "module",
   "scripts": {
     "prebuild": "node _build/copy-config.js",
-    "build:lib": "mkdir -p lib && cp -r node_modules/colorjs.io lib/colorjs.io",
-    "build": "run-s build:lib build:html",
+    "build": "npm run build:html",
     "watch": "run-p watch:*",
     "prepack": "npm run build",
     "release": "release-it",
