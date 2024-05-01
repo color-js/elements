@@ -190,7 +190,7 @@ export default class Prop {
 			if (value === undefined) {
 				value = element === change.element ? change.element.props[this.name] : change.element[this.name];
 			}
-			console.log(change.element, this.name, change.element[this.name]);
+
 			element[this.name] = value;
 		}
 		else {

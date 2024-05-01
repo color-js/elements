@@ -93,7 +93,7 @@ export default class ChannelSlider extends HTMLElement {
 
 	propChangedCallback (prop, change) {
 		let name = prop.name;
-		// console.log(name)
+
 		if (["space", "min", "max", "step", "value", "defaultValue"].includes(name)) {
 			prop.applyChange(this._el.slider, change);
 
