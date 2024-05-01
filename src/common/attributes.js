@@ -2,7 +2,7 @@ import { defineInstanceProperty } from "./util.js";
 
 export default function (Class, attributes = Class.attributes) {
 	defineInstanceProperty(Class, "_props", el => ({}));
-	defineInstanceProperty(Class, "ignoreAttributes", el => new Set());
+	defineInstanceProperty(Class, "ignoredAttributes", el => new Set());
 
 	// Define getters and setters for each attribute
 	for (let name in attributes) {
@@ -19,13 +19,13 @@ export default function (Class, attributes = Class.attributes) {
 		});
 	}
 
-	Class.prototype.attributeChangedCallback ??= function (name) {
-		if (!this.isConnected || this.ignoreAttributes.has(name)) {
+	Class.prototype.attributeChangedCallback ??= function (name, value, oldValue) {
+		if (!this.isConnected || this.ignoredAttributes.has(name)) {
 			return;
 		}
 
 		if (name) {
-			if (name in attributes) {
+			if (name in attributes && (this.hasAttribute(name) || value !== undefined)) {
 				let spec = attributes[name];
 				spec.set(this);
 			}
@@ -58,6 +58,8 @@ export class Attribute {
 
 		this.name = name;
 		Object.assign(this, spec);
+
+		this.reflect ??= true;
 	}
 
 	// Cast value to the desired type
@@ -156,67 +158,94 @@ export class Attribute {
 			element._props[name] = value;
 		}
 
-		change.attributeValue = element.getAttribute(name);
+		let attributeValue = change.attributeValue = element.getAttribute(name);
+
+		let reflectToAttribute = this.reflect === true || this.reflect.toAttribute;
+		let attributeName = this.reflect === true ? this.name : this.reflect.toAttribute;
 
 		if (source === "property") { // property -> attribute
-			// Reflect to attribute
-			let oldAttributeValue = change.attributeValue;
-			let changed = false;
+			if (reflectToAttribute) {
+				// Reflect to attribute
+				let oldAttributeValue = change.attributeValue;
+				let changed = false;
 
-			if (!(typeof originalValue === "string" && originalValue === oldAttributeValue)) {
-				let attributeValue;
+				if (!(typeof originalValue === "string" && originalValue === oldAttributeValue)) {
+					let attributeValue;
 
-				if (this.type === Boolean) {
-					attributeValue = value ? "" : null;
-					changed = (value !== null) !== (oldAttributeValue !== null);
-				}
-				else {
-					if (oldAttributeValue === null) {
-						changed = value !== null;
+					if (this.type === Boolean) {
+						attributeValue = value ? "" : null;
+						changed = (value !== null) !== (oldAttributeValue !== null);
 					}
 					else {
-						changed = this.roundtrip(attributeValue) !== this.roundtrip(value);
-					}
-				}
-
-				if (changed) {
-					attributeValue = this.stringify(value);
-					element.ignoreAttributes.add(name);
-
-					if (attributeValue === null) {
-						element.removeAttribute(name);
-					}
-					else {
-						element.setAttribute(name, attributeValue);
+						if (oldAttributeValue === null) {
+							changed = value !== null;
+						}
+						else {
+							changed = this.roundtrip(attributeValue) !== this.roundtrip(value);
+						}
 					}
 
-					element.ignoreAttributes.delete(name);
-				}
+					if (changed) {
+						attributeValue = this.stringify(value);
+						element.ignoredAttributes.add(attributeName);
 
-				Object.assign(change, {attributeValue, oldAttributeValue});
-			}
-		}
+						if (attributeValue === null) {
+							element.removeAttribute(attributeName);
+						}
+						else {
+							element.setAttribute(attributeName, attributeValue);
+						}
 
-		if (this.propagateTo) {
-			let elements = typeof this.propagateTo === "function" ? this.propagateTo.call(element, element) : this.propagateTo;
-			elements = Array.isArray(elements) ? elements : [elements];
-
-			for (let element of elements) {
-				if (source === "property") {
-					element[name] = value;
-				}
-				else {
-					let attributeValue = change.attributeValue;
-					if (attributeValue === null) {
-						element.removeAttribute(name);
+						element.ignoredAttributes.delete(attributeName);
 					}
-					else {
-						element.setAttribute(name, attributeValue);
-					}
+
+					Object.assign(change, {attributeValue, oldAttributeValue});
 				}
 			}
 		}
+		else if (source === "attribute") {
+			let reflectFromAttribute = this.reflect === true || this.reflect.fromAttribute;
+			let propertyName = this.reflect === true ? name : this.reflect.fromAttribute;
 
+			if (reflectFromAttribute) {
+				// Common DOM pattern where the attribute sets the default value
+				// and the DOM property is used to store the current value
+				element._props[propertyName] = this.parse(attributeValue);
+			}
+		}
+
+		this.propagate(element, change);
+
+		this.changed?.call(element, change);
 		element.propChangedCallback?.(name, change);
+	}
+
+	propagate (element, change) {
+		if (!this.propagateTo) {
+			return;
+		}
+
+		let {source, value, oldValue} = change;
+		let attributeName = this.reflect === true ? this.name : this.reflect.toAttribute;
+		let elements = typeof this.propagateTo === "function" ? this.propagateTo.call(element, element) : this.propagateTo;
+		elements = Array.isArray(elements) ? elements : [elements];
+
+		for (let element of elements) {
+			if (!element) {
+				continue;
+			}
+			if (source === "property") {
+				element[this.name] = value;
+			}
+			else {
+				let attributeValue = change.attributeValue;
+				if (attributeValue === null) {
+					element.removeAttribute(attributeName);
+				}
+				else {
+					element.setAttribute(attributeName, attributeValue);
+				}
+			}
+		}
 	}
 }

@@ -1,27 +1,66 @@
-export function defineInstanceProperty (Class, name, getValue) {
+/**
+ * Defines instance properties by defining an accessor that automatically replaces itself with a writable property when accessed.
+ * @param {Function} Class
+ * @param {string} name
+ * @param {function} getValue
+ */
+export function defineInstanceProperty (
+	Class, name, getValue,
+	{writable = true, configurable = true, enumerable = false} = {}) {
+	let setter = function (value) {
+		Object.defineProperty(this, name, { value, writable, configurable, enumerable });
+	}
 	Object.defineProperty(Class.prototype, name, {
 		get () {
 			let value = getValue.call(this, this);
-
-			Object.defineProperty(this, name, {
-				value,
-				writable: true,
-				configurable: true,
-				enumerable: false,
-			});
-
+			setter.call(this, value);
 			return value;
 		},
-		set (value) {
-			Object.defineProperty(this, name, {
-				value,
-				writable: true,
-				configurable: true,
-				enumerable: false,
-			});
+		set (value) { // Blind set
+			setter.call(this, value);
 		},
 		configurable: true,
 	});
+}
+
+export function defineLazyProperty (object, name, options) {
+	if (typeof options === "function") {
+		options = { get: options };
+	}
+
+	let {get, writable = true, configurable = true, enumerable = false} = options;
+
+	let setter = function (value) {
+		Object.defineProperty(this, name, { value, writable, configurable, enumerable });
+	}
+	Object.defineProperty(object, name, {
+		get () {
+			let value = get.call(this);
+			setter.call(this, value);
+			return value;
+		},
+		set (value) { // Blind set
+			setter.call(this, value);
+		},
+		configurable: true,
+	});
+}
+
+export function equals (a, b) {
+	let simpleEquals = a === b;
+	if (simpleEquals || !a || !b) {
+		return simpleEquals;
+	}
+
+	if (typeof a.equals === "function") {
+		return a.equals(b);
+	}
+
+	if (typeof a === "number") {
+		return Number.isNaN(a) && Number.isNaN(b);
+	}
+
+	return simpleEquals;
 }
 
 export function defineComputed (Class, computed = Class.computed) {
@@ -53,4 +92,28 @@ export function defineComputed (Class, computed = Class.computed) {
 			_propChangedCallback?.call(this, name, change);
 		}
 	}
+}
+
+export function inferDependencies (fn) {
+	if (!fn || typeof fn !== "function") {
+		return [];
+	}
+
+	let code = fn.toString();
+
+	return [...code.matchAll(/\bthis\.([$\w]+)\b/g)].map(match => match[1]);
+}
+
+export async function wait (ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export async function nextTick (refreshRate = 20) {
+	let now = performance.now();
+	let remainder = now % refreshRate;
+	let delay = refreshRate - remainder;
+	let nextAt = now + delay;
+	nextTick.start ??= now - remainder;
+
+	return new Promise(resolve => setTimeout(() => resolve(nextAt - nextTick.start), delay));
 }

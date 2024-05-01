@@ -17,7 +17,7 @@ input[type=number] {
 	--_tooltip-background: hsl(0 0 0 / 80%);
 	position: absolute;
 	margin-top: -1em;
-	left: calc(100% * var(--progress));
+	left: clamp(0%, 100% * var(--progress), 100%);
 	transform: translateX(-50%);
 	padding: .2em .5em;
 	width: 3em;

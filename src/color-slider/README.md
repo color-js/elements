@@ -6,11 +6,11 @@ Creates a slider with a gradient background, primarily intended for color pickin
 
 There are many ways to use this component, depending on what you need.
 E.g. if all you need is styling sliders with arbitrary gradients you don’t even need a component,
-you can just use the CSS file and a few classes and CSS variables.
+you can just [use the CSS file](#css-only) and a few classes and CSS variables to style regular HTML sliders.
 
 The actual component does a lot more:
 - It provides a `color` property with the actual color value.
-- It can provide an editable tooltip as a tooltip that both shows and edits the current value
+- It takes care of displaying even colors in unsupported color spaces
 
 Basic example:
 
@@ -57,7 +57,7 @@ You can use a different min and max value and it’s just linearly mapped to the
 <color-swatch></color-swatch>
 ```
 
-### Styling-only usage
+### CSS-only usage
 
 If you just want the styling and are fine dealing with the lower level details on your own, you *can* just use the CSS file:
 
@@ -72,7 +72,7 @@ If you just want the styling and are fine dealing with the lower level details o
 <input type="range" class="color-slider" style="--stops: oklch(85% 50% 180), gold" />
 ```
 
-Then use a `color-slider` class on your slider element, and use [CSS variables](#css-variables) to set the gradient (either `--stops` + `--color-space` or `--gradient`).
+Then use a `color-slider` class on your slider element, and use [CSS variables](#css-variables) to set the gradient (either directly via `--gradient` or generated via `--stops` + `--color-space` or `--gradient`).
 
 ## Reference
 
@@ -96,6 +96,7 @@ If you’re only using the CSS file, you should set these yourself.
 |----------|---------------|-------------|
 | `--stops` | `<color>#` | Comma-separated list of color stops |
 | `--color-space` | `<ident>` | The color space to use for interpolation |
+| `--hue-interpolation` | `[shorter &#124; longer &#124; increasing &#124; decreasing] hue` | The color space to use for interpolation |
 | `--gradient` | `<image>` | The gradient to use as the background |
 
 ### Events

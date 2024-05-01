@@ -1,6 +1,6 @@
 import ChannelSlider from "../channel-slider/channel-slider.js";
-import ColorSwatch from "../css-color/css-color.js";
-import defineAttributes from "../common/attributes.js";
+import "../css-color/css-color.js";
+import Props from "../common/props.js";
 import * as dom from "../common/dom.js";
 import Color from "../common/color.js";
 
@@ -31,11 +31,6 @@ const self = class ColorPicker extends HTMLElement {
 	connectedCallback() {
 		this.attributeChangedCallback();
 
-		if (this.color) {
-			this.initialColor = this.color;
-
-		}
-
 		this._el.sliders.addEventListener("input", this);
 
 		if (!this.#initialized) {
@@ -57,16 +52,18 @@ const self = class ColorPicker extends HTMLElement {
 	}
 
 	render () {
-		this.color = self.computed.color.get.call(this);
+		let coords = [...this._el.sliders.children].map(el => el.value);
+		this.color = new Color(this.space, coords);
+
 		this._el.swatch.value = this.color;
+
+		for (let slider of this._el.sliders.children) {
+			slider.defaultColor = this.color;
+		}
 	}
 
-	propChangedCallback (name, change) {
-		if (name === "color") {
-			if (change.source === "attribute") {
-				this.initialColor = this.color;
-			}
-		}
+	propChangedCallback (prop, change) {
+		let name = prop.name;
 		if (name === "space") {
 			let i = 0;
 			for (let channel in this.space.coords) {
@@ -81,41 +78,30 @@ const self = class ColorPicker extends HTMLElement {
 				}
 			}
 		}
+
+		if (name === "color") {
+			prop.applyChange(this._el.swatch, change);
+		}
 	}
 
 	static computed = {
-		color: {
-			get () {
-				let coords = [...this._el.sliders.children].map(el => el.value);
-				this.color = new Color(this.space, coords);
-			},
-			dependencies: ["space"],
-		}
+
 	}
 
-	static attributes = {
+	static props = {
 		space: {
-			...ChannelSlider.attributes.space,
-			default: "oklch",
-			propagateTo: el => [...el._el.sliders.children],
+			...ChannelSlider.props.get("space").spec,
+		},
+		defaultColor: {
+			...ChannelSlider.props.get("defaultColor").spec
 		},
 		color: {
-			type: Color,
-			default (el) {
-				let coords = [];
-				for (let channel in this.space.coords) {
-					let spec = this.space.coords[channel];
-					let range = spec.refRange ?? spec.range;
-					coords.push((range[0] + range[1]) / 2);
-				}
-
-				return new Color(this.space, coords);
-			}
-		}
+			...ChannelSlider.props.get("color").spec
+		},
 	}
 }
 
-defineAttributes(self);
+Props.create(self);
 
 customElements.define(tagName, self);
 

@@ -232,8 +232,6 @@ export default class CSSColor extends HTMLElement {
 			catch (e) {
 				colorString = this.value;
 			}
-
-			console.log(colorString)
 		}
 
 		if (this.value === colorString) {

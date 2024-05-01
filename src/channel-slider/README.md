@@ -11,7 +11,20 @@ It offers many conveniences for these cases:
 - It can provide an editable tooltip as a tooltip that both shows and edits the current value
 - Already includes a suitable label
 
-Example:
+Basic example:
+
+```html
+<channel-slider space="oklch" channel="h"></channel-slider>
+```
+
+In most cases you’d also want to set a color to set the other channels and the initial value:
+
+```html
+<channel-slider space="oklch" channel="h" color="oklch(80% 20% 130)"></channel-slider>
+```
+
+You can listen to the `input` event and grab the `color` property to get the current color value.
+Here we are using a [`<color-swatch>`](../color-swatch/) to not just display the CSS code but also the actual color:
 
 ```html
 <channel-slider space="oklch" channel="h" color="oklch(50% 50% 180)"
