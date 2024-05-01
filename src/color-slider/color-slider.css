@@ -121,9 +121,9 @@
 	}
 
 	&:not(:is(:focus-within, :hover) > *, .color-slider:is(:focus, :hover) + *, :focus, :hover) {
-		/* visibility: hidden;
+		visibility: hidden;
 		opacity: 0;
-		scale: .5; */
+		scale: .5;
 	}
 }
 
