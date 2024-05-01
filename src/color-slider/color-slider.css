@@ -1,4 +1,9 @@
 .color-slider {
+	--_slider-height: var(--slider-height, 2.2em);
+	--_thumb-width: var(--slider-thumb-width, 1.1em);
+	--_thumb-radius: var(--slider-thumb-radius, .16em);
+	--_thumb-height-offset: var(--slider-thumb-height-offset, 4px);
+
 	--gradient: linear-gradient(to right var(--in-space, ), var(--stops));
 	--transparency: repeating-conic-gradient(transparent 0 25%, rgb(0 0 0 / .05) 0 50%) 0 0 / 1.5em 1.5em content-box border-box;
 
@@ -13,26 +18,27 @@
 	-webkit-appearance: none;
 
 	background: var(--gradient, linear-gradient(transparent, transparent)), var(--transparency);
-	height: 2.2em;
+	height: var(--_slider-height);
 	border-radius: .3em;
 	box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
 
 	&::-webkit-slider-thumb {
-		width: 1em;
-		height: 2.3em;
 		-webkit-appearance: none;
-		border-radius: .15em;
-		border: 1px solid black;
+		width: var(--_thumb-width);
+		height: calc(var(--_slider-height) + var(--_thumb-height-offset));
+		border-radius: var(--_thumb-radius);
+		border: 1px solid oklab(.2 0 0);
 		box-shadow: 0 0 0 1px white;
+		background: var(--color, transparent);
 	}
 
 	&::-moz-range-thumb {
-		width: 1em;
-		height: 2.3em;
-		border-radius: .15em;
-		border: 1px solid black;
+		width: var(--_thumb-width);
+		height: calc(var(--_slider-height) + var(--_thumb-height-offset));
+		border-radius: var(--_thumb-radius);
+		border: 1px solid oklab(.2 0 0);
 		box-shadow: 0 0 0 1px white;
-		background: transparent;
+		background: var(--color, transparent);
 	}
 
 	&::-moz-range-track {

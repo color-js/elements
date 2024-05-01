@@ -81,6 +81,10 @@ export default class ColorSlider extends HTMLElement {
 				this.style.setProperty("--color-space", spaceId);
 			}
 		}
+
+		if (name === "color") {
+			this.style.setProperty("--color", this.color?.display());
+		}
 	}
 
 	tessellateStops (options = {}) {

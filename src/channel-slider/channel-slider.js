@@ -19,7 +19,7 @@ export default class ChannelSlider extends HTMLElement {
 			<label class="color-slider-label" part="label">
 				<slot></slot>
 				<color-slider part="color_slider" exportparts="slider" id="slider"></color-slider>
-				<input type="number" part="spinner" />
+				<input type="number" part="spinner" class="slider-tooltip" />
 			</label>
 		`;
 
