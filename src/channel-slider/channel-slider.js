@@ -31,6 +31,7 @@ export default class ChannelSlider extends HTMLElement {
 		this.attributeChangedCallback();
 
 		this._el.slider.addEventListener("input", this);
+		this._el.spinner.addEventListener("input", this);
 
 		if (!this.#initialized) {
 			this.#initialized = true;
@@ -41,6 +42,7 @@ export default class ChannelSlider extends HTMLElement {
 
 	disconnectedCallback() {
 		this._el.slider.removeEventListener("input", this);
+		this._el.spinner.removeEventListener("input", this);
 	}
 
 	handleEvent(event) {
