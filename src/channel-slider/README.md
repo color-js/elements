@@ -7,7 +7,7 @@ A [`<color-slider>`](../color-slider) for a specific channel, intended for color
 This is a higher level component than `<color-slider>` for the cases where you want to control a single channel of a color space.
 It offers many conveniences for these cases:
 - It takes care of applying the right `min` and `max` values to the slider
-- It automatically generates the start and end colors,
+- It automatically generates the start and end colors
 - It can provide an editable tooltip as a tooltip that both shows and edits the current value
 - Already includes a suitable label
 
@@ -52,6 +52,7 @@ If you don’t want to show the whole range you can also specify `min` and `max`
 | `channel` | `channel` | `string` | `h` | The component to use for the gradient. |
 | `min` | `min` | `number` | `this.refRange[0]` | The minimum value for the slider. |
 | `max` | `max` | `number` | `this.refRange[1]` | The maximum value for the slider. |
+| `step` | `step` | `number` | `(this.max - this.min) / 1000` &#124; `1` | The granularity that the slider's current value must adhere to. |
 | `value` | `value` | `number` | `(this.min + this.max) / 2` | The current value of the slider. |
 | `color` | `color` | `Color` &#124; `string` | `oklch(50 50% 180)` | The current color value. |
 | - | `minColor` | `Color` | `oklch(0 50% 180)` | The minimum color value _(read-only)_. |
