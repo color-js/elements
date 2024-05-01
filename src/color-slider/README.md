@@ -28,7 +28,7 @@ You can listen to the `input` event and grab the `color` property to get the cur
 <output></output>
 ```
 
-In fact, you can combine it with a [`<color-swatch>`](../color-swatch/):
+In fact, you can combine it with a [`<color-swatch>`](../color-swatch/) or [`<css-color>`](../css-color/) element to display the color in a more visual way:
 
 ```html
 <color-slider space="oklch"
@@ -37,7 +37,7 @@ In fact, you can combine it with a [`<color-swatch>`](../color-swatch/):
 <color-swatch></color-swatch>
 ```
 
-You can also set the `value` attribute to specify an initial color other than the midpoint:
+You can set the `value` attribute to specify an initial color other than the midpoint:
 
 ```html
 <color-slider space="oklch"
@@ -56,6 +56,29 @@ You can use a different min and max value and it’s just linearly mapped to the
               oninput="this.nextElementSibling.textContent = this.color"></color-slider>
 <color-swatch></color-swatch>
 ```
+
+You can add an editable tooltip by simply using the `tooltip` attribute:
+
+```html
+<color-slider space="oklch"
+              stops="oklch(85% 50% 80), oklch(65% 50% 180)"
+			  min="-50" max="50" value="20"
+              tooltip
+              oninput="this.nextElementSibling.textContent = this.color"></color-slider>
+<color-swatch></color-swatch>
+```
+
+<!-- By default, the tooltip will show the slider value as a number.
+If you want to show the progress instead, you can specify `"progress"` as the attribute value:
+
+```html
+<color-slider space="oklch"
+              stops="oklch(85% 50% 80), oklch(65% 50% 180)"
+			  min="-50" max="50" value="20"
+              tooltip="progress"
+              oninput="this.nextElementSibling.textContent = this.color"></color-slider>
+<color-swatch></color-swatch>
+``` -->
 
 ### CSS-only usage
 

@@ -23,15 +23,20 @@ export default class ColorSlider extends HTMLElement {
 			this.shadowRoot.innerHTML = `
 			<style>@import url("${ styleURL }")</style>
 			<input type="range" class="color-slider" part="slider"
-			       min="${ this.min }" max="${ this.max }" step="${ this.step }" value="${ this.defaultValue }" />`;
+			       min="${ this.min }" max="${ this.max }" step="${ this.step }" value="${ this.defaultValue }" />
+			<input type="number" class="slider-tooltip" part="tooltip" />
+			<slot></slot>
+			`;
 
 			this._el = {
 				slider: this.shadowRoot.querySelector(".color-slider"),
+				spinner: this.shadowRoot.querySelector(".slider-tooltip"),
 			};
 
 			this.attributeChangedCallback();
 
 			this._el.slider.addEventListener("input", this);
+			this._el.spinner.addEventListener("input", this);
 
 			this.#initialized = true;
 
@@ -41,19 +46,24 @@ export default class ColorSlider extends HTMLElement {
 
 	disconnectedCallback() {
 		this._el.slider.removeEventListener("input", this);
+		this._el.spinner.removeEventListener("input", this);
 	}
 
-	handleEvent(event) {
-		this.value = this._el.slider.value;
-		this.dispatchEvent(new event.constructor(event.type, {...event}));
+	handleEvent (event) {
+		if (event.type === "input") {
+			this.value = event.target.value;
+			this.dispatchEvent(new event.constructor(event.type, {...event}));
+		}
 	}
 
 	propChangedCallback (prop, change) {
 		let name = prop.name;
 		let slider = this._el?.slider;
+		let spinner = this._el?.spinner;
 
-		if (["min", "max", "step", "value", "defaultValue"].includes(name)) {
-			slider && prop.applyChange(slider, change);
+		if (slider && ["min", "max", "step", "value", "defaultValue"].includes(name)) {
+			prop.applyChange(slider, change);
+			prop.applyChange(spinner, change);
 		}
 
 		if (!name || name === "stops" || name === "space") {
@@ -68,7 +78,7 @@ export default class ColorSlider extends HTMLElement {
 
 				stops = stops.map(color => color.display()).join(", ");
 
-				this.style.setProperty("--stops", stops);
+				this.style.setProperty("--slider-color-stops", stops);
 			}
 			else if (name === "space") {
 				let space = this.space;
@@ -84,6 +94,16 @@ export default class ColorSlider extends HTMLElement {
 
 		if (name === "color") {
 			this.style.setProperty("--color", this.color?.display());
+		}
+
+		if (name === "value") {
+			this.style.setProperty("--progress", this.progress);
+
+			if (spinner && !CSS.supports("field-sizing", "content")) {
+				let valueStr = this.value + "";
+				spinner?.style.setProperty("--value-length", valueStr.length);
+			}
+
 		}
 	}
 
@@ -216,6 +236,10 @@ export default class ColorSlider extends HTMLElement {
 			},
 			dependencies: ["stops", "space"],
 		},
+
+		tooltip: {
+			type: String,
+		}
 	}
 }
 

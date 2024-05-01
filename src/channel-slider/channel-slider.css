@@ -13,60 +13,7 @@ color-slider {
 	grid-column: 1 / -1;
 }
 
-.slider-tooltip {
-	--_tooltip-background: hsl(0 0 0 / 80%);
-	--_border-radius: var(--spinner-border-radius, .3em);
-	--_pointer-height: var(--spinner-pointer-height, .3em);
-	--_pointer-angle: var(--spinner-pointer-angle, 90deg);
 
-	position: absolute;
-	margin-top: calc(-.8em - var(--_pointer-height));
-	left: clamp(0%, 100% * var(--progress), 100%);
-	translate: -50%;
-	padding-block: .2em;
-	padding-inline: .5em .3em;
-	border: var(--_pointer-height) solid transparent;
-	border-radius: calc(var(--_border-radius) + var(--_pointer-height));
-	text-align: center;
-	color: white;
-	background:
-		conic-gradient(from calc(-1 * var(--_pointer-angle) / 2) at bottom, var(--_tooltip-background) var(--_pointer-angle), transparent 0) border-box bottom / 100% var(--_pointer-height) no-repeat,
-		var(--_tooltip-background) padding-box;
-	color-scheme: dark;
-
-	transform-origin: bottom;
-	transition: visibility 0s step-start,
-		opacity 200ms,
-		scale 200ms,
-		.3s left cubic-bezier(.17,.67,.49,1.48);
-
-	&:is(input[type=number]) {
-		font: inherit;
-		font-size: 120%;
-		width: 3em;
-
-		@supports (field-sizing: content) {
-			field-sizing: content;
-			width: auto;
-		}
-	}
-
-	/* Prevent input from moving all over the place as we type */
-	&:focus {
-		transition-delay: .5s;
-	}
-
-	/* Don’t auto hide the spin buttons */
-	&::-webkit-inner-spin-button {
-		opacity: 1;
-	}
-
-	&:is(label:not(:focus-within):not(:hover) > *) {
-		visibility: hidden;
-		opacity: 0;
-		scale: .5;
-	}
-}
 
 
 

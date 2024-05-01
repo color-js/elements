@@ -18,8 +18,7 @@ export default class ChannelSlider extends HTMLElement {
 			<style>@import url("${ styleURL }")</style>
 			<label class="color-slider-label" part="label">
 				<slot></slot>
-				<color-slider part="color_slider" exportparts="slider" id="slider"></color-slider>
-				<input type="number" part="spinner" class="slider-tooltip" />
+				<color-slider part="color_slider" exportparts="slider" id="slider" tooltip></color-slider>
 			</label>
 		`;
 
@@ -31,7 +30,6 @@ export default class ChannelSlider extends HTMLElement {
 		this.attributeChangedCallback();
 
 		this._el.slider.addEventListener("input", this);
-		this._el.spinner.addEventListener("input", this);
 
 		if (!this.#initialized) {
 			this.#initialized = true;
@@ -42,7 +40,6 @@ export default class ChannelSlider extends HTMLElement {
 
 	disconnectedCallback() {
 		this._el.slider.removeEventListener("input", this);
-		this._el.spinner.removeEventListener("input", this);
 	}
 
 	handleEvent(event) {
@@ -96,10 +93,6 @@ export default class ChannelSlider extends HTMLElement {
 
 		if (["space", "min", "max", "step", "value", "defaultValue"].includes(name)) {
 			prop.applyChange(this._el.slider, change);
-
-			if (name !== "space") {
-				prop.applyChange(this._el.spinner, change);
-			}
 		};
 
 		if (name === "defaultColor" || name === "space" || name === "channel" || name === "min" || name === "max") {
@@ -108,10 +101,6 @@ export default class ChannelSlider extends HTMLElement {
 			if (name === "space" || name === "channel" || name === "min" || name === "max") {
 				this._el.slot.innerHTML = `${ this.channelName } <em>(${ this.min }&thinsp;&ndash;&thinsp;${ this.max })</em>`;
 			}
-		}
-
-		if (name === "value") {
-			this.style.setProperty("--progress", this.progress);
 		}
 	}
 
