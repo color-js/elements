@@ -24,13 +24,15 @@ export default class ColorSlider extends HTMLElement {
 			<style>@import url("${ styleURL }")</style>
 			<input type="range" class="color-slider" part="slider"
 			       min="${ this.min }" max="${ this.max }" step="${ this.step }" value="${ this.defaultValue }" />
-			<input type="number" class="slider-tooltip" part="tooltip" />
+			<slot name="tooltip" class="slider-tooltip">
+				<input type="number" part="spinner" />
+			</slot>
 			<slot></slot>
 			`;
 
 			this._el = {
 				slider: this.shadowRoot.querySelector(".color-slider"),
-				spinner: this.shadowRoot.querySelector(".slider-tooltip"),
+				spinner: this.shadowRoot.querySelector("input[type=number]"),
 			};
 
 			this.attributeChangedCallback();
@@ -51,7 +53,15 @@ export default class ColorSlider extends HTMLElement {
 
 	handleEvent (event) {
 		if (event.type === "input") {
-			this.value = event.target.value;
+			if (this.tooltip === "progress" && event.target === this._el.spinner) {
+				// Convert to value
+				let value = this._el.spinner.value;
+				this.value = this.valueAt(value / 100);
+			}
+			else {
+				this.value = event.target.value;
+			}
+
 			this.dispatchEvent(new event.constructor(event.type, {...event}));
 		}
 	}
@@ -63,7 +73,8 @@ export default class ColorSlider extends HTMLElement {
 
 		if (slider && ["min", "max", "step", "value", "defaultValue"].includes(name)) {
 			prop.applyChange(slider, change);
-			prop.applyChange(spinner, change);
+			let spinnerValue = this.tooltip === "progress" ? Math.round(this.progress * 100) : this.value;
+			prop.applyChange(spinner, {...change, value: spinnerValue});
 		}
 
 		if (!name || name === "stops" || name === "space") {
@@ -129,12 +140,16 @@ export default class ColorSlider extends HTMLElement {
 		return this.progressAt(this.value);
 	}
 
-	progressAt (p) {
-		return (p - this.min) / (this.max - this.min);
+	progressAt (value) {
+		return (value - this.min) / (this.max - this.min);
 	}
 
-	colorAt (p) {
-		let progress = this.progressAt(p);
+	valueAt (progress) {
+		return this.min + progress * (this.max - this.min);
+	}
+
+	colorAt (value) {
+		let progress = this.progressAt(value);
 		return this.colorAtProgress(progress);
 	}
 

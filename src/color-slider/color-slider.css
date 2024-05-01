@@ -65,11 +65,12 @@
 			100% * var(--progress)
 			- (var(--progress) - 0.5) * var(--_slider-thumb-width) / 2 /* center on slider thumb */
 		, 100%);
-	bottom: calc(100% + 2px);
+	bottom: calc(100% + 3px);
 	translate: -50%;
 	transform-origin: bottom;
-	padding-block: .2em;
-	padding-inline: .3em;
+	display: flex;
+	padding-block: .3em;
+	padding-inline: .4em;
 	border: var(--_tooltip-pointer-height) solid transparent;
 	border-radius: calc(var(--_tooltip-border-radius) + var(--_tooltip-pointer-height));
 	text-align: center;
@@ -78,17 +79,19 @@
 		conic-gradient(from calc(-1 * var(--_tooltip-pointer-angle) / 2) at bottom, var(--_tooltip-background) var(--_tooltip-pointer-angle), transparent 0) border-box bottom / 100% var(--_tooltip-pointer-height) no-repeat,
 		var(--_tooltip-background) padding-box;
 	color-scheme: dark;
-
-
-	transition: visibility 0s step-start,
+	transition:
+		visibility 0s step-start,
 		opacity 200ms,
 		scale 200ms,
 		width 100ms,
 		left 200ms cubic-bezier(.17,.67,.49,1.48);
 
-	&:is(input) {
-		font: inherit;
-		font-size: 120%;
+	&::after {
+		content: var(--tooltip-suffix);
+	}
+
+	input {
+		all: unset;
 
 		&:where([type=number]) {
 			--content-width: calc(var(--value-length) * 1ch);
@@ -126,4 +129,8 @@
 
 :host(:not([tooltip])) .slider-tooltip {
 	display: none;
+}
+
+:host([tooltip="progress"]) .slider-tooltip {
+	--tooltip-suffix: "%";
 }

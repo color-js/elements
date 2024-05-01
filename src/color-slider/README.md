@@ -68,7 +68,7 @@ You can add an editable tooltip by simply using the `tooltip` attribute:
 <color-swatch></color-swatch>
 ```
 
-<!-- By default, the tooltip will show the slider value as a number.
+By default, the tooltip will show the slider value as a number.
 If you want to show the progress instead, you can specify `"progress"` as the attribute value:
 
 ```html
@@ -78,7 +78,7 @@ If you want to show the progress instead, you can specify `"progress"` as the at
               tooltip="progress"
               oninput="this.nextElementSibling.textContent = this.color"></color-slider>
 <color-swatch></color-swatch>
-``` -->
+```
 
 ### CSS-only usage
 
