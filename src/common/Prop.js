@@ -186,7 +186,10 @@ export default class Prop {
 			}
 		}
 		else if (change.source === "property" || change.source === "default") {
-			let value = change.value !== undefined ? change.value : change.element.props[this.name];
+			let value = change.value;
+			if (value === undefined) {
+				value = element === change.element ? change.element.props[this.name] : change.element[this.name];
+			}
 			console.log(change.element, this.name, change.element[this.name]);
 			element[this.name] = value;
 		}
