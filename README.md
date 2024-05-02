@@ -40,8 +40,8 @@ Then just start using it!
 
 ## All elements
 
-- [`<color-inline>`](src/color-inline/)
 - [`<color-swatch>`](src/color-swatch/)
+- [`<color-inline>`](src/color-inline/)
 - [`<color-gamut>`](src/color-gamut/)
 
 ### Upcoming:
