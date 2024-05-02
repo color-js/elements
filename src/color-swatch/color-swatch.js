@@ -4,10 +4,10 @@ import "../color-gamut/color-gamut.js";
 
 const gamuts = ["srgb", "p3", "rec2020"];
 
-let styleURL = new URL("./style.css", import.meta.url);
+let styleURL = new URL("./color-swatch.css", import.meta.url);
 let importIncrementable = import("https://incrementable.verou.me/incrementable.mjs").then(m => m.default);
 
-export default class CSSColor extends HTMLElement {
+export default class ColorSwatch extends HTMLElement {
 	#dom = {};
 
 	constructor () {
@@ -252,4 +252,4 @@ export default class CSSColor extends HTMLElement {
 	static observedAttributes = ["for", "property"];
 }
 
-customElements.define("css-color", CSSColor);
+customElements.define("color-swatch", ColorSwatch);

@@ -1,7 +1,7 @@
 <script src="color-gamut.js" type="module"></script>
 # &lt;color-gamut>
 
-Gamut indicator. Used internally by `<css-color>`
+Gamut indicator. Used internally by `<color-swatch>`
 
 ## Usage
 

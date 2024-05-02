@@ -1,5 +1,5 @@
 import ChannelSlider from "../channel-slider/channel-slider.js";
-import "../css-color/css-color.js";
+import "../color-swatch/color-swatch.js";
 import Props from "../common/props.js";
 import * as dom from "../common/dom.js";
 import Color from "../common/color.js";
@@ -19,9 +19,9 @@ const self = class ColorPicker extends HTMLElement {
 			<style>@import url("${ styleURL }")</style>
 			<div id=sliders></div>
 			<slot name="swatch">
-				<css-color swatch="large" id="swatch">
+				<color-swatch swatch="large" id="swatch">
 					<input value="oklch(70% 0.25 138)" id="color" />
-				</css-color>
+				</color-swatch>
 			</slot>
 		`;
 

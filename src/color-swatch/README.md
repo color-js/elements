@@ -1,69 +1,69 @@
-# `<css-color>`
+# `<color-swatch>`
 
 ## Examples
 
 ### Static
 
 ```html
-<css-color>oklch(70% 0.25 138)</css-color>
+<color-swatch>oklch(70% 0.25 138)</color-swatch>
 ```
 
 ```html
-<css-color swatch="large">oklch(70% 0.25 138)</css-color>
+<color-swatch swatch="large">oklch(70% 0.25 138)</color-swatch>
 ```
 
 ### Editable
 
 ```html
-<css-color>
+<color-swatch>
 	<input value="oklch(70% 0.25 138)" />
-</css-color>
+</color-swatch>
 ```
 
 ```html
-<css-color swatch="large">
+<color-swatch swatch="large">
 	<input value="oklch(70% 0.25 138)" />
-</css-color>
+</color-swatch>
 ```
 
 ### With name
 
 ```html
-<css-color>
+<color-swatch>
 	<label slot="before" for=c1>Accent color:</label>
 	<input value="oklch(70% 0.25 138)" id=c1 />
-</css-color>
+</color-swatch>
 ```
 
 ```html
-<css-color swatch="large">
+<color-swatch swatch="large">
 	<label slot="before" id=c2>Accent color:</label>
 	<input value="oklch(70% 0.25 138)" id=c2 />
-</css-color>
+</color-swatch>
 ```
 
 ### Bound to CSS property
 
 ```html
-<css-color swatch="large" property="--color-red">
+<color-swatch swatch="large" property="--color-red">
 	<input />
-</css-color>
+</color-swatch>
 ```
 
 ### Update via JS
 
 #### Static
 
-<css-color id="dynamic_static">oklch(70% 0.25 138)</css-color>
+<color-swatch id="dynamic_static">oklch(70% 0.25 138)</color-swatch>
 <script type="module">
 	dynamic_static.color = "oklch(60% 0.15 0)"
 </script>
 
 ### Editable
 
-<css-color id="dynamic_editable">
+<color-swatch id="dynamic_editable">
 	<input value="oklch(70% 0.25 138)" />
-</css-color>
+</color-swatch>
 <script type="module">
 	dynamic_editable.color = "oklch(60% 0.15 0)"
 </script>

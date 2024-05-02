@@ -28,7 +28,7 @@ You can listen to the `input` event and grab the `color` property to get the cur
 <output></output>
 ```
 
-In fact, you can combine it with a [`<color-inline>`](../color-inline/) or [`<css-color>`](../css-color/) element to display the color in a more visual way:
+In fact, you can combine it with a [`<color-inline>`](../color-inline/) or [`<color-swatch>`](../color-swatch/) element to display the color in a more visual way:
 
 ```html
 <color-slider space="oklch"
