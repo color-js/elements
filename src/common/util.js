@@ -117,3 +117,19 @@ export async function nextTick (refreshRate = 20) {
 
 	return new Promise(resolve => setTimeout(() => resolve(nextAt - nextTick.start), delay));
 }
+
+/**
+ * Compute the ideal step for a range, to be used as a default in spinners and sliders
+ * @param {number} min
+ * @param {number} max
+ * @param {options} options
+ */
+export function getStep (min, max, {minSteps = 100, maxStep = 1} = {}) {
+	let range = Math.abs(max - min);
+	let step = range / minSteps;
+
+	// Find nearest power of 10 that is < step
+	step = 10 ** Math.floor(Math.log10(step));
+
+	return step > maxStep ? maxStep : step;
+}

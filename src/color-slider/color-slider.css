@@ -80,7 +80,7 @@
 		var(--_tooltip-background) padding-box;
 	color-scheme: dark;
 	transition:
-		visibility 0s step-start,
+		visibility 0s 200ms,
 		opacity 200ms,
 		scale 200ms,
 		width 100ms,
@@ -101,6 +101,12 @@
 
 			&::-webkit-textfield-decoration-container {
 				gap: .2em;
+			}
+
+			@container style(--tooltip-suffix) {
+				&::-webkit-textfield-decoration-container {
+					flex-flow: row-reverse;
+				}
 			}
 
 			/* Don’t auto hide the spin buttons */

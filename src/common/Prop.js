@@ -185,13 +185,14 @@ export default class Prop {
 				element.setAttribute(attributeName, attributeValue);
 			}
 		}
-		else if (change.source === "property" || change.source === "default") {
-			let value = change.value;
-			if (value === undefined) {
-				value = element === change.element ? change.element.props[this.name] : change.element[this.name];
+		else if (change.source === "property") {
+			element[this.name] = change.value;
+		}
+		else if (change.source === "default") {
+			// Value will be undefined here
+			if (change.element !== element) {
+				element[this.name] = change.element[this.name];
 			}
-
-			element[this.name] = value;
 		}
 		else {
 			// Mixed

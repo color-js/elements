@@ -2,6 +2,7 @@
 import Color from "../common/color.js";
 import Props from "../common/props.js";
 import defineFormAssociated from "../common/form-associated.js";
+import { getStep } from "../common/util.js";
 
 export const tagName = "color-slider";
 let styleURL = new URL(`./${tagName}.css`, import.meta.url);
@@ -12,33 +13,27 @@ export default class ColorSlider extends HTMLElement {
 	constructor () {
 		super();
 		this.attachShadow({mode: "open"});
-	}
-
-	connectedCallback() {
-		if (!this.#initialized) {
-			this.attributeChangedCallback("max");
-			this.attributeChangedCallback("min");
-			this.attributeChangedCallback("value");
-
-			this.shadowRoot.innerHTML = `
+		this.shadowRoot.innerHTML = `
 			<style>@import url("${ styleURL }")</style>
-			<input type="range" class="color-slider" part="slider"
-			       min="${ this.min }" max="${ this.max }" step="${ this.step }" value="${ this.defaultValue }" />
+			<input type="range" class="color-slider" part="slider" min="0" max="1" step="0.01" />
 			<slot name="tooltip" class="slider-tooltip">
-				<input type="number" part="spinner" />
+				<input type="number" part="spinner" min="0" max="1" step="0.01" />
 			</slot>
 			<slot></slot>
 			`;
 
-			this._el = {
-				slider: this.shadowRoot.querySelector(".color-slider"),
-				spinner: this.shadowRoot.querySelector("input[type=number]"),
-			};
+		this._el = {
+			slider: this.shadowRoot.querySelector(".color-slider"),
+			spinner: this.shadowRoot.querySelector("input[type=number]"),
+		};
 
+		this._el.slider.addEventListener("input", this);
+		this._el.spinner.addEventListener("input", this);
+	}
+
+	connectedCallback() {
+		if (!this.#initialized) {
 			this.attributeChangedCallback();
-
-			this._el.slider.addEventListener("input", this);
-			this._el.spinner.addEventListener("input", this);
 
 			this.#initialized = true;
 
@@ -68,16 +63,16 @@ export default class ColorSlider extends HTMLElement {
 
 	propChangedCallback (prop, change) {
 		let name = prop.name;
-		let slider = this._el?.slider;
-		let spinner = this._el?.spinner;
 
-		if (slider && ["min", "max", "step", "value", "defaultValue"].includes(name)) {
-			prop.applyChange(slider, change);
-			let spinnerValue = this.tooltip === "progress" ? Math.round(this.progress * 100) : this.value;
-			prop.applyChange(spinner, {...change, value: spinnerValue});
+		if (["min", "max", "step", "value", "defaultValue"].includes(name)) {
+			prop.applyChange(this._el.slider, change);
+
+
+			let spinnerValue = this.tooltip === "progress" ? +(this.progress * 100).toPrecision(4) : this.value;
+			prop.applyChange(this._el.spinner, {...change, value: spinnerValue});
 		}
 
-		if (!name || name === "stops" || name === "space") {
+		if (name === "stops" || name === "space") {
 			let stops = this.stops;
 			let supported = stops.every(color => !CSS.supports("color", color));
 			// FIXME will fail if there are none values
@@ -95,7 +90,7 @@ export default class ColorSlider extends HTMLElement {
 				let space = this.space;
 				let spaceId = space.id;
 
-				if (supported) {
+				if (!supported) {
 					spaceId = this.space.isPolar ? "oklch" : "oklab";
 				}
 
@@ -110,9 +105,9 @@ export default class ColorSlider extends HTMLElement {
 		if (name === "value") {
 			this.style.setProperty("--progress", this.progress);
 
-			if (spinner && !CSS.supports("field-sizing", "content")) {
+			if (!CSS.supports("field-sizing", "content")) {
 				let valueStr = this.value + "";
-				spinner?.style.setProperty("--value-length", valueStr.length);
+				this._el.spinner.style.setProperty("--value-length", valueStr.length);
 			}
 
 		}
@@ -188,7 +183,7 @@ export default class ColorSlider extends HTMLElement {
 		step: {
 			type: Number,
 			default () {
-				return Math.abs(this.max - this.min) / 1000;
+				return getStep(this.max, this.min, { minSteps: 100 });
 			},
 		},
 		stops: {

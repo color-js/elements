@@ -92,7 +92,7 @@ If you just want the styling and are fine dealing with the lower level details o
 <style>
     @import url("color-slider.css");
 </style>
-<input type="range" class="color-slider" style="--stops: oklch(85% 50% 180), gold" />
+<input type="range" class="color-slider" style="--slider-color-stops: oklch(85% 50% 180), gold" />
 ```
 
 Then use a `color-slider` class on your slider element, and use [CSS variables](#css-variables) to set the gradient (either directly via `--gradient` or generated via `--stops` + `--color-space` or `--gradient`).
@@ -117,10 +117,10 @@ If you’re only using the CSS file, you should set these yourself.
 
 | Variable | Type | Description |
 |----------|---------------|-------------|
-| `--stops` | `<color>#` | Comma-separated list of color stops |
+| `--slider-color-stops` | `<color>#` | Comma-separated list of color stops |
 | `--color-space` | `<ident>` | The color space to use for interpolation |
 | `--hue-interpolation` | `[shorter &#124; longer &#124; increasing &#124; decreasing] hue` | The color space to use for interpolation |
-| `--gradient` | `<image>` | The gradient to use as the background |
+| `--slider-gradient` | `<image>` | The gradient to use as the background |
 
 ### Events
 
