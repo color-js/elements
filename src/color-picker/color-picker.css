@@ -10,7 +10,7 @@
 	gap: .3em;
 }
 
-css-color {
+color-swatch {
 	width: auto;
 
 	&::part(swatch) {

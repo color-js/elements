@@ -1,31 +1,69 @@
----
-layout: component
-css: "style.css"
----
-
 # `<color-swatch>`
 
-Basic use:
+## Examples
 
-<html-demo adjust="font-size">
-
-```html
-<color-swatch>lch(50% 40 30)</color-swatch>
-```
-</html-demo>
-
-Editable:
-```html
-<color-swatch contentEditable>lch(50% 40 30)</color-swatch>
-```
-
-Semi-transparent color:
-```html
-<color-swatch>hsl(340 90% 50% / .25)</color-swatch>
-```
-
-Invalid color:
+### Static
 
 ```html
-<color-swatch>foobar</color-swatch>
+<color-swatch>oklch(70% 0.25 138)</color-swatch>
 ```
+
+```html
+<color-swatch swatch="large">oklch(70% 0.25 138)</color-swatch>
+```
+
+### Editable
+
+```html
+<color-swatch>
+	<input value="oklch(70% 0.25 138)" />
+</color-swatch>
+```
+
+```html
+<color-swatch swatch="large">
+	<input value="oklch(70% 0.25 138)" />
+</color-swatch>
+```
+
+### With name
+
+```html
+<color-swatch>
+	<label slot="before" for=c1>Accent color:</label>
+	<input value="oklch(70% 0.25 138)" id=c1 />
+</color-swatch>
+```
+
+```html
+<color-swatch swatch="large">
+	<label slot="before" id=c2>Accent color:</label>
+	<input value="oklch(70% 0.25 138)" id=c2 />
+</color-swatch>
+```
+
+### Bound to CSS property
+
+```html
+<color-swatch swatch="large" property="--color-red">
+	<input />
+</color-swatch>
+```
+
+### Update via JS
+
+#### Static
+
+<color-swatch id="dynamic_static">oklch(70% 0.25 138)</color-swatch>
+<script type="module">
+	dynamic_static.color = "oklch(60% 0.15 0)"
+</script>
+
+### Editable
+
+<color-swatch id="dynamic_editable">
+	<input value="oklch(70% 0.25 138)" />
+</color-swatch>
+<script type="module">
+	dynamic_editable.color = "oklch(60% 0.15 0)"
+</script>

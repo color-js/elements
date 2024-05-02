@@ -41,7 +41,7 @@ Then just start using it!
 ## All elements
 
 - [`<color-swatch>`](src/color-swatch/)
-- [`<css-color>`](src/css-color/)
+- [`<color-inline>`](src/color-inline/)
 - [`<color-gamut>`](src/color-gamut/)
 
 ### Upcoming:

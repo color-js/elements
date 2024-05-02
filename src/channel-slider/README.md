@@ -24,12 +24,12 @@ In most cases you’d also want to set a color to set the other channels and the
 ```
 
 You can listen to the `input` event and grab the `color` property to get the current color value.
-Here we are using a [`<color-swatch>`](../color-swatch/) to not just display the CSS code but also the actual color:
+Here we are using a [`<color-inline>`](../color-inline/) to not just display the CSS code but also the actual color:
 
 ```html
 <channel-slider space="oklch" channel="h" color="oklch(50% 50% 180)"
                 oninput="this.nextElementSibling.textContent = this.color"></channel-slider>
-<color-swatch></color-swatch>
+<color-inline></color-inline>
 ```
 
 This will automatically use the whole reference range of that component in the specified color space,
