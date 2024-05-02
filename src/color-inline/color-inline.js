@@ -1,8 +1,8 @@
 import Color from "../common/color.js";
 
-let styleURL = new URL("./color-swatch.css", import.meta.url);
+let styleURL = new URL("./color-inline.css", import.meta.url);
 
-export default class ColorSwatch extends HTMLElement {
+export default class ColorInline extends HTMLElement {
 	#swatch;
 
 	constructor () {
@@ -19,7 +19,7 @@ export default class ColorSwatch extends HTMLElement {
 
 	connectedCallback () {
 		this.#render();
-		ColorSwatch.#mo.observe(this, {childList: true, subtree: true, characterData: true});
+		ColorInline.#mo.observe(this, {childList: true, subtree: true, characterData: true});
 	}
 
 	#value;
@@ -64,7 +64,7 @@ export default class ColorSwatch extends HTMLElement {
 		for (let mutation of mutations) {
 			let target = mutation.target;
 
-			while (target && !(target instanceof ColorSwatch)) {
+			while (target && !(target instanceof ColorInline)) {
 				target = target.parentNode;
 			}
 
@@ -76,4 +76,4 @@ export default class ColorSwatch extends HTMLElement {
 }
 
 
-customElements.define("color-swatch", ColorSwatch);
+customElements.define("color-inline", ColorInline);

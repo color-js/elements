@@ -40,7 +40,7 @@ Then just start using it!
 
 ## All elements
 
-- [`<color-swatch>`](src/color-swatch/)
+- [`<color-inline>`](src/color-inline/)
 - [`<css-color>`](src/css-color/)
 - [`<color-gamut>`](src/color-gamut/)
 
