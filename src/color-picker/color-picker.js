@@ -8,7 +8,7 @@ export const tagName = "color-picker";
 
 let styleURL = new URL(`./${tagName}.css`, import.meta.url);
 
-const self = class ColorPicker extends HTMLElement {
+const Self = class ColorPicker extends HTMLElement {
 	#initialized = false;
 
 	constructor () {
@@ -103,8 +103,8 @@ const self = class ColorPicker extends HTMLElement {
 	}
 }
 
-Props.create(self);
+Props.create(Self);
 
-customElements.define(tagName, self);
+customElements.define(tagName, Self);
 
-export default self;
+export default Self;

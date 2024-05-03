@@ -5,7 +5,7 @@ import {
 } from "./util.js";
 const callableBuiltins = new Set([String, Number, Boolean, Array, Object, Function, Symbol, BigInt]);
 
-export default class Prop {
+let Self = class Prop {
 	constructor (name, spec, props) {
 		if (spec instanceof Prop && name === spec.name) {
 			return spec;
@@ -272,4 +272,4 @@ export default class Prop {
 
 		return value;
 	}
-}
+}export default Self;
