@@ -34,10 +34,9 @@ const self = class ColorPicker extends HTMLElement {
 		this._el.sliders.addEventListener("input", this);
 
 		if (!this.#initialized) {
-			// Create sliders
-			// this.propChangedCallback("space");
-
 			this.#initialized = true;
+
+			this._el.sliders.dispatchEvent(new Event("input"));
 		}
 	}
 
@@ -96,7 +95,10 @@ const self = class ColorPicker extends HTMLElement {
 			...ChannelSlider.props.get("defaultColor").spec
 		},
 		color: {
-			...ChannelSlider.props.get("color").spec
+			type: Color,
+			set (value) {
+				this.defaultColor = new Color(value).to(this.space);
+			},
 		},
 	}
 }
