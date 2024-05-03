@@ -5,6 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "eslint": "npx eslint .",
+    "eslint:fix": "npx eslint . --fix",
     "prebuild": "node _build/copy-config.js",
     "build": "npm run build:html",
     "watch": "run-p watch:*",
@@ -34,6 +36,9 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.0.0-alpha.6",
+    "@stylistic/eslint-plugin": "latest",
+    "eslint": "latest",
+    "globals": "latest",
     "markdown-it-attrs": "^4.1.6",
     "npm-run-all": "^4.1.5",
     "release-it": "^17.2.0"
