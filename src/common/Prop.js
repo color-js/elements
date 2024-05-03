@@ -273,15 +273,3 @@ export default class Prop {
 		return value;
 	}
 }
-
-function combineChanges (queuedChange, change) {
-	if (queuedChange) {
-		let sources = new Set([queuedChange.source, change.source]);
-		change = Object.assign({}, queuedChange, change);
-		if (sources.size > 1) {
-			change.source = "mixed";
-		}
-	}
-
-	return change;
-}
