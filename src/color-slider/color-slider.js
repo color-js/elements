@@ -2,6 +2,7 @@
 import Color from "../common/color.js";
 import Props from "../common/props.js";
 import defineFormAssociated from "../common/form-associated.js";
+import ColorChangeEvent from "../common/ColorChangeEvent.js";
 import { getStep } from "../common/util.js";
 
 export const tagName = "color-slider";
@@ -37,7 +38,7 @@ export default class ColorSlider extends HTMLElement {
 
 			this.#initialized = true;
 
-			this._el.slider.dispatchEvent(new Event("input"));
+			this._el.slider.dispatchEvent(new Event("colorchange"));
 		}
 	}
 
@@ -98,10 +99,6 @@ export default class ColorSlider extends HTMLElement {
 			}
 		}
 
-		if (name === "color") {
-			this.style.setProperty("--color", this.color?.display());
-		}
-
 		if (name === "value") {
 			this.style.setProperty("--progress", this.progress);
 
@@ -109,7 +106,30 @@ export default class ColorSlider extends HTMLElement {
 				let valueStr = this.value + "";
 				this._el.spinner.style.setProperty("--value-length", valueStr.length);
 			}
+		}
 
+		if (name === "color" || name === "defaultColor") {
+			let color = this.color;
+
+			if (color) {
+				let displayedColor = color.display();
+				this.style.setProperty("--color", displayedColor);
+
+				this.dispatchEvent(new ColorChangeEvent("colorchange", {
+					bubbles: true,
+					color, displayedColor,
+					detail: change,
+				}));
+			}
+		}
+
+		if (name === "oncolorchange") {
+			if (change.oldInternalValue) {
+				this.removeEventListener("colorchange", change.oldInternalValue);
+			}
+			if (change.parsedValue) {
+				this.addEventListener("colorchange", change.parsedValue);
+			}
 		}
 	}
 
@@ -251,6 +271,13 @@ export default class ColorSlider extends HTMLElement {
 
 		tooltip: {
 			type: String,
+		},
+
+		oncolorchange: {
+			type: Function,
+			typeOptions: {
+				arguments: ["event"],
+			},
 		}
 	}
 }
@@ -260,7 +287,7 @@ defineFormAssociated(ColorSlider, {
 	getSource: el => el._el.slider,
 	role: "slider",
 	valueProp: "value",
-	changeEvent: "input",
+	changeEvent: "change",
 });
 
 customElements.define(tagName, ColorSlider);
