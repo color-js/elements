@@ -9,7 +9,7 @@
 ```
 
 ```html
-<color-swatch swatch="large">oklch(70% 0.25 138)</color-swatch>
+<color-swatch size="large">oklch(70% 0.25 138)</color-swatch>
 ```
 
 ### Editable
@@ -21,7 +21,7 @@
 ```
 
 ```html
-<color-swatch swatch="large">
+<color-swatch size="large">
 	<input value="oklch(70% 0.25 138)" />
 </color-swatch>
 ```
@@ -36,7 +36,7 @@
 ```
 
 ```html
-<color-swatch swatch="large">
+<color-swatch size="large">
 	<label slot="before" id=c2>Accent color:</label>
 	<input value="oklch(70% 0.25 138)" id=c2 />
 </color-swatch>
@@ -45,7 +45,7 @@
 ### Bound to CSS property
 
 ```html
-<color-swatch swatch="large" property="--color-red">
+<color-swatch size="large" property="--color-red">
 	<input />
 </color-swatch>
 ```
