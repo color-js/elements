@@ -2,6 +2,7 @@
 	display: inline-flex;
 	gap: .3em;
 	width: min-content;
+	margin: .3em;
 	white-space: nowrap;
 	--background-checkerboard: repeating-conic-gradient(rgb(0 0 0 / .12) 0 25%, transparent 0 50%) 0 0 / 1em 1em;
 }
