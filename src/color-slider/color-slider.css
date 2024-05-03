@@ -12,7 +12,7 @@
 	--_slider-height: var(--slider-height, 2.2em);
 	--_slider-thumb-width: var(--slider-thumb-width, 1.1em);
 	--_slider-thumb-radius: var(--slider-thumb-radius, .16em);
-	--_slider-thumb-height-offset: var(--slider-thumb-height-offset, 4px);
+	--_slider-thumb-height-offset: var(--slider-thumb-height-offset, 2px);
 
 	--_tooltip-background: var(--tooltip-background, hsl(0 0 0 / 80%));
 	--_tooltip-border-radius: var(--tooltip-border-radius, .3em);
