@@ -68,18 +68,14 @@ let Self = class Prop {
 
 	// To attribute
 	stringify (value) {
-		if (Array.isArray(value)) {
-			return value.map(item => this.stringify(item)).join(", ");
-		}
-
-		return value === null ? value : String(value);
+		return Self.stringify(value, this.type, this.typeOptions);
 	}
 
 	// Parse value into the correct type
 	// This could be coming from an attribute (string)
 	// Or directly setting the property (which could be a variety of types)
 	parse (value) {
-		return Prop.parseAs(value, this.type, this.typeOptions);
+		return Self.parse(value, this.type, this.typeOptions);
 	}
 
 	// Define the necessary getters and setters
@@ -238,38 +234,97 @@ let Self = class Prop {
 	}
 
 	// Cast a value to the desired type
-	static parseAs (value, type, typeOptions) {
-		if (!type || value === undefined) {
+	static parse (value, type, typeOptions) {
+		if (!type || value === undefined || value === null) {
 			return value;
 		}
 
-		if (value !== null && value !== undefined) {
-			if (type === Array) {
-				// Arrays involve two steps: parsing the value _into_ an array,
-				// then converting each individual value into the desired itemType
-				if (!Array.isArray(value)) {
-					value = typeof value === "string" ? value.trim().split(/\s*,\s*/) : [value];
-				}
+		let converter = this.converters.get(type);
+		return converter?.parse?.(value, typeOptions)
+		       ?? this.defaultConverter.parse(value, type, typeOptions);
+	}
 
-				if (typeOptions?.itemType) {
-					return value.map(item => this.parseAs(item, typeOptions.itemType));
-				}
-
-				return value;
-			}
+	static stringify (value, type, typeOptions) {
+		if (value === undefined || value === null) {
+			return null;
 		}
 
-		if (type === Boolean) {
-			return value !== null;
+		if (!type) {
+			return String(value);
 		}
-		else if (type && value !== null) {
+
+		let stringify = this.converters.get(type)?.stringify;
+
+		if (stringify === false) {
+			throw new TypeError(`Cannot stringify ${type}`);
+		}
+
+		return stringify?.(value, typeOptions) ?? this.defaultConverter.stringify(value, type, typeOptions);
+	}
+
+	static defaultConverter = {
+		parse (value, type, typeOptions) {
 			if (value instanceof type) {
 				return value;
 			}
 
 			return callableBuiltins.has(type) ? type(value) : new type(value);
-		}
+		},
 
-		return value;
+		stringify (value, type, typeOptions) {
+			return String(value);
+		}
 	}
-}export default Self;
+
+	static converters = new Map([
+		[Boolean, {
+			parse: value => value !== null,
+			stringify: value => value ? "" : null,
+		}],
+		[Function, {
+			parse (value, options = {}) {
+				if (typeof value === "function") {
+					return value;
+				}
+
+				value = String(value);
+
+				return Function(...(options.arguments ?? []), value);
+			},
+			// Just don’t do that
+			stringify: false,
+		}],
+		[Array, {
+			parse (value, { itemType, separator = ",", splitter } = {}) {
+				if (!Array.isArray(value)) {
+					if (!splitter) {
+						// Make whitespace optional and flexible, unless the separator consists entirely of whitespace
+						let isSeparatorWhitespace = !separator.trim();
+						splitter = isSeparatorWhitespace ? /\s+/ : new RegExp(separator.replace(/\s+/g, "\\s*"));
+					}
+
+
+					value = typeof value === "string" ? value.trim().split(splitter) : [value];
+				}
+
+				if (itemType) {
+					return value.map(item => Self.parse(item, itemType));
+				}
+			},
+			stringify: (value, { itemType, separator = ",", joiner } = {}) => {
+				if (itemType) {
+					value = value.map(item => Self.stringify(item, itemType));
+				}
+
+				if (!joiner) {
+					let trimmedSeparator = separator.trim();
+					joiner = (!trimmedSeparator || trimmedSeparator === "," ? "" : " ") + separator + " ";
+				}
+
+				return value.join(joiner);
+			},
+		}],
+	])
+}
+
+export default Self;
