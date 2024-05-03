@@ -40,7 +40,7 @@ export default class Props extends Map {
 		// Define the attributeChangedCallback iff not already defined
 		// We assume that if it's defined, it's defined from this
 		// This will fail if a class has a custom attributeChangedCallback
-		Class.prototype.attributeChangedCallback ??= function (name, value, oldValue) {
+		Class.prototype.attributeChangedCallback ??= function (name, oldValue, value) {
 			if (!this.isConnected || this.ignoredAttributes.has(name)) {
 				// We process attributes all at once when the element is connected
 				return;
