@@ -46,23 +46,6 @@ export function defineLazyProperty (object, name, options) {
 	});
 }
 
-export function equals (a, b) {
-	let simpleEquals = a === b;
-	if (simpleEquals || !a || !b) {
-		return simpleEquals;
-	}
-
-	if (typeof a.equals === "function") {
-		return a.equals(b);
-	}
-
-	if (typeof a === "number") {
-		return Number.isNaN(a) && Number.isNaN(b);
-	}
-
-	return simpleEquals;
-}
-
 export function defineComputed (Class, computed = Class.computed) {
 	let dependencies = new Map();
 

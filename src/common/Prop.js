@@ -1,7 +1,5 @@
 import {
-	equals,
 	inferDependencies,
-	nextTick,
 } from "./util.js";
 const callableBuiltins = new Set([String, Number, Boolean, Array, Object, Function, Symbol, BigInt]);
 
@@ -61,9 +59,9 @@ let Self = class Prop {
 		return reflectTo === true ? this.name : typeof reflectTo === "string" ? reflectTo : null;
 	}
 
-	// Just calls equals() by default but can be overridden
+	// Just calls Self.equals() by default but can be overridden
 	equals(a, b) {
-		return equals(a, b);
+		return Self.equals(a, b, this.type, this.typeOptions);
 	}
 
 	// To attribute
@@ -129,7 +127,7 @@ let Self = class Prop {
 
 	set (element, value, {source = "property", name, oldValue} = {}) {
 		let oldInternalValue = element.props[this.name];
-		let change = {element, source, value, oldInternalValue, attributeName: name};
+
 		let attributeName = name;
 		let parsedValue = this.parse(value);
 
@@ -138,6 +136,12 @@ let Self = class Prop {
 		}
 
 		element.props[this.name] = parsedValue;
+
+		let change = {
+			element, source,
+			value, parsedValue, oldInternalValue,
+			attributeName: name,
+		};
 
 		if (source === "property") {
 			// Reflect to attribute?
@@ -233,15 +237,23 @@ let Self = class Prop {
 		}
 	}
 
+	static equals (a, b, type, typeOptions) {
+		if (a === null || b === null || a === undefined || b === undefined) {
+			return a === b;
+		}
+
+		let equals = this.types.get(type)?.equals;
+		return equals ? equals(a, b, typeOptions) : this.defaultType.equals(a, b, type, typeOptions);
+	}
+
 	// Cast a value to the desired type
 	static parse (value, type, typeOptions) {
 		if (!type || value === undefined || value === null) {
 			return value;
 		}
 
-		let converter = this.converters.get(type);
-		return converter?.parse?.(value, typeOptions)
-		       ?? this.defaultConverter.parse(value, type, typeOptions);
+		let parse = this.types.get(type)?.parse;
+		return parse ? parse(value, typeOptions) : this.defaultType.parse(value, type, typeOptions);
 	}
 
 	static stringify (value, type, typeOptions) {
@@ -253,16 +265,29 @@ let Self = class Prop {
 			return String(value);
 		}
 
-		let stringify = this.converters.get(type)?.stringify;
+		let stringify = this.types.get(type)?.stringify;
 
 		if (stringify === false) {
 			throw new TypeError(`Cannot stringify ${type}`);
 		}
 
-		return stringify?.(value, typeOptions) ?? this.defaultConverter.stringify(value, type, typeOptions);
+		return stringify ? stringify(value, typeOptions) : this.defaultType.stringify(value, type, typeOptions);
 	}
 
-	static defaultConverter = {
+	static defaultType = {
+		equals (a, b, type) {
+			let simpleEquals = a === b;
+			if (simpleEquals || a === null || a === undefined || b === null || b === undefined) {
+				return simpleEquals;
+			}
+
+			if (typeof a.equals === "function") {
+				return a.equals(b);
+			}
+
+			// Roundtrip
+			return simpleEquals;
+		},
 		parse (value, type, typeOptions) {
 			if (value instanceof type) {
 				return value;
@@ -273,15 +298,19 @@ let Self = class Prop {
 
 		stringify (value, type, typeOptions) {
 			return String(value);
-		}
+		},
 	}
 
-	static converters = new Map([
+	static types = new Map([
 		[Boolean, {
 			parse: value => value !== null,
 			stringify: value => value ? "" : null,
 		}],
+		[Number, {
+			equals: (a, b) => a === b || Number.isNaN(a) && Number.isNaN(b),
+		}],
 		[Function, {
+			equals: (a, b) => a === b || a.toString() === b.toString(),
 			parse (value, options = {}) {
 				if (typeof value === "function") {
 					return value;
@@ -295,6 +324,18 @@ let Self = class Prop {
 			stringify: false,
 		}],
 		[Array, {
+			equals (a, b, { itemType } = {}) {
+				if (a.length !== b.length) {
+					return false;
+				}
+
+				if (itemType) {
+					return a.every((item, i) => Self.equals(item, b[i], itemType));
+				}
+				else {
+					return a.every((item, i) => item === b[i]);
+				}
+			},
 			parse (value, { itemType, separator = ",", splitter } = {}) {
 				if (!Array.isArray(value)) {
 					if (!splitter) {
