@@ -1,30 +1,36 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -625 630 615" overflow="visible" height="600">
 <desc>Based on u*,v* UCS diagram</desc>
 <style>
+
 #tongue {
 	fill: hsl(220, 10%, 48%);
 }
 
-.color-space polygon {
-	fill: none;
+text {
+	stroke: hsl(220, 10%, 94%);
+	stroke-width: .1em;
+	stroke-linejoin: round;
+	font: 800 333px/1 system-ui, sans-serif;
+	text-anchor: middle;
+	dominant-baseline: middle;
+	letter-spacing: -.06em;
+	paint-order: stroke fill;
 }
 
-.color-space circle,
-.color-space polygon {
-	stroke: hsl(220, 10%, 88%);
-	stroke-width: 30px;
+.lt {
+	fill: hsl(0, 80%, 50%);
 }
 
-.color-space circle {
-	stroke-width: 22px;
+.slash {
+	fill: hsl(90, 50%, 45%);
 }
 
-#white-point {
-	fill: white;
+.gt {
+	fill: hsl(210 80% 55%);
 }
 
 </style>
-
+<!-- <rect x="0" y="-625" width="630" height="615" fill="hsl(60, 100%, 50%)"/> -->
 <path id="tongue" d="M 256.804  -16.594
   L 256.637  -16.593
   L 256.418  -16.266
@@ -120,39 +126,11 @@
   L 623.393  -506.491
   Z"/>
 
-<!-- White point -->
-<!-- <circle r="12" cx="197.83" cy="-468.32" id="white-point" /> -->
-
-<!-- sRGB
-red 450.70423, 522.88732
-green  125, 562.5
-blue 175.4386, 157.89474
-white 197.83001, 468.31999
-
-<g class="color-space" id="srgb">
-	<polygon points="450.7, -522.887 125, -562.5 175.44, -157.89"/>
-
-	<circle r="36" cx="450.7" cy="-522.887" fill="hsl(0, 80%, 50%)" />
-	<circle r="36" cx="125" cy="-562.5" fill="hsl(90, 50%, 45%)" />
-	<circle r="36" cx="175.44" cy="-157.89" fill="hsl(210 80% 55%)" />
-</g>
--->
-
-<!-- display-p3000
-red 496.35036, 525.54745
-green 98.60465, 577.67442
-blue 175.4386, 157.89474
-white 197.83001, 468.31999
--->
-<g class="color-space" id="p3">
-	<polygon points="496.35, -525.54 98.6, -577.67 175.44, -157.89"/>
-
-	<circle r="36" cx="496.35" cy="-525.54" fill="hsl(0, 80%, 50%)" />
-	<circle r="36" cx="98.6" cy="-577.67" fill="hsl(90, 50%, 45%)" />
-	<circle r="36" cx="175.44" cy="-157.89" fill="hsl(210 80% 55%)" />
-</g>
-
-
+<text x="44%" y="-55%">
+	<tspan class="lt">&lt;</tspan>
+	<tspan class="slash">/</tspan>
+	<tspan class="gt">&gt;</tspan>
+</text>
 
 
 
