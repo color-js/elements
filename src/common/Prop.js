@@ -16,7 +16,7 @@ export default class Prop {
 		this.props = props;
 
 		this.type = spec.type;
-		this.itemType = spec.itemType;
+		this.typeOptions = spec.typeOptions;
 
 		this.default = spec.default;
 
@@ -79,7 +79,7 @@ export default class Prop {
 	// This could be coming from an attribute (string)
 	// Or directly setting the property (which could be a variety of types)
 	parse (value) {
-		return Prop.parseAs(this, value);
+		return Prop.parseAs(value, this.type, this.typeOptions);
 	}
 
 	// Define the necessary getters and setters
@@ -238,7 +238,7 @@ export default class Prop {
 	}
 
 	// Cast a value to the desired type
-	static parseAs ({type, itemType}, value) {
+	static parseAs (value, type, typeOptions) {
 		if (!type || value === undefined) {
 			return value;
 		}
@@ -251,8 +251,8 @@ export default class Prop {
 					value = typeof value === "string" ? value.trim().split(/\s*,\s*/) : [value];
 				}
 
-				if (itemType) {
-					return value.map(item => this.parseAs({type: itemType}, item));
+				if (typeOptions?.itemType) {
+					return value.map(item => this.parseAs(item, typeOptions.itemType));
 				}
 
 				return value;

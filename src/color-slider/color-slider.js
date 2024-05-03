@@ -188,7 +188,9 @@ export default class ColorSlider extends HTMLElement {
 		},
 		stops: {
 			type: Array,
-			itemType: Color,
+			typeOptions: {
+				itemType: Color,
+			},
 			default: el => []
 		},
 		defaultValue: {
