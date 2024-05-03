@@ -52,7 +52,7 @@
 	display: none;
 }
 
-:host(:not([for])):host([swatch="large"]) {
+:host(:not([for])):host([size="large"]) {
 	flex-flow: column;
 
 	#wrapper {
@@ -60,12 +60,12 @@
 	}
 }
 
-:host(:not([for])):host([swatch="large"]) #swatch {
+:host(:not([for])):host([size="large"]) #swatch {
 	inline-size: auto;
 	block-size: 5em;
 }
 
-:host(:not([for])):host([swatch="large"]) #wrapper.static slot {
+:host(:not([for])):host([size="large"]) #wrapper.static slot {
 	display: flex;
 	flex: 1;
 }

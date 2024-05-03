@@ -19,7 +19,7 @@ const self = class ColorPicker extends HTMLElement {
 			<style>@import url("${ styleURL }")</style>
 			<div id=sliders></div>
 			<slot name="swatch">
-				<color-swatch swatch="large" id="swatch">
+				<color-swatch size="large" id="swatch">
 					<input value="oklch(70% 0.25 138)" id="color" />
 				</color-swatch>
 			</slot>
