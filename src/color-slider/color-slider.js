@@ -38,7 +38,11 @@ export default class ColorSlider extends HTMLElement {
 
 			this.#initialized = true;
 
-			this._el.slider.dispatchEvent(new Event("colorchange"));
+			this._el.slider.dispatchEvent(new ColorChangeEvent("colorchange", {
+				bubbles: true,
+				color: this.color,
+				displayedColor: this.color?.display(),
+			}));
 		}
 	}
 
