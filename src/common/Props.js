@@ -119,11 +119,3 @@ export default class Props extends Map {
 		return new this(...args);
 	}
 }
-
-class ElementProps extends EventTarget {
-	constructor (element) {
-		super();
-
-		this.element = element;
-	}
-}
