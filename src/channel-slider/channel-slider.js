@@ -24,6 +24,7 @@ export default class ChannelSlider extends HTMLElement {
 
 		this._el = dom.named(this);
 		this._el.slot = this.shadowRoot.querySelector("slot");
+		this.addEventListener("propchange", this.propChangedCallback);
 	}
 
 	connectedCallback() {
@@ -88,9 +89,7 @@ export default class ChannelSlider extends HTMLElement {
 		return this._el.slider.progressAt(p);
 	}
 
-	propChangedCallback (prop, change) {
-		let name = prop.name;
-
+	propChangedCallback ({name, prop, detail: change}) {
 		if (["space", "min", "max", "step", "value", "defaultValue"].includes(name)) {
 			prop.applyChange(this._el.slider, change);
 		};

@@ -26,6 +26,7 @@ const Self = class ColorPicker extends HTMLElement {
 		`;
 
 		this._el = dom.named(this);
+		this.addEventListener("propchange", this.propChangedCallback);
 	}
 
 	connectedCallback() {
@@ -61,8 +62,7 @@ const Self = class ColorPicker extends HTMLElement {
 		}
 	}
 
-	propChangedCallback (prop, change) {
-		let name = prop.name;
+	propChangedCallback ({name, prop, detail: change}) {
 		if (name === "space") {
 			let i = 0;
 			for (let channel in this.space.coords) {
