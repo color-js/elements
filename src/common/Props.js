@@ -97,6 +97,21 @@ export default class Props extends Map {
 		return prop;
 	}
 
+	/**
+	 * Add a prop regardless of whether props have been processed or not yet
+	 * @param {Function} Class
+	 * @param {string} name
+	 * @param {object} spec
+	 */
+	static add (Class, name, spec) {
+		if (Class.props instanceof this) {
+			Class.props.add(name, spec);
+		}
+		else {
+			Class.props[name] = spec;
+		}
+	}
+
 	updateDependents () {
 		if (!this.#initialized) {
 			// We update all dependents at once after initialization
