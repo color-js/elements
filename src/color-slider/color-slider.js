@@ -1,6 +1,6 @@
 
 import Color from "../common/color.js";
-import Props from "../common/props.js";
+import Props from "../common/Props.js";
 import defineFormAssociated from "../common/form-associated.js";
 import ColorChangeEvent from "../common/ColorChangeEvent.js";
 import { getStep } from "../common/util.js";
