@@ -29,6 +29,7 @@ export default class ColorSlider extends HTMLElement {
 
 		this._el.slider.addEventListener("input", this);
 		this._el.spinner.addEventListener("input", this);
+		this.addEventListener("propchange", this.propChangedCallback);
 	}
 
 	connectedCallback() {
@@ -61,9 +62,7 @@ export default class ColorSlider extends HTMLElement {
 		}
 	}
 
-	propChangedCallback (prop, change) {
-		let name = prop.name;
-
+	propChangedCallback ({name, prop, detail: change}) {
 		if (["min", "max", "step", "value", "defaultValue"].includes(name)) {
 			prop.applyChange(this._el.slider, change);
 
@@ -98,8 +97,13 @@ export default class ColorSlider extends HTMLElement {
 			}
 		}
 
-		if (name === "color") {
-			this.style.setProperty("--color", this.color?.display());
+		if (name === "color" || name === "defaultColor") {
+			let color = this.color;
+
+			if (color) {
+				let displayedColor = color.display();
+				this.style.setProperty("--color", displayedColor);
+			}
 		}
 
 		if (name === "value") {
@@ -109,7 +113,6 @@ export default class ColorSlider extends HTMLElement {
 				let valueStr = this.value + "";
 				this._el.spinner.style.setProperty("--value-length", valueStr.length);
 			}
-
 		}
 	}
 

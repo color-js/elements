@@ -1,6 +1,8 @@
 import {
 	inferDependencies,
 } from "./util.js";
+import PropChangeEvent from "./PropChangeEvent.js";
+
 const callableBuiltins = new Set([String, Number, Boolean, Array, Object, Function, Symbol, BigInt]);
 
 let Self = class Prop {
@@ -204,7 +206,12 @@ let Self = class Prop {
 	async changed (element, change) {
 		this.updateDependents(element);
 
-		element.propChangedCallback?.(this, change);
+		let event = new PropChangeEvent("propchange", {
+			name: this.name,
+			prop: this,
+			detail: change
+		});
+		element.dispatchEvent(event);
 	}
 
 	/**
