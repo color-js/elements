@@ -150,7 +150,7 @@ export default class Props extends Map {
 			dependents[name] = new Set();
 		}
 
-		let keyIndices = Object.fromEntries(this.keys().map((key, i) => [key, i]));
+		let keyIndices = Object.fromEntries([...this.keys()].map((key, i) => [key, i]));
 		let sort = false;
 
 		for (let prop of this.values()) {
