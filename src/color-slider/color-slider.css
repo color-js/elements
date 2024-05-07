@@ -52,7 +52,7 @@
 		border: var(--_slider-thumb-border);
 		box-shadow: 0 0 0 1px white;
 		background: var(--color, transparent);
-		transition: 200ms;
+		transition: 200ms, 0s background;
 	}
 
 	&::-moz-range-thumb {
@@ -63,7 +63,7 @@
 		border: var(--_slider-thumb-border);
 		box-shadow: 0 0 0 1px white;
 		background: var(--color, transparent);
-		transition: 200ms;
+		transition: 200ms, 0s background;
 	}
 
 		&::-webkit-slider-thumb:active {

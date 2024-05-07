@@ -10,7 +10,9 @@ you can just [use the CSS file](#css-only) and a few classes and CSS variables t
 
 The actual component does a lot more:
 - It provides a `color` property with the actual color value.
-- It takes care of displaying even colors in unsupported color spaces
+- It takes care of even displaying colors in unsupported color spaces
+- Editable tooltip showing the current value or progress _(optional)_
+- Convenient events like `colorchange` and `valuechange` that fire even when the value changes programmatically
 
 Basic example:
 
