@@ -19,12 +19,12 @@ Basic example:
               stops="oklch(90% 50% 100), darkcyan, indigo"></color-slider>
 ```
 
-You can listen to the `input` event and grab the `color` property to get the current color value:
+You can listen to the `colorchange` event and grab the `color` property to get the current color value:
 
 ```html
 <color-slider space="hsl"
               stops="red, yellow, lime, aqua, blue, magenta, red"
-              oninput="this.nextElementSibling.textContent = this.color"></color-slider>
+              oncolorchange="this.nextElementSibling.textContent = this.color"></color-slider>
 <output></output>
 ```
 
@@ -33,7 +33,7 @@ In fact, you can combine it with a [`<color-inline>`](../color-inline/) or [`<co
 ```html
 <color-slider space="oklch"
               stops="oklch(80% 50% 70), oklch(65% 50% 180)"
-              oninput="this.nextElementSibling.textContent = this.color"></color-slider>
+              oncolorchange="this.nextElementSibling.textContent = this.color"></color-slider>
 <color-inline></color-inline>
 ```
 
@@ -43,7 +43,7 @@ You can set the `value` attribute to specify an initial color other than the mid
 <color-slider space="oklch"
               stops="oklch(85% 50% 80), oklch(65% 50% 180)"
 			  value="0.1"
-              oninput="this.nextElementSibling.textContent = this.color"></color-slider>
+              oncolorchange="this.nextElementSibling.textContent = this.color"></color-slider>
 <color-inline></color-inline>
 ```
 
@@ -53,7 +53,7 @@ You can use a different min and max value and it’s just linearly mapped to the
 <color-slider space="oklch"
               stops="oklch(85% 50% 80), oklch(65% 50% 180)"
 			  min="-50" max="50" value="20"
-              oninput="this.nextElementSibling.textContent = this.color"></color-slider>
+              oncolorchange="this.nextElementSibling.textContent = this.color"></color-slider>
 <color-inline></color-inline>
 ```
 
@@ -64,7 +64,7 @@ You can add an editable tooltip by simply using the `tooltip` attribute:
               stops="oklch(85% 50% 80), oklch(65% 50% 180)"
 			  min="-50" max="50" value="20"
               tooltip
-              oninput="this.nextElementSibling.textContent = this.color"></color-slider>
+              oncolorchange="this.nextElementSibling.textContent = this.color"></color-slider>
 <color-inline></color-inline>
 ```
 
@@ -76,8 +76,18 @@ If you want to show the progress instead, you can specify `"progress"` as the at
               stops="oklch(85% 50% 80), oklch(65% 50% 180)"
 			  min="-50" max="50" value="20"
               tooltip="progress"
-              oninput="this.nextElementSibling.textContent = this.color"></color-slider>
+              oncolorchange="this.nextElementSibling.textContent = this.color"></color-slider>
 <color-inline></color-inline>
+```
+
+All properties are reactive and can be set programmatically:
+
+```html
+<button onclick="this.nextElementSibling.value = Math.random() ">Random color</button>
+<color-slider space="oklch" stops="gold, darkcyan, indigo"
+oncolorchange="this.nextElementSibling.textContent = this.color"></color-slider>
+<color-swatch></color-swatch>
+
 ```
 
 ### CSS-only usage
@@ -126,7 +136,8 @@ If you’re only using the CSS file, you should set these yourself.
 
 | Name | Description |
 |------|-------------|
-| `input` | Fired when the color changes and once during initialization |
+| `input` | Fired when the color changes due to user action |
+| `change` | Fired when the color changes for any reason, and once during initialization |
 
 ## Planned features
 

@@ -1,6 +1,6 @@
 import ChannelSlider from "../channel-slider/channel-slider.js";
 import "../color-swatch/color-swatch.js";
-import Props from "../common/props.js";
+import Props from "../common/Props.js";
 import * as dom from "../common/dom.js";
 import Color from "../common/color.js";
 

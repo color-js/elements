@@ -116,3 +116,7 @@ export function getStep (min, max, {minSteps = 100, maxStep = 1} = {}) {
 
 	return step > maxStep ? maxStep : step;
 }
+
+export function sortObject (obj, fn) {
+	return Object.fromEntries(Object.entries(obj).sort(fn));
+}

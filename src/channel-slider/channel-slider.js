@@ -1,5 +1,5 @@
 import ColorSlider from "../color-slider/color-slider.js";
-import Props from "../common/props.js";
+import Props from "../common/Props.js";
 import * as dom from "../common/dom.js";
 import Color from "../common/color.js";
 

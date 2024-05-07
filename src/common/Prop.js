@@ -1,7 +1,7 @@
 import {
 	inferDependencies,
 } from "./util.js";
-import PropChangeEvent from "./PropChangeEvent.js";
+import { PropChangeEvent } from "./PropChangeEvent.js";
 
 const callableBuiltins = new Set([String, Number, Boolean, Array, Object, Function, Symbol, BigInt]);
 
@@ -39,7 +39,7 @@ let Self = class Prop {
 			});
 		}
 
-		this.dependencies = spec.dependencies ?? inferDependencies(spec.get);
+		this.dependencies = new Set(spec.dependencies ?? inferDependencies(spec.get));
 
 		for (let fn of ["equals", "parse", "stringify"]) {
 			if (spec[fn]) {
@@ -59,6 +59,10 @@ let Self = class Prop {
 	get toAttribute () {
 		let reflectTo = typeof this.reflect === "object" ? this.reflect.to : this.reflect;
 		return reflectTo === true ? this.name : typeof reflectTo === "string" ? reflectTo : null;
+	}
+
+	get defaultProp () {
+		return this.default instanceof Prop ? this.default : null;
 	}
 
 	// Just calls Self.equals() by default but can be overridden
@@ -112,8 +116,8 @@ let Self = class Prop {
 
 		if (value === undefined || value === null) {
 			if (this.default !== undefined) {
-				if (this.default instanceof Prop) {
-					return this.default.get(element);
+				if (this.defaultProp) {
+					return this.defaultProp.get(element);
 				}
 				else if (typeof this.default === "function") {
 					return this.default(element);
@@ -171,7 +175,6 @@ let Self = class Prop {
 			});
 		}
 
-
 		this.changed(element, change);
 	}
 
@@ -211,6 +214,7 @@ let Self = class Prop {
 			prop: this,
 			detail: change
 		});
+
 		element.dispatchEvent(event);
 	}
 
@@ -225,21 +229,29 @@ let Self = class Prop {
 		}
 	}
 
+	dependsOn (prop, element) {
+		if (!prop) {
+			return false;
+		}
+
+		if (prop === this) {
+			return true;
+		}
+
+		return this.dependencies.has(prop.name)
+		       || (this.defaultProp === prop && element.props[this.name] === undefined);
+	}
+
 	/**
 	 * Update all props that have this prop as a dependency
 	 * @param {*} element
 	 */
 	updateDependents (element) {
-		let dependents = this.props.dependents[this.name] ?? [];
+		let dependents = this.props.dependents[this.name] ?? new Set();
 
 		for (let prop of dependents) {
-			prop.update(element);
-		}
-
-		// Is this a default for any empty properties?
-		for (let prop of this.props.values()) {
-			if (prop.default === this && element.props[prop.name] === undefined) {
-				prop.changed(element, {source: "default", element});
+			if (prop.dependsOn(this, element)) {
+				prop.update(element);
 			}
 		}
 	}
