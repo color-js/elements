@@ -120,15 +120,6 @@ const Self = class ColorSlider extends HTMLElement {
 				this._el.spinner.style.setProperty("--value-length", valueStr.length);
 			}
 		}
-
-		if (name === "color" || name === "defaultColor") {
-			let color = this.color;
-
-			if (color) {
-				let displayedColor = color.display();
-				this.style.setProperty("--color", displayedColor);
-			}
-		}
 	}
 
 	tessellateStops (options = {}) {
