@@ -102,7 +102,7 @@ You can style it to look quite different:
 }
 </style>
 <color-slider class="lr-slider" space="oklch"
-              stops="yellowgreen, white, red"></color-slider>
+              stops="yellowgreen, gold, red"></color-slider>
 ```
 
 
