@@ -54,16 +54,16 @@
 
 #### Static
 
+```html
 <color-swatch id="dynamic_static">oklch(70% 0.25 138)</color-swatch>
-<script type="module">
-	dynamic_static.color = "oklch(60% 0.15 0)"
-</script>
+<button onclick='dynamic_static.color = "oklch(60% 0.15 0)"'>Change color</button>
+```
 
 ### Editable
 
+```html
 <color-swatch id="dynamic_editable">
 	<input value="oklch(70% 0.25 138)" />
 </color-swatch>
-<script type="module">
-	dynamic_editable.color = "oklch(60% 0.15 0)"
-</script>
+<button onclick='dynamic_editable.color = "oklch(60% 0.15 0)"'>Change color</button>
+```
