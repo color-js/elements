@@ -49,7 +49,7 @@ export default function definePropChangeEvent (Class, name) {
 
 			if (event.name === name) {
 				// Actually fire event
-				let newEvent = new CustomPropChangeEvent("colorchange", {
+				let newEvent = new CustomPropChangeEvent(eventName, {
 					[name]: this[name],
 				});
 				this.dispatchEvent(newEvent);
