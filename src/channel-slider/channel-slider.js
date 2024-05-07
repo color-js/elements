@@ -109,8 +109,21 @@ export default class ChannelSlider extends HTMLElement {
 
 	static props = {
 		space: {
-			...ColorSlider.props.get("space").spec,
-			default: "oklch",
+			space: {
+				default: "oklch",
+				parse (value) {
+					if (value instanceof Color.Space || value === null || value === undefined) {
+						return value;
+					}
+
+					value += "";
+
+					return Color.Space.get(value);
+				},
+				stringify (value) {
+					return value?.id;
+				},
+			},
 		},
 		channel: {
 			type: String,
