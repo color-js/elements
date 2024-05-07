@@ -109,20 +109,18 @@ export default class ChannelSlider extends HTMLElement {
 
 	static props = {
 		space: {
-			space: {
-				default: "oklch",
-				parse (value) {
-					if (value instanceof Color.Space || value === null || value === undefined) {
-						return value;
-					}
+			default: "oklch",
+			parse (value) {
+				if (value instanceof Color.Space || value === null || value === undefined) {
+					return value;
+				}
 
-					value += "";
+				value += "";
 
-					return Color.Space.get(value);
-				},
-				stringify (value) {
-					return value?.id;
-				},
+				return Color.Space.get(value);
+			},
+			stringify (value) {
+				return value?.id;
 			},
 		},
 		channel: {
