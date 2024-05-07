@@ -1,19 +1,20 @@
 
 import Color from "../common/color.js";
 import Props from "../common/Props.js";
+import definePropChangeEvent from "../common/PropChangeEvent.js";
 import defineFormAssociated from "../common/form-associated.js";
-import ColorChangeEvent from "../common/ColorChangeEvent.js";
 import { getStep } from "../common/util.js";
 
-export const tagName = "color-slider";
-let styleURL = new URL(`./${tagName}.css`, import.meta.url);
-
-export default class ColorSlider extends HTMLElement {
+const Self = class ColorSlider extends HTMLElement {
 	#initialized = false;
+	static postInit = [];
+	static tagName = "color-slider";
 
 	constructor () {
 		super();
 		this.attachShadow({mode: "open"});
+
+		let styleURL = new URL(`./${this.constructor.tagName}.css`, import.meta.url);
 		this.shadowRoot.innerHTML = `
 			<style>@import url("${ styleURL }")</style>
 			<input type="range" class="color-slider" part="slider" min="0" max="1" step="0.01" />
@@ -31,19 +32,17 @@ export default class ColorSlider extends HTMLElement {
 		this._el.slider.addEventListener("input", this);
 		this._el.spinner.addEventListener("input", this);
 		this.addEventListener("propchange", this.propChangedCallback);
+
+		for (let init of this.constructor.postInit) {
+			init.call(this);
+		}
 	}
 
 	connectedCallback() {
 		if (!this.#initialized) {
-			this.attributeChangedCallback();
+			this.initializeProps();
 
 			this.#initialized = true;
-
-			this._el.slider.dispatchEvent(new ColorChangeEvent("colorchange", {
-				bubbles: true,
-				color: this.color,
-				displayedColor: this.color?.display(),
-			}));
 		}
 	}
 
@@ -70,7 +69,6 @@ export default class ColorSlider extends HTMLElement {
 	propChangedCallback ({name, prop, detail: change}) {
 		if (["min", "max", "step", "value", "defaultValue"].includes(name)) {
 			prop.applyChange(this._el.slider, change);
-
 
 			let spinnerValue = this.tooltip === "progress" ? +(this.progress * 100).toPrecision(4) : this.value;
 			prop.applyChange(this._el.spinner, {...change, value: spinnerValue});
@@ -126,21 +124,6 @@ export default class ColorSlider extends HTMLElement {
 			if (color) {
 				let displayedColor = color.display();
 				this.style.setProperty("--color", displayedColor);
-
-				this.dispatchEvent(new ColorChangeEvent("colorchange", {
-					bubbles: true,
-					color, displayedColor,
-					detail: change,
-				}));
-			}
-		}
-
-		if (name === "oncolorchange") {
-			if (change.oldInternalValue) {
-				this.removeEventListener("colorchange", change.oldInternalValue);
-			}
-			if (change.parsedValue) {
-				this.addEventListener("colorchange", change.parsedValue);
 			}
 		}
 	}
@@ -284,22 +267,21 @@ export default class ColorSlider extends HTMLElement {
 		tooltip: {
 			type: String,
 		},
-
-		oncolorchange: {
-			type: Function,
-			typeOptions: {
-				arguments: ["event"],
-			},
-		}
 	}
 }
 
-Props.create(ColorSlider);
-defineFormAssociated(ColorSlider, {
+
+Self.postInit.push(definePropChangeEvent(Self, "color"));
+Self.postInit.push(definePropChangeEvent(Self, "value"));
+Props.create(Self);
+
+defineFormAssociated(Self, {
 	getSource: el => el._el.slider,
 	role: "slider",
 	valueProp: "value",
 	changeEvent: "change",
 });
 
-customElements.define(tagName, ColorSlider);
+customElements.define(Self.tagName, Self);
+
+export default Self;

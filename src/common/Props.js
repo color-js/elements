@@ -1,7 +1,10 @@
 import {
 	defineLazyProperty,
+	sortObject,
 } from "./util.js";
 import Prop from "./Prop.js";
+
+let propsInitialized = Symbol("propsInitialized");
 
 export default class Props extends Map {
 	/**
@@ -67,6 +70,27 @@ export default class Props extends Map {
 			}
 		}
 
+		// To be called when the element is connected
+		Class.prototype.initializeProps ??= function (options = {}) {
+			if (this[propsInitialized] && !options.force) {
+				return;
+			}
+
+			// Update all reflected props from attributes at once
+			this.attributeChangedCallback();
+
+			// Fire propchange events for any props not already handled
+			// FIXME this logic should probably live somewhere else
+			let props = this.constructor.props;
+			for (let name of props.keys()) {
+				let prop = props.get(name);
+				if (this.props[name] === undefined && !prop.defaultProp) {
+					// Is not set and its default is not another prop
+					prop.changed(this, {source: "default", element: this});
+				}
+			}
+		}
+
 		if (!Object.hasOwn(Class, "observedAttributes")) {
 			Object.defineProperty(Class, "observedAttributes", {
 				get: () => this.observedAttributes,
@@ -115,18 +139,48 @@ export default class Props extends Map {
 	updateDependents () {
 		if (!this.#initialized) {
 			// We update all dependents at once after initialization
+			// no need to do it after every single property
 			return;
 		}
 
-		// Build or update dependency graph
-		for (let prop of this.values()) {
-			for (let name of prop.dependencies) {
-				if (!this.dependents[name]) {
-					this.dependents[name] = new Set();
-				}
+		// Rebuild dependency graph
+		let dependents = {};
 
-				this.dependents[name].add(prop);
+		for (let name of this.keys()) {
+			dependents[name] = new Set();
+		}
+
+		let keyIndices = Object.fromEntries(this.keys().map((key, i) => [key, i]));
+		let sort = false;
+
+		for (let prop of this.values()) {
+			// Add dependencies
+			let dependencies = [...prop.dependencies];
+
+			if (prop.defaultProp) {
+				dependencies.push(prop.defaultProp.name);
 			}
+
+			for (let name of dependencies) {
+				// ${name} depends on ${prop.name}
+				dependents[name]?.add(prop);
+
+				// Dependent props should come after the prop they depend on
+				if (keyIndices[name] < keyIndices[prop.name]) {
+					// Swap the order of the props
+					[keyIndices[name], keyIndices[prop.name]] = [keyIndices[prop.name], keyIndices[name]];
+					sort = true;
+				}
+			}
+		}
+
+		if (sort) {
+			// Sort dependency graph using the new order in keyIndices
+			// TODO put props with no dependencies first
+			// TODO do we need a topological sort?
+			this.dependents = sortObject(dependents, ([a], [b]) => {
+				return keyIndices[a] - keyIndices[b];
+			});
 		}
 	}
 

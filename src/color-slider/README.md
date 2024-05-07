@@ -24,7 +24,7 @@ You can listen to the `input` event and grab the `color` property to get the cur
 ```html
 <color-slider space="hsl"
               stops="red, yellow, lime, aqua, blue, magenta, red"
-              oncolorchange="console.log(this.nextElementSibling.textContent = this.color)"></color-slider>
+              oncolorchange="this.nextElementSibling.textContent = this.color"></color-slider>
 <output></output>
 ```
 
