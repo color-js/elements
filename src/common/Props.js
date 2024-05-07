@@ -184,7 +184,11 @@ export default class Props extends Map {
 		}
 	}
 
-	static create (...args) {
-		return new this(...args);
+	static create (Class, props = Class.props) {
+		if (props instanceof Props) {
+			return props;
+		}
+
+		return new this(Class, props);
 	}
 }
