@@ -5,7 +5,7 @@ export default function (Class, {
 	role,
 	valueProp = "value",
 	changeEvent = "input",
-} = {}) {
+} = Class.formAssociated) {
 	defineInstanceProperty(Class, "_internals", el => {
 		let source = getSource(el);
 		let internals = el.attachInternals?.();

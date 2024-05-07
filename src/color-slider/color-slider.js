@@ -1,13 +1,11 @@
 
 import Color from "../common/color.js";
-import Props from "../common/Props.js";
-import definePropChangeEvent from "../common/PropChangeEvent.js";
-import defineFormAssociated from "../common/form-associated.js";
+import NudeElement from "../common/Element.js";
 import { getStep } from "../common/util.js";
 
-const Self = class ColorSlider extends HTMLElement {
+const Self = class ColorSlider extends NudeElement {
 	#initialized = false;
-	static postInit = [];
+	static postConstruct = [];
 	static tagName = "color-slider";
 
 	constructor () {
@@ -29,21 +27,20 @@ const Self = class ColorSlider extends HTMLElement {
 			spinner: this.shadowRoot.querySelector("input[type=number]"),
 		};
 
-		this.addEventListener("propchange", this.propChangedCallback);
-
-		for (let init of this.constructor.postInit) {
+		for (let init of this.constructor.postConstruct) {
 			init.call(this);
 		}
 	}
 
 	connectedCallback() {
-		if (!this.#initialized) {
-			this.initializeProps();
+		super.connectedCallback?.();
 
+		this._el.slider.addEventListener("input", this);
+		this._el.spinner.addEventListener("input", this);
+		if (!this.#initialized) {
 			this.#initialized = true;
 
-			this._el.slider.addEventListener("input", this);
-			this._el.spinner.addEventListener("input", this);
+
 
 			this._el.slider.dispatchEvent(new Event("input"));
 		}
@@ -261,20 +258,29 @@ const Self = class ColorSlider extends HTMLElement {
 		tooltip: {
 			type: String,
 		},
-	}
+	};
+
+	static events = {
+		change: {
+			from () {
+				return this._el.slider;
+			}
+		},
+		valuechange: {
+			propchange: "value",
+		},
+		colorchange: {
+			propchange: "color",
+		},
+	};
+
+	static formAssociated = {
+		getSource: el => el._el.slider,
+		role: "slider",
+		valueProp: "value",
+		changeEvent: "valuechange",
+	};
 }
-
-
-Self.postInit.push(definePropChangeEvent(Self, "color"));
-Self.postInit.push(definePropChangeEvent(Self, "value"));
-Props.create(Self);
-
-defineFormAssociated(Self, {
-	getSource: el => el._el.slider,
-	role: "slider",
-	valueProp: "value",
-	changeEvent: "change",
-});
 
 customElements.define(Self.tagName, Self);
 
