@@ -1,4 +1,8 @@
 import Props from "./Props.js";
+import PropChangeEvent from "../common/PropChangeEvent.js";
+import {
+	pick,
+} from "./util.js";
 
 export function defineEvent (Class, name, options = {}) {
 	let onName = `on${name}`;
@@ -27,12 +31,46 @@ export function defineEvent (Class, name, options = {}) {
 				}
 			});
 
-			if (options.init) {
-				options.init.call(this);
+			if (options.propchange) {
+				// Shortcut for events that fire when a specific prop changes
+				let propName = options.propchange;
+				options.from ??= {};
+				Object.assign(options.from, {
+					type: "propchange",
+					when: event => event.name === propName,
+					constructor: PropChangeEvent.for(propName),
+					options: {
+						[propName]: this[propName],
+					}
+				}, options.from);
+			}
+
+			// Event is a subset of another event (either on this element or another element)
+			let from = typeof options.from === "function" ? { on: options.from } : options.from;
+
+			if (from) {
+				let target = typeof from?.on === "function" ? from.on.call(this) : from?.on ?? this;
+				let host = this;
+				let type = from?.type ?? name;
+
+				// OPTIMIZE is it worth merging this with the listener above if options.propchange ?
+				target.addEventListener(type, event => {
+					if (!from.when || from.when(event)) {
+						let EventConstructor = from.constructor ?? event.constructor;
+						let source = from.constructor
+							// Construct specific event object
+							? pick(event, ["bubbles", "cancelable", "composed", "detail"])
+							// Retarget this event
+							: event;
+						let options = Object.assign({}, source, from.options);
+
+						let newEvent = new EventConstructor(name, options);
+						host.dispatchEvent(newEvent);
+					}
+				})
 			}
 		}
 	}
-
 }
 
 export default function defineEvents (Class, events = Class.events) {

@@ -1,6 +1,6 @@
-import Props from "./Props.js";
 
-export class PropChangeEvent extends CustomEvent {
+
+export default class PropChangeEvent extends CustomEvent {
 	constructor (type, { name, prop, ...options } = {}) {
 		super(type, options);
 
@@ -8,41 +8,30 @@ export class PropChangeEvent extends CustomEvent {
 		this.prop = prop;
 	}
 
+	static subtypes = {};
+
 	/**
 	 * Get a subclass for a specific prop
 	 * @param {*} name
 	 */
 	static for (name) {
-		let eventClassName = name[0].toUpperCase() + name.slice(1) + "ChangeEvent";
-		let CustomPropChangeEvent = class extends PropChangeEvent {
-			constructor (type, options = {}) {
-				super(type, options);
+		if (!this.subtypes[name]) {
+			let CustomPropChangeEvent = class extends PropChangeEvent {
+				constructor (type, options = {}) {
+					super(type, options);
 
-				this[name] = options[name];
-			}
+					this[name] = options[name];
+				}
+			};
 
-			static dispatchFrom (element) {
-				let event = new this(name + "change", {
-					[name]: element[name],
-				});
-				element.dispatchEvent(event);
-			}
-		};
-		Object.defineProperty(CustomPropChangeEvent, "name", { value: eventClassName });
-		return CustomPropChangeEvent;
-	}
-}
+			// In the future we may want to allow subtypes for more than one props,
+			// in which case we’d want to make the class name customizable
+			let eventClassName = name[0].toUpperCase() + name.slice(1) + "ChangeEvent";
+			Object.defineProperty(CustomPropChangeEvent, "name", { value: eventClassName });
 
-export default function definePropChangeEvent (name) {
-	let CustomPropChangeEvent = PropChangeEvent.for(name);
+			this.subtypes[name] = CustomPropChangeEvent;
+		}
 
-	return function postConstruct () {
-
-		this.addEventListener("propchange", event => {
-			if (event.name === name) {
-				// Actually fire event
-				CustomPropChangeEvent.dispatchFrom(this);
-			}
-		});
+		return this.subtypes[name];
 	}
 }

@@ -118,5 +118,25 @@ export function getStep (min, max, {minSteps = 100, maxStep = 1} = {}) {
 }
 
 export function sortObject (obj, fn) {
+	if (!obj) {
+		return obj;
+	}
+
 	return Object.fromEntries(Object.entries(obj).sort(fn));
+}
+
+export function mapObject (obj, fn) {
+	if (!obj) {
+		return obj;
+	}
+
+	return Object.fromEntries(Object.entries(obj).map(fn));
+}
+
+export function pick (obj, properties) {
+	if (!properties || !obj) {
+		return obj;
+	}
+
+	return Object.fromEntries(Object.entries(obj).filter(([key]) => properties.includes(key)));
 }

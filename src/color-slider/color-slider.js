@@ -1,6 +1,5 @@
 
 import Color from "../common/color.js";
-import definePropChangeEvent from "../common/PropChangeEvent.js";
 import NudeElement from "../common/Element.js";
 import { getStep } from "../common/util.js";
 
@@ -34,11 +33,14 @@ const Self = class ColorSlider extends NudeElement {
 	}
 
 	connectedCallback() {
+		super.connectedCallback?.();
+
+		this._el.slider.addEventListener("input", this);
+		this._el.spinner.addEventListener("input", this);
 		if (!this.#initialized) {
 			this.#initialized = true;
 
-			this._el.slider.addEventListener("input", this);
-			this._el.spinner.addEventListener("input", this);
+
 
 			this._el.slider.dispatchEvent(new Event("input"));
 		}
@@ -259,11 +261,16 @@ const Self = class ColorSlider extends NudeElement {
 	};
 
 	static events = {
+		change: {
+			from () {
+				return this._el.slider;
+			}
+		},
 		valuechange: {
-			init: definePropChangeEvent("value"),
+			propchange: "value",
 		},
 		colorchange: {
-			init: definePropChangeEvent("color"),
+			propchange: "color",
 		},
 	};
 
