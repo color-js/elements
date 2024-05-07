@@ -63,6 +63,11 @@ export default class ColorSwatch extends HTMLElement {
 		this.#dom.wrapper = this.shadowRoot.querySelector("#wrapper");
 		this.#dom.colorWrapper = this.shadowRoot.querySelector("[part=color-wrapper]");
 		this.#dom.input = this.querySelector("input");
+		this.#dom.slot = this.shadowRoot.querySelector("slot:not([name])");
+
+		this.#dom.slot.addEventListener("slotchange", evt => {
+			this.#render();
+		});
 
 		if (this.#dom.input) {
 			this.#dom.input.addEventListener("input", evt => {
