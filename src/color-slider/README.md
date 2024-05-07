@@ -87,22 +87,46 @@ All properties are reactive and can be set programmatically:
 <color-slider space="oklch" stops="gold, darkcyan, indigo"
 oncolorchange="this.nextElementSibling.textContent = this.color"></color-slider>
 <color-swatch></color-swatch>
-
 ```
+
+You can style it to look quite different:
+
+```html
+<style>
+.lr-slider {
+    --slider-height: .3em;
+    --slider-thumb-width: 1em;
+    --slider-thumb-height: 1em;
+    --slider-thumb-radius: 1em;
+    --slider-thumb-border: 3px solid oklab(50% 0 0);
+}
+</style>
+<color-slider class="lr-slider" space="oklch"
+              stops="yellowgreen, white, red"></color-slider>
+```
+
 
 ### CSS-only usage
 
-If you just want the styling and are fine dealing with the lower level details on your own, you *can* just use the CSS file:
+If you just want the styling of `<color-slider>` and not any of the API (or are fine dealing with the lower level details on your own),
+you *can* just use the CSS file:
 
 ```css
 @import url("https://elements.colorjs.io/src/color-slider/color-slider.css");
 ```
 
+This is perfect for when the gradient is more of a visual aid than a functional part of your UI,
+e.g. when picking a temperature:
+
 ```html
 <style>
     @import url("color-slider.css");
 </style>
-<input type="range" class="color-slider" style="--slider-color-stops: oklch(85% 50% 180), gold" />
+<label>
+    Temperature:
+    <input type="range" class="color-slider" min="-20" max="50" value="15"
+           style="--slider-color-stops: oklch(65% 0.1 250), yellowgreen, gold, orange, red, darkred" />
+</label>
 ```
 
 Then use a `color-slider` class on your slider element, and use [CSS variables](#css-variables) to set the gradient (either directly via `--gradient` or generated via `--stops` + `--color-space` or `--gradient`).
