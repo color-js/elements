@@ -33,7 +33,7 @@ export class PropChangeEvent extends CustomEvent {
 	}
 }
 
-export default function definePropChangeEvent (Class, name) {
+export default function definePropChangeEvent (name) {
 	let CustomPropChangeEvent = PropChangeEvent.for(name);
 
 	return function postConstruct () {

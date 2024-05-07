@@ -260,10 +260,10 @@ const Self = class ColorSlider extends NudeElement {
 
 	static events = {
 		valuechange: {
-			init: definePropChangeEvent(ColorSlider, "value"),
+			init: definePropChangeEvent("value"),
 		},
 		colorchange: {
-			init: definePropChangeEvent(ColorSlider, "color"),
+			init: definePropChangeEvent("color"),
 		},
 	};
 
