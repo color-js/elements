@@ -19,7 +19,7 @@ Basic example:
               stops="oklch(90% 50% 100), darkcyan, indigo"></color-slider>
 ```
 
-You can listen to the `input` event and grab the `color` property to get the current color value:
+You can listen to the `colorchange` event and grab the `color` property to get the current color value:
 
 ```html
 <color-slider space="hsl"
