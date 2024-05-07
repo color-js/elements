@@ -29,8 +29,6 @@ const Self = class ColorSlider extends HTMLElement {
 			spinner: this.shadowRoot.querySelector("input[type=number]"),
 		};
 
-		this._el.slider.addEventListener("input", this);
-		this._el.spinner.addEventListener("input", this);
 		this.addEventListener("propchange", this.propChangedCallback);
 
 		for (let init of this.constructor.postInit) {
@@ -43,6 +41,11 @@ const Self = class ColorSlider extends HTMLElement {
 			this.initializeProps();
 
 			this.#initialized = true;
+
+			this._el.slider.addEventListener("input", this);
+			this._el.spinner.addEventListener("input", this);
+
+			this._el.slider.dispatchEvent(new Event("input"));
 		}
 	}
 
