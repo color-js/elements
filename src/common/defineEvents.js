@@ -6,17 +6,30 @@ import {
 
 export function defineEvent (Class, name, options = {}) {
 	let onName = `on${name}`;
+	let isImplemented = name in Class.prototype;
 
-	if (!(onName in Class.prototype)) {
+	if (!isImplemented) {
 		Props.add(Class, onName, {
 			type: Function,
 			typeOptions: {
 				arguments: ["event"],
 			},
+			reflect: {
+				from: true,
+			}
 		});
+	}
 
-		return function postConstruct () {
-			this.addEventListener("propchange", event => {
+
+
+	if (isImplemented && !options.from) {
+		// Not much to do here
+		return;
+	}
+
+	return function postConstruct () {
+		this.addEventListener("propchange", event => {
+			if (!isImplemented) {
 				if (event.name === onName) {
 					// Implement the oneventname attribute
 					let change = event.detail;
@@ -29,46 +42,42 @@ export function defineEvent (Class, name, options = {}) {
 						this.addEventListener(name, change.parsedValue);
 					}
 				}
-			});
+			}
 
-			if (options.propchange) {
+			if (event.name === options.propchange) {
 				// Shortcut for events that fire when a specific prop changes
 				let propName = options.propchange;
-				options.from ??= {};
-				Object.assign(options.from, {
-					type: "propchange",
-					when: event => event.name === propName,
-					constructor: PropChangeEvent.for(propName),
-					options: {
-						[propName]: this[propName],
-					}
-				}, options.from);
+				let EventConstructor = PropChangeEvent.for(propName);
+				let eventOptions = Object.assign(pick(event, ["bubbles", "cancelable", "composed", "detail"]), {
+					[propName]: this[propName],
+				});
+
+				this.dispatchEvent(new EventConstructor(name, eventOptions));
 			}
+		});
 
-			// Event is a subset of another event (either on this element or another element)
-			let from = typeof options.from === "function" ? { on: options.from } : options.from;
+		// Event is a subset of another event (either on this element or another element)
+		let from = typeof options.from === "function" ? { on: options.from } : options.from;
 
-			if (from) {
-				let target = typeof from?.on === "function" ? from.on.call(this) : from?.on ?? this;
-				let host = this;
-				let type = from?.type ?? name;
+		if (from) {
+			let target = typeof from?.on === "function" ? from.on.call(this) : from?.on ?? this;
+			let host = this;
+			let type = from?.type ?? name;
 
-				// OPTIMIZE is it worth merging this with the listener above if options.propchange ?
-				target.addEventListener(type, event => {
-					if (!from.when || from.when(event)) {
-						let EventConstructor = from.constructor ?? event.constructor;
-						let source = from.constructor
-							// Construct specific event object
-							? pick(event, ["bubbles", "cancelable", "composed", "detail"])
-							// Retarget this event
-							: event;
-						let options = Object.assign({}, source, from.options);
+			target.addEventListener(type, event => {
+				if (!from.when || from.when(event)) {
+					let EventConstructor = from.event ?? event.constructor;
+					let source = from.constructor
+						// Construct specific event object
+						? pick(event, ["bubbles", "cancelable", "composed", "detail"])
+						// Retarget this event
+						: event;
+					let options = Object.assign({}, source, from.options);
 
-						let newEvent = new EventConstructor(name, options);
-						host.dispatchEvent(newEvent);
-					}
-				})
-			}
+					let newEvent = new EventConstructor(name, options);
+					host.dispatchEvent(newEvent);
+				}
+			});
 		}
 	}
 }

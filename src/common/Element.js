@@ -17,19 +17,24 @@ const Self = class NudeElement extends HTMLElement {
 			this.addEventListener("propchange", this.propChangedCallback);
 		}
 
+		// Run after child constructor has finished
+		Promise.resolve().then(() => {
+			for (let init of this.constructor.postConstruct) {
+				init.call(this);
+			}
+		});
 	}
 
 	connectedCallback () {
 		if (!this.#initialized) {
+			// Stuff that runs once per element
 			this.initializeProps?.();
-
 			this.#initialized = true;
 		}
 	}
 
-
 	static init () {
-		// One time stuff
+		// Stuff that runs once per class
 		if (this._initialized) {
 			return;
 		}

@@ -1,19 +1,18 @@
-import ColorSlider from "../color-slider/color-slider.js";
-import Props from "../common/Props.js";
+import "../color-slider/color-slider.js";
 import * as dom from "../common/dom.js";
 import Color from "../common/color.js";
+import NudeElement from "../common/Element.js";
 
 export const tagName = "channel-slider";
 
-let styleURL = new URL(`./${tagName}.css`, import.meta.url);
-
-export default class ChannelSlider extends HTMLElement {
+export default class ChannelSlider extends NudeElement {
 	#initialized = false;
 
 	constructor () {
 		super();
 
 		this.attachShadow({mode: "open"});
+		let styleURL = new URL(`./${tagName}.css`, import.meta.url);
 		this.shadowRoot.innerHTML = `
 			<style>@import url("${ styleURL }")</style>
 			<label class="color-slider-label" part="label">
@@ -24,11 +23,10 @@ export default class ChannelSlider extends HTMLElement {
 
 		this._el = dom.named(this);
 		this._el.slot = this.shadowRoot.querySelector("slot");
-		this.addEventListener("propchange", this.propChangedCallback);
 	}
 
 	connectedCallback() {
-		this.attributeChangedCallback();
+		super.connectedCallback?.();
 
 		this._el.slider.addEventListener("input", this);
 
@@ -53,7 +51,12 @@ export default class ChannelSlider extends HTMLElement {
 
 	colorAt (value) {
 		let color = this.defaultColor.clone();
-		color.set(this.channel, value);
+		try {
+			color.set(this.channel, value);
+		}
+		catch (e) {
+			console.warn(e);
+		}
 		return color;
 	}
 
@@ -103,8 +106,10 @@ export default class ChannelSlider extends HTMLElement {
 		}
 	}
 
+
+
 	get channelName () {
-		return this.space.coords[this.channel].name ?? this.channel;
+		return this.channelSpec?.name ?? this.channel;
 	}
 
 	static props = {
@@ -126,19 +131,38 @@ export default class ChannelSlider extends HTMLElement {
 		channel: {
 			type: String,
 			default () {
-				return Object.keys(this.space.coords)[0]
+				return Object.keys(this.space.coords)[0];
 			},
+			// get () {
+			// 	let value = this.props.channel;
+			// 	let space = this.space;
+			// 	console.log(this.props, value, space);
+
+			// 	if (!space || space.coords[value]) {
+			// 		return value;
+			// 	}
+
+			// 	return Object.keys(this.space.coords)[0];
+			// },
+			// set: true,
+			// reflect: true,
+		},
+		channelSpec: {
+			get () {
+				let channelSpec = this.space?.coords[this.channel];
+
+				if (!channelSpec && this.space) {
+					channelSpec = Object.values(this.space.coords)[0];
+					console.warn(`Unknown channel ${ this.channel } in space ${ this.space }. Using first channel (${ channelSpec.name }) instead.`);
+				}
+
+				return channelSpec;
+			}
 		},
 		refRange: {
 			get () {
-				let coordSpec = this.space.coords[this.channel];
-
-				if (!coordSpec) {
-					console.warn(`Unknown channel ${ this.channel } in space ${ this.space }`);
-					return;
-				}
-
-				return coordSpec.refRange ?? coordSpec.range ?? [];
+				let channelSpec = this.channelSpec;
+				return channelSpec?.refRange ?? channelSpec?.range ?? [0, 100];
 			},
 		},
 		min: {
@@ -183,6 +207,9 @@ export default class ChannelSlider extends HTMLElement {
 
 		defaultColor: {
 			type: Color,
+			convert (color) {
+				return color.to(this.space);
+			},
 			default () {
 				let coords = [];
 				for (let channel in this.space.coords) {
@@ -202,16 +229,40 @@ export default class ChannelSlider extends HTMLElement {
 			get () {
 				return this.colorAt(this.value);
 			},
+			dependencies: ["defaultColor", "space", "channel", "value"],
 			set (value) {
 				let color = new Color(value).to(this.space);
 				this.defaultColor = color;
 				this.value = color.get(this.channel);
 			},
-			setDependencies: ["channel", "space"],
 		},
 	}
-}
 
-Props.create(ChannelSlider);
+	static events = {
+		change: {
+			from () {
+				return this._el.slider;
+			}
+		},
+		input: {
+			from () {
+				return this._el.slider;
+			}
+		},
+		valuechange: {
+			propchange: "value",
+		},
+		colorchange: {
+			propchange: "color",
+		},
+	};
+
+	static formAssociated = {
+		getSource: el => el._el.slider,
+		role: "slider",
+		valueProp: "value",
+		changeEvent: "valuechange",
+	};
+}
 
 customElements.define(tagName, ChannelSlider);

@@ -40,8 +40,6 @@ const Self = class ColorSlider extends NudeElement {
 		if (!this.#initialized) {
 			this.#initialized = true;
 
-
-
 			this._el.slider.dispatchEvent(new Event("input"));
 		}
 	}
@@ -216,7 +214,7 @@ const Self = class ColorSlider extends NudeElement {
 
 		space: {
 			default () {
-				return this.stops[0]?.space;
+				return this.stops[0]?.space ?? "oklab";
 			},
 			parse (value) {
 				if (value instanceof Color.Space || value === null || value === undefined) {

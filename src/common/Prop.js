@@ -39,7 +39,16 @@ let Self = class Prop {
 			});
 		}
 
-		this.dependencies = new Set(spec.dependencies ?? inferDependencies(spec.get));
+		if (spec.dependencies) {
+			this.dependencies = new Set(spec.dependencies);
+		}
+		else {
+			this.dependencies = new Set([
+				...inferDependencies(spec.get),
+				...inferDependencies(spec.convert),
+			]);
+		}
+		// this.dependencies = new Set(spec.dependencies ?? inferDependencies(spec.get));
 
 		for (let fn of ["equals", "parse", "stringify"]) {
 			if (spec[fn]) {
@@ -92,7 +101,7 @@ let Self = class Prop {
 			enumerable,
 		};
 
-		if (!this.spec.get) {
+		if (!this.spec.get || this.spec.set === true) {
 			descriptor.set = function (value) {
 				me.set(this, value, {source: "property"});
 			};
@@ -136,6 +145,10 @@ let Self = class Prop {
 
 		let attributeName = name;
 		let parsedValue = this.parse(value);
+
+		if (this.spec.convert) {
+			parsedValue = this.spec.convert.call(element, parsedValue);
+		}
 
 		if (this.equals(parsedValue, oldInternalValue)) {
 			return;
@@ -222,10 +235,19 @@ let Self = class Prop {
 	 * Recalculate computed properties and cache the value
 	 * @param {*} element
 	 */
-	update (element) {
+	update (element, dependency) {
+		let oldValue = element.props[this.name];
+
 		if (this.spec.get) {
 			let value = this.spec.get.call(element);
-			this.set(element, value, {source: "property"});
+			this.set(element, value, {source: "property", oldValue});
+		}
+		else if (this.spec.convert && oldValue !== undefined) {
+			let value = this.spec.convert.call(element, oldValue);
+			this.set(element, value, {source: "property", oldValue});
+		}
+		else if (dependency === this.defaultProp) {
+			this.changed(element, {element, source: "default"});
 		}
 	}
 
@@ -251,7 +273,7 @@ let Self = class Prop {
 
 		for (let prop of dependents) {
 			if (prop.dependsOn(this, element)) {
-				prop.update(element);
+				prop.update(element, this);
 			}
 		}
 	}
