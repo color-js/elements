@@ -25,10 +25,6 @@ const Self = class ColorSlider extends NudeElement {
 			slider: this.shadowRoot.querySelector(".color-slider"),
 			spinner: this.shadowRoot.querySelector("input[type=number]"),
 		};
-
-		for (let init of this.constructor.postConstruct) {
-			init.call(this);
-		}
 	}
 
 	connectedCallback() {
