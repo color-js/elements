@@ -1,20 +1,18 @@
-import ChannelSlider from "../channel-slider/channel-slider.js";
+import "../channel-slider/channel-slider.js";
 import "../color-swatch/color-swatch.js";
 import Props from "../common/Props.js";
 import * as dom from "../common/dom.js";
 import Color from "../common/color.js";
 
-export const tagName = "color-picker";
-
-let styleURL = new URL(`./${tagName}.css`, import.meta.url);
-
 const Self = class ColorPicker extends HTMLElement {
 	#initialized = false;
+	static tagName = "color-picker";
 
 	constructor () {
 		super();
 
 		this.attachShadow({mode: "open"});
+		let styleURL = new URL(`./${tagName}.css`, import.meta.url);
 		this.shadowRoot.innerHTML = `
 			<style>@import url("${ styleURL }")</style>
 			<div id=sliders></div>
@@ -83,10 +81,6 @@ const Self = class ColorPicker extends HTMLElement {
 		}
 	}
 
-	static computed = {
-
-	}
-
 	static props = {
 		space: {
 			default: "oklch",
@@ -135,6 +129,6 @@ const Self = class ColorPicker extends HTMLElement {
 
 Props.create(Self);
 
-customElements.define(tagName, Self);
+customElements.define(Self.tagName, Self);
 
 export default Self;
