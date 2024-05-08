@@ -2,12 +2,11 @@ import "../color-slider/color-slider.js";
 import * as dom from "../common/dom.js";
 import Color from "../common/color.js";
 import NudeElement from "../common/Element.js";
+import { getStep } from "../common/util.js";
 
 export const tagName = "channel-slider";
 
 export default class ChannelSlider extends NudeElement {
-	#initialized = false;
-
 	constructor () {
 		super();
 
@@ -29,12 +28,6 @@ export default class ChannelSlider extends NudeElement {
 		super.connectedCallback?.();
 
 		this._el.slider.addEventListener("input", this);
-
-		if (!this.#initialized) {
-			this.#initialized = true;
-
-			this._el.slider.dispatchEvent(new Event("input"));
-		}
 	}
 
 	disconnectedCallback() {
@@ -180,13 +173,7 @@ export default class ChannelSlider extends NudeElement {
 		step: {
 			type: Number,
 			default () {
-				let step = (this.max - this.min) / 1000;
-				// Clamp to closest power of ten
-				if (step >= 1) {
-					return 1;
-				}
-
-				return step;
+				return getStep(this.max, this.min, { minSteps: 100 });
 			},
 		},
 
