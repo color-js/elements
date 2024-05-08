@@ -6,7 +6,7 @@ import {
 
 export function defineEvent (Class, name, options = {}) {
 	let onName = `on${name}`;
-	let isImplemented = name in Class.prototype;
+	let isImplemented = onName in Class.prototype;
 
 	if (!isImplemented) {
 		Props.add(Class, onName, {
