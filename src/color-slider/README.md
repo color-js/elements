@@ -9,7 +9,7 @@ E.g. if all you need is styling sliders with arbitrary gradients you don’t eve
 you can just [use the CSS file](#css-only) and a few classes and CSS variables to style regular HTML sliders.
 
 The actual component does a lot more:
-- It provides a `color` property with the actual color value.
+- It provides a `color` property with the actual color value
 - It takes care of even displaying colors in unsupported color spaces
 - Editable tooltip showing the current value or progress _(optional)_
 - Convenient events like `colorchange` and `valuechange` that fire even when the value changes programmatically
@@ -85,9 +85,10 @@ If you want to show the progress instead, you can specify `"progress"` as the at
 All properties are reactive and can be set programmatically:
 
 ```html
-<button onclick="this.nextElementSibling.value = Math.random() ">Random color</button>
-<color-slider space="oklch" stops="gold, darkcyan, indigo"
-oncolorchange="this.nextElementSibling.textContent = this.color"></color-slider>
+<button onclick="this.nextElementSibling.value = Math.random()">Random color</button>
+<color-slider space="oklch"
+              stops="gold, darkcyan, indigo"
+              oncolorchange="this.nextElementSibling.textContent = this.color"></color-slider>
 <color-swatch></color-swatch>
 ```
 
@@ -131,7 +132,7 @@ e.g. when picking a temperature:
 </label>
 ```
 
-Then use a `color-slider` class on your slider element, and use [CSS variables](#css-variables) to set the gradient (either directly via `--gradient` or generated via `--stops` + `--color-space` or `--gradient`).
+Then use a `color-slider` class on your slider element, and use [CSS variables](#css-variables) to set the gradient (either directly via `--slider-gradient` or generated via `--slider-color-stops` + `--color-space`).
 
 ## Reference
 
@@ -144,6 +145,7 @@ Then use a `color-slider` class on your slider element, and use [CSS variables](
 | `stops` | `stops` | `String` &#124; `Array<Color>` | - | Comma-separated list of color stops |
 | `min` | `min` | `number` | 0 | The minimum value for the slider. |
 | `max` | `max` | `number` | 1 | The maximum value for the slider. |
+| `step` | `step` | `number` | Computed automatically based on `this.min` and `this.max`. | The granularity that the slider's current value must adhere to. |
 | `value` | `value` | `number` | `(this.min + this.max) / 2` | The current value of the slider. |
 
 ### CSS variables
@@ -153,17 +155,32 @@ If you’re only using the CSS file, you should set these yourself.
 
 | Variable | Type | Description |
 |----------|---------------|-------------|
-| `--slider-color-stops` | `<color>#` | Comma-separated list of color stops |
-| `--color-space` | `<ident>` | The color space to use for interpolation |
-| `--hue-interpolation` | `[shorter &#124; longer &#124; increasing &#124; decreasing] hue` | The color space to use for interpolation |
-| `--slider-gradient` | `<image>` | The gradient to use as the background |
+| `--slider-color-stops` | `<color>#` | Comma-separated list of color stops. |
+| `--color-space` | `<ident>` | The color space to use for interpolation. |
+| `--hue-interpolation` | `[shorter` &#124; `longer` &#124; `increasing` &#124; `decreasing] hue` | The color space to use for interpolation. |
+| `--slider-gradient` | `<image>` | The gradient to use as the background. |
+| `--slider-height` | `<length>` | Height of the slider track. |
+| `--slider-thumb-width` | `<length>` | Width of the slider thumb. |
+| `--slider-thumb-height` | `<length>` | Height of the slider thumb. |
+| `--slider-thumb-height-offset` | `<length>` | Offset the thumb height from the track height. |
+| `--slider-thumb-radius` | `<length>` | Radius of the slider thumb. |
+| `--slider-thumb-background` | `<color>` | Background color of the slider thumb. |
+| `--slider-thumb-border` | `<line-width>` &#124;&#124; `<line-style>` &#124;&#124; `<color>` | Border of the slider thumb. |
+| `--slider-thumb-border-active` | `<line-width>` &#124;&#124; `<line-style>` &#124;&#124; `<color>` | Border of the slider thumb in active state. |
+| `--slider-thumb-scale-active` | `<number>` | Scale transform applied to the slider thumb in active state. |
+| `--tooltip-background` | `<color>` | Background color of the tooltip. |
+| `--tooltip-border-radius` | `<length>` | Border radius of the tooltip. |
+| `--tooltip-pointer-height` | `<length>` | Height of the tooltip pointer triangle. |
+| `--tooltip-pointer-angle` | `<angle>` | Angle of the tooltip pointer triangle. |
 
 ### Events
 
 | Name | Description |
 |------|-------------|
-| `input` | Fired when the color changes due to user action |
-| `change` | Fired when the color changes for any reason, and once during initialization |
+| `input` | Fired when the color changes due to user action. |
+| `change` | Fired when the color changes due to user action. |
+| `valuechange` | Fired when the value changes for any reason, and once during initialization. |
+| `colorchange` | Fired when the color changes for any reason, and once during initialization. |
 
 ## Planned features
 
