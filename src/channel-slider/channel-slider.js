@@ -7,8 +7,6 @@ import { getStep } from "../common/util.js";
 export const tagName = "channel-slider";
 
 export default class ChannelSlider extends NudeElement {
-	#initialized = false;
-
 	constructor () {
 		super();
 
@@ -30,12 +28,6 @@ export default class ChannelSlider extends NudeElement {
 		super.connectedCallback?.();
 
 		this._el.slider.addEventListener("input", this);
-
-		if (!this.#initialized) {
-			this.#initialized = true;
-
-			this._el.slider.dispatchEvent(new Event("input"));
-		}
 	}
 
 	disconnectedCallback() {
