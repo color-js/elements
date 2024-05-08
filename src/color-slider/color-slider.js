@@ -4,7 +4,6 @@ import NudeElement from "../common/Element.js";
 import { getStep } from "../common/util.js";
 
 const Self = class ColorSlider extends NudeElement {
-	#initialized = false;
 	static postConstruct = [];
 	static tagName = "color-slider";
 
@@ -37,11 +36,6 @@ const Self = class ColorSlider extends NudeElement {
 
 		this._el.slider.addEventListener("input", this);
 		this._el.spinner.addEventListener("input", this);
-		if (!this.#initialized) {
-			this.#initialized = true;
-
-			this._el.slider.dispatchEvent(new Event("input"));
-		}
 	}
 
 	disconnectedCallback() {
