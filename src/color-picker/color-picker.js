@@ -1,10 +1,10 @@
 import "../channel-slider/channel-slider.js";
 import "../color-swatch/color-swatch.js";
-import Props from "../common/Props.js";
+import NudeElement from "../../node_modules/nude-element/src/Element.js";
 import * as dom from "../common/dom.js";
 import Color from "../common/color.js";
 
-const Self = class ColorPicker extends HTMLElement {
+const Self = class ColorPicker extends NudeElement {
 	#initialized = false;
 	static tagName = "color-picker";
 
@@ -12,7 +12,7 @@ const Self = class ColorPicker extends HTMLElement {
 		super();
 
 		this.attachShadow({mode: "open"});
-		let styleURL = new URL(`./${tagName}.css`, import.meta.url);
+		let styleURL = new URL(`./${Self.tagName}.css`, import.meta.url);
 		this.shadowRoot.innerHTML = `
 			<style>@import url("${ styleURL }")</style>
 			<div id=sliders></div>
@@ -24,18 +24,14 @@ const Self = class ColorPicker extends HTMLElement {
 		`;
 
 		this._el = dom.named(this);
-		this.addEventListener("propchange", this.propChangedCallback);
 	}
 
 	connectedCallback() {
-		this.attributeChangedCallback();
-
+		super.connectedCallback?.();
 		this._el.sliders.addEventListener("input", this);
 
 		if (!this.#initialized) {
 			this.#initialized = true;
-
-			this._el.sliders.dispatchEvent(new Event("input"));
 		}
 	}
 
@@ -126,8 +122,6 @@ const Self = class ColorPicker extends HTMLElement {
 		},
 	}
 }
-
-Props.create(Self);
 
 customElements.define(Self.tagName, Self);
 

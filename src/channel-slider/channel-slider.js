@@ -1,7 +1,7 @@
 import "../color-slider/color-slider.js";
 import * as dom from "../common/dom.js";
 import Color from "../common/color.js";
-import NudeElement from "../common/Element.js";
+import NudeElement from "../../node_modules/nude-element/src/Element.js";
 import { getStep } from "../common/util.js";
 
 export const tagName = "channel-slider";

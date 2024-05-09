@@ -1,6 +1,6 @@
 
 import Color from "../common/color.js";
-import NudeElement from "../common/Element.js";
+import NudeElement from "../../node_modules/nude-element/src/Element.js";
 import { getStep } from "../common/util.js";
 
 const Self = class ColorSlider extends NudeElement {
