@@ -3,6 +3,11 @@ import Color from "../common/color.js";
 import NudeElement from "../../node_modules/nude-element/src/Element.js";
 import { getStep } from "../common/util.js";
 
+let supports = {
+	inSpace: CSS?.supports("background", "linear-gradient(in oklab, red, tan)"),
+	fieldSizing: CSS?.supports("field-sizing", "content"),
+};
+
 const Self = class ColorSlider extends NudeElement {
 	static postConstruct = [];
 	static tagName = "color-slider";
@@ -62,33 +67,31 @@ const Self = class ColorSlider extends NudeElement {
 			prop.applyChange(this._el.spinner, {...change, value: spinnerValue});
 		}
 
-		if (name === "stops" || name === "space") {
+		if (name === "stops") {
+			// FIXME will fail if there are none values
 			let stops = this.stops;
 			let supported = stops.every(color => !CSS.supports("color", color));
-			// FIXME will fail if there are none values
 
-			if (name === "stops") {
-				if (!supported) {
-					stops = this.tessellateStops({ steps: 3 });
-				}
-
-				stops = stops.map(color => color.display()).join(", ");
-
-				this.style.setProperty("--slider-color-stops", stops);
+			if (!supported) {
+				stops = this.tessellateStops({ steps: 3 });
 			}
-			else if (name === "space") {
-				let space = this.space;
-				let spaceId = space.id;
 
-				if (!supported) {
-					spaceId = this.space.isPolar ? "oklch" : "oklab";
-				}
+			stops = stops.map(color => color.display()).join(", ");
 
-				this.style.setProperty("--color-space", spaceId);
-			}
+			this.style.setProperty("--slider-color-stops", stops);
 		}
+		else if (name === "space" && supports.inSpace) {
+			let space = this.space;
+			let spaceId = space.id;
+			let supported = CSS.supports("background", `linear-gradient(in ${ spaceId }, red, tan)`);
 
-		if (name === "color" || name === "defaultColor") {
+			if (!supported) {
+				spaceId = this.space.isPolar ? "oklch" : "oklab";
+			}
+
+			this.style.setProperty("--color-space", spaceId);
+		}
+		else if (name === "color" || name === "defaultColor") {
 			let color = this.color;
 
 			if (color) {
@@ -96,11 +99,10 @@ const Self = class ColorSlider extends NudeElement {
 				this.style.setProperty("--color", displayedColor);
 			}
 		}
-
-		if (name === "value") {
+		else if (name === "value") {
 			this.style.setProperty("--progress", this.progress);
 
-			if (!CSS.supports("field-sizing", "content")) {
+			if (!supports.fieldSizing) {
 				let valueStr = this.value + "";
 				this._el.spinner.style.setProperty("--value-length", valueStr.length);
 			}
