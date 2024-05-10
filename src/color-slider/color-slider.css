@@ -27,7 +27,7 @@
 }
 
 .color-slider {
-	@supports (background: linear-gradient(in oklch, red, tan)) {
+	@supports (background: linear-gradient(in oklab, red, tan)) {
 		--in-space: in var(--color-space, oklab) var(--hue-interpolation, );
 	}
 

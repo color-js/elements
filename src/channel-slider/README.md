@@ -56,7 +56,7 @@ Here we are using a [`<color-swatch>`](../color-swatch/) to not just display the
 
 ```html
 <channel-slider space="oklch" channel="h" color="oklch(50% 50% 180)"
-                oncolorchange="this.nextElementSibling.textContent = this.color"></channel-slider>
+				oncolorchange="this.nextElementSibling.textContent = this.color"></channel-slider>
 <color-swatch></color-swatch>
 ```
 
@@ -64,31 +64,46 @@ All attributes are reactive:
 
 ```html
 <label>
-    Space:
-    <select size=3 onchange="
-              dynamic_slider.space = this.value;
-              channel_select.innerHTML = Object.keys(dynamic_slider.space.coords).map(c => `<option>${c}</option>`).join('\n')">
-        <option>oklch</option>
-        <option>oklab</option>
-        <option>okhsl</option>
-        <option>lab</option>
-        <option>lch</option>
-        <option>hsl</option>
-        <option>srgb</option>
-    </select>
+	Space:
+	<select id="space_select" size="3">
+		<option>oklch</option>
+		<option>oklab</option>
+		<option>okhsl</option>
+		<option>lab</option>
+		<option>lch</option>
+		<option>hsl</option>
+		<option>srgb</option>
+	</select>
 </label>
 <label>
-    Channel:
-    <select id="channel_select" size=3 onchange="dynamic_slider.channel = this.value">
-        <option>l</option>
-        <option>c</option>
-        <option>h</option>
-    </select>
+	Channel:
+	<select id="channel_select" size=3>
+		<option>l</option>
+		<option>c</option>
+		<option>h</option>
+	</select>
 </label>
 
 <channel-slider id="dynamic_slider" space="oklch" channel="h" color="oklch(50% 50% 180)"
-                oncolorchange="this.nextElementSibling.textContent = this.color"></channel-slider>
+				oncolorchange="this.nextElementSibling.textContent = this.color"></channel-slider>
 <color-swatch></color-swatch>
+<script>
+	function fromSlider () {
+		space_select.value = dynamic_slider.space.id;
+		channel_select.innerHTML = Object.keys(dynamic_slider.space.coords).map(c => `<option>${c}</option>`).join('\n');
+		channel_select.value = dynamic_slider.channel;
+	}
+
+	function fromSelects () {
+		dynamic_slider.space = space_select.value;
+		dynamic_slider.channel = channel_select.value;
+	}
+
+	space_select.oninput = channel_select.oninput = fromSelects;
+
+	customElements.whenDefined("channel-slider").then(fromSlider);
+	dynamic_slider.addEventListener("propchange", fromSlider);
+</script>
 ```
 
 
