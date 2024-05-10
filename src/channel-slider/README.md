@@ -39,7 +39,7 @@ The color does not actually need to be in the same color space, it will be conve
 Colors and color spaces not supported by the browser also work:
 
 ```html
-<color-slider space="okhsl" channel="h" color="color(--okhsl 180 100% 50%)"></color-slider>
+<channel-slider space="okhsl" channel="h" color="color(--okhsl 180 100% 50%)"></channel-slider>
 ```
 
 
