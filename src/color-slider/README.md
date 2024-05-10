@@ -39,6 +39,12 @@ In fact, you can combine it with a [`<color-inline>`](../color-inline/) or [`<co
 <color-inline></color-inline>
 ```
 
+Colors and color spaces not supported by the browser also work:
+
+```html
+<color-slider space="okhsl" stops="gold, color(--okhsl 180 100% 50%)"></color-slider>
+```
+
 You can set the `value` attribute to specify an initial color other than the midpoint:
 
 ```html

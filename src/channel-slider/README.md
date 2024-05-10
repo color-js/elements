@@ -25,14 +25,24 @@ In most cases you’d also want to set a color to set the other channels and the
 <channel-slider space="oklch" channel="h" color="oklch(80% 20% 130)"></channel-slider>
 ```
 
+This will automatically use the whole reference range of that component in the specified color space,
+and use the current value of the component as the starting value (unless `value` is also specified).
+
+---
+
 The color does not actually need to be in the same color space, it will be converted if needed:
 
 ```html
 <channel-slider space="oklch" channel="h" color="deeppink"></channel-slider>
 ```
 
-This will automatically use the whole reference range of that component in the specified color space,
-and use the current value of the component as the starting value (unless `value` is also specified).
+Colors and color spaces not supported by the browser also work:
+
+```html
+<color-slider space="okhsl" channel="h" color="color(--okhsl 180 100% 50%)"></color-slider>
+```
+
+
 If you don’t want to show the whole range you can also specify `min` and `max` attributes.
 
 ```html
