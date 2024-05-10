@@ -38,8 +38,6 @@ export default class ChannelSlider extends NudeElement {
 		if (event.type === "input") {
 			this.value = event.target.value;
 		}
-
-		this.dispatchEvent(new event.constructor(event.type, {...event}));
 	}
 
 	colorAt (value) {
