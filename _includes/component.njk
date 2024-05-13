@@ -37,13 +37,13 @@ The rest of this section is about using _only_ `{{ tag | safe }}`.
 The quick and dirty way is straight from the CDN (kindly provided by [Netlify](https://www.netlify.com/)):
 
 ```html
-<script src="https://elements.colorjs.io/{{ name }}/{{ name }}.js" type="module"></script>
+<script src="https://elements.colorjs.io/src/{{ name }}/{{ name }}.js" type="module"></script>
 ```
 
 or in JS:
 
 ```js
-import "https://elements.colorjs.io/{{ name }}/{{ name }}.js";
+import "https://elements.colorjs.io/src/{{ name }}/{{ name }}.js";
 ```
 
 If you are using npm to manage your dependencies, you can import it via:
