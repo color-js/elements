@@ -227,6 +227,7 @@ const Self = class ColorSlider extends NudeElement {
 			get () {
 				return this.colorAt(this.value);
 			},
+			dependencies: ["scales", "value"],
 		},
 		scales: {
 			get () {
