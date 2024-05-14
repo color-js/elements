@@ -26,7 +26,7 @@
 </color-swatch>
 ```
 
-### With name
+### With content before/after
 
 ```html
 <color-swatch>
@@ -39,6 +39,7 @@
 <color-swatch size="large">
 	<label slot="before" id=c2>Accent color:</label>
 	<input value="oklch(70% 0.25 138)" id=c2 />
+	<small slot="after">Tip: Pick a bright medium color.</small>
 </color-swatch>
 ```
 

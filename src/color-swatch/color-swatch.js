@@ -15,7 +15,7 @@ export default class ColorSwatch extends HTMLElement {
 		this.attachShadow({mode: "open"});
 		this.shadowRoot.innerHTML = `
 			<style>@import url("${ styleURL }")</style>
-			<slot name="swatch">
+			<slot name="swatch" part="swatch-container">
 				<div id="swatch" part="swatch"></div>
 			</slot>
 			<div id="wrapper">
