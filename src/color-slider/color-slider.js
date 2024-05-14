@@ -70,7 +70,7 @@ const Self = class ColorSlider extends NudeElement {
 		if (name === "stops") {
 			// FIXME will fail if there are none values
 			let stops = this.stops;
-			let supported = stops.every(color => !CSS.supports("color", color));
+			let supported = stops.every(color => CSS.supports("color", color));
 
 			if (!supported) {
 				stops = this.tessellateStops({ steps: 3 });
