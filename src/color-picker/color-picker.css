@@ -1,16 +1,20 @@
 :host {
-	display: grid;
-	grid-template-columns: 3fr 1fr;
+	display: flex;
+	flex-wrap: wrap;
 	gap: 1em;
 }
 
 #sliders {
+	flex: 3;
 	display: flex;
 	flex-flow: column;
 	gap: .3em;
+	min-inline-size: 10em;
 }
 
-color-swatch {
+[part="swatch"],
+slot[name="swatch"]::slotted(*) {
+	flex: 1;
 	width: auto;
 	margin: 0;
 

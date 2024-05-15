@@ -7,6 +7,7 @@
 		0 0 / calc(2 * var(--_transparency-cell-size)) calc(2 * var(--_transparency-cell-size))
 		content-box border-box var(--_transparency-background)
 	);
+
 	display: inline-flex;
 	gap: .3em;
 	width: min-content;
@@ -15,6 +16,12 @@
 
 :host([size="large"]) {
 	flex-flow: column;
+	min-inline-size: 11em;
+	min-block-size: 6em;
+}
+
+:host(:not([size="large"])) {
+
 }
 
 #gamut {
@@ -55,11 +62,20 @@
 
 slot:not([name]) {
 	white-space: nowrap;
+
+	&::slotted(input) {
+		display: flex;
+		box-sizing: border-box;
+		min-width: 10ch;
+		font: inherit;
+
+		&:is(:host([size="large"]) *) {
+			width: 100%;
+		}
+	}
 }
 
-::slotted(input) {
-	font: inherit;
-}
+
 
 slot[name=swatch]::slotted(*),
 #swatch {
@@ -77,10 +93,7 @@ slot[name=swatch]::slotted(*),
 		var(--_transparency);
 	border-radius: .2rem;
 
-	&:is(:host([size="large"]) *) {
-		max-inline-size: 15em;
-		min-block-size: 6em;
-	}
+
 
 	&:not(:host([size="large"]) *) {
 		display: flex;
