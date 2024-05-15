@@ -1,6 +1,6 @@
 # Color Elements
 
-These are some highly experimental color-related web components.
+These are some **highly experimental** color-related web components.
 Use at your own risk, the API can change at any point.
 
 ## Usage
