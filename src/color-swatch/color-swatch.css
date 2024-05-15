@@ -63,9 +63,11 @@ slot:not([name]) {
 
 slot[name=swatch]::slotted(*),
 #swatch {
+	flex: 1;
 	display: flex;
 	flex-flow: column;
-	flex: 1;
+	align-items: center;
+	justify-content: center;
 	padding: .5em;
 	display: flex;
 	flex-flow: column;
