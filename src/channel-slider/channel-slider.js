@@ -216,9 +216,8 @@ export default class ChannelSlider extends NudeElement {
 			},
 			dependencies: ["defaultColor", "space", "channel", "value"],
 			set (value) {
-				let color = new Color(value).to(this.space);
-				this.defaultColor = color;
-				this.value = color.get(this.channel);
+				this.defaultColor = value;
+				this.value = this.defaultValue;
 			},
 		},
 	}
