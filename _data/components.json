@@ -1,8 +1,8 @@
 [
-	"color-inline",
-	"color-swatch",
-	"color-slider",
-	"channel-slider",
 	"color-picker",
+	"color-swatch",
+	"color-inline",
+	"channel-slider",
+	"color-slider",
 	"color-gamut"
 ]
