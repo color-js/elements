@@ -5,7 +5,6 @@ import * as dom from "../common/dom.js";
 import Color from "../common/color.js";
 
 const Self = class ColorPicker extends NudeElement {
-	#initialized = false;
 	static tagName = "color-picker";
 
 	constructor () {
@@ -30,9 +29,7 @@ const Self = class ColorPicker extends NudeElement {
 		super.connectedCallback?.();
 		this._el.sliders.addEventListener("input", this);
 
-		if (!this.#initialized) {
-			this.#initialized = true;
-		}
+		this.render();
 	}
 
 	disconnectedCallback() {
@@ -73,6 +70,10 @@ const Self = class ColorPicker extends NudeElement {
 		}
 
 		if (name === "color") {
+			for (let slider of this._el.sliders.children) {
+				slider.color = this.color;
+			}
+
 			prop.applyChange(this._el.swatch, change);
 		}
 	}
