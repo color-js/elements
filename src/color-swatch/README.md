@@ -45,6 +45,9 @@
 
 ### Bound to CSS property
 
+You can automatically bind the color swatch to a CSS property by setting the `property` attribute.
+Then you don’t need to provide an initial value, it will be read from the CSS property.
+
 ```html
 <color-swatch size="large" property="--color-red">
 	<input />
