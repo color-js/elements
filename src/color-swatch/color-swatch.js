@@ -1,18 +1,15 @@
 import Color from "../common/color.js";
 import "../color-gamut/color-gamut.js";
-// const styles = await fetch("./style.css").then(r => r.text());
 
-const gamuts = ["srgb", "p3", "rec2020"];
-
-let styleURL = new URL("./color-swatch.css", import.meta.url);
 let importIncrementable = import("https://incrementable.verou.me/incrementable.mjs").then(m => m.default);
 
-export default class ColorSwatch extends HTMLElement {
+const Self = class ColorSwatch extends HTMLElement {
 	#dom = {};
 
 	constructor () {
 		super();
 		this.attachShadow({mode: "open"});
+		let styleURL = new URL("./color-swatch.css", import.meta.url);
 		this.shadowRoot.innerHTML = `
 			<style>@import url("${ styleURL }")</style>
 			<slot name="swatch" part="swatch-container">
@@ -257,4 +254,6 @@ export default class ColorSwatch extends HTMLElement {
 	static observedAttributes = ["for", "property"];
 }
 
-customElements.define("color-swatch", ColorSwatch);
+customElements.define("color-swatch", Self);
+
+export default Self;
