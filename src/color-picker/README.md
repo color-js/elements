@@ -2,9 +2,7 @@
 
 ## Usage
 
-
-
-Example:
+### Basic usage
 
 ```html
 <color-picker space="oklch" color="oklch(50% 50% 180)"></color-picker>
@@ -16,6 +14,13 @@ Color spaces not supported by the browser also work:
 <color-picker space="okhsl" color="color(--okhsl 180 50% 50%)"></color-picker>
 ```
 
+### Slots
+
+```html
+<color-picker space="oklch" color="oklch(50% 50% 180)">
+	Element content goes into the swatch
+</color-picker>
+```
 
 
 

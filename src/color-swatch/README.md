@@ -26,7 +26,7 @@
 </color-swatch>
 ```
 
-### With content before/after
+### With slot content
 
 ```html
 <color-swatch>
@@ -40,6 +40,24 @@
 	<label slot="before" id=c2>Accent color:</label>
 	<input value="oklch(70% 0.25 138)" id=c2 />
 	<small slot="after">Tip: Pick a bright medium color.</small>
+</color-swatch>
+```
+
+Adding text within the default swatch:
+
+```html
+<color-swatch size="large">
+	<div slot="swatch-content">Some text</div>
+	<input value="oklch(70% 0.25 138)" id=c1 />
+</color-swatch>
+```
+
+Replacing the whole swatch with a custom element:
+
+```html
+<color-swatch size="large">
+	<div slot="swatch">Some text</div>
+	<input value="oklch(70% 0.25 138)" id=c1 />
 </color-swatch>
 ```
 

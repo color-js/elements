@@ -58,11 +58,18 @@
 	font: inherit;
 }
 
-slot[name=swatch] {
+slot[name=swatch]::slotted(*),
+#swatch {
 	display: flex;
 	flex-flow: column;
 	flex: 1;
-	background: var(--_transparency);
+	padding: .5em;
+	display: flex;
+	flex-flow: column;
+	flex: 1;
+	background:
+		linear-gradient(var(--color) 0 100%),
+		var(--_transparency);
 	border-radius: .2rem;
 
 	&:is(:host([size="large"]) *) {
@@ -71,25 +78,8 @@ slot[name=swatch] {
 
 	&:not(:host([size="large"]) *) {
 		display: flex;
-		inline-size: 2rem;
+		inline-size: 1.4rem;
 		font-size: 65%;
-	}
-}
-
-slot[name=swatch]::slotted(*),
-#swatch {
-	display: flex;
-	flex-flow: column;
-	flex: 1;
-	padding: .5em;
-	background: var(--color);
-	border-radius: inherit;
-
-	&:is(:host([size="large"]) *) {
-		block-size: 5em;
-	}
-
-	&:not(:host([size="large"]) *) {
 		flex: 1;
 	}
 }

@@ -12,8 +12,10 @@ const Self = class ColorSwatch extends HTMLElement {
 		let styleURL = new URL("./color-swatch.css", import.meta.url);
 		this.shadowRoot.innerHTML = `
 			<style>@import url("${ styleURL }")</style>
-			<slot name="swatch" part="swatch-container">
-				<div id="swatch" part="swatch"></div>
+			<slot name="swatch">
+				<div id="swatch" part="swatch">
+					<slot name="swatch-content"></slot>
+				</div>
 			</slot>
 			<div id="wrapper">
 				<slot name="before"></slot>
