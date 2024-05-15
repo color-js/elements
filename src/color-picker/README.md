@@ -5,7 +5,7 @@
 ### Basic usage
 
 ```html
-<color-picker space="oklch" color="oklch(50% 50% 180)"></color-picker>
+<color-picker space="oklch" color="oklch(60% 30% 180)"></color-picker>
 ```
 
 Color spaces not supported by the browser also work:
