@@ -12,6 +12,7 @@
 
 color-swatch {
 	width: auto;
+	margin: 0;
 
 	&::part(swatch) {
 		flex: 1;
