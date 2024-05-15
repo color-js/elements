@@ -68,10 +68,10 @@ slot:not([name]) {
 		box-sizing: border-box;
 		min-width: 10ch;
 		font: inherit;
+	}
 
-		&:is(:host([size="large"]) *) {
-			width: 100%;
-		}
+	&:is(:host([size="large"]) *)::slotted(input) {
+		width: 100%;
 	}
 }
 
