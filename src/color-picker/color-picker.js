@@ -70,6 +70,10 @@ const Self = class ColorPicker extends NudeElement {
 		}
 
 		if (name === "color") {
+			for (let slider of this._el.sliders.children) {
+				slider.color = this.color;
+			}
+
 			prop.applyChange(this._el.swatch, change);
 		}
 	}
