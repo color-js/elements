@@ -137,7 +137,26 @@ const Self = class ColorPicker extends NudeElement {
 				this.defaultColor = new Color(value).to(this.space);
 			},
 		},
-	}
+	};
+
+	static events = {
+		change: {
+			from () {
+				return [this._el.sliders, this._el.swatch];
+			}
+		},
+		input: {
+			from () {
+				return [this._el.sliders, this._el.swatch];
+			}
+		},
+		valuechange: {
+			propchange: "value",
+		},
+		colorchange: {
+			propchange: "color",
+		},
+	};
 }
 
 customElements.define(Self.tagName, Self);

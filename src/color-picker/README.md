@@ -22,6 +22,16 @@ Color spaces not supported by the browser also work:
 </color-picker>
 ```
 
+### Events
+
+As with other components, you can listen to the `colorchange` event:
+
+```html
+<color-picker space="oklch" color="oklch(50% 50% 180)"
+              oncolorchange="this.firstElementChild.textContent = this.color.oklch.join(' ')">
+	<div class="coords" style="font-weight: bold; text-shadow: 0 0 .1em white, 0 0 .1em white, 0 0 .1em white"></div>
+</color-picker>
+```
 
 
 ## Reference
