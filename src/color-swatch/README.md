@@ -2,29 +2,53 @@
 
 ## Examples
 
-### Static
+### Basic usage
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Normal size</th>
+<th>Large</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>Static</th>
+<td>
 
 ```html
 <color-swatch>oklch(70% 0.25 138)</color-swatch>
 ```
+</td>
+<td>
 
 ```html
 <color-swatch size="large">oklch(70% 0.25 138)</color-swatch>
 ```
-
-### Editable
+</td>
+</tr>
+<tr>
+<th>Editable</th>
+<td>
 
 ```html
 <color-swatch>
 	<input value="oklch(70% 0.25 138)" />
 </color-swatch>
 ```
+</td>
+<td>
 
 ```html
 <color-swatch size="large">
 	<input value="oklch(70% 0.25 138)" />
 </color-swatch>
 ```
+</td>
+</tr>
+</tbody>
+</table>
 
 ### With slot content
 
@@ -64,13 +88,17 @@ Replacing the whole swatch with a custom element:
 ### Bound to CSS property
 
 You can automatically bind the color swatch to a CSS property by setting the `property` attribute.
-Then you don’t need to provide an initial value, it will be read from the CSS property.
+Then you don’t need to provide an initial value, it will be read from the CSS property,
+and updating the color will update the CSS property.
 
 ```html
 <color-swatch size="large" property="--color-red">
 	<input />
 </color-swatch>
 ```
+
+You can use `scope` to select the closest ancestor (via a CSS selector) on which the CSS property will be read from and written to.
+If you don’t, the `<html>` element will be used.
 
 ### Events
 
