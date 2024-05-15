@@ -28,6 +28,8 @@ const Self = class ColorPicker extends NudeElement {
 	connectedCallback() {
 		super.connectedCallback?.();
 		this._el.sliders.addEventListener("input", this);
+
+		this.render();
 	}
 
 	disconnectedCallback() {
