@@ -254,8 +254,12 @@ const Self = class ColorSwatch extends HTMLElement {
 	}
 
 	static events = {
-		colorchange: {},
-		valuechange: {},
+		colorchange: {
+			propchange: "color",
+		},
+		valuechange: {
+			propchange: "value",
+		},
 	};
 
 	static observedAttributes = ["for", "property"];
