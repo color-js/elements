@@ -74,7 +74,9 @@ slot[name=swatch] {
 
 slot[name=swatch]::slotted(*),
 #swatch {
-	display: block;
+	display: flex;
+	flex-flow: column;
+	flex: 1;
 	padding: .5em;
 	background: var(--color);
 	border-radius: inherit;
