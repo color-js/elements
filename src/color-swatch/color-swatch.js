@@ -1,4 +1,5 @@
 import Color from "../common/color.js";
+import defineEvents from "../../node_modules/nude-element/src/events/defineEvents.js";
 import "../color-gamut/color-gamut.js";
 
 let importIncrementable;
@@ -252,8 +253,15 @@ const Self = class ColorSwatch extends HTMLElement {
 		}
 	}
 
+	static events = {
+		colorchange: {},
+		valuechange: {},
+	};
+
 	static observedAttributes = ["for", "property"];
 }
+
+defineEvents(Self);
 
 customElements.define("color-swatch", Self);
 
