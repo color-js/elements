@@ -93,7 +93,9 @@ slot[name=swatch]::slotted(*),
 		var(--_transparency);
 	border-radius: .2rem;
 
-
+	&:is(:host([size="large"]) *) {
+		min-block-size: 3em;
+	}
 
 	&:not(:host([size="large"]) *) {
 		display: flex;
