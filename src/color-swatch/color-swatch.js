@@ -1,7 +1,7 @@
 import Color from "../common/color.js";
 import "../color-gamut/color-gamut.js";
 
-let importIncrementable = import("https://incrementable.verou.me/incrementable.mjs").then(m => m.default);
+let importIncrementable;
 
 const Self = class ColorSwatch extends HTMLElement {
 	#dom = {};
@@ -67,6 +67,7 @@ const Self = class ColorSwatch extends HTMLElement {
 		});
 
 		if (this.#dom.input) {
+			importIncrementable ??= import("https://incrementable.verou.me/incrementable.mjs").then(m => m.default);
 			this.#dom.input.addEventListener("input", evt => {
 				this.#render(evt);
 			});
