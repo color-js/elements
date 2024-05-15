@@ -5,6 +5,8 @@ import "../color-gamut/color-gamut.js";
 let importIncrementable;
 
 const Self = class ColorSwatch extends HTMLElement {
+	static initQueue = [];
+
 	#dom = {};
 
 	constructor () {
@@ -32,6 +34,8 @@ const Self = class ColorSwatch extends HTMLElement {
 		if (!this.#initialized) {
 			this.#initialize();
 		}
+
+		this.constructor.initQueue.forEach(init => init.call(this));
 
 		// This should eventually be a custom state
 		this.#dom.wrapper.classList.toggle("static", !this.#dom.input);
