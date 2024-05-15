@@ -1,2 +1,7 @@
+# Specific versions
+node_modules/nude-element/* https://cdn.jsdelivr.net/npm/nude-element@0.0.2/:splat 200
+
+# Catch all NPM fallback
 node_modules/:modulename/* https://cdn.jsdelivr.net/npm/:modulename@latest/:splat 200
+
 assets/* https://colorjs.io/assets/:splat 200
