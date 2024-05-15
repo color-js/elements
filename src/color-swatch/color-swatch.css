@@ -65,6 +65,10 @@ slot[name=swatch] {
 	background: var(--_transparency);
 	border-radius: .2rem;
 
+	&:is(:host([size="large"]) *) {
+		min-block-size: 6em;
+	}
+
 	&:not(:host([size="large"]) *) {
 		display: flex;
 		inline-size: 2rem;
