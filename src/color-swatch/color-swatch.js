@@ -1,9 +1,12 @@
 import Color from "../common/color.js";
+import defineEvents from "../../node_modules/nude-element/src/events/defineEvents.js";
 import "../color-gamut/color-gamut.js";
 
 let importIncrementable;
 
 const Self = class ColorSwatch extends HTMLElement {
+	static initQueue = [];
+
 	#dom = {};
 
 	constructor () {
@@ -33,6 +36,8 @@ const Self = class ColorSwatch extends HTMLElement {
 		if (!this.#initialized) {
 			this.#initialize();
 		}
+
+		this.constructor.initQueue.forEach(init => init.call(this));
 
 		// This should eventually be a custom state
 		this.#dom.wrapper.classList.toggle("static", !this.#dom.input);
@@ -254,8 +259,19 @@ const Self = class ColorSwatch extends HTMLElement {
 		}
 	}
 
+	static events = {
+		colorchange: {
+			propchange: "color",
+		},
+		valuechange: {
+			propchange: "value",
+		},
+	};
+
 	static observedAttributes = ["for", "property"];
 }
+
+defineEvents(Self);
 
 customElements.define("color-swatch", Self);
 

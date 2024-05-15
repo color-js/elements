@@ -72,6 +72,15 @@ Then you don’t need to provide an initial value, it will be read from the CSS 
 </color-swatch>
 ```
 
+### Events
+
+```html
+<color-swatch size="large" oncolorchange="this.nextElementSibling.textContent = this.color">
+	<input value="oklch(70% 0.25 138)" />
+</color-swatch>
+<color-inline></color-inline>
+```
+
 ### Update via JS
 
 #### Static
