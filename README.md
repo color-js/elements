@@ -5,13 +5,25 @@ Use at your own risk, the API can change at any point.
 
 ## Usage
 
+### CDN
+
 To include all components at once:
 
 ```html
 <script src="https://elements.colorjs.io/index.js"></script>
 ```
 
-or if using a bundler:
+To cherry-pick individual components, follow the instructions within the component’s page, but it generally looks like this:
+
+```html
+<script src="https://elements.colorjs.io/src/COMPONENT_NAME/COMPONENT_NAME.js"></script>
+```
+
+Each component imports its own dependencies and styles.
+
+### NPM
+
+As usual:
 
 ```bash
 npm i color-elements
@@ -23,29 +35,21 @@ and then:
 import "color-elements";
 ```
 
-To cherry-pick individual components, follow the instructions within the component’s page, but it generally looks like this:
-
-```html
-<script src="https://elements.colorjs.io/src/COMPONENT_NAME/COMPONENT_NAME.js"></script>
-```
-
-or
+You can also import individual components:
 
 ```js
 import "color-elements/COMPONENT_NAME";
 ```
 
-
-Then just start using it!
-
 ## All elements
 
+- [`<color-picker>`](src/color-picker/)
+- [`<color-slider>`](src/color-slider/)
+- [`<channel-slider>`](src/channel-slider/)
 - [`<color-swatch>`](src/color-swatch/)
 - [`<color-inline>`](src/color-inline/)
 - [`<color-gamut>`](src/color-gamut/)
 
 ### Upcoming:
 
-- [`<color-slider>`](src/color-slider/)
-- `<color-picker>`
 - `<color-plane>`
