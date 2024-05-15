@@ -1,2 +1,2 @@
-node_modules/:modulename/* https://unpkg.com/:modulename/:splat 301
+node_modules/:modulename/* https://unpkg.com/:modulename/:splat 200
 assets/* https://colorjs.io/assets/:splat 200
