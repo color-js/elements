@@ -163,7 +163,7 @@ If you’re only using the CSS file, you should set these yourself.
 |----------|---------------|-------------|
 | `--slider-color-stops` | `<color>#` | Comma-separated list of color stops. |
 | `--color-space` | `<ident>` | The color space to use for interpolation. |
-| `--hue-interpolation` | `[shorter` &#124; `longer` &#124; `increasing` &#124; `decreasing] hue` | The color space to use for interpolation. |
+| `--hue-interpolation` | `[shorter` &#124; `longer` &#124; `increasing` &#124; `decreasing] hue` | The hue interpolation method to use. |
 | `--slider-gradient` | `<image>` | The gradient to use as the background. |
 | `--slider-height` | `<length>` | Height of the slider track. |
 | `--slider-thumb-width` | `<length>` | Width of the slider thumb. |
