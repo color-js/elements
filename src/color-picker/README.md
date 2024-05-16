@@ -52,6 +52,10 @@ As with other components, you can listen to the `colorchange` event:
 | `valuechange` | Fired when the value changes for any reason, and once during initialization. |
 | `colorchange` | Fired when the color changes for any reason, and once during initialization. |
 
+### CSS variables
+
+The styling of `<color-picker>` is fully customizable via CSS variables provided by the [`<color-slider>`](../color-slider/#css-variables) and [`<color-swatch>`](../color-swatch/#css-variables).
+
 ## Planned features
 
 - Alpha
