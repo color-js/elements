@@ -106,6 +106,12 @@ and updating the color will update the CSS property.
 You can use `scope` to select the closest ancestor (via a CSS selector) on which the CSS property will be read from and written to.
 If you don’t, the `<html>` element will be used.
 
+You can add the boolean `verbatim` attribute to show the bound CSS property instead of its value.
+
+```html
+<color-swatch size="large" property="--color-red" verbatim></color-swatch>
+```
+
 ### Events
 
 ```html
@@ -144,6 +150,7 @@ If you don’t, the `<html>` element will be used.
 | `size` | - | `large` | - | The size of the swatch. Currently, it is used only to make a large swatch. |
 | `property` | `property` | `string` | - | CSS property to bind to. |
 | `scope` | `scope` | `string` | `:root` | CSS selector to use as the scope for the specified CSS property. |
+| `verbatim` | `verbatim` | `boolean` | `false` | ??? |
 | `gamuts` | `gamuts` | `string` | `srgb, p3, rec2020: P3+, prophoto: PP` | Comma-separated list of gamuts to be used by the gamut indicator. |
 
 ### CSS variables
