@@ -41,8 +41,17 @@ As with other components, you can listen to the `colorchange` event:
 | Attribute | Property | Property type | Default value | Description |
 |-----------|----------|---------------|---------------|-------------|
 | `space` | `space` | `ColorSpace` &#124; `string` | `oklch` | The color space to use for interpolation. |
-| `color` | `color` | `Color` &#124; `string` | `oklch(50 50% 180)` | The current color value. |
+| `color` | `color` | `Color` &#124; `string` | `oklch(50% 50% 180)` | The current color value. |
 
-## To-Do
+### Events
+
+| Name | Description |
+|------|-------------|
+| `input` | Fired when the color changes due to user action, either with the sliders or the color swatch's input field. |
+| `change` | Fired when the color changes due to user action, either with the sliders or the color swatch's input field. |
+| `valuechange` | Fired when the value changes for any reason, and once during initialization. |
+| `colorchange` | Fired when the color changes for any reason, and once during initialization. |
+
+## Planned features
 
 - Alpha
