@@ -36,11 +36,11 @@ colorGamutElement.color = colorValue;
 
 | Variable | Type | Description |
 |----------|---------------|-------------|
-| `--color-green` | `<color>` | Green background color of gamut indicator. |
-| `--color-yellow` | `<color>` | Yellow background color of gamut indicator. |
-| `--color-orange` | `<color>` | Orange background color of gamut indicator. |
-| `--color-red` | `<color>` | Red background color of gamut indicator. |
-| `--color-red-dark` | `<color>` | Dark red background color of gamut indicator. |
+| `--color-green` | `<color>` | Green background color of gamut indicator. Used when the color is within the first gamut. |
+| `--color-yellow` | `<color>` | Yellow background color of gamut indicator. Used when the color is within the second gamut. |
+| `--color-orange` | `<color>` | Orange background color of gamut indicator. Used when the color is within the third gamut. |
+| `--color-red` | `<color>` | Red background color of gamut indicator. Used when the color is within the fourth gamut. |
+| `--color-red-dark` | `<color>` | Dark red background color of gamut indicator. Used when the provided color fits none of the specified gamuts. |
 | `--gamut-color` | `<color>` | Background color of gamut indicator. Will override the color that depends on the actual gamut, so you should rarely use this directly. |
 
 ## Demo
