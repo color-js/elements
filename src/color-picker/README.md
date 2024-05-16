@@ -43,6 +43,10 @@ As with other components, you can listen to the `colorchange` event:
 | `space` | `space` | `ColorSpace` &#124; `string` | `oklch` | The color space to use for interpolation. |
 | `color` | `color` | `Color` &#124; `string` | `oklch(50% 50% 180)` | The current color value. |
 
+### CSS variables
+
+The styling of `<color-picker>` is fully customizable via CSS variables provided by the [`<color-slider>`](../color-slider/#css-variables) and [`<color-swatch>`](../color-swatch/#css-variables).
+
 ### Events
 
 | Name | Description |
