@@ -75,8 +75,6 @@ slot:not([name]) {
 	}
 }
 
-
-
 slot[name=swatch]::slotted(*),
 #swatch {
 	flex: 1;
@@ -103,6 +101,12 @@ slot[name=swatch]::slotted(*),
 		font-size: 65%;
 		flex: 1;
 	}
+}
+
+slot[name=swatch-content] {
+	/* See https://lea.verou.me/blog/2024/contrast-color/ */
+	--l: clamp(0, (var(--l-threshold, 0.7) / l - 1) * infinity, 1);
+	color: oklch(from var(--color) var(--l) 0 h);
 }
 
 :host([swatch="none"]) #swatch {

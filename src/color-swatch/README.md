@@ -52,6 +52,8 @@
 
 ### With slot content
 
+Before and after:
+
 ```html
 <color-swatch>
 	<label slot="before" for=c1>Accent color:</label>
@@ -75,6 +77,10 @@ Adding text within the default swatch:
 	<input value="oklch(70% 0.25 138)" id=c1 />
 </color-swatch>
 ```
+
+Note that the text color will automatically switch from black to white to remain readable (using [this technique](https://lea.verou.me/blog/2024/contrast-color/)).
+
+----
 
 Replacing the whole swatch with a custom element:
 
