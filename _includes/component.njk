@@ -16,7 +16,7 @@
 			}
 		},
 		title: function (data) {
-			return data.title ?? data.tag;
+			return data.title || data.tag;
 		},
 	}
 }
