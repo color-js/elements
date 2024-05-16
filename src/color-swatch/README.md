@@ -160,7 +160,7 @@ You can add the boolean `verbatim` attribute to show the bound CSS property inst
 | `--transparcency` | `<image>` | Gradient used as a background for transparent parts of the swatch. |
 | `--transparency-cell-size` | `<length>` | The size of the cells of the transparency gradient. |
 | `--transparcency-background` | `<color>` | The background color of the transparency gradient. |
-| `--transparency-darkness` | `<percent>` | The opacity of the black color used for dark parts of the transparency gradient. |
+| `--transparency-darkness` | `<percentage>` | The opacity of the black color used for dark parts of the transparency gradient. |
 
 ### Events
 
