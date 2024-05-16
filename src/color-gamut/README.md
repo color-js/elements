@@ -17,6 +17,33 @@ Dynamic:
 colorGamutElement.color = colorValue;
 ```
 
+## Reference
+
+### Attributes & Properties
+
+| Attribute | Property | Property type | Default value | Description |
+|-----------|----------|---------------|---------------|-------------|
+| `gamuts` | `gamuts` | `string` &#124; `Array<string>` &#124; `object` | `["srgb", "p3", "rec2020", "prophoto"]` | A list of gamuts to use. |
+| `color` | `color` | `Color` &#124; `string` | - | The current color value. |
+
+### Events
+
+| Name | Description |
+|------|-------------|
+| `gamutchange` | Fired when the gamut changes for any reason, and once during initialization. |
+
+### CSS variables
+
+| Variable | Type | Description |
+|----------|---------------|-------------|
+| `--gamut-color` | `<color>` | Background color of gamut indicator. |
+| `--color-neutral-60` | `<color>` | Neutral background color of gamut indicator. |
+| `--color-green` | `<color>` | Green background color of gamut indicator. |
+| `--color-yellow` | `<color>` | Yellow background color of gamut indicator. |
+| `--color-orange` | `<color>` | Orange background color of gamut indicator. |
+| `--color-red` | `<color>` | Red background color of gamut indicator. |
+| `--color-red-dark` | `<color>` | Dark red background color of gamut indicator. |
+
 ## Demo
 <style>
 	#params {
