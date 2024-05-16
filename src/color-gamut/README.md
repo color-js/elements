@@ -36,7 +36,7 @@ colorGamutElement.color = colorValue;
 
 | Variable | Type | Description |
 |----------|---------------|-------------|
-| `--gamut-color` | `<color>` | Background color of gamut indicator. |
+| `--gamut-color` | `<color>` | Background color of gamut indicator. Will override the color that depends on the actual gamut, so you should rarely use this directly. |
 | `--color-neutral-60` | `<color>` | Neutral background color of gamut indicator. |
 | `--color-green` | `<color>` | Green background color of gamut indicator. |
 | `--color-yellow` | `<color>` | Yellow background color of gamut indicator. |
