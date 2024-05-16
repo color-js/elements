@@ -106,12 +106,6 @@ and updating the color will update the CSS property.
 You can use `scope` to select the closest ancestor (via a CSS selector) on which the CSS property will be read from and written to.
 If you don’t, the `<html>` element will be used.
 
-You can add the boolean `verbatim` attribute to show the bound CSS property instead of its value.
-
-```html
-<color-swatch size="large" property="--color-red" verbatim></color-swatch>
-```
-
 ### Events
 
 ```html
