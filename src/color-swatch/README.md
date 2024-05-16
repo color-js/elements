@@ -160,4 +160,4 @@ If you don’t, the `<html>` element will be used.
 |------|-------------|
 | `valuechange` | Fired when the value changes for any reason, and once during initialization. |
 | `colorchange` | Fired when the color changes for any reason, and once during initialization. |
-| `gamutchange` | Fired when the gamut changes. |
+| `gamutchange` | Fired when the gamut changes for any reason, and once during initialization. |
