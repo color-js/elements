@@ -147,8 +147,8 @@ Then use a `color-slider` class on your slider element, and use [CSS variables](
 | Attribute | Property | Property type | Default value | Description |
 |-----------|----------|---------------|---------------|-------------|
 | `space` | `space` | `ColorSpace` &#124; `string` | `oklch` | The color space to use for interpolation. |
-| `color` | `color` | `Color` &#124; `string` | `oklch(50 50% 180)` | The current color value. |
-| `stops` | `stops` | `String` &#124; `Array<Color>` | - | Comma-separated list of color stops |
+| `color` | `color` | `Color` &#124; `string` | `oklch(50% 50% 180)` | The current color value. |
+| `stops` | `stops` | `String` &#124; `Array<Color>` | - | Comma-separated list of color stops. |
 | `min` | `min` | `number` | 0 | The minimum value for the slider. |
 | `max` | `max` | `number` | 1 | The maximum value for the slider. |
 | `step` | `step` | `number` | Computed automatically based on `this.min` and `this.max`. | The granularity that the slider's current value must adhere to. |
