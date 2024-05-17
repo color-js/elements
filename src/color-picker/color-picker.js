@@ -50,7 +50,7 @@ const Self = class ColorPicker extends NudeElement {
 			// From sliders
 			let coords = [...this._el.sliders.children].map(el => el.value);
 			this.color = new Color(this.space, coords);
-			this._el.swatch.value = this.color;
+			this._el.swatch.color = this.color;
 		}
 		else if (!source || this._el.swatch.contains(source)) {
 			// From swatch
