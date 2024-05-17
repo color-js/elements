@@ -17,6 +17,32 @@ Dynamic:
 colorGamutElement.color = colorValue;
 ```
 
+## Reference
+
+### Attributes & Properties
+
+| Attribute | Property | Property type | Default value | Description |
+|-----------|----------|---------------|---------------|-------------|
+| `gamuts` | `gamuts` | `string` &#124; `Array<string>` &#124; `object` | `["srgb", "p3", "rec2020", "prophoto"]` | A list of gamuts to use. |
+| `color` | `color` | `Color` &#124; `string` | - | The current color value. |
+
+### Events
+
+| Name | Description |
+|------|-------------|
+| `gamutchange` | Fired when the gamut changes for any reason, and once during initialization. |
+
+### CSS variables
+
+| Variable | Type | Description |
+|----------|---------------|-------------|
+| `--color-green` | `<color>` | Green background color of gamut indicator. Used when the color is within the first gamut. |
+| `--color-yellow` | `<color>` | Yellow background color of gamut indicator. Used when the color is within the second gamut. |
+| `--color-orange` | `<color>` | Orange background color of gamut indicator. Used when the color is within the third gamut. |
+| `--color-red` | `<color>` | Red background color of gamut indicator. Used when the color is within the fourth gamut. |
+| `--color-red-dark` | `<color>` | Dark red background color of gamut indicator. Used when the provided color fits none of the specified gamuts. |
+| `--gamut-color` | `<color>` | Background color of gamut indicator. Will override the color that depends on the actual gamut, so you should rarely use this directly. |
+
 ## Demo
 <style>
 	#params {
