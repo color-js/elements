@@ -182,8 +182,7 @@ export default class ChannelSlider extends NudeElement {
 					return this.defaultColor.get(this.channel);
 				}
 				catch {
-					let channel = Object.keys(this.space.coords)[0];
-					return this.defaultColor.get(channel);
+					return this.defaultColor.coords[0];
 				}
 			},
 			reflect: {
