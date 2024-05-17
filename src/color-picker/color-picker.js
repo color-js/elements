@@ -80,6 +80,10 @@ const Self = class ColorPicker extends NudeElement {
 					this._el.sliders.insertAdjacentHTML("beforeend", `<channel-slider space="${ this.space.id }" channel="${ channel }"></channel-slider>`);
 				}
 			}
+
+			if (change.oldInternalValue || change.oldAttributeValue) {
+				this.render();
+			}
 		}
 
 		if (name === "color") {
