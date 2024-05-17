@@ -8,6 +8,7 @@
 	flex: 3;
 	display: flex;
 	flex-flow: column;
+	justify-content: space-between;
 	gap: .3em;
 	min-inline-size: 10em;
 }
