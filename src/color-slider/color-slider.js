@@ -99,10 +99,10 @@ const Self = class ColorSlider extends NudeElement {
 				this.style.setProperty("--color", displayedColor);
 			}
 		}
-		else if (name === "value") {
+		else if (name === "value" || name === "min" || name === "max") {
 			this.style.setProperty("--progress", this.progress);
 
-			if (!supports.fieldSizing) {
+			if (name === "value" && !supports.fieldSizing) {
 				let valueStr = this.value + "";
 				this._el.spinner.style.setProperty("--value-length", valueStr.length);
 			}
