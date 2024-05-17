@@ -6,7 +6,7 @@ Creates a slider with a gradient background, primarily intended for color pickin
 
 There are many ways to use this component, depending on what you need.
 E.g. if all you need is styling sliders with arbitrary gradients you don’t even need a component,
-you can just [use the CSS file](#css-only) and a few classes and CSS variables to style regular HTML sliders.
+you can just [use the CSS file](#css-only-usage) and a few classes and CSS variables to style regular HTML sliders.
 
 The actual component does a lot more:
 - It provides a `color` property with the actual color value
