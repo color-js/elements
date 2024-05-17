@@ -178,7 +178,6 @@ export default class ChannelSlider extends NudeElement {
 		defaultValue: {
 			type: Number,
 			default () {
-				return this.defaultColor.get(this.channel);
 				try {
 					return this.defaultColor.get(this.channel);
 				}
