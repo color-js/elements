@@ -1,5 +1,6 @@
 import markdownIt from "markdown-it";
 import markdownItAttrs from "markdown-it-attrs";
+import markdownItAnchor from "markdown-it-anchor";
 import configOriginal from "./eleventy-original.js";
 import * as filters from "./filters-extra.js";
 
@@ -14,7 +15,11 @@ let md = markdownIt({
 	typographer: true,
 })
 .disable("code")
-.use(markdownItAttrs);
+.use(markdownItAttrs)
+.use(markdownItAnchor, {
+	permalink: markdownItAnchor.permalink.headerLink(),
+	level: 2,
+});
 
 export default config => {
 	let ret = configOriginal(config);
