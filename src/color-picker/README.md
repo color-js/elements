@@ -22,6 +22,15 @@ Color spaces not supported by the browser also work:
 </color-picker>
 ```
 
+You can use your component instead of the default color swatch:
+
+```html
+<color-picker space="oklch" color="oklch(50% 50% 180)"
+              oncolorchange="this.firstElementChild.textContent = this.color">
+	<color-inline slot="swatch" style="place-self: center; min-inline-size: fit-content"></color-inline>
+</color-picker>
+```
+
 ### Events
 
 As with other components, you can listen to the `colorchange` event:
@@ -35,6 +44,13 @@ As with other components, you can listen to the `colorchange` event:
 
 
 ## Reference
+
+### Slots
+
+| Name | Description |
+|------|-------------|
+| (default) | The color picker's main content. Goes into the swatch. |
+| `swatch` | An element used to provide a visual preview of the current color. |
 
 ### Attributes & Properties
 
