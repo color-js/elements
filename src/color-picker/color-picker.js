@@ -30,8 +30,6 @@ const Self = class ColorPicker extends NudeElement {
 		super.connectedCallback?.();
 		this._el.sliders.addEventListener("input", this);
 		this._el.swatch.addEventListener("input", this);
-
-		this.render();
 	}
 
 	disconnectedCallback() {
@@ -80,6 +78,8 @@ const Self = class ColorPicker extends NudeElement {
 					this._el.sliders.insertAdjacentHTML("beforeend", `<channel-slider space="${ this.space.id }" channel="${ channel }"></channel-slider>`);
 				}
 			}
+
+			this.render();
 		}
 
 		if (name === "color") {
