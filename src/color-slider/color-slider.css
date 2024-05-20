@@ -66,11 +66,6 @@
 		transition: 200ms, 0s background;
 	}
 
-		&::-webkit-slider-thumb:active {
-			border: var(--_slider-thumb-border-active);
-			scale: var(--_slider-thumb-scale-active);
-		}
-
 		&::-moz-range-thumb:active {
 			border: var(--_slider-thumb-border-active);
 			scale: var(--_slider-thumb-scale-active);
@@ -79,6 +74,13 @@
 	&::-moz-range-track {
 		background: none;
 	}
+}
+
+/* For some reason, the &::-webkit-slider-thumb:active rule (previously used inside the above rule) doesn't work 🤷‍♂️ */
+/* DO NOT MOVE IT BACK! :) */
+.color-slider::-webkit-slider-thumb:active {
+	border: var(--_slider-thumb-border-active);
+	scale: var(--_slider-thumb-scale-active);
 }
 
 .slider-tooltip {
