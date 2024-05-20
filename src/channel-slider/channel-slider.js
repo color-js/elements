@@ -178,7 +178,15 @@ export default class ChannelSlider extends NudeElement {
 		defaultValue: {
 			type: Number,
 			default () {
-				return this.defaultColor.get(this.channel);
+				try {
+					return this.defaultColor.get(this.channel);
+				}
+				catch {
+					// When there is no channel in the defaultColor color space, don't throw,
+					// but return the value of the first one. Eventually, everything will settle down,
+					// and the default value will be correct.
+					return this.defaultColor.coords[0];
+				}
 			},
 			reflect: {
 				from: "value",
