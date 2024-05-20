@@ -72,7 +72,27 @@ const Self = class ColorSlider extends NudeElement {
 			let stops = this.stops;
 			let supported = stops.every(color => CSS.supports("color", color));
 
-			if (!supported) {
+			// CSS does not support (yet?) a raw hue interpolation,
+			// so we need to fake it with tessellateStops() in cases of polar space and far-apart stops.
+			let farApart = false;
+			let space = this.space;
+			if (space.isPolar) {
+				for (let i = 1; i < stops.length; i++) {
+					// Even though space is polar, color stops might be in non-polar spaces
+					let first = stops[i - 1].to(space);
+					let second = stops[i].to(space);
+
+					let firstHue = first.get("h");
+					let secondHue = second.get("h");
+
+					if (Math.abs(firstHue - secondHue) >= 180) {
+						farApart = true;
+						break;
+					}
+				}
+			}
+
+			if (!supported || farApart) {
 				stops = this.tessellateStops({ steps: 3 });
 			}
 
@@ -237,7 +257,7 @@ const Self = class ColorSlider extends NudeElement {
 				for (let i=1; i<stops.length; i++) {
 					let start = stops[i - 1];
 					let end = stops[i];
-					let range = start.range(end, { space: this.space, hue: "raw" });
+					let range = start.range(end, { space: this.space });
 					scales.push(range);
 				}
 
