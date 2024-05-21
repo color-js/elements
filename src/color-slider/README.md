@@ -142,6 +142,13 @@ Then use a `color-slider` class on your slider element, and use [CSS variables](
 
 ## Reference
 
+### Slots
+
+| Name | Description |
+|------|-------------|
+| (default) | The color slider's main content. By default, it is placed after the slider. |
+| `tooltip` | An element used as a tooltip. |
+
 ### Attributes & Properties
 
 | Attribute | Property | Property type | Default value | Description |
@@ -187,6 +194,13 @@ If you’re only using the CSS file, you should set these yourself.
 | `change` | Fired when the color changes due to user action. |
 | `valuechange` | Fired when the value changes for any reason, and once during initialization. |
 | `colorchange` | Fired when the color changes for any reason, and once during initialization. |
+
+### Parts
+
+| Name | Description |
+|------|-------------|
+| `slider` | The internal `<input type="range">` element. |
+| `spinner` | The internal `<input type="number">` element inside the `tooltip` slot. |
 
 ## Planned features
 
