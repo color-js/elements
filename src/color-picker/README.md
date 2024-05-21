@@ -72,6 +72,12 @@ As with other components, you can listen to the `colorchange` event:
 
 The styling of `<color-picker>` is fully customizable via CSS variables provided by the [`<color-slider>`](../color-slider/#css-variables) and [`<color-swatch>`](../color-swatch/#css-variables).
 
+### Parts
+
+| Name | Description |
+|------|-------------|
+| `swatch` | The internal `<color-swatch>` element inside the `swatch` slot. |
+
 ## Planned features
 
 - Alpha
