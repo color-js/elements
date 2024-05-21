@@ -19,7 +19,7 @@ const Self = class ColorSlider extends NudeElement {
 		let styleURL = new URL(`./${this.constructor.tagName}.css`, import.meta.url);
 		this.shadowRoot.innerHTML = `
 			<style>@import url("${ styleURL }")</style>
-			<input type="range" class="color-slider" part="slider" min="0" max="1" step="0.01" part="slider" />
+			<input type="range" class="color-slider" part="slider" min="0" max="1" step="0.01" />
 			<slot name="tooltip" class="slider-tooltip">
 				<input type="number" part="spinner" min="0" max="1" step="0.01" />
 			</slot>
