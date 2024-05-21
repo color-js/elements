@@ -64,8 +64,8 @@ All attributes are reactive:
 	function init () {
 		let pickerSpace = dynamic_picker.space.id;
 
-		space_select.innerHTML = Color.Space.all
-			.map(({id, name}) => `<option value="${id}" ${id === pickerSpace ? "selected" : "" }>${name}</option>`)
+		space_select.innerHTML = Object.entries(Color.spaces)
+			.map(([id, space]) => `<option value="${id}" ${id === pickerSpace ? "selected" : "" }>${space.name}</option>`)
 			.join('\n');
 
 		space_select.oninput = fromSelects;
