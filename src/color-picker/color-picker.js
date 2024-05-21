@@ -30,6 +30,8 @@ const Self = class ColorPicker extends NudeElement {
 		super.connectedCallback?.();
 		this._el.sliders.addEventListener("input", this);
 		this._el.swatch.addEventListener("input", this);
+
+		this.render();
 	}
 
 	disconnectedCallback() {
@@ -79,7 +81,12 @@ const Self = class ColorPicker extends NudeElement {
 				}
 			}
 
-			this.render();
+			// When we first come here on component initialization,
+			// we shouldn't call render() since it'll replace the provided color with the default one.
+			// So, we only need to re-render the component when space actually changes *after* the component is mounted.
+			if (change.oldInternalValue || change.oldAttributeValue) {
+				this.render();
+			}
 		}
 
 		if (name === "color") {
