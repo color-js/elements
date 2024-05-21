@@ -113,7 +113,7 @@ All attributes are reactive:
 
 | Name | Description |
 |------|-------------|
-| (default) | The channel slider's label. |
+| _(default)_ | The channel slider's label. |
 
 ### Attributes & Properties
 
