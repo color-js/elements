@@ -49,25 +49,29 @@ All attributes are reactive:
 ```html
 <label>
 	Space:
-	<select id="space_select" size="3">
-		<option selected>oklch</option>
-		<option>oklab</option>
-		<option>okhsl</option>
-		<option>lab</option>
-		<option>lch</option>
-		<option>hsl</option>
-		<option>srgb</option>
-	</select>
+	<select id="space_select" size="3"></select>
 </label>
 
 <color-picker id="dynamic_picker" space="oklch" color="oklch(60% 30% 180)"></color-picker>
 
-<script>
+<script type="module">
+	import Color from "../common/color.js";
+
 	function fromSelects () {
 		dynamic_picker.space = space_select.value;
 	}
 
-	space_select.oninput = fromSelects;
+	function init () {
+		let pickerSpace = dynamic_picker.space.id;
+
+		space_select.innerHTML = Color.Space.all
+			.map(({id, name}) => `<option value="${id}" ${id === pickerSpace ? "selected" : "" }>${name}</option>`)
+			.join('\n');
+
+		space_select.oninput = fromSelects;
+	}
+
+	customElements.whenDefined("color-picker").then(init);
 </script>
 ```
 
