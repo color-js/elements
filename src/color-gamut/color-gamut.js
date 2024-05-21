@@ -1,19 +1,19 @@
 import Color from "../common/color.js";
 
-let styleURL = new URL("./color-gamut.css", import.meta.url);
-
-export default class ColorGamut extends HTMLElement {
+const Self = class ColorGamut extends HTMLElement {
+	static tagName = "color-gamut";
 	#label;
 
 	constructor () {
 		super();
 		this.attachShadow({mode: "open"});
+		let styleURL = new URL(`./${ Self.tagName }.css`, import.meta.url);
 		this.shadowRoot.innerHTML = `
 			<style>@import url("${ styleURL }")</style>
 			<span id="label" part="label"></span>
 		`;
 
-		this.gamuts = this.gamuts ?? this.getAttribute("gamuts") ?? this.constructor.defaultGamuts;
+		this.gamuts ??= this.getAttribute("gamuts") ?? this.constructor.defaultGamuts;
 	}
 
 	connectedCallback () {
@@ -169,4 +169,6 @@ export default class ColorGamut extends HTMLElement {
 	}
 }
 
-customElements.define("color-gamut", ColorGamut);
+customElements.define(Self.tagName, Self);
+
+export default Self;
