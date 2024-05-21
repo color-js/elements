@@ -42,6 +42,34 @@ As with other components, you can listen to the `colorchange` event:
 </color-picker>
 ```
 
+### Dynamic
+
+All attributes are reactive:
+
+```html
+<label>
+	Space:
+	<select id="space_select" size="3">
+		<option selected>oklch</option>
+		<option>oklab</option>
+		<option>okhsl</option>
+		<option>lab</option>
+		<option>lch</option>
+		<option>hsl</option>
+		<option>srgb</option>
+	</select>
+</label>
+
+<color-picker id="dynamic_picker" space="oklch" color="oklch(60% 30% 180)"></color-picker>
+
+<script>
+	function fromSelects () {
+		dynamic_picker.space = space_select.value;
+	}
+
+	space_select.oninput = fromSelects;
+</script>
+```
 
 ## Reference
 
