@@ -81,7 +81,7 @@ const Self = class ColorGamut extends NudeElement {
 
 					gamut = gamut.trim().split(/\s*:\s*/);
 					let id = gamut[0];
-					let label = gamut[1] ?? Color.spaces[gamut]?.name ?? id;
+					let label = gamut[1] ?? Color.spaces[id]?.name ?? id;
 					return {id, label, level};
 				});
 
