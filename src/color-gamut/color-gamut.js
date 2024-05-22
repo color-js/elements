@@ -96,7 +96,10 @@ const Self = class ColorGamut extends NudeElement {
 				}
 
 				return ret;
-			}
+			},
+			stringify (gamuts) {
+				return gamuts.map(({id, label}) => `${ id }: ${ label }`).join(", ");
+			},
 		},
 		gamutInfo: {
 			get () {
