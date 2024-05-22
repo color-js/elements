@@ -7,41 +7,19 @@ Gamut indicator. Used internally by `<color-swatch>`
 
 Static (only read once):
 ```html
-<color-gamut>red</color-gamut>
+<color-gamut color="red"></color-gamut>
 ```
 
-Produces <color-gamut>red</color-gamut>
+Invalid color:
+```html
+<color-gamut color="poop"></color-gamut>
+```
 
 Dynamic:
-```js
-colorGamutElement.color = colorValue;
+```html
+<color-gamut id="cg_1" color="red"></color-gamut>
+<script>cg_1.color = "oklch(50% 0.5 180)";</script>
 ```
-
-## Reference
-
-### Attributes & Properties
-
-| Attribute | Property | Property type | Default value | Description |
-|-----------|----------|---------------|---------------|-------------|
-| `gamuts` | `gamuts` | `string` &#124; `Array<string>` &#124; `object` | `["srgb", "p3", "rec2020", "prophoto"]` | A list of gamuts to use. |
-| `color` | `color` | `Color` &#124; `string` | - | The current color value. |
-
-### Events
-
-| Name | Description |
-|------|-------------|
-| `gamutchange` | Fired when the gamut changes for any reason, and once during initialization. |
-
-### CSS variables
-
-| Variable | Type | Description |
-|----------|---------------|-------------|
-| `--color-green` | `<color>` | Green background color of gamut indicator. Used when the color is within the first gamut. |
-| `--color-yellow` | `<color>` | Yellow background color of gamut indicator. Used when the color is within the second gamut. |
-| `--color-orange` | `<color>` | Orange background color of gamut indicator. Used when the color is within the third gamut. |
-| `--color-red` | `<color>` | Red background color of gamut indicator. Used when the color is within the fourth gamut. |
-| `--color-red-dark` | `<color>` | Dark red background color of gamut indicator. Used when the provided color fits none of the specified gamuts. |
-| `--gamut-color` | `<color>` | Background color of gamut indicator. Will override the color that depends on the actual gamut, so you should rarely use this directly. |
 
 ## Demo
 <style>
@@ -99,3 +77,52 @@ No label:
 
 Default display:
 <div id=colors_container></div>
+
+## Reference
+
+### Attributes & Properties
+
+| Attribute | Property | Property type | Default value | Description |
+|-----------|----------|---------------|---------------|-------------|
+| `gamuts` | `gamuts` | `string` &#124; `Array<string>` &#124; `object` | `["srgb", "p3", "rec2020", "prophoto"]` | A list of gamuts to use. |
+| `color` | `color` | `Color` &#124; `string` | - | The current color value. |
+
+### Events
+
+| Name | Description |
+|------|-------------|
+| `gamutchange` | Fired when the gamut changes for any reason, and once during initialization. |
+
+### Slots
+
+| Slot | Description |
+|------|-------------|
+| _(default)_ | Custom content |
+
+### CSS variables
+
+| Variable | Type | Default value | Description |
+|----------|------|---------------|-------------|
+| `--color-green` | `<color>` | | Starting color of the background color scale. Used when the color is within the first gamut. |
+| `--color-yellow` | `<color>` | | Yellow color to be used at around 33.3% of the color scale Will be used for the second gamut if there are four total. |
+| `--color-orange` | `<color>` | | Orange color to be used at around 66.6% of the color scale. Will be used for the third gamut if there are four total. |
+| `--color-red` | `<color>` | | Red color to be used as the last stop of the color scale. Used when the color is within the last gamut. |
+| `--color-red-dark` | `<color>` | | Dark red background color of gamut indicator. Used when the provided color fits none of the specified gamuts. |
+| `--color-invalid` | `<color>` | | Background color of gamut indicator when the provided color is invalid. |
+
+#### Output-only CSS variables
+
+These variables are set by the component.
+You can write CSS that reacts to them, but you should not set them yourself unless you *really* know what you’re doing.
+
+| Variable | Type | Default value | Description |
+|----------|------|---------------|-------------|
+| `--gamut-color` | `<color>` | | Background color of gamut indicator. Will override the color that depends on the actual gamut, so you should rarely use this directly. |
+| `--gamut-level` | `<integer>` | - | The index of the gamut the current color fits in, starting from 0. You can use this in styling, but don’t overwrite it. |
+
+### CSS Parts
+
+| Part | Description |
+|------|-------------|
+| `label` | The label of the gamut indicator. Does not apply if the element has content. |
+
