@@ -109,6 +109,12 @@ All attributes are reactive:
 
 ## Reference
 
+### Slots
+
+| Name | Description |
+|------|-------------|
+| _(default)_ | The channel slider's label. |
+
 ### Attributes & Properties
 
 | Attribute | Property | Property type | Default value | Description |
@@ -131,3 +137,11 @@ All attributes are reactive:
 | `change` | Fired when the color changes due to user action. |
 | `valuechange` | Fired when the value changes for any reason, and once during initialization. |
 | `colorchange` | Fired when the color changes for any reason, and once during initialization. |
+
+### Parts
+
+| Name | Description |
+|------|-------------|
+| `color_slider` | The internal `<color-slider>` element. |
+| `slider` | The `slider` part of the internal [`<color-slider>`](../color-slider/#parts) element. |
+| `label` | The internal `<label>` element used as a wrapper around the default slot and the slider. |
