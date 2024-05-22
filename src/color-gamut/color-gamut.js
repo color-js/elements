@@ -70,7 +70,7 @@ const Self = class ColorGamut extends NudeElement {
 				}
 				else if (!Array.isArray(gamuts) && typeof gamuts === "object") {
 					// Object
-					return Object.entries(gamuts).map(([id, label]) => {id, label});
+					return Object.entries(gamuts).map(([id, label]) => ({id, label}));
 				}
 
 				let ret = gamuts.map((gamut, level) => {
