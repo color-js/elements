@@ -190,7 +190,7 @@ export default class ChannelSlider extends NudeElement {
 			type: Number,
 			default () {
 				let value = this.defaultColor.get(this.channel);
-				return this.channel === "alpha" ? value * 100 : value;
+				return this.channel === "alpha" ? +(value * 100).toPrecision(4) : value;
 			},
 			reflect: {
 				from: "value",
