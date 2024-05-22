@@ -55,7 +55,7 @@ All attributes are reactive:
 <color-picker id="dynamic_picker" space="oklch" color="oklch(60% 30% 180)"></color-picker>
 
 <script type="module">
-	import Color from "../common/color.js";
+	import Color from "https://colorjs.io/dist/color.js";
 
 	function fromSelects () {
 		dynamic_picker.space = space_select.value;
