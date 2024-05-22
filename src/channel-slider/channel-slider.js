@@ -42,14 +42,12 @@ export default class ChannelSlider extends NudeElement {
 
 	colorAt (value) {
 		let color = this.defaultColor.clone();
-
 		try {
 			color.set(this.channel, value);
 		}
 		catch (e) {
 			console.warn(e);
 		}
-
 		return color;
 	}
 
