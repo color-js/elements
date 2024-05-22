@@ -42,7 +42,7 @@ Invalid color:
 
 | Name | Description |
 |------|-------------|
-| (default) | The element's main content—the color to be shown. Placed next to the color swatch. |
+| _(default)_ | The element's main content—the color to be shown. Placed next to the color swatch. |
 
 ### Attributes & Properties
 
