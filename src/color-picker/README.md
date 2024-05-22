@@ -57,15 +57,11 @@ All attributes are reactive:
 <script type="module">
 	import Color from "https://colorjs.io/dist/color.js";
 
-	function fromSelects () {
-		dynamic_picker.space = space_select.value;
-	}
-
 	space_select.innerHTML = Object.entries(Color.spaces)
 		.map(([id, space]) => `<option value="${id}">${space.name}</option>`)
 		.join('\n');
 
-	space_select.oninput = fromSelects;
+	space_select.oninput = () => dynamic_picker.space = space_select.value;
 
 	customElements.whenDefined("color-picker").then(() => space_select.value = dynamic_picker.space.id);
 </script>
