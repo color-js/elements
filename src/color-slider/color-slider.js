@@ -63,7 +63,10 @@ const Self = class ColorSlider extends NudeElement {
 		if (["min", "max", "step", "value", "defaultValue"].includes(name)) {
 			prop.applyChange(this._el.slider, change);
 
-			let spinnerValue = this.tooltip === "progress" ? +(this.progress * 100).toPrecision(4) : change.value;
+			let spinnerValue = change.value;
+			if (this.tooltip === "progress" && (name === "value" || name === "defaultValue")) {
+				spinnerValue = +(this.progress * 100).toPrecision(4);
+			}
 			prop.applyChange(this._el.spinner, {...change, value: spinnerValue});
 		}
 
