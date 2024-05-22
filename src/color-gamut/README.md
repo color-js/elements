@@ -14,6 +14,10 @@ Invalid color:
 ```html
 <color-gamut color="poop"></color-gamut>
 ```
+Missing color:
+```html
+<color-gamut></color-gamut>
+```
 
 Dynamic:
 ```html
