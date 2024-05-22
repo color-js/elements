@@ -146,7 +146,7 @@ Then use a `color-slider` class on your slider element, and use [CSS variables](
 
 | Name | Description |
 |------|-------------|
-| _(default)_ | The color slider's main content. By default, it is placed after the slider. |
+| _(default)_ | Content placed after the color slider. |
 | `tooltip` | An element used as a tooltip. |
 
 ### Attributes & Properties
