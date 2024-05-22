@@ -57,7 +57,7 @@ Invalid color:
 | Variable | Type | Description |
 |----------|---------------|-------------|
 | `--transparency-grid` | `<image>` | Gradient used as a background for transparent parts of the swatch. |
-| `--transparency-tile-size` | `<length>` | The size of the tiles in the transparency grid. |
+| `--transparency-tile-size` | `<length>` | The size of the tiles in the transparency grid. This will not be used if you are overriding `--transparency-grid` |
 | `--border-width` | `<length>` | The width of the border around the swatch. |
 | `--box-shadow-blur` | `<length>` | The blur radius of the box shadow around the swatch. |
 | `--box-shadow-color` | `<color>` | The color of the box shadow around the swatch. |
