@@ -43,16 +43,11 @@ export default class ChannelSlider extends NudeElement {
 	colorAt (value) {
 		let color = this.defaultColor.clone();
 
-		if (this.channel === "alpha") {
-			color.alpha = value;
+		try {
+			color.set(this.channel, value);
 		}
-		else {
-			try {
-				color.set(this.channel, value);
-			}
-			catch (e) {
-				console.warn(e);
-			}
+		catch (e) {
+			console.warn(e);
 		}
 
 		return color;
@@ -192,8 +187,7 @@ export default class ChannelSlider extends NudeElement {
 		defaultValue: {
 			type: Number,
 			default () {
-				let color = this.defaultColor;
-				return this.channel === "alpha" ? color.alpha : color.get(this.channel);
+				return this.defaultColor.get(this.channel);
 			},
 			reflect: {
 				from: "value",
