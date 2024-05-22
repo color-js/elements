@@ -103,7 +103,10 @@ const Self = class ColorGamut extends NudeElement {
 		},
 		gamutInfo: {
 			get () {
-				// console.log(this.color, this);
+				if (!this.color) {
+					return null;
+				}
+
 				return this.gamuts?.find(gamut => gamut.id === "none" || this.color?.inGamut(gamut.id));
 			}
 		},
