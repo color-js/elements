@@ -143,5 +143,5 @@ All attributes are reactive:
 | Name | Description |
 |------|-------------|
 | `color_slider` | The internal `<color-slider>` element. |
-| `slider` | The exposed [part of the internal `<color-slider>` element](../color-slider/#parts). |
+| `slider` | The `slider` part of the internal [`<color-slider>`](../color-slider/#parts) element. |
 | `label` | The internal `<label>` element used as a wrapper around the default slot and the slider. |
