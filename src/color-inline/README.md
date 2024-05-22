@@ -49,7 +49,7 @@ Invalid color:
 | Attribute | Property | Property type | Default value | Description |
 |-----------|----------|---------------|---------------|-------------|
 | `color` | `color` | `Color` &#124; `null` | - | The current color value. `null` for invalid colors. |
-| `value` | `value` | `string` &#124; `undefined` | - | The textual form of the color. Will have a value even if the color is invalid. `undefined` if the `value` attribute is not set. |
+| `value` | `value` | `string` | - | The textual form of the color. Will have a value even if the color is invalid. |
 
 
 ### CSS variables
