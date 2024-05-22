@@ -61,7 +61,6 @@ Invalid color:
 | `--border-width` | `<length>` | The width of the border around the swatch. |
 | `--box-shadow-blur` | `<length>` | The blur radius of the box shadow around the swatch. |
 | `--box-shadow-color` | `<color>` | The color of the box shadow around the swatch. |
-| `--color-image` | `<image>` | The image used to render the swatch. Will override the image that depends on the actual color, so you should rarely use this directly. |
 
 ### Parts
 
