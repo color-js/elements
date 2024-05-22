@@ -33,7 +33,7 @@ const Self = class ColorGamut extends NudeElement {
 		if (name === "gamut") {
 			if (this.gamutInfo) {
 				this.style.setProperty("--gamut-level", this.gamutInfo.level);
-				this.style.setProperty("--gamut-label", this.gamutInfo.label);
+				this.style.setProperty("--gamut-label", `"${ this.gamutInfo.label }"`);
 				this.style.setProperty("--gamut-id", `"${ this.gamutInfo.id }"`);
 			}
 			else {
