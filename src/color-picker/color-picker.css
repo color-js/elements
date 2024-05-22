@@ -24,3 +24,6 @@ slot[name="swatch"]::slotted(*) {
 	}
 }
 
+:host(:not([alpha])) channel-slider[channel="alpha"] {
+	display: none;
+}

@@ -47,7 +47,8 @@ const Self = class ColorPicker extends NudeElement {
 		if (!source || this._el.sliders.contains(source)) {
 			// From sliders
 			let coords = [...this._el.sliders.children].map(el => el.value);
-			this.color = new Color(this.space, coords);
+			let alpha = coords.pop() / 100;
+			this.color = new Color(this.space, coords, alpha);
 			this._el.swatch.color = this.color;
 		}
 		else if (!source || this._el.swatch.contains(source)) {
@@ -67,7 +68,8 @@ const Self = class ColorPicker extends NudeElement {
 	propChangedCallback ({name, prop, detail: change}) {
 		if (name === "space") {
 			let i = 0;
-			for (let channel in this.space.coords) {
+			let channels = [...Object.keys(this.space.coords), "alpha"];
+			for (let channel of channels) {
 				let slider = this._el.sliders.children[i++];
 
 				if (slider) {
@@ -136,6 +138,10 @@ const Self = class ColorPicker extends NudeElement {
 			set (value) {
 				this.defaultColor = new Color(value).to(this.space);
 			},
+		},
+
+		alpha: {
+			type: Boolean,
 		},
 	};
 
