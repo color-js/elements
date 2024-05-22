@@ -61,17 +61,17 @@ All attributes are reactive:
 		dynamic_picker.space = space_select.value;
 	}
 
-	function init () {
-		let pickerSpace = dynamic_picker.space.id;
-
-		space_select.innerHTML = Object.entries(Color.spaces)
-			.map(([id, space]) => `<option value="${id}" ${id === pickerSpace ? "selected" : "" }>${space.name}</option>`)
-			.join('\n');
-
-		space_select.oninput = fromSelects;
+	function setDefault () {
+		space_select.value = dynamic_picker.space.id;
 	}
 
-	customElements.whenDefined("color-picker").then(init);
+	space_select.innerHTML = Object.entries(Color.spaces)
+		.map(([id, space]) => `<option value="${id}">${space.name}</option>`)
+		.join('\n');
+
+	space_select.oninput = fromSelects;
+
+	customElements.whenDefined("color-picker").then(setDefault);
 </script>
 ```
 
