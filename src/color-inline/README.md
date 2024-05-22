@@ -14,7 +14,7 @@ Basic use:
 ```
 </html-demo>
 
-The color swatch only:
+You can use `value` to set the color swatch while displaying something else as the content (or even nothing at all):
 
 ```html
 <color-inline value="lch(50% 40 30)"></color-inline>
