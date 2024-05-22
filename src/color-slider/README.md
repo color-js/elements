@@ -200,7 +200,7 @@ If you’re only using the CSS file, you should set these yourself.
 | Name | Description |
 |------|-------------|
 | `slider` | The internal `<input type="range">` element. |
-| `spinner` | The internal `<input type="number">` element inside the `tooltip` slot. |
+| `spinner` | The default `tooltip` slot content (an `<input type="number">` element). Please note that if an element is slotted in the `tooltip` slot, this will not match anyhing. |
 
 ## Planned features
 
