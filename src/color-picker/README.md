@@ -42,6 +42,30 @@ As with other components, you can listen to the `colorchange` event:
 </color-picker>
 ```
 
+### Dynamic
+
+All attributes are reactive:
+
+```html
+<label>
+	Space:
+	<select id="space_select" size="3"></select>
+</label>
+
+<color-picker id="dynamic_picker" space="oklch" color="oklch(60% 30% 180)"></color-picker>
+
+<script type="module">
+	import Color from "https://colorjs.io/dist/color.js";
+
+	space_select.innerHTML = Object.entries(Color.spaces)
+		.map(([id, space]) => `<option value="${id}">${space.name}</option>`)
+		.join('\n');
+	
+	space_select.value = "oklch";
+
+	space_select.oninput = () => dynamic_picker.space = space_select.value;
+</script>
+```
 
 ## Reference
 
@@ -71,6 +95,12 @@ As with other components, you can listen to the `colorchange` event:
 ### CSS variables
 
 The styling of `<color-picker>` is fully customizable via CSS variables provided by the [`<color-slider>`](../color-slider/#css-variables) and [`<color-swatch>`](../color-swatch/#css-variables).
+
+### Parts
+
+| Name | Description |
+|------|-------------|
+| `swatch` | The default `<color-swatch>` element, used if the `swatch` slot has no slotted elements. |
 
 ## Planned features
 
