@@ -68,7 +68,7 @@ params.addEventListener("input", e => {
 	}
 
 	let html = colors.map(color => `
-		<color-gamut title="${color}">${color}</color-gamut>`).join("\n");
+		<color-gamut title="${color}" color="${color}"></color-gamut>`).join("\n");
 	colors_container_h.innerHTML = html;
 	colors_container.innerHTML = html;
 });
