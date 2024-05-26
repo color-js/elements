@@ -1,32 +1,74 @@
 :host {
+	--_color-green: var(--color-green, yellowgreen);
+	--_color-yellow: var(--color-yellow, gold);
+	--_color-orange: var(--color-orange, orange);
+	--_color-red: var(--color-red, red);
+	--_color-red-dark: var(--color-red-dark, #a00);
+	--_color-invalid: var(--color-invalid, hsl(220 10% 60%));
+
+	/* Low-level scales, i.e. between pairs of our core colors */
+	--color-scale-1: color-mix(in oklch, var(--_color-green), var(--_color-yellow) var(--progress-1));
+	--color-scale-2: color-mix(in oklch, var(--_color-yellow), var(--_color-orange) var(--progress-2));
+	--color-scale-3: color-mix(in oklch, var(--_color-orange), var(--_color-red) var(--progress-3));
+
+	/* Recursive scales: their only purpose is to select one of the low-level scales, and will only ever have 0%/100% positions
+	   For N colors there are N-2 + N-3 + ... + 1 = (N-1)(N-2) / 2 of these
+	*/
+	--color-scale-12: color-mix(in oklch, var(--color-scale-1), var(--color-scale-2) var(--progress-12));
+	--color-scale-23: color-mix(in oklch, var(--color-scale-2), var(--color-scale-3) var(--progress-23));
+	--color-scale-123: color-mix(in oklch, var(--color-scale-12), var(--color-scale-23) var(--progress-123));
+
+	--gamut-progress: calc(var(--gamut-level) / (var(--gamut-count) - 1));
+	--progress-ext: calc(var(--gamut-progress) * 300%);
+
+	--progress-123: clamp(0%, (var(--progress-ext) - 150%)       * infinity, 100%);
+	--progress-12:  clamp(0%, (var(--progress-ext) - 150% + 75%) *  infinity, 100%);
+	--progress-23:  clamp(0%, (var(--progress-ext) - 150% - 75%) * infinity, 100%);
+
+	--progress-1:   clamp(0%, var(--progress-ext), 100%);
+	--progress-2:   calc(clamp(100%, var(--progress-ext), 200%) - 100%);
+	--progress-3:   calc(clamp(200%, var(--progress-ext), 300%) - 200%);
+
+	--color-level-infinity: var(--_color-red-dark);
+	--color: var(--color-scale-123, var(--_color-invalid));
+
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 	border-radius: .2em;
 	color: white;
-	background: var(--gamut-color, var(--color-neutral-60, hsl(220 10% 60%)));
+	background-color: var(--color);
 	font-weight: bold;
 	padding-inline: .4em;
 	line-height: 1.4;
 }
 
-:host([level="0"]) {
-	--gamut-color: var(--color-green, yellowgreen);
-}
-
-:host([level="1"]) {
-	color: black;
-	--gamut-color: var(--color-yellow, gold);
-}
-
-:host([level="2"]) {
-	--gamut-color: var(--color-orange, orange);
-}
-
-:host([level="3"]) {
-	--gamut-color: var(--color-red, red);
-}
-
 :host([gamut="none"]) {
-	--gamut-color: var(--color-red-dark, #b00);
+	background-color: var(--color-level-infinity);
+}
+
+#label {
+	&::before {
+		content: var(--gamut-label, "N/A");
+	}
+
+	@supports not (color: color(from red xyz-d65 y y y)) {
+		/* https://miunau.com/posts/dynamic-text-contrast-in-css/ */
+		filter: invert(1) grayscale(1) brightness(1.3) contrast(9000);
+		mix-blend-mode: luminosity;
+	}
+
+	@supports (color: color(from red xyz-d65 y y y)) {
+		/* https://lea.verou.me/blog/2024/contrast-color/ */
+		--y-threshold: 0.36;
+		--y: clamp(0, (var(--y-threshold) - y) * infinity, 1);
+
+		color: color(from var(--color) xyz-d65 var(--y) var(--y) var(--y));
+	}
+}
+
+@property --color {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: transparent;
 }

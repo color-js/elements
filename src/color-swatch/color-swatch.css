@@ -8,6 +8,7 @@
 		content-box border-box var(--_transparency-background)
 	);
 
+	position: relative;
 	display: inline-flex;
 	gap: .3em;
 	width: min-content;
@@ -16,7 +17,7 @@
 
 :host([size="large"]) {
 	flex-flow: column;
-	min-inline-size: 11em;
+	inline-size: 11em;
 	min-block-size: 6em;
 }
 
@@ -26,6 +27,18 @@
 
 #gamut {
 	font-size: 80%;
+
+
+	&:is(:host([size="large"]) *) {
+		position: absolute;
+		top: 0;
+		right: 0;
+		margin: .5rem;
+	}
+
+	&:not(:host([size="large"]) *):is(.static *) {
+		align-self: baseline;
+	}
 }
 
 #wrapper {
@@ -34,7 +47,9 @@
 	gap: inherit;
 
 	&.static {
-		gap: .4em;
+		&:is(:host([size="large"]) *) {
+			background: white;
+		}
 	}
 
 	&:not(:host([size="large"]) *) {
@@ -43,21 +58,8 @@
 }
 
 [part="color-wrapper"] {
-	position: relative;
 	display: flex;
 	gap: .2em;
-
-	&:not(.static *) {
-		#gamut {
-			position: absolute;
-			inset: .3em;
-			inset-inline-start: auto;
-		}
-	}
-
-	::slotted(input) {
-		padding-inline-end: 2em;
-	}
 }
 
 slot:not([name]) {
