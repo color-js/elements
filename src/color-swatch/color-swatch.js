@@ -102,9 +102,10 @@ const Self = class ColorSwatch extends HTMLElement {
 			this.#dom.colorWrapper.appendChild(this.#dom.gamutIndicator);
 
 			this.#dom.gamutIndicator.addEventListener("gamutchange", evt => {
-				this.setAttribute("gamut", evt.detail.gamut);
+				let gamut = this.#dom.gamutIndicator.gamut;
+				this.setAttribute("gamut", gamut);
 				this.dispatchEvent(new CustomEvent("gamutchange", {
-					detail: evt.detail,
+					detail: gamut,
 				}));
 			});
 		}

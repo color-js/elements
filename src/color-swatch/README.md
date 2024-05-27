@@ -8,7 +8,7 @@
 <thead>
 <tr>
 <th></th>
-<th>Normal size</th>
+<th>Default</th>
 <th>Large</th>
 </tr>
 </thead>
