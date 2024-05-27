@@ -5,7 +5,16 @@
 
 .color-slider,
 .slider-tooltip {
-	--transparency: repeating-conic-gradient(transparent 0 25%, rgb(0 0 0 / .05) 0 50%) 0 0 / 1.5em 1.5em content-box border-box;
+	--transparency-cell-size: 1.5em;
+
+	--_transparency-cell-size: var(--transparency-cell-size, .5em);
+	--_transparency-background: var(--transparency-background, transparent);
+	--_transparency-darkness: var(--transparency-darkness, 5%);
+	--_transparency: var(--transparency-grid,
+		repeating-conic-gradient(transparent 0 25%, rgb(0 0 0 / var(--_transparency-darkness)) 0 50%)
+		0 0 / calc(2 * var(--_transparency-cell-size)) calc(2 * var(--_transparency-cell-size))
+		content-box border-box var(--_transparency-background)
+	);
 
 	--_slider-color-stops: var(--slider-color-stops, transparent 0% 100%);
 	--_slider-gradient: var(--slider-gradient, linear-gradient(to right var(--in-space, ), var(--_slider-color-stops)));
@@ -36,7 +45,7 @@
 	width: 100%;
 	-moz-appearance: none;
 	-webkit-appearance: none;
-	background: var(--_slider-gradient), var(--transparency);
+	background: var(--_slider-gradient), var(--_transparency);
 	background-origin: border-box;
 	background-clip: border-box;
 	height: var(--_slider-height);
