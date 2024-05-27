@@ -1,8 +1,8 @@
 import Color from "../common/color.js";
 import NudeElement from "../../node_modules/nude-element/src/Element.js";
 
-const Self = class ColorGamut extends NudeElement {
-	static tagName = "color-gamut";
+const Self = class GamutBadge extends NudeElement {
+	static tagName = "gamut-badge";
 	#label;
 
 	constructor () {
@@ -52,10 +52,10 @@ const Self = class ColorGamut extends NudeElement {
 					return Color.get(color);
 				}
 				catch (e) {
-					console.warn("<color-gamut>:", e);
+					console.warn("<gamut-badge>:", e);
 					return null;
 				}
-			}
+			},
 		},
 		gamuts: {
 			type: Array,
@@ -108,13 +108,13 @@ const Self = class ColorGamut extends NudeElement {
 				}
 
 				return this.gamuts?.find(gamut => gamut.id === "none" || this.color?.inGamut(gamut.id));
-			}
+			},
 		},
 		gamut: {
 			type: String,
 			get () {
 				return this.gamutInfo?.id;
-			}
+			},
 		},
 	};
 
@@ -122,8 +122,8 @@ const Self = class ColorGamut extends NudeElement {
 		gamutchange: {
 			propchange: "gamut",
 		},
-	}
-}
+	};
+};
 
 customElements.define(Self.tagName, Self);
 
