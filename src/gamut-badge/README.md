@@ -1,5 +1,5 @@
-<script src="color-gamut.js" type="module"></script>
-# &lt;color-gamut>
+<script src="gamut-badge.js" type="module"></script>
+# &lt;gamut-badge>
 
 Gamut indicator. Used internally by `<color-swatch>`
 
@@ -7,21 +7,21 @@ Gamut indicator. Used internally by `<color-swatch>`
 
 Static (only read once):
 ```html
-<color-gamut color="red"></color-gamut>
+<gamut-badge color="red"></gamut-badge>
 ```
 
 Invalid color:
 ```html
-<color-gamut color="poop"></color-gamut>
+<gamut-badge color="poop"></gamut-badge>
 ```
 Missing color:
 ```html
-<color-gamut></color-gamut>
+<gamut-badge></gamut-badge>
 ```
 
 Dynamic:
 ```html
-<color-gamut id="cg_1" color="red"></color-gamut>
+<gamut-badge id="cg_1" color="red"></gamut-badge>
 <script>cg_1.color = "oklch(50% 0.5 180)";</script>
 ```
 
@@ -37,7 +37,7 @@ Dynamic:
 		height: 1em;
 		margin-bottom: 1em;
 
-		color-gamut {
+		gamut-badge {
 			flex: 1;
 			border-radius: 0;
 
@@ -68,7 +68,7 @@ params.addEventListener("input", e => {
 	}
 
 	let html = colors.map(color => `
-		<color-gamut title="${color}" color="${color}"></color-gamut>`).join("\n");
+		<gamut-badge title="${color}" color="${color}"></gamut-badge>`).join("\n");
 	colors_container_h.innerHTML = html;
 	colors_container.innerHTML = html;
 });

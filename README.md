@@ -48,7 +48,7 @@ import "color-elements/COMPONENT_NAME";
 - [`<channel-slider>`](src/channel-slider/)
 - [`<color-swatch>`](src/color-swatch/)
 - [`<color-inline>`](src/color-inline/)
-- [`<color-gamut>`](src/color-gamut/)
+- [`<gamut-badge>`](src/gamut-badge/)
 
 ### Upcoming:
 

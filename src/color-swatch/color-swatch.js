@@ -1,6 +1,6 @@
 import Color from "../common/color.js";
 import defineEvents from "../../node_modules/nude-element/src/events/defineEvents.js";
-import "../color-gamut/color-gamut.js";
+import "../gamut-badge/gamut-badge.js";
 
 let importIncrementable;
 
@@ -90,7 +90,7 @@ const Self = class ColorSwatch extends HTMLElement {
 		this.gamuts = null;
 		if (!this.matches('[gamuts="none"]')) {
 			this.gamuts = this.getAttribute("gamuts") ?? "srgb, p3, rec2020: P3+, prophoto: PP";
-			this.#dom.gamutIndicator = document.createElement("color-gamut");
+			this.#dom.gamutIndicator = document.createElement("gamut-badge");
 
 			Object.assign(this.#dom.gamutIndicator, {
 				gamuts: this.gamuts,
