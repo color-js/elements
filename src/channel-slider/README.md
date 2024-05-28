@@ -126,8 +126,19 @@ All attributes are reactive:
 | `step` | `step` | `number` | Computed automatically based on `this.min` and `this.max`. | The granularity that the slider's current value must adhere to. |
 | `value` | `value` | `number` | `(this.min + this.max) / 2` | The current value of the slider. |
 | `color` | `color` | `Color` &#124; `string` | `oklch(50% 50% 180)` | The current color value. |
-| - | `minColor` | `Color` | `oklch(0% 50% 180)` | The minimum color value _(read-only)_. |
-| - | `maxColor` | `Color` | `oklch(100% 50% 180)` | The maximum color value _(read-only)_. |
+
+### Getters
+
+These properties are read-only.
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `minColor` | `Color` | The color corresponding to the minimum value of the slider. |
+| `maxColor` | `Color` | The color corresponding to the maximum value of the slider. |
+| `stops` | `Array<Color>` | The array of color stops corresponding to the slider progress of `0%`, `25%`, `50%`, `75%`, and `100%` respectively. |
+| `progress` | `number` | The slider progress calculated on its current value (e.g. `0.42`). |
+| `channelName` | `string` | The label of the slider (e.g. `Hue`). |
+
 
 ### Events
 
