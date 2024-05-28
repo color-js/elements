@@ -135,7 +135,7 @@ These properties are read-only.
 |----------|------|-------------|
 | `minColor` | `Color` | The color corresponding to the minimum value of the slider. |
 | `maxColor` | `Color` | The color corresponding to the maximum value of the slider. |
-| `stops` | `Array<Color>` | The array of the slider color stops with `minColor` and `maxColor` as its first and last elements, respectively. |
+| `stops` | `Array<Color>` | The array of the slider color stops used for rendering. Unsupported color spaces or angular channels (hues) will have more color stops, while other channels may have as little as two: `minColor` and `maxColor`. |
 | `progress` | `number` | The slider value converted to a 0-1 number with `0` corresponding to the min of the range and `1` to the max. |
 | `channelName` | `string` | The name of the channel (e.g. `Hue` or `Alpha`). |
 
