@@ -135,9 +135,9 @@ These properties are read-only.
 |----------|------|-------------|
 | `minColor` | `Color` | The color corresponding to the minimum value of the slider. |
 | `maxColor` | `Color` | The color corresponding to the maximum value of the slider. |
-| `stops` | `Array<Color>` | The array of color stops corresponding to the slider progress of `0%`, `25%`, `50%`, `75%`, and `100%` respectively. |
-| `progress` | `number` | The slider progress calculated on its current value (e.g. `0.42`). |
-| `channelName` | `string` | The label of the slider (e.g. `Hue`). |
+| `stops` | `Array<Color>` | The array of the slider color stops with `minColor` and `maxColor` as its first and last elements, respectively. |
+| `progress` | `number` | The slider progress, as a number between `0` and `1`, calculated on its current value (e.g. `0.42`). |
+| `channelName` | `string` | The name of the channel (e.g. `Hue` or `Alpha`). |
 
 
 ### Events
