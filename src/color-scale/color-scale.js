@@ -4,6 +4,7 @@ import Color from "../common/color.js";
 
 const Self = class ColorScale extends NudeElement {
 	static tagName = "color-scale";
+	static Color = Color;
 
 	constructor () {
 		super();

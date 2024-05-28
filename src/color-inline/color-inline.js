@@ -3,6 +3,7 @@ import Color from "../common/color.js";
 let styleURL = new URL("./color-inline.css", import.meta.url);
 
 export default class ColorInline extends HTMLElement {
+	static Color = Color;
 	#swatch;
 
 	constructor () {
