@@ -192,7 +192,7 @@ These properties are read-only.
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `progress` | `number` | The slider progress calculated on its current value (e.g. `0.42`). |
+| `progress` | `number` | The slider progress, as a number between `0` and `1`, calculated on its current value (e.g. `0.42`). |
 
 
 ### Events
