@@ -155,6 +155,14 @@ If you don’t, the `<html>` element will be used.
 | `--transparcency-background` | `<color>` | The background color of the transparency gradient. |
 | `--transparency-darkness` | `<percentage>` | The opacity of the black color used for dark parts of the transparency gradient. |
 
+### Getters
+
+These properties are read-only.
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `gamut` | `string` | The id of the current gamut (e.g. `srgb`). |
+
 ### Events
 
 | Name | Description |
