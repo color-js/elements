@@ -44,7 +44,7 @@
 	width: 100%;
 	-moz-appearance: none;
 	-webkit-appearance: none;
-	background: var(--_slider-gradient), var(--_transparency);
+	background: var(--_slider-gradient), var(--_transparency-grid);
 	background-origin: border-box;
 	background-clip: border-box;
 	height: var(--_slider-height);
