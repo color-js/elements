@@ -196,7 +196,7 @@ These properties are read-only.
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `progress` | `number` | The slider progress, as a number between `0` and `1`, calculated on its current value (e.g. `0.42`). |
+| `progress` | `number` | The slider value converted to a 0-1 number with `0` corresponding to the min of the range and `1` to the max. |
 
 
 ### Events
