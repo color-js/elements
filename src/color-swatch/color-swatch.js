@@ -1,14 +1,15 @@
 import Color from "../common/color.js";
 import defineEvents from "../../node_modules/nude-element/src/events/defineEvents.js";
+import NudeElement from "../../node_modules/nude-element/src/Element.js";
 import "../gamut-badge/gamut-badge.js";
 
 let importIncrementable;
 
-const Self = class ColorSwatch extends HTMLElement {
-	static initQueue = [];
+const Self = class ColorSwatch extends NudeElement {
+	static tagName = "color-swatch";
 	static Color = Color;
 
-	#dom = {};
+	_el = {};
 
 	constructor () {
 		super();
@@ -34,28 +35,29 @@ const Self = class ColorSwatch extends HTMLElement {
 	#initialized;
 
 	connectedCallback () {
+		super.connectedCallback();
+
 		if (!this.#initialized) {
 			this.#initialize();
 		}
-
-		this.constructor.initQueue.forEach(init => init.call(this));
-
-		// This should eventually be a custom state
-		this.#dom.wrapper.classList.toggle("static", !this.#dom.input);
-
-		if (this.#dom.input) {
-			if (!this.#dom.input.incrementable) {
-				// Increment numbers by keyboard arrow keys
-				importIncrementable.then(Incrementable => new Incrementable(this.#dom.input));
-			}
-		}
-
-		this.#render();
 	}
 
-	#errorTimeout;
-	#cs;
-	#scopeRoot;
+
+	#updateStatic () {
+		let previousInput = this._el.input;
+		this._el.input = this.querySelector("input");
+		this.static = !this._el.input;
+
+		// This should eventually be a custom state
+		this._el.wrapper.classList.toggle("static", this.static);
+
+		if (this._el.input && this._el.input !== previousInput) {
+			importIncrementable ??= import("https://incrementable.verou.me/incrementable.mjs").then(m => m.default);
+			this._el.input.addEventListener("input", evt => {
+				this.value = evt.target.value;
+			});
+		}
+	}
 
 	// Gets called when the element is connected for the first time
 	#initialize ({force} = {}) {
@@ -65,45 +67,29 @@ const Self = class ColorSwatch extends HTMLElement {
 
 		this.#initialized = true;
 
-		this.#dom.wrapper = this.shadowRoot.querySelector("#wrapper");
-		this.#dom.colorWrapper = this.shadowRoot.querySelector("[part=color-wrapper]");
-		this.#dom.input = this.querySelector("input");
-		this.#dom.slot = this.shadowRoot.querySelector("slot:not([name])");
+		this._el.wrapper = this.shadowRoot.querySelector("#wrapper");
+		this._el.colorWrapper = this.shadowRoot.querySelector("[part=color-wrapper]");
+		this._el.slot = this.shadowRoot.querySelector("slot:not([name])");
 
-		this.#dom.slot.addEventListener("slotchange", evt => {
-			this.#render();
-		});
-
-		if (this.#dom.input) {
-			importIncrementable ??= import("https://incrementable.verou.me/incrementable.mjs").then(m => m.default);
-			this.#dom.input.addEventListener("input", evt => {
-				this.#render(evt);
-			});
-		}
-
-		this.verbatim = this.hasAttribute("verbatim");
-
-		if (this.verbatim) {
-			// Cannot display gamut info without parsing the color
-			this.setAttribute("gamuts", "none");
-		}
+		this.#updateStatic();
+		this._el.slot.addEventListener("slotchange", evt => this.#updateStatic());
 
 		this.gamuts = null;
 		if (!this.matches('[gamuts="none"]')) {
 			this.gamuts = this.getAttribute("gamuts") ?? "srgb, p3, rec2020: P3+, prophoto: PP";
-			this.#dom.gamutIndicator = document.createElement("gamut-badge");
+			this._el.gamutIndicator = document.createElement("gamut-badge");
 
-			Object.assign(this.#dom.gamutIndicator, {
+			Object.assign(this._el.gamutIndicator, {
 				gamuts: this.gamuts,
 				id: "gamut",
 				part: "gamut",
 				exportparts: "label: gamutlabel",
 			});
 
-			this.#dom.colorWrapper.appendChild(this.#dom.gamutIndicator);
+			this._el.colorWrapper.appendChild(this._el.gamutIndicator);
 
-			this.#dom.gamutIndicator.addEventListener("gamutchange", evt => {
-				let gamut = this.#dom.gamutIndicator.gamut;
+			this._el.gamutIndicator.addEventListener("gamutchange", evt => {
+				let gamut = this._el.gamutIndicator.gamut;
 				this.setAttribute("gamut", gamut);
 				this.dispatchEvent(new CustomEvent("gamutchange", {
 					detail: gamut,
@@ -114,8 +100,8 @@ const Self = class ColorSwatch extends HTMLElement {
 		if (this.hasAttribute("property")) {
 			this.property = this.getAttribute("property");
 			this.scope = this.getAttribute("scope") ?? ":root";
-			this.#dom.style = document.createElement("style");
-			document.head.appendChild(this.#dom.style);
+			this._el.style = document.createElement("style");
+			document.head.appendChild(this._el.style);
 
 			let varRef = `var(${this.property})`;
 			if (this.verbatim) {
@@ -140,125 +126,91 @@ const Self = class ColorSwatch extends HTMLElement {
 		}
 	}
 
-	#render (evt) {
-		if (!this.#initialized) {
-			return;
-		}
-
-		clearTimeout(this.#errorTimeout);
-
-		if (!this.isConnected) {
-			return;
-		}
-
-		let value = this.value;
-		this.#color = null;
-
-		if (value) {
-			try {
-				this.#color = new Color(value);
-			}
-			catch (e) {
-				// Why a timeout? We don't want to produce errors for intermediate states while typing,
-				// but if this is a genuine error, we do want to communicate it.
-				this.#errorTimeout = setTimeout(_ => this.#dom.input?.setCustomValidity(e.message), 500);
-			}
-
-			if (this.#color) {
-				this.#setColor(this.#color);
-				this.#dom.input?.setCustomValidity("");
-			}
-
-			this.dispatchEvent(new CustomEvent("colorchange", {
-				detail: {
-					color: this.#color,
-				},
-			}));
-		}
-	}
-
 	get gamut () {
-		return this.#dom.gamutIndicator.gamut;
+		return this._el.gamutIndicator.gamut;
 	}
 
-	get value () {
-		return this.#dom.input?.value ?? this.textContent.trim();
-	}
-
-	set value (value) {
-		let oldValue = this.value;
-		if (value === oldValue) {
-			return;
-		}
-
-		this.#setValue(value);
-		this.#render();
-	}
-
-	#setValue (value) {
-		if (!this.#initialized) {
-			this.#initialize();
-		}
-
-		if (this.#dom.input) {
-			this.#dom.input.value = value;
-		}
-		else {
-			this.textContent = value;
-		}
-	}
-
-	#color;
-	get color () {
-		return this.#color;
-	}
-
-	set color (color) {
-		if (typeof color === "string") {
-			color = new Color(color);
-		}
-
-		this.#setColor(color);
-
-		let colorString;
-		if (this.verbatim && this.property) {
-			colorString = `var(${this.property})`;
-		}
-		else {
-			colorString = color.toString({ precision: 2, inGamut: false });
-		}
-		this.#setValue(colorString);
-	}
-
-	#setColor (color) {
-		this.#color = color;
-		let colorString;
-
-		if (this.verbatim && this.property) {
-			colorString = `var(${this.property})`;
-		}
-		else {
-			try {
-				colorString = this.#color.display({inGamut: false});
+	propChangedCallback ({name, prop, detail: change}) {
+		if (name === "gamuts") {
+			if (this.gamuts === "none") {
+				this._el.gamutIndicator?.remove();
+				this._el.gamutIndicator = null;
 			}
-			catch (e) {
-				colorString = this.value;
+			else if (this.gamuts) {
+				if (!this._el.gamutIndicator) {
+					this._el.colorWrapper.insertAdjacentHTML("beforeend", `
+						<gamut-badge id="gamut" part="gamut" exportparts="label: gamutlabel" gamuts="${ this.gamuts }"></gamut-badge>
+					`);
+
+					this._el.gamutIndicator = this._el.colorWrapper.lastElementChild;
+
+					this._el.gamutIndicator.addEventListener("gamutchange", evt => {
+						let gamut = this._el.gamutIndicator.gamut;
+						this.setAttribute("gamut", gamut);
+						this.dispatchEvent(new CustomEvent("gamutchange", {
+							detail: gamut,
+						}));
+					});
+				}
+				else {
+					this._el.gamutIndicator.gamuts = this.gamuts;
+				}
 			}
 		}
 
-		if (this.value === colorString) {
-			return;
+		if (name === "color") {
+			if (this._el.gamutIndicator) {
+				this._el.gamutIndicator.color = this.color;
+			}
+
+			let colorString = this.color?.display();
+			this.style.setProperty("--color", colorString);
 		}
 
-		this.style.setProperty("--color", colorString);
+	}
 
-		if (this.property) {
-			this.#dom.style.textContent = `${this.scope} { ${this.property}: ${colorString}; }`;
-		}
+	static props = {
+		gamuts: {
+			default: "srgb, p3, rec2020: P3+, prophoto: PP",
+		},
+		value: {
+			type: String,
+			default () {
+				if (this._el.input) {
+					return this._el.input.value;
+				}
 
-		if (this.#dom.gamutIndicator) {
-			this.#dom.gamutIndicator.color = this.#color;
-		}
+				// Children that are not assigned to another slot
+				return [...this.childNodes].filter(n => n.slot).map(n => n.textContent).join("");
+			},
+			reflect: {
+				from: "color",
+			}
+		},
+		color: {
+			type: Color,
+			parse (value) {
+				clearTimeout(this._errorTimeout);
+
+				let ret = null;
+				try {
+					ret = new Color(value);
+				}
+				catch (e) {
+					// Why a timeout? We don't want to produce errors for intermediate states while typing,
+					// but if this is a genuine error, we do want to communicate it.
+					this._errorTimeout = setTimeout(_ => this._el.input?.setCustomValidity(e.message), 500);
+				}
+
+				if (ret) {
+					this._el.input?.setCustomValidity("");
+				}
+
+				return ret;
+			},
+			defaultProp: "value",
+			reflect: false,
+		},
 	}
 
 	static events = {
@@ -269,12 +221,8 @@ const Self = class ColorSwatch extends HTMLElement {
 			propchange: "value",
 		},
 	};
-
-	static observedAttributes = ["for", "property"];
 }
 
-defineEvents(Self);
-
-customElements.define("color-swatch", Self);
+customElements.define(Self.tagName, Self);
 
 export default Self;

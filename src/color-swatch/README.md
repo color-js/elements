@@ -62,6 +62,13 @@ Before and after:
 ```
 
 ```html
+<color-swatch>
+	<label slot="before" for=c1>Accent color:</label>
+	oklch(70% 0.25 138)
+</color-swatch>
+```
+
+```html
 <color-swatch size="large">
 	<label slot="before" id=c2>Accent color:</label>
 	<input value="oklch(70% 0.25 138)" id=c2 />
