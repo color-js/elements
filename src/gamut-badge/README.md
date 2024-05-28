@@ -56,6 +56,9 @@ Dynamic:
 params.addEventListener("input", e => {
 	let c_range = {min: Number(min_c.value), max: Number(max_c.value)};
 	let step = Number(c_step.value);
+	if (step <= 0) {
+		step = 1;
+	}
 	let colors = [];
 	let start = `oklch(${l.value}% ${c_range.min.toLocaleString("en")}% ${h.value})`;
 	let end = `oklch(${l.value}% ${c_range.max.toLocaleString("en")}% ${h.value})`;
