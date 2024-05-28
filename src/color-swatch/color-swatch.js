@@ -6,6 +6,7 @@ let importIncrementable;
 
 const Self = class ColorSwatch extends HTMLElement {
 	static initQueue = [];
+	static Color = Color;
 
 	#dom = {};
 

@@ -7,6 +7,8 @@ import { getStep } from "../common/util.js";
 export const tagName = "channel-slider";
 
 export default class ChannelSlider extends NudeElement {
+	static Color = Color;
+
 	constructor () {
 		super();
 

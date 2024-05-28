@@ -6,6 +6,7 @@ import Color from "../common/color.js";
 
 const Self = class ColorPicker extends NudeElement {
 	static tagName = "color-picker";
+	static Color = Color;
 
 	constructor () {
 		super();

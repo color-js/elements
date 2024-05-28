@@ -3,6 +3,7 @@ import NudeElement from "../../node_modules/nude-element/src/Element.js";
 
 const Self = class GamutBadge extends NudeElement {
 	static tagName = "gamut-badge";
+	static Color = Color;
 	#label;
 
 	constructor () {
