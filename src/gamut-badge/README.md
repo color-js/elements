@@ -94,6 +94,16 @@ Default display:
 | `gamuts` | `gamuts` | `string` &#124; `Array<string>` &#124; `object` | `["srgb", "p3", "rec2020", "prophoto"]` | A list of gamuts to use. |
 | `color` | `color` | `Color` &#124; `string` | - | The current color value. |
 
+### Getters
+
+These properties are read-only.
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `gamut` | `string` | The id of the current gamut (e.g. `srgb`). |
+| `gamutLabel` | `string` | The label of the current gamut (e.g. `sRGB`). |
+| `gamutInfo` | `object` | Metadata about the current gamut (label, id, level). |
+
 ### Events
 
 | Name | Description |
