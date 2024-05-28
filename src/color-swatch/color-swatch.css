@@ -2,7 +2,7 @@
 	--_transparency-cell-size: var(--transparency-cell-size, .5em);
 	--_transparency-background: var(--transparency-background, transparent);
 	--_transparency-darkness: var(--transparency-darkness, 5%);
-	--_transparency: var(--transparency,
+	--_transparency-grid: var(--transparency-grid,
 		repeating-conic-gradient(transparent 0 25%, rgb(0 0 0 / var(--_transparency-darkness)) 0 50%)
 		0 0 / calc(2 * var(--_transparency-cell-size)) calc(2 * var(--_transparency-cell-size))
 		content-box border-box var(--_transparency-background)
@@ -90,7 +90,7 @@ slot[name=swatch]::slotted(*),
 	flex: 1;
 	background:
 		linear-gradient(var(--color) 0 100%),
-		var(--_transparency);
+		var(--_transparency-grid);
 	border-radius: .2rem;
 
 	&:is(:host([size="large"]) *) {
