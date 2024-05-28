@@ -6,7 +6,6 @@
 .color-slider,
 .slider-tooltip {
 	--transparency-cell-size: 1.5em;
-
 	--_transparency-cell-size: var(--transparency-cell-size, .5em);
 	--_transparency-background: var(--transparency-background, transparent);
 	--_transparency-darkness: var(--transparency-darkness, 5%);
