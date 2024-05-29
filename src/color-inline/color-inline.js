@@ -1,19 +1,20 @@
 import Color from "../common/color.js";
 
-let styleURL = new URL("./color-inline.css", import.meta.url);
-
-export default class ColorInline extends HTMLElement {
+const Self = class ColorInline extends HTMLElement {
 	static Color = Color;
+	static tagName = "color-inline";
 	#swatch;
 
 	constructor () {
 		super();
 		this.attachShadow({mode: "open"});
+		let styleURL = new URL("./color-inline.css", import.meta.url);
 		this.shadowRoot.innerHTML = `<style>@import url("${ styleURL }");</style>
 		<div part="swatch-wrapper">
 			<div id="swatch" part="swatch"></div>
 			<slot></slot>
 		</div>`;
+
 		this.#swatch = this.shadowRoot.querySelector("#swatch");
 		this.attributeChangedCallback();
 	}
@@ -77,4 +78,6 @@ export default class ColorInline extends HTMLElement {
 }
 
 
-customElements.define("color-inline", ColorInline);
+customElements.define(Self.tagName, Self);
+
+export default Self;
