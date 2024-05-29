@@ -50,13 +50,14 @@
 </tbody>
 </table>
 
-### `color` attribute
+### The `color` attribute
 
 You can provide the color via the `color` attribute,
 which can be more convenient when you have slotted content.
 
 In that case, the content of the element is merely presentational
-(unless it’s an `<input>`)
+(unless it’s an `<input>`).
+If you don’t specify any content, no text will be shown.
 
 <table>
 <thead>
@@ -87,6 +88,19 @@ In that case, the content of the element is merely presentational
 </tr>
 </tbody>
 </table>
+
+You can also use this as a property when creating color swatches dynamically:
+
+```html
+<div id="future_swatch_container"></div>
+<script>
+let swatch = document.createElement("color-swatch");
+swatch.color = "oklch(65% 0.15 210)";
+swatch.setAttribute("size", "large");
+swatch.textContent = "Turquoise";
+future_swatch_container.append(swatch);
+</script>
+```
 
 ### With slot content
 
