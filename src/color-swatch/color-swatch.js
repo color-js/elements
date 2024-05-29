@@ -1,5 +1,4 @@
 import Color from "../common/color.js";
-import defineEvents from "../../node_modules/nude-element/src/events/defineEvents.js";
 import NudeElement from "../../node_modules/nude-element/src/Element.js";
 import "../gamut-badge/gamut-badge.js";
 
