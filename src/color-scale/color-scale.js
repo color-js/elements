@@ -47,27 +47,28 @@ const Self = class ColorScale extends NudeElement {
 	render () {
 		let colors = this.colors, colorCount = Object.values(colors).length;
 
-		for (let i=0; i<this.children.length; i++) {
-			this.#swatches[i] = this.children[i];
+		let i = 0;
+		let newSwatches = [];
+		for (let colorName in colors) {
+			let color = colors[colorName];
+			let swatch = this.#swatches[i] = this.children[i];
 
-			if (colorCount > i) {
-				this.#swatches[i].color = colors[i];
+			if (!swatch) {
+				this.#swatches[i] = swatch = document.createElement("color-swatch");
+				swatch.setAttribute("size", "large");
+				newSwatches.push(swatch);
 			}
-			else {
-				this.#swatches[i].remove();
-			}
+
+			swatch.color = color;
+			swatch.textContent = colorName;
 		}
 
-		if (colorCount > this.#swatches.length) {
-			let newSwatches = Array.from({length: colorCount - this.#swatches.length}, (_, i) => {
-				let swatch = document.createElement("color-swatch");
-				swatch.color = colors[i];
-				swatch.setAttribute("size", "large");
-				return swatch;
-			});
-
+		if (newSwatches.length > 0) {
 			this.append(...newSwatches);
-			this.#swatches.push(...newSwatches);
+		}
+		else if (colorCount < this.children.length) {
+			// Remove but keep them around in this.#swatches
+			[...this.children].slice(colorCount).forEach(child => child.remove());
 		}
 	}
 
@@ -95,7 +96,7 @@ const Self = class ColorScale extends NudeElement {
 			type: Object,
 			typeOptions: {
 				valueType: Color,
-				defaultKey: (v, i) => i,
+				defaultKey: (v, i) => v,
 			},
 			// get () {
 
