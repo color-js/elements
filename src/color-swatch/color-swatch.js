@@ -181,7 +181,7 @@ const Self = class ColorSwatch extends NudeElement {
 				}
 
 				// Children that are not assigned to another slot
-				return [...this.childNodes].filter(n => n.slot).map(n => n.textContent).join("");
+				return [...this.childNodes].filter(n => !n.slot).map(n => n.textContent).join("");
 			},
 			reflect: {
 				from: "color",
