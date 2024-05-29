@@ -71,7 +71,7 @@ const Self = class ColorSwatch extends NudeElement {
 			else if (this.gamuts) {
 				if (!this._el.gamutIndicator) {
 					this._el.colorWrapper.insertAdjacentHTML("beforeend", `
-						<gamut-badge id="gamut" part="gamut" exportparts="label: gamutlabel" gamuts="${ this.gamuts }"></gamut-badge>
+						<gamut-badge id="gamut" part="gamut" exportparts="label: gamutlabel" gamuts="${ this.gamuts }" color="${ this.color }"></gamut-badge>
 					`);
 
 					this._el.gamutIndicator = this._el.colorWrapper.lastElementChild;
