@@ -45,12 +45,12 @@ const Self = class ColorScale extends NudeElement {
 	#swatches = [];
 
 	render () {
-		let colors = this.colors;
+		let colors = this.colors, colorCount = Object.values(colors).length;
 
 		for (let i=0; i<this.children.length; i++) {
 			this.#swatches[i] = this.children[i];
 
-			if (colors.length > i) {
+			if (colorCount > i) {
 				this.#swatches[i].color = colors[i];
 			}
 			else {
@@ -59,7 +59,7 @@ const Self = class ColorScale extends NudeElement {
 		}
 
 		if (colors.length > this.#swatches.length) {
-			let newSwatches = Array.from({length: colors.length - this.#swatches.length}, (_, i) => {
+			let newSwatches = Array.from({length: colorCount - this.#swatches.length}, (_, i) => {
 				let swatch = document.createElement("color-swatch");
 				swatch.color = colors[i];
 				swatch.setAttribute("size", "large");
@@ -91,9 +91,10 @@ const Self = class ColorScale extends NudeElement {
 			},
 		},
 		colors: {
-			type: Array,
+			type: Object,
 			typeOptions: {
-				itemType: Color,
+				valueType: Color,
+				defaultKey: (v, i) => i,
 			},
 			// get () {
 
