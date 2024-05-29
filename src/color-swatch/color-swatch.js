@@ -30,18 +30,14 @@ const Self = class ColorSwatch extends NudeElement {
 				<slot name="after"></slot>
 			</div>
 		`;
+
+		this._el.wrapper = this.shadowRoot.querySelector("#wrapper");
+		this._el.colorWrapper = this.shadowRoot.querySelector("[part=color-wrapper]");
+		this._el.slot = this.shadowRoot.querySelector("slot:not([name])");
+
+		this.#updateStatic();
+		this._el.slot.addEventListener("slotchange", evt => this.#updateStatic());
 	}
-
-	#initialized;
-
-	connectedCallback () {
-		super.connectedCallback();
-
-		if (!this.#initialized) {
-			this.#initialize();
-		}
-	}
-
 
 	#updateStatic () {
 		let previousInput = this._el.input;
@@ -56,73 +52,6 @@ const Self = class ColorSwatch extends NudeElement {
 			this._el.input.addEventListener("input", evt => {
 				this.value = evt.target.value;
 			});
-		}
-	}
-
-	// Gets called when the element is connected for the first time
-	#initialize ({force} = {}) {
-		if (!force && this.#initialized) {
-			return;
-		}
-
-		this.#initialized = true;
-
-		this._el.wrapper = this.shadowRoot.querySelector("#wrapper");
-		this._el.colorWrapper = this.shadowRoot.querySelector("[part=color-wrapper]");
-		this._el.slot = this.shadowRoot.querySelector("slot:not([name])");
-
-		this.#updateStatic();
-		this._el.slot.addEventListener("slotchange", evt => this.#updateStatic());
-
-		this.gamuts = null;
-		if (!this.matches('[gamuts="none"]')) {
-			this.gamuts = this.getAttribute("gamuts") ?? "srgb, p3, rec2020: P3+, prophoto: PP";
-			this._el.gamutIndicator = document.createElement("gamut-badge");
-
-			Object.assign(this._el.gamutIndicator, {
-				gamuts: this.gamuts,
-				id: "gamut",
-				part: "gamut",
-				exportparts: "label: gamutlabel",
-			});
-
-			this._el.colorWrapper.appendChild(this._el.gamutIndicator);
-
-			this._el.gamutIndicator.addEventListener("gamutchange", evt => {
-				let gamut = this._el.gamutIndicator.gamut;
-				this.setAttribute("gamut", gamut);
-				this.dispatchEvent(new CustomEvent("gamutchange", {
-					detail: gamut,
-				}));
-			});
-		}
-
-		if (this.hasAttribute("property")) {
-			this.property = this.getAttribute("property");
-			this.scope = this.getAttribute("scope") ?? ":root";
-			this._el.style = document.createElement("style");
-			document.head.appendChild(this._el.style);
-
-			let varRef = `var(${this.property})`;
-			if (this.verbatim) {
-				this.style.setProperty("--color", varRef);
-				this.value ||= varRef;
-			}
-			else {
-				let scopeRoot = this.closest(this.scope);
-
-				// Is contained within scope root
-				if (scopeRoot) {
-					this.style.setProperty("--color", varRef);
-				}
-
-				scopeRoot ??= document.querySelector(this.scope);
-
-				if (scopeRoot) {
-					let cs = getComputedStyle(scopeRoot);
-					this.value = cs.getPropertyValue(this.property);
-				}
-			}
 		}
 	}
 
