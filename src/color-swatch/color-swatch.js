@@ -9,8 +9,6 @@ const Self = class ColorSwatch extends NudeElement {
 	static tagName = "color-swatch";
 	static Color = Color;
 
-	_el = {};
-
 	constructor () {
 		super();
 		this.attachShadow({mode: "open"});
@@ -31,6 +29,7 @@ const Self = class ColorSwatch extends NudeElement {
 			</div>
 		`;
 
+		this._el = {};
 		this._el.wrapper = this.shadowRoot.querySelector("#wrapper");
 		this._el.colorWrapper = this.shadowRoot.querySelector("[part=color-wrapper]");
 		this._el.slot = this.shadowRoot.querySelector("slot:not([name])");
@@ -88,6 +87,10 @@ const Self = class ColorSwatch extends NudeElement {
 		}
 
 		if (name === "color") {
+			let isValid = this.color !== null || !this.value;
+
+			this._el.input?.setCustomValidity(isValid ? "" : "Invalid color");
+
 			if (this._el.gamutIndicator) {
 				this._el.gamutIndicator.color = this.color;
 			}
@@ -118,25 +121,6 @@ const Self = class ColorSwatch extends NudeElement {
 		},
 		color: {
 			type: Color,
-			parse (value) {
-				clearTimeout(this._errorTimeout);
-
-				let ret = null;
-				try {
-					ret = new Color(value);
-				}
-				catch (e) {
-					// Why a timeout? We don't want to produce errors for intermediate states while typing,
-					// but if this is a genuine error, we do want to communicate it.
-					this._errorTimeout = setTimeout(_ => this._el.input?.setCustomValidity(e.message), 500);
-				}
-
-				if (ret) {
-					this._el.input?.setCustomValidity("");
-				}
-
-				return ret;
-			},
 			defaultProp: "value",
 			reflect: false,
 		},
