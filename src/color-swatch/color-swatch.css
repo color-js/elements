@@ -20,6 +20,7 @@
 	flex-flow: column;
 	inline-size: 11em;
 	min-block-size: 6em;
+	contain: inline-size;
 }
 
 slot {
