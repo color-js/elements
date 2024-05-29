@@ -6,11 +6,11 @@
 
 <table>
 <thead>
-<tr>
-<th></th>
-<th>Default</th>
-<th>Large</th>
-</tr>
+	<tr>
+		<th></th>
+		<th>Default</th>
+		<th>Large</th>
+	</tr>
 </thead>
 <tbody>
 <tr>
@@ -50,6 +50,44 @@
 </tbody>
 </table>
 
+### `color` attribute
+
+You can provide the color via the `color` attribute,
+which can be more convenient when you have slotted content.
+
+In that case, the content of the element is merely presentational
+(unless it’s an `<input>`)
+
+<table>
+<thead>
+	<tr>
+		<th>Static</th>
+		<th>Editable</th>
+	</tr>
+</thead>
+<tbody>
+<tr>
+
+<td>
+
+```html
+<color-swatch color="oklch(70% 0.25 138)" size="large">red</color-swatch>
+```
+
+</td>
+<td>
+
+```html
+<color-swatch color="oklch(70% 0.25 138)" size="large">
+	<input />
+</color-swatch>
+```
+</td>
+
+</tr>
+</tbody>
+</table>
+
 ### With slot content
 
 Before and after:
@@ -58,6 +96,13 @@ Before and after:
 <color-swatch>
 	<label slot="before" for=c1>Accent color:</label>
 	<input value="oklch(70% 0.25 138)" id=c1 />
+</color-swatch>
+```
+
+```html
+<color-swatch>
+	<label slot="before" for=c1>Accent color:</label>
+	oklch(70% 0.25 138)
 </color-swatch>
 ```
 
@@ -91,6 +136,7 @@ Replacing the whole swatch with a custom element:
 </color-swatch>
 ```
 
+<!--
 ### Bound to CSS property
 
 You can automatically bind the color swatch to a CSS property by setting the `property` attribute.
@@ -105,6 +151,7 @@ and updating the color will update the CSS property.
 
 You can use `scope` to select the closest ancestor (via a CSS selector) on which the CSS property will be read from and written to.
 If you don’t, the `<html>` element will be used.
+-->
 
 ### Events
 
