@@ -1,3 +1,9 @@
 :host {
 	display: flex;
+	gap: .3em;
+}
+
+::slotted(color-swatch) {
+	margin: 0;
+	flex: 1;
 }
