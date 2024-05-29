@@ -22,6 +22,11 @@
 	min-block-size: 6em;
 }
 
+slot {
+	all: inherit;
+	display: contents;
+}
+
 #gamut {
 	font-size: 80%;
 
@@ -74,9 +79,8 @@ slot:not([name]) {
 }
 
 [part="color-wrapper"],
-slot[name=swatch],
 slot[name=swatch]::slotted(*),
-#swatch, {
+#swatch {
 	border-radius: inherit;
 }
 
