@@ -48,15 +48,6 @@ const Self = class GamutBadge extends NudeElement {
 	static props = {
 		color: {
 			type: Color,
-			parse (color) {
-				try {
-					return Color.get(color);
-				}
-				catch (e) {
-					console.warn("<gamut-badge>:", e);
-					return null;
-				}
-			},
 		},
 		gamuts: {
 			type: Array,
