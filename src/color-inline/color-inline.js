@@ -1,9 +1,9 @@
 import Color from "../common/color.js";
+import NudeElement from "../../node_modules/nude-element/src/Element.js";
 
-const Self = class ColorInline extends HTMLElement {
+const Self = class ColorInline extends NudeElement {
 	static Color = Color;
 	static tagName = "color-inline";
-	#swatch;
 
 	constructor () {
 		super();
@@ -15,50 +15,22 @@ const Self = class ColorInline extends HTMLElement {
 			<slot></slot>
 		</div>`;
 
-		this.#swatch = this.shadowRoot.querySelector("#swatch");
-		this.attributeChangedCallback();
+		this._el = {};
+		this._el.swatch = this.shadowRoot.querySelector("#swatch");
 	}
 
 	connectedCallback () {
-		this.#render();
-		ColorInline.#mo.observe(this, {childList: true, subtree: true, characterData: true});
+		super.connectedCallback?.();
+		Self.#mo.observe(this, {childList: true, subtree: true, characterData: true});
 	}
 
-	#value;
-	get value () {
-		return this.#value;
-	}
-	set value (value) {
-		this.#value = value;
-		this.#render();
-	}
+	propChangedCallback ({name, prop, detail: change}) {
+		if (name === "color") {
+			let isValid = this.color !== null;
+			this._el.swatch.classList.toggle("invalid", !isValid);
 
-	#color;
-	get color () {
-		return this.#color;
-	}
-
-	#render () {
-		let colorText = this.value || this.textContent;
-
-		try {
-			this.#color = new Color(colorText);
-			this.#swatch.style.cssText = `--color: ${this.#color.display()}`;
-			this.#swatch.classList.remove("invalid");
-		}
-		catch (e) {
-			this.#color = null;
-			this.#swatch.classList.add("invalid");
-		}
-	}
-
-	static get observedAttributes () {
-		return ["value"];
-	}
-
-	attributeChangedCallback (name, newValue) {
-		if (!name && this.hasAttribute("value") || name === "value") {
-			this.value = this.getAttribute("value");
+			let colorString = this.color?.display();
+			this._el.swatch.style.setProperty("--color", colorString);
 		}
 	}
 
@@ -71,11 +43,41 @@ const Self = class ColorInline extends HTMLElement {
 			}
 
 			if (target) {
-				target.#render();
+				target.value = target.textContent.trim();
 			}
 		}
 	});
-}
+
+	static props = {
+		value: {
+			type: String,
+			default () {
+				return this.textContent.trim();
+			},
+		},
+		color: {
+			type: Color,
+			defaultProp: "value",
+			parse (value) {
+				if (!value) {
+					return null;
+				}
+
+				return Color.get(value);
+			},
+			reflect: false,
+		},
+	};
+
+	static events = {
+		colorchange: {
+			propchange: "color",
+		},
+		valuechange: {
+			propchange: "value",
+		},
+	};
+};
 
 
 customElements.define(Self.tagName, Self);
