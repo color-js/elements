@@ -58,13 +58,14 @@ const Self = class ColorScale extends NudeElement {
 			}
 		}
 
-		if (colors.length > this.#swatches.length) {
+		if (colorCount > this.#swatches.length) {
 			let newSwatches = Array.from({length: colorCount - this.#swatches.length}, (_, i) => {
 				let swatch = document.createElement("color-swatch");
 				swatch.color = colors[i];
 				swatch.setAttribute("size", "large");
 				return swatch;
 			});
+
 			this.append(...newSwatches);
 			this.#swatches.push(...newSwatches);
 		}
