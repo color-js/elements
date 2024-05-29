@@ -53,7 +53,7 @@
 ### `color` attribute
 
 You can provide the color via the `color` attribute,
-which can be move convenient when you have slotted content.
+which can be more convenient when you have slotted content.
 
 In that case, the content of the element is merely presentational
 (unless it’s an `<input>`)
