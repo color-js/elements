@@ -113,7 +113,7 @@ const Self = class ColorSwatch extends NudeElement {
 				}
 
 				// Children that are not assigned to another slot
-				return [...this.childNodes].filter(n => !n.slot).map(n => n.textContent).join("");
+				return [...this.childNodes].filter(n => !n.slot).map(n => n.textContent).join("").trim();
 			},
 			reflect: {
 				from: "color",
@@ -122,6 +122,13 @@ const Self = class ColorSwatch extends NudeElement {
 		color: {
 			type: Color,
 			defaultProp: "value",
+			parse (value) {
+				if (!value) {
+					return null;
+				}
+
+				return Color.get(value);
+			},
 			reflect: false,
 		},
 	}
