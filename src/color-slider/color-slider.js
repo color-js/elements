@@ -290,7 +290,7 @@ const Self = class ColorSlider extends NudeElement {
 	};
 
 	static formAssociated = {
-		getSource: el => el._el.slider,
+		like: el => el._el.slider,
 		role: "slider",
 		valueProp: "value",
 		changeEvent: "valuechange",
