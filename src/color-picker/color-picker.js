@@ -151,9 +151,6 @@ const Self = class ColorPicker extends NudeElement {
 				return [this._el.sliders, this._el.swatch];
 			}
 		},
-		valuechange: {
-			propchange: "value",
-		},
 		colorchange: {
 			propchange: "color",
 		},
