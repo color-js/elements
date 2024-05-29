@@ -52,4 +52,5 @@ import "color-elements/COMPONENT_NAME";
 
 ### Upcoming:
 
+- [`<color-scale>`](src/color-scale)
 - `<color-plane>`
