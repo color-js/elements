@@ -48,6 +48,7 @@ const Self = class ColorSwatch extends NudeElement {
 
 		if (input && input !== previousInput) {
 			importIncrementable ??= import("https://incrementable.verou.me/incrementable.mjs").then(m => m.default);
+			importIncrementable?.then(Incrementable => new Incrementable(input));
 
 			input.addEventListener("input", evt => {
 				this.value = evt.target.value;
