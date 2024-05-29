@@ -38,7 +38,7 @@ As with other components, you can listen to the `colorchange` event:
 ```html
 <color-picker space="oklch" color="oklch(50% 50% 180)"
               oncolorchange="this.firstElementChild.textContent = this.color.oklch.join(' ')">
-	<div class="coords" style="font-weight: bold; text-shadow: 0 0 .1em white, 0 0 .1em white, 0 0 .1em white"></div>
+	<div class="coords"></div>
 </color-picker>
 ```
 
@@ -60,7 +60,7 @@ All attributes are reactive:
 	space_select.innerHTML = Object.entries(Color.spaces)
 		.map(([id, space]) => `<option value="${id}">${space.name}</option>`)
 		.join('\n');
-	
+
 	space_select.value = "oklch";
 
 	space_select.oninput = () => dynamic_picker.space = space_select.value;
