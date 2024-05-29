@@ -40,15 +40,17 @@ const Self = class ColorSwatch extends NudeElement {
 
 	#updateStatic () {
 		let previousInput = this._el.input;
-		this._el.input = this.querySelector("input");
-		this.static = !this._el.input;
+		let input = this._el.input = this.querySelector("input");
+
+		this.static = !input;
 
 		// This should eventually be a custom state
 		this._el.wrapper.classList.toggle("static", this.static);
 
-		if (this._el.input && this._el.input !== previousInput) {
+		if (input && input !== previousInput) {
 			importIncrementable ??= import("https://incrementable.verou.me/incrementable.mjs").then(m => m.default);
-			this._el.input.addEventListener("input", evt => {
+
+			input.addEventListener("input", evt => {
 				this.value = evt.target.value;
 			});
 		}
@@ -59,6 +61,8 @@ const Self = class ColorSwatch extends NudeElement {
 	}
 
 	propChangedCallback ({name, prop, detail: change}) {
+		let input = this._el.input;
+
 		if (name === "gamuts") {
 			if (this.gamuts === "none") {
 				this._el.gamutIndicator?.remove();
@@ -86,10 +90,16 @@ const Self = class ColorSwatch extends NudeElement {
 			}
 		}
 
+		if (name === "value") {
+			if (!input.value) {
+				input.value = this.value;
+			}
+		}
+
 		if (name === "color") {
 			let isValid = this.color !== null || !this.value;
 
-			this._el.input?.setCustomValidity(isValid ? "" : "Invalid color");
+			input?.setCustomValidity(isValid ? "" : "Invalid color");
 
 			if (this._el.gamutIndicator) {
 				this._el.gamutIndicator.color = this.color;
