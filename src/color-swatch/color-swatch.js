@@ -54,6 +54,10 @@ const Self = class ColorSwatch extends NudeElement {
 				this.value = evt.target.value;
 			});
 		}
+
+		if (this.static) {
+			this.value = this.textContent.trim();
+		}
 	}
 
 	get gamut () {
