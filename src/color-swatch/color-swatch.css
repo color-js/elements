@@ -13,6 +13,7 @@
 	gap: .3em;
 	width: min-content;
 	margin: .3em;
+	border-radius: .2rem;
 }
 
 :host([size="large"]) {
@@ -21,13 +22,8 @@
 	min-block-size: 6em;
 }
 
-:host(:not([size="large"])) {
-
-}
-
 #gamut {
 	font-size: 80%;
-
 
 	&:is(:host([size="large"]) *) {
 		position: absolute;
@@ -77,6 +73,13 @@ slot:not([name]) {
 	}
 }
 
+[part="color-wrapper"],
+slot[name=swatch],
+slot[name=swatch]::slotted(*),
+#swatch, {
+	border-radius: inherit;
+}
+
 slot[name=swatch]::slotted(*),
 #swatch {
 	flex: 1;
@@ -91,7 +94,6 @@ slot[name=swatch]::slotted(*),
 	background:
 		linear-gradient(var(--color) 0 100%),
 		var(--_transparency-grid);
-	border-radius: .2rem;
 
 	&:is(:host([size="large"]) *) {
 		min-block-size: 3em;
