@@ -116,7 +116,3 @@ slot[name=swatch-content] {
 	--l: clamp(0, (var(--l-threshold, 0.7) / l - 1) * infinity, 1);
 	color: oklch(from var(--color) var(--l) 0 h);
 }
-
-:host([swatch="none"]) #swatch {
-	display: none;
-}
