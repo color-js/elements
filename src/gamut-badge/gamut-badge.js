@@ -46,9 +46,6 @@ const Self = class GamutBadge extends NudeElement {
 	}
 
 	static props = {
-		color: {
-			type: Color,
-		},
 		gamuts: {
 			type: Array,
 			default: "srgb, p3, rec2020, prophoto",
@@ -107,6 +104,9 @@ const Self = class GamutBadge extends NudeElement {
 			get () {
 				return this.gamutInfo?.id;
 			},
+		},
+		color: {
+			type: Color,
 		},
 	};
 
