@@ -21,6 +21,8 @@
 	inline-size: 11em;
 	min-block-size: 6em;
 	contain: inline-size;
+	container-name: color-swatch;
+	container-type: inline-size;
 }
 
 slot {
@@ -48,6 +50,7 @@ slot {
 	flex-flow: inherit;
 	gap: inherit;
 
+
 	&.static {
 		&:is(:host([size="large"]) *) {
 			background: white;
@@ -56,6 +59,10 @@ slot {
 
 	&:not(:host([size="large"]) *) {
 		align-items: baseline;
+	}
+
+	@container color-swatch (width <= 5rem) {
+		font-size: 80%;
 	}
 }
 
