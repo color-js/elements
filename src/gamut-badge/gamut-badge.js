@@ -31,7 +31,7 @@ const Self = class GamutBadge extends NudeElement {
 			this.style.setProperty("--gamut-count", this.gamuts.length - 1);
 		}
 
-		if (name === "gamut") {
+		if (name === "gamut" || name === "gamuts") {
 			if (this.gamutInfo) {
 				this.style.setProperty("--gamut-level", this.gamutInfo.level);
 				this.style.setProperty("--gamut-label", `"${ this.gamutInfo.label }"`);
@@ -46,6 +46,9 @@ const Self = class GamutBadge extends NudeElement {
 	}
 
 	static props = {
+		color: {
+			type: Color,
+		},
 		gamuts: {
 			type: Array,
 			default: "srgb, p3, rec2020, prophoto",
@@ -104,9 +107,6 @@ const Self = class GamutBadge extends NudeElement {
 			get () {
 				return this.gamutInfo?.id;
 			},
-		},
-		color: {
-			type: Color,
 		},
 	};
 
