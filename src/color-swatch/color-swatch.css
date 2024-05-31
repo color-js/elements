@@ -11,7 +11,7 @@
 	position: relative;
 	display: inline-flex;
 	gap: .3em;
-	width: min-content;
+	width: fit-content;
 	margin: .3em;
 	border-radius: .2rem;
 }
@@ -72,8 +72,6 @@ slot {
 }
 
 slot:not([name]) {
-	white-space: nowrap;
-
 	&::slotted(input) {
 		display: flex;
 		box-sizing: border-box;
