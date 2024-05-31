@@ -11,3 +11,24 @@ color-swatch {
 	margin: 0;
 	flex: 1;
 }
+
+@supports (grid-template-columns: subgrid) {
+	/* Avoid uneven swatch heights */
+	#swatches {
+		display: grid;
+		grid-auto-flow: row;
+		grid-template-rows: auto auto;
+		grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+	}
+
+	color-swatch {
+		width: 100%;
+		grid-row: 1 / span 2;
+		display: grid;
+		grid-template-rows: subgrid;
+
+		&::part(swatch) {
+			grid-row: 1;
+		}
+	}
+}
