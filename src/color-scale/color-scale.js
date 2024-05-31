@@ -13,19 +13,23 @@ const Self = class ColorScale extends NudeElement {
 		let styleURL = new URL(`./${Self.tagName}.css`, import.meta.url);
 		this.shadowRoot.innerHTML = `
 			<style>@import url("${ styleURL }")</style>
+			<div id=swatches></div>
 			<slot></slot>
 		`;
 
-		this._el = this.shadowRoot.querySelector("slot");
+		this._el = {
+			slot: this.shadowRoot.querySelector("slot"),
+			swatches: this.shadowRoot.getElementById("swatches"),
+		};
 	}
 
 	connectedCallback() {
 		super.connectedCallback?.();
-		this._el.addEventListener("colorchange", this, {capture: true});
+		this._el.swatches.addEventListener("colorchange", this, {capture: true});
 	}
 
 	disconnectedCallback() {
-		this._el.removeEventListener("colorchange", this, {capture: true});
+		this._el.swatches.removeEventListener("colorchange", this, {capture: true});
 	}
 
 	handleEvent(event) {
@@ -33,25 +37,27 @@ const Self = class ColorScale extends NudeElement {
 	}
 
 	propChangedCallback ({name, prop, detail: change}) {
-		if (name === "colors") {
+		if (name === "computedColors") {
 			// Re-render swatches
 			this.render();
-		}
-		else if (name === "steps") {
-			// Re-render swatches
 		}
 	}
 
 	#swatches = [];
 
 	render () {
-		let colors = this.colors, colorCount = Object.values(colors).length;
+		let colors = this.computedColors;
+
+		if (!colors) {
+			return;
+		}
+
+		let colorCount = colors.length;
 
 		let i = 0;
 		let newSwatches = [];
-		for (let colorName in colors) {
-			let color = colors[colorName];
-			let swatch = this.#swatches[i] = this.children[i];
+		for (let {name, color} of colors) {
+			let swatch = this.#swatches[i] = this._el.swatches.children[i];
 
 			if (!swatch) {
 				this.#swatches[i] = swatch = document.createElement("color-swatch");
@@ -60,15 +66,16 @@ const Self = class ColorScale extends NudeElement {
 			}
 
 			swatch.color = color;
-			swatch.textContent = colorName;
+			swatch.textContent = name;
+			i++;
 		}
 
 		if (newSwatches.length > 0) {
-			this.append(...newSwatches);
+			this._el.swatches.append(...newSwatches);
 		}
-		else if (colorCount < this.children.length) {
+		else if (colorCount < this._el.swatches.children.length) {
 			// Remove but keep them around in this.#swatches
-			[...this.children].slice(colorCount).forEach(child => child.remove());
+			[...this._el.swatches.children].slice(colorCount).forEach(child => child.remove());
 		}
 	}
 
@@ -98,15 +105,50 @@ const Self = class ColorScale extends NudeElement {
 				valueType: Color,
 				defaultKey: (v, i) => v,
 			},
-			// get () {
-
-			// },
-			// set: true,
 		},
 		steps: {
+			type: Number,
+			default: 0,
+		},
+		computedColors: {
+			get () {
+				if (!this.colors) {
+					return null;
+				}
 
+				let colors = Object.entries(this.colors).map(([name, color]) => ({name, color}));
+
+				if (this.steps > 0) {
+					// Insert intermediate steps
+					let tessellated = [];
+
+					for (let i = 1; i < colors.length; i++) {
+						let start = colors[i - 1];
+						let end = colors[i];
+						let steps = Color.steps(start.color, end.color, { space: this.space, steps: this.steps + 2 });
+
+						steps.shift();
+						steps.pop();
+						steps = steps.map(color => ({name: color + "", color}));
+
+						tessellated.push(start, ...steps);
+
+						if (i === colors.length - 1) {
+							// Only add the last color at the end
+							// In all other iterations, it’s the same as the start of the next pair
+							tessellated.push(end);
+						}
+					}
+
+					colors = tessellated;
+				}
+
+				return colors;
+			}
 		},
 	};
 }
 
 customElements.define(Self.tagName, Self);
+
+export default Self;

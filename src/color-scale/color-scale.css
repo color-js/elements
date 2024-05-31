@@ -1,9 +1,13 @@
 :host {
-	display: flex;
 	gap: .3em;
 }
 
-::slotted(color-swatch) {
+#swatches {
+	display: flex;
+	gap: inherit;
+}
+
+color-swatch {
 	margin: 0;
 	flex: 1;
 }
