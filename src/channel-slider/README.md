@@ -19,6 +19,12 @@ Basic example:
 <channel-slider space="oklch" channel="h"></channel-slider>
 ```
 
+The alpha channel is also supported:
+
+```html
+<channel-slider space="oklch" channel="alpha"></channel-slider>
+```
+
 In most cases you’d also want to set a color to set the other channels and the initial value:
 
 ```html
