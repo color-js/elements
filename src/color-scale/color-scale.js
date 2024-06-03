@@ -100,9 +100,9 @@ const Self = class ColorScale extends NudeElement {
 			},
 		},
 		colors: {
-			type: Object,
-			typeOptions: {
-				valueType: Color,
+			type: {
+				is: Object,
+				values: Color,
 				defaultKey: (v, i) => v,
 			},
 		},

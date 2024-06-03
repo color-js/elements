@@ -207,9 +207,9 @@ const Self = class ColorSlider extends NudeElement {
 			},
 		},
 		stops: {
-			type: Array,
-			typeOptions: {
-				itemType: Color,
+			type: {
+				is: Array,
+				values: Color,
 			},
 			default: el => []
 		},
