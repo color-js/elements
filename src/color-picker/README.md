@@ -89,7 +89,6 @@ All attributes are reactive:
 |------|-------------|
 | `input` | Fired when the color changes due to user action, either with the sliders or the color swatch's input field. |
 | `change` | Fired when the color changes due to user action, either with the sliders or the color swatch's input field. |
-| `valuechange` | Fired when the value changes for any reason, and once during initialization. |
 | `colorchange` | Fired when the color changes for any reason, and once during initialization. |
 
 ### CSS variables
