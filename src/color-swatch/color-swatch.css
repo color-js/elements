@@ -43,6 +43,10 @@ slot {
 	&:not(:host([size="large"]) *):is(.static *) {
 		align-self: baseline;
 	}
+
+	&[style*="--gamut-level: 0"] {
+		display: none;
+	}
 }
 
 #wrapper {
