@@ -102,7 +102,9 @@ function defineProps () {
 							let defaultValue = tags?.find(tag => tag.tagName.getText() === "default")?.comment ?? "";
 							if (!defaultValue) {
 								// If the @default tag is not provided, try to get the default value from the prop's spec (if it's not a function)
-								let defaultProp = spec.find(prop => prop.name.getText() === "default" && (prop.initializer?.kind !== ts.SyntaxKind.ArrowFunction));
+								let defaultProp = spec.find(prop => prop.name.getText() === "default" &&
+								                 (prop.initializer?.kind !== ts.SyntaxKind.ArrowFunction || prop.initializer?.kind !== ts.SyntaxKind.MethodDeclaration));
+
 								let kind = defaultProp?.initializer?.kind;
 								if (kind === ts.SyntaxKind.NumericLiteral) {
 									defaultValue = Number(defaultProp?.initializer?.text);
