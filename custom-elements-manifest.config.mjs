@@ -242,6 +242,7 @@ function defineAttributes () {
 					continue;
 				}
 
+				// We define attributes for all props that have the reflects flag set to true
 				let props = Class.members.filter(member => member.reflects);
 				for (let prop of props) {
 					let {attribute: name, default: defaultValue, name: fieldName} = prop;
