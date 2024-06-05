@@ -60,13 +60,14 @@ const Self = class ColorSlider extends NudeElement {
 	}
 
 	propChangedCallback ({name, prop, detail: change}) {
+		// Spinner values when tooltip is "progress"
+		let values = { min: 1, max: 100, step: 1, value: +(this.progress * 100).toPrecision(4) };
+		values["defaultValue"] = values.value;
+
 		if (["min", "max", "step", "value", "defaultValue"].includes(name)) {
 			prop.applyChange(this._el.slider, change);
 
-			let value = change.value;
-			if (this.tooltip === "progress" && (name === "value" || name === "defaultValue")) {
-				value = +(this.progress * 100).toPrecision(4);
-			}
+			let value = this.tooltip === "progress" ? values[name] : change.value;
 			prop.applyChange(this._el.spinner, {...change, value});
 		}
 
@@ -128,6 +129,13 @@ const Self = class ColorSlider extends NudeElement {
 			if (name === "value" && !supports.fieldSizing) {
 				let valueStr = this.value + "";
 				this._el.spinner.style.setProperty("--value-length", valueStr.length);
+			}
+		}
+		else if (name === "tooltip") {
+			if (change.value === "progress") {
+				["min", "max", "step", "value"].forEach(name => {
+					this._el.spinner[name] = values[name];
+				});
 			}
 		}
 	}
