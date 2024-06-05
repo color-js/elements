@@ -39,19 +39,14 @@ const Self = class ColorPicker extends NudeElement {
 	}
 
 	handleEvent(event) {
-		this.render(event.target);
+		let source = event.target;
 
-		this.dispatchEvent(new event.constructor(event.type, {...event}));
-	}
-
-	render (source) {
-		if (!source || this._el.sliders.contains(source)) {
+		if (this._el.sliders.contains(source)) {
 			// From sliders
 			let coords = [...this._el.sliders.children].map(el => el.value);
 			this.color = new Color(this.space, coords);
-			this._el.swatch.color = this.color;
 		}
-		else if (!source || this._el.swatch.contains(source)) {
+		else if (this._el.swatch.contains(source)) {
 			// From swatch
 			if (!this._el.swatch.color) {
 				// Invalid color, or still typing
@@ -60,9 +55,7 @@ const Self = class ColorPicker extends NudeElement {
 			this.color = this._el.swatch.color;
 		}
 
-		for (let slider of this._el.sliders.children) {
-			slider.defaultColor = this.color;
-		}
+		this.dispatchEvent(new event.constructor(event.type, {...event}));
 	}
 
 	propChangedCallback ({name, prop, detail: change}) {
@@ -80,7 +73,10 @@ const Self = class ColorPicker extends NudeElement {
 				}
 			}
 
-			this.render();
+			if (this.color) {
+				let coords = [...this._el.sliders.children].map(el => el.value);
+				this.color = new Color(this.space, coords);
+			}
 		}
 
 		if (name === "color") {
@@ -90,7 +86,7 @@ const Self = class ColorPicker extends NudeElement {
 
 			if (this.color && (!this._el.swatch.color || !this.color.equals(this._el.swatch.color))) {
 				// Avoid typing e.g. "red" and having it replaced with "rgb(100% 0% 0%)" under your caret
-				prop.applyChange(this._el.swatch, change);
+				prop.applyChange(this._el.swatch, { ...change, source: "property" });
 			}
 		}
 	}
