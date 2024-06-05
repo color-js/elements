@@ -9,7 +9,6 @@ let supports = {
 };
 
 const Self = class ColorSlider extends NudeElement {
-	static postConstruct = [];
 	static tagName = "color-slider";
 	static Color = Color;
 
