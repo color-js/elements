@@ -31,7 +31,7 @@ const Self = class GamutBadge extends NudeElement {
 			this.style.setProperty("--gamut-count", this.gamuts.length - 1);
 		}
 
-		if (name === "gamut") {
+		if (name === "gamutInfo") {
 			if (this.gamutInfo) {
 				this.style.setProperty("--gamut-level", this.gamutInfo.level);
 				this.style.setProperty("--gamut-label", `"${ this.gamutInfo.label }"`);
