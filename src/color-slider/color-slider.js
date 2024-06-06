@@ -132,9 +132,9 @@ const Self = class ColorSlider extends NudeElement {
 			}
 		}
 		else if (name === "tooltip") {
-			if (change.value === "progress") {
+			if (change.value !== undefined) {
 				["min", "max", "step", "value"].forEach(name => {
-					this._el.spinner[name] = values[name];
+					this._el.spinner[name] = change.value === "progress" ? values[name] : this[name];
 				});
 			}
 		}
