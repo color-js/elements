@@ -54,6 +54,9 @@ const Self = class ColorSwatch extends NudeElement {
 				this.value = evt.target.value;
 			});
 		}
+		else if (this.static) {
+			this.value = this.textContent.trim();
+		}
 	}
 
 	get gamut () {
@@ -91,8 +94,11 @@ const Self = class ColorSwatch extends NudeElement {
 		}
 
 		if (name === "value") {
-			if (input && !input.value) {
+			if (input && (!input.value || input.value !== this.value)) {
 				input.value = this.value;
+			}
+			else if (this.static) {
+				this.textContent = this.value;
 			}
 		}
 
@@ -131,13 +137,15 @@ const Self = class ColorSwatch extends NudeElement {
 		},
 		color: {
 			type: Color,
-			defaultProp: "value",
-			parse (value) {
-				if (!value) {
+			get () {
+				if (!this.value) {
 					return null;
 				}
 
-				return Color.get(value);
+				return Color.get(this.value);
+			},
+			set (value) {
+				this.value = Color.get(value)?.display();
 			},
 			reflect: false,
 		},
