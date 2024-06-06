@@ -91,7 +91,7 @@ const Self = class ColorSwatch extends NudeElement {
 		}
 
 		if (name === "value") {
-			if (input && !input.value) {
+			if (input && (!input.value || input.value !== this.value)) {
 				input.value = this.value;
 			}
 		}
