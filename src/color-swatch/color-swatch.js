@@ -131,13 +131,15 @@ const Self = class ColorSwatch extends NudeElement {
 		},
 		color: {
 			type: Color,
-			defaultProp: "value",
-			parse (value) {
-				if (!value) {
+			get () {
+				if (!this.value) {
 					return null;
 				}
 
-				return Color.get(value);
+				return Color.get(this.value);
+			},
+			set (value) {
+				this.value = Color.get(value)?.display();
 			},
 			reflect: false,
 		},
