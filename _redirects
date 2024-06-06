@@ -1,5 +1,5 @@
 # Specific versions
-node_modules/nude-element/* https://cdn.jsdelivr.net/npm/nude-element@0.0.7/:splat 200
+node_modules/nude-element/* https://cdn.jsdelivr.net/npm/nude-element@0.0.8/:splat 200
 
 # Catch all NPM fallback
 node_modules/:modulename/* https://cdn.jsdelivr.net/npm/:modulename@latest/:splat 200
