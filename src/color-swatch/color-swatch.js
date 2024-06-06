@@ -24,6 +24,7 @@ const Self = class ColorSwatch extends NudeElement {
 				<div part="color-wrapper">
 					<slot></slot>
 				</div>
+				<dl id="coords" part="coords"></dl>
 				<slot name="after"></slot>
 			</div>
 		`;
@@ -31,6 +32,7 @@ const Self = class ColorSwatch extends NudeElement {
 		this._el = {};
 		this._el.wrapper = this.shadowRoot.querySelector("#wrapper");
 		this._el.colorWrapper = this.shadowRoot.querySelector("[part=color-wrapper]");
+		this._el.coords = this.shadowRoot.querySelector("#coords");
 		this._el.slot = this.shadowRoot.querySelector("slot:not([name])");
 
 		this.#updateStatic();
@@ -109,6 +111,26 @@ const Self = class ColorSwatch extends NudeElement {
 			this.style.setProperty("--color", colorString);
 		}
 
+		if (name === "coords") {
+			if (this.color) {
+				this._el.coords?.replaceChildren(); // remove all children
+
+				for (let coord of this.coords ?? []) {
+					let [label, properties] = Object.entries(coord)[0];
+					let [space, channel] = properties.split(".");
+					let value;
+
+					if (!channel) {
+						value = this.color[space];
+					}
+					else {
+						value = this.color[space][channel];
+					}
+
+					this._el.coords.insertAdjacentHTML("beforeend", `<div class="coord"><dt>${ label }</dt><dd>${ value }</dd></div>`);
+				}
+			}
+		}
 	}
 
 	static props = {
@@ -142,6 +164,27 @@ const Self = class ColorSwatch extends NudeElement {
 				this.value = Color.get(value)?.display();
 			},
 			reflect: false,
+		},
+		coords: {
+			type: {
+				is: Array,
+				values: {
+					is: Object,
+					defaultKey: (value, i) => {
+						let [space, channel] = value.split(".");
+						if (!channel) {
+							channel = space;
+							space = this.color?.space.id;
+						}
+
+						return Color.Space.get(space)?.coords[channel]?.name ?? channel;
+					},
+				},
+			},
+			reflect: {
+				from: true,
+			},
+			dependencies: ["color"],
 		},
 	}
 

@@ -66,6 +66,7 @@ const Self = class ColorScale extends NudeElement {
 			}
 
 			swatch.color = color;
+			swatch.coords = this.coords;
 			swatch.textContent = name;
 			i++;
 		}
@@ -144,7 +145,11 @@ const Self = class ColorScale extends NudeElement {
 				}
 
 				return colors;
-			}
+			},
+			dependencies: ["colors", "steps", "space", "coords"],
+		},
+		coords: {
+			type: String,
 		},
 	};
 }
