@@ -80,13 +80,20 @@ const Self = class ColorPicker extends NudeElement {
 		}
 
 		if (name === "color") {
-			for (let slider of this._el.sliders.children) {
-				slider.color = this.color;
-			}
+			if (this.color) {
+				for (let slider of this._el.sliders.children) {
+					slider.color = this.color;
+				}
 
-			if (this.color && (!this._el.swatch.color || !this.color.equals(this._el.swatch.color))) {
-				// Avoid typing e.g. "red" and having it replaced with "rgb(100% 0% 0%)" under your caret
-				prop.applyChange(this._el.swatch, { ...change, source: "property" });
+				if (this._el.swatch.color || !this.color.equals(this._el.swatch.color)) {
+					// Avoid typing e.g. "red" and having it replaced with "rgb(100% 0% 0%)" under your caret
+					prop.applyChange(this._el.swatch, { ...change, source: "property" });
+				}
+			}
+			else {
+				// No color is provided; use to the default one.
+				// We should do this to propagate the default color to all the underlying elements: the sliders and swatch.
+				this.color = this.defaultColor;
 			}
 		}
 	}
