@@ -170,15 +170,7 @@ const Self = class ColorSwatch extends NudeElement {
 				is: Array,
 				values: {
 					is: Object,
-					defaultKey: (value, i) => {
-						let [space, channel] = value.split(".");
-						if (!channel) {
-							channel = space;
-							space = this.color?.space.id;
-						}
-
-						return Color.Space.get(space)?.coords[channel]?.name ?? channel;
-					},
+					defaultKey: (coord, i) => Color.Space.resolveCoord(coord)?.name,
 				},
 			},
 			default: [],
