@@ -178,7 +178,6 @@ const Self = class ColorSwatch extends NudeElement {
 			reflect: {
 				from: true,
 			},
-			dependencies: ["color"],
 		},
 	}
 
