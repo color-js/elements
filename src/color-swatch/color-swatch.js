@@ -118,7 +118,6 @@ const Self = class ColorSwatch extends NudeElement {
 				for (let coord of this.coords) {
 					let [label, properties] = Object.entries(coord)[0];
 					let [space, channel] = properties.split(".");
-					let value;
 
 					let value = this.color[space];
 
