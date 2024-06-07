@@ -113,7 +113,7 @@ const Self = class ColorSwatch extends NudeElement {
 
 		if (name === "coords") {
 			if (this.color) {
-				this._el.coords?.replaceChildren(); // remove all children
+				this._el.coords.textContent = ""; // remove all children
 
 				for (let coord of this.coords) {
 					let [label, properties] = Object.entries(coord)[0];
