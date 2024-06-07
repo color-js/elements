@@ -74,6 +74,10 @@ slot {
 			font-variant-numeric: tabular-nums;
 		}
 	}
+
+	&:empty {
+		display: none;
+	}
 }
 
 #wrapper {
