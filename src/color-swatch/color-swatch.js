@@ -120,11 +120,10 @@ const Self = class ColorSwatch extends NudeElement {
 					let [space, channel] = properties.split(".");
 					let value;
 
-					if (!channel) {
-						value = this.color[space];
-					}
-					else {
-						value = this.color[space][channel];
+					let value = this.color[space];
+
+					if (channel) {
+						value = value[channel];
 					}
 
 					this._el.coords.insertAdjacentHTML("beforeend", `<div class="coord"><dt>${ label }</dt><dd>${ value }</dd></div>`);
