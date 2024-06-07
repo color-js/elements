@@ -115,6 +115,7 @@ const Self = class ColorSwatch extends NudeElement {
 			if (this.color) {
 				this._el.coords.textContent = ""; // remove all children
 
+				let coords = [];
 				for (let coord of this.coords) {
 					let [label, properties] = Object.entries(coord)[0];
 					let [space, channel] = properties.split(".");
@@ -125,8 +126,10 @@ const Self = class ColorSwatch extends NudeElement {
 						value = value[channel];
 					}
 
-					this._el.coords.insertAdjacentHTML("beforeend", `<div class="coord"><dt>${ label }</dt><dd>${ value }</dd></div>`);
+					coords.push(`<div class="coord"><dt>${ label }</dt><dd>${ value }</dd></div>`);
 				}
+
+				this._el.coords.innerHTML = coords.join("\n");
 			}
 		}
 	}
