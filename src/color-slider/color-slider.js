@@ -140,7 +140,10 @@ const Self = class ColorSlider extends NudeElement {
 			if (change.value !== undefined) {
 				let values = this;
 				if (change.value === "progress") {
-					values = { min: 1, max: 100, step: 1, value: +(this.progress * 100).toPrecision(4) };
+					values = {
+						min: 1, max: 100, step: 1,
+						value: +(this.progress * 100).toPrecision(4),
+					};
 				}
 
 				["min", "max", "step", "value"].forEach(name => {
