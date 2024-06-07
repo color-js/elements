@@ -70,8 +70,7 @@ const Self = class ColorSlider extends NudeElement {
 				}
 				else {
 					// Spinner values when tooltip is "progress"
-					let values = { min: 1, max: 100, step: 1 };
-					value = values[name];
+					value = ({ min: 1, max: 100, step: 1 })[name];
 				}
 			}
 			prop.applyChange(this._el.spinner, {...change, value});
