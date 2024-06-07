@@ -115,7 +115,7 @@ const Self = class ColorSwatch extends NudeElement {
 			if (this.color) {
 				this._el.coords?.replaceChildren(); // remove all children
 
-				for (let coord of this.coords ?? []) {
+				for (let coord of this.coords) {
 					let [label, properties] = Object.entries(coord)[0];
 					let [space, channel] = properties.split(".");
 					let value;
@@ -181,6 +181,7 @@ const Self = class ColorSwatch extends NudeElement {
 					},
 				},
 			},
+			default: [],
 			reflect: {
 				from: true,
 			},
