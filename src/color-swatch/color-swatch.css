@@ -51,12 +51,22 @@ slot {
 
 #coords {
 	margin: 0;
-	display: grid;
-	grid-template-columns: max-content auto;
-	gap: .3em .7em;
+	display: inline-flex;
+	gap: .5em;
+
+	&:is(:host([size="large"]) &) {
+		display: grid;
+		grid-template-columns: max-content auto;
+		gap: .3em .7em;
+
+		.coord {
+			display: contents;
+		}
+	}
 
 	.coord {
-		display: contents;
+		display: flex;
+		gap: .2em;
 
 		dd {
 			margin: 0;
