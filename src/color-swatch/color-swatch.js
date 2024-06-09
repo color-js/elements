@@ -110,28 +110,30 @@ const Self = class ColorSwatch extends NudeElement {
 		}
 
 		if (name === "coords") {
-			if (this.color) {
-				if (!this._el.coords) {
-					this._el.colorWrapper.insertAdjacentHTML("afterend", `<dl part="coords"></dl>`);
-					this._el.coords = this._el.colorWrapper.nextElementSibling;
-				}
-
-				let coords = [];
-				for (let coord of this.coords) {
-					let [label, properties] = Object.entries(coord)[0];
-					let {space, id: channel} = Color.Space.resolveCoord(properties);
-
-					let value = this.color[space.id];
-
-					if (channel) {
-						value = value[channel];
-					}
-
-					coords.push(`<div class="coord"><dt>${ label }</dt><dd>${ value }</dd></div>`);
-				}
-
-				this._el.coords.innerHTML = coords.join("\n");
+			if (!this.coords.length) {
+				return;
 			}
+
+			if (!this._el.coords) {
+				this._el.colorWrapper.insertAdjacentHTML("afterend", `<dl part="coords"></dl>`);
+				this._el.coords = this._el.colorWrapper.nextElementSibling;
+			}
+
+			let coords = [];
+			for (let coord of this.coords) {
+				let [label, properties] = Object.entries(coord)[0];
+				let {space, id: channel} = Color.Space.resolveCoord(properties);
+
+				let value = this.color[space.id];
+
+				if (channel) {
+					value = value[channel];
+				}
+
+				coords.push(`<div class="coord"><dt>${ label }</dt><dd>${ value }</dd></div>`);
+			}
+
+			this._el.coords.innerHTML = coords.join("\n");
 		}
 	}
 
@@ -179,6 +181,7 @@ const Self = class ColorSwatch extends NudeElement {
 			reflect: {
 				from: true,
 			},
+			dependencies: ["color"],
 		},
 	}
 
