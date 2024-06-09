@@ -118,9 +118,9 @@ const Self = class ColorSwatch extends NudeElement {
 				let coords = [];
 				for (let coord of this.coords) {
 					let [label, properties] = Object.entries(coord)[0];
-					let [space, channel] = properties.split(".");
+					let {space, id: channel} = Color.Space.resolveCoord(properties);
 
-					let value = this.color[space];
+					let value = this.color[space.id];
 
 					if (channel) {
 						value = value[channel];
