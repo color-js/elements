@@ -49,7 +49,7 @@ slot {
 	}
 }
 
-#coords {
+[part="coords"] {
 	margin: 0;
 	display: inline-flex;
 	gap: .5em;
@@ -73,10 +73,6 @@ slot {
 			font-weight: bold;
 			font-variant-numeric: tabular-nums;
 		}
-	}
-
-	&:empty {
-		display: none;
 	}
 }
 

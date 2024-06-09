@@ -24,7 +24,6 @@ const Self = class ColorSwatch extends NudeElement {
 				<div part="color-wrapper">
 					<slot></slot>
 				</div>
-				<dl id="coords" part="coords"></dl>
 				<slot name="after"></slot>
 			</div>
 		`;
@@ -113,7 +112,10 @@ const Self = class ColorSwatch extends NudeElement {
 
 		if (name === "coords") {
 			if (this.color) {
-				this._el.coords.textContent = ""; // remove all children
+				if (!this._el.coords) {
+					this._el.colorWrapper.insertAdjacentHTML("afterend", `<dl part="coords"></dl>`);
+					this._el.coords = this._el.colorWrapper.nextElementSibling;
+				}
 
 				let coords = [];
 				for (let coord of this.coords) {
