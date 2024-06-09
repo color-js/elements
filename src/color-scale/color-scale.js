@@ -148,7 +148,7 @@ const Self = class ColorScale extends NudeElement {
 
 				return colors;
 			},
-			dependencies: ["colors", "steps", "space", "coords"],
+			additionalDependencies: ["coords"],
 		},
 		coords: {},
 	};
