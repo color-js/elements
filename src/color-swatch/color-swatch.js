@@ -31,7 +31,6 @@ const Self = class ColorSwatch extends NudeElement {
 		this._el = {};
 		this._el.wrapper = this.shadowRoot.querySelector("#wrapper");
 		this._el.colorWrapper = this.shadowRoot.querySelector("[part=color-wrapper]");
-		this._el.coords = this.shadowRoot.querySelector("#coords");
 		this._el.slot = this.shadowRoot.querySelector("slot:not([name])");
 
 		this.#updateStatic();
