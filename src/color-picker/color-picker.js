@@ -73,9 +73,8 @@ const Self = class ColorPicker extends NudeElement {
 				}
 			}
 
-			if (this.color) {
-				let coords = [...this._el.sliders.children].map(el => el.value);
-				this.color = new Color(this.space, coords);
+			for (let slider of this._el.sliders.children) {
+				slider.color = this.color;
 			}
 		}
 
