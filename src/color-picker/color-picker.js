@@ -85,7 +85,11 @@ const Self = class ColorPicker extends NudeElement {
 
 			if (!this._el.swatch.color || !this.color.equals(this._el.swatch.color)) {
 				// Avoid typing e.g. "red" and having it replaced with "rgb(100% 0% 0%)" under your caret
-				prop.applyChange(this._el.swatch, { ...change, source: "property" });
+				if (change.source === "attribute") {
+					// <color-swatch> doesn't have a color attribute, so we must change the corresponding property
+					change.source = "property";
+				}
+				prop.applyChange(this._el.swatch, change);
 			}
 		}
 	}
@@ -107,7 +111,7 @@ const Self = class ColorPicker extends NudeElement {
 			},
 		},
 
-		defaultColor: {
+		color: {
 			type: Color,
 			convert (color) {
 				return color.to(this.space);
@@ -124,16 +128,6 @@ const Self = class ColorPicker extends NudeElement {
 			},
 			reflect: {
 				from: "color",
-			},
-		},
-
-		color: {
-			type: Color,
-			get () {
-				return this.defaultColor;
-			},
-			set (value) {
-				this.defaultColor = value;
 			},
 		},
 	};
