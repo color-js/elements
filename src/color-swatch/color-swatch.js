@@ -114,9 +114,9 @@ const Self = class ColorSwatch extends NudeElement {
 				return;
 			}
 
-			if (!this._el.coords) {
-				this._el.colorWrapper.insertAdjacentHTML("afterend", `<dl part="coords"></dl>`);
-				this._el.coords = this._el.colorWrapper.nextElementSibling;
+			this._el.coords ??= Object.assign(document.createElement("dl"), {part: "coords"});
+			if (!this._el.coords.parentNode) {
+				this._el.colorWrapper.after(this._el.coords);
 			}
 
 			let coords = [];
