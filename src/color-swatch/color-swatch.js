@@ -124,7 +124,7 @@ const Self = class ColorSwatch extends NudeElement {
 				let [label, channel] = Object.entries(coord)[0];
 
 				let value = this.color.get(channel);
-				value = +value.toPrecision(4);
+				value = typeof value === "number" ? Number(value.toPrecision(4)) : value;
 
 				coords.push(`<div class="coord"><dt>${ label }</dt><dd>${ value }</dd></div>`);
 			}
