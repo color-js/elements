@@ -71,6 +71,9 @@ const Self = class ColorScale extends NudeElement {
 			if (this.coords) {
 				swatch.coords = this.coords;
 			}
+			if (this.vs) {
+				swatch.vs = this.vs;
+			}
 			i++;
 		}
 
@@ -152,6 +155,9 @@ const Self = class ColorScale extends NudeElement {
 			additionalDependencies: ["coords"],
 		},
 		coords: {},
+		vs: {
+			type: Color,
+		},
 	};
 }
 
