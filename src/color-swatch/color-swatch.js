@@ -109,27 +109,68 @@ const Self = class ColorSwatch extends NudeElement {
 			this.style.setProperty("--color", colorString);
 		}
 
-		if (name === "coords") {
-			if (!this.coords.length) {
-				return;
+		if (name === "coords" || name === "vs") {
+			if (this.coords.length) {
+				this._el.coords ??= Object.assign(document.createElement("dl"), {part: "coords"});
+				if (!this._el.coords.parentNode) {
+					this._el.colorWrapper.after(this._el.coords);
+				}
+
+				let coords = [];
+				for (let coord of this.coords) {
+					let [label, channel] = Object.entries(coord)[0];
+					let {space, index} = Color.Space.resolveCoord(channel);
+
+					let value = this.color.get(channel);
+
+					let deltaString;
+					if (typeof value === "number" && this.vs) {
+						let spaceCoords = Object.values(space.coords);
+						let deltas = this.color.deltas(this.vs, this.color, {space}).coords;
+
+						let delta = deltas[index];
+						if (typeof delta === "number" && delta !== 0) {
+							let isAngle = spaceCoords[index].type === "angle";
+							if (!isAngle) {
+								delta = Math.abs(delta - value) / delta;
+							}
+							delta = Number(delta.toPrecision(4));
+
+							let sign = delta > 0 ? "+" : "";
+							let className = delta > 0 ? "positive" : "negative";
+							deltaString = `<dd class="deltaE ${ className }">(${ sign }${ delta }${ !isAngle ? "%" : ""})</dd>`;
+						}
+					}
+
+					value = typeof value === "number" ? Number(value.toPrecision(4)) : value;
+					let html = `<dt>${ label }</dt><dd>${ value }</dd>`;
+					if (deltaString) {
+						html += deltaString;
+					}
+
+					coords.push(`<div class="coord">${ html }</div>`);
+				}
+
+				this._el.coords.innerHTML = coords.join("\n");
 			}
+		}
 
-			this._el.coords ??= Object.assign(document.createElement("dl"), {part: "coords"});
-			if (!this._el.coords.parentNode) {
-				this._el.colorWrapper.after(this._el.coords);
+		if (name === "vs") {
+			if (!this.vs) {
+				this._el.deltaE?.remove();
+				this._el.deltaE = null;
 			}
+			else {
+				this._el.deltaE ??= Object.assign(document.createElement("dl"), {part: "deltaE"});
+				if (!this._el.deltaE.parentNode) {
+					(this._el.coords ?? this._el.colorWrapper).after(this._el.deltaE);
+				}
 
-			let coords = [];
-			for (let coord of this.coords) {
-				let [label, channel] = Object.entries(coord)[0];
-
-				let value = this.color.get(channel);
+				let value = this.color.deltaE(this.vs);
 				value = typeof value === "number" ? Number(value.toPrecision(4)) : value;
 
-				coords.push(`<div class="coord"><dt>${ label }</dt><dd>${ value }</dd></div>`);
+				this._el.deltaE.innerHTML = `<dt>ΔE</dt><dd>${ value }</dd>`;
 			}
-
-			this._el.coords.innerHTML = coords.join("\n");
 		}
 	}
 
@@ -177,6 +218,10 @@ const Self = class ColorSwatch extends NudeElement {
 			reflect: {
 				from: true,
 			},
+			dependencies: ["color"],
+		},
+		vs: {
+			type: Color,
 			dependencies: ["color"],
 		},
 	}

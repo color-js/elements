@@ -7,6 +7,8 @@
 		0 0 / calc(2 * var(--_transparency-cell-size)) calc(2 * var(--_transparency-cell-size))
 		content-box border-box var(--_transparency-background)
 	);
+	--_positive-deltaE-color: var(--positive-deltaE-color, hsl(120, 80%, 25%));
+	--_negative-deltaE-color: var(--negative-deltaE-color, hsl(0, 85%, 40%));
 
 	position: relative;
 	display: inline-flex;
@@ -49,31 +51,48 @@ slot {
 	}
 }
 
-[part="coords"] {
+[part="coords"], [part="deltaE"] {
 	margin: 0;
 	display: inline-flex;
 	gap: .5em;
 
-	&:is(:host([size="large"]) &) {
-		display: grid;
-		grid-template-columns: max-content auto;
-		gap: .3em;
-		font-size: max(9px, 80%);
-		justify-content: start;
-
-		.coord {
-			display: contents;
-		}
+	dd {
+		margin: 0;
+		font-weight: bold;
+		font-variant-numeric: tabular-nums;
 	}
 
+	&:is(:host([size="large"]) &) {
+		display: grid;
+		grid-template-columns: subgrid;
+	}
+}
+
+[part="coords"] {
 	.coord {
 		display: flex;
 		gap: .2em;
 
-		dd {
-			margin: 0;
-			font-weight: bold;
-			font-variant-numeric: tabular-nums;
+		dd.deltaE {
+			color: var(--_deltaE-color);
+
+			&.positive {
+				--_deltaE-color: var(--_positive-deltaE-color);
+			}
+
+			&.negative {
+				--_deltaE-color: var(--_negative-deltaE-color);
+			}
+		}
+	}
+
+	&:is(:host([size="large"]) &) {
+		.coord {
+			display: contents;
+
+			dd:not(.deltaE, :has(~ dd)) {
+				grid-column: span 2;
+			}
 		}
 	}
 }
@@ -96,6 +115,18 @@ slot {
 
 	@container color-swatch (width <= 5rem) {
 		font-size: 80%;
+	}
+
+	&:is(:host([size="large"]) &) {
+		display: grid;
+		grid-template-columns: repeat(3, max-content);
+		gap: .1em .2em;
+		font-size: max(9px, 80%);
+		justify-content: start;
+
+		& > * {
+			grid-column: 1 / -1;
+		}
 	}
 }
 
