@@ -102,6 +102,24 @@ future_swatch_container.append(swatch);
 </script>
 ```
 
+### The `coords` attribute
+
+You can show any of the color coords in _any_ color space.
+
+```html
+<color-swatch coords="oklch.l, oklch.c, oklch.h" size="large">
+	oklch(70% 0.25 138)
+</color-swatch>
+```
+
+By default, the coord name will be used as a coord label. Add a label before the corresponding coord, followed by the colon to change this.
+
+```html
+<color-swatch coords="L: oklch.l, C: oklch.c, H: oklch.h" size="large">
+	oklch(70% 0.25 138)
+</color-swatch>
+```
+
 ### With slot content
 
 Before and after:
@@ -201,6 +219,7 @@ If you don’t, the `<html>` element will be used.
 | Attribute | Property | Property type | Default value | Description |
 |-----------|----------|---------------|---------------|-------------|
 | `color` | `color` | `Color` &#124; `string` | - | The current color value. |
+| `coords` | `coords` | `string` | - | Comma-separated list of coords of the current color to be shown. |
 | `value` | `value` | `string` | - | The current value of the swatch. |
 | `size` | - | `large` | - | The size of the swatch. Currently, it is used only to make a large swatch. |
 | `property` | `property` | `string` | - | CSS property to bind to. |
