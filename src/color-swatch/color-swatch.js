@@ -133,7 +133,7 @@ const Self = class ColorSwatch extends NudeElement {
 							if (!isAngle) {
 								delta = Math.abs(delta - value) / delta;
 							}
-							delta = Number(delta.toPrecision(4));
+							delta = Number(delta.toPrecision(isAngle ? 4 : 1));
 
 							let sign = delta > 0 ? "+" : "";
 							let className = delta > 0 ? "positive" : "negative";
