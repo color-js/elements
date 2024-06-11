@@ -160,15 +160,16 @@ const Self = class ColorSwatch extends NudeElement {
 				this._el.deltaE = null;
 			}
 			else {
-				this._el.deltaE ??= Object.assign(document.createElement("dl"), {part: "deltaE"});
-				if (!this._el.deltaE.parentNode) {
-					(this._el.coords ?? this._el.colorWrapper).after(this._el.deltaE);
-				}
-
 				let value = this.color.deltaE(this.vs);
 				value = typeof value === "number" ? Number(value.toPrecision(4)) : value;
+				if (value !== 0) {
+					this._el.deltaE ??= Object.assign(document.createElement("dl"), {part: "deltaE"});
+					if (!this._el.deltaE.parentNode) {
+						(this._el.coords ?? this._el.colorWrapper).after(this._el.deltaE);
+					}
 
-				this._el.deltaE.innerHTML = `<dt>ΔE</dt><dd>${ value }</dd>`;
+					this._el.deltaE.innerHTML = `<dt>ΔE</dt><dd>${ value }</dd>`;
+				}
 			}
 		}
 	}
