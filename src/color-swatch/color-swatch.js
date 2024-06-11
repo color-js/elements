@@ -119,12 +119,11 @@ const Self = class ColorSwatch extends NudeElement {
 				let coords = [];
 				for (let coord of this.coords) {
 					let [label, channel] = Object.entries(coord)[0];
-					let {space, index} = Color.Space.resolveCoord(channel);
-
 					let value = this.color.get(channel);
 
 					let deltaString;
 					if (typeof value === "number" && this.vs) {
+						let {space, index} = Color.Space.resolveCoord(channel);
 						let spaceCoords = Object.values(space.coords);
 						let deltas = this.color.deltas(this.vs, this.color, {space}).coords;
 
