@@ -57,7 +57,9 @@ slot {
 	&:is(:host([size="large"]) &) {
 		display: grid;
 		grid-template-columns: max-content auto;
-		gap: .3em .7em;
+		gap: .3em;
+		font-size: max(9px, 80%);
+		justify-content: start;
 
 		.coord {
 			display: contents;
