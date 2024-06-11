@@ -49,6 +49,33 @@ slot {
 	}
 }
 
+[part="coords"] {
+	margin: 0;
+	display: inline-flex;
+	gap: .5em;
+
+	&:is(:host([size="large"]) &) {
+		display: grid;
+		grid-template-columns: max-content auto;
+		gap: .3em .7em;
+
+		.coord {
+			display: contents;
+		}
+	}
+
+	.coord {
+		display: flex;
+		gap: .2em;
+
+		dd {
+			margin: 0;
+			font-weight: bold;
+			font-variant-numeric: tabular-nums;
+		}
+	}
+}
+
 #wrapper {
 	display: flex;
 	flex-flow: inherit;

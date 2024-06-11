@@ -109,6 +109,28 @@ const Self = class ColorSwatch extends NudeElement {
 			this.style.setProperty("--color", colorString);
 		}
 
+		if (name === "coords") {
+			if (!this.coords.length) {
+				return;
+			}
+
+			this._el.coords ??= Object.assign(document.createElement("dl"), {part: "coords"});
+			if (!this._el.coords.parentNode) {
+				this._el.colorWrapper.after(this._el.coords);
+			}
+
+			let coords = [];
+			for (let coord of this.coords) {
+				let [label, channel] = Object.entries(coord)[0];
+
+				let value = this.color.get(channel);
+				value = +value.toPrecision(4);
+
+				coords.push(`<div class="coord"><dt>${ label }</dt><dd>${ value }</dd></div>`);
+			}
+
+			this._el.coords.innerHTML = coords.join("\n");
+		}
 	}
 
 	static props = {
@@ -142,6 +164,20 @@ const Self = class ColorSwatch extends NudeElement {
 				this.value = Color.get(value)?.display();
 			},
 			reflect: false,
+		},
+		coords: {
+			type: {
+				is: Array,
+				values: {
+					is: Object,
+					defaultKey: (coord, i) => Color.Space.resolveCoord(coord)?.name,
+				},
+			},
+			default: [],
+			reflect: {
+				from: true,
+			},
+			dependencies: ["color"],
 		},
 	}
 
