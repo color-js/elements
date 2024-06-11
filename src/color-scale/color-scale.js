@@ -70,9 +70,18 @@ const Self = class ColorScale extends NudeElement {
 			swatch.textContent = name;
 			if (this.coords) {
 				swatch.coords = this.coords;
-			}
-			if (this.vs) {
-				swatch.vs = this.vs;
+
+				// Deltas don't make sense without coords
+				if (this.deltas) {
+					if (this.vs) {
+						// If there is a vs color, use it as the reference for the deltas
+						swatch.vs = this.vs;
+					}
+					else if (i > 0) {
+						// Otherwise, use the previous color
+						swatch.vs = colors[i - 1].color;
+					}
+				}
 			}
 			i++;
 		}
@@ -152,11 +161,14 @@ const Self = class ColorScale extends NudeElement {
 
 				return colors;
 			},
-			additionalDependencies: ["coords"],
+			additionalDependencies: ["coords", "vs", "deltas"],
 		},
 		coords: {},
 		vs: {
 			type: Color,
+		},
+		deltas: {
+			type: Boolean,
 		},
 	};
 }
