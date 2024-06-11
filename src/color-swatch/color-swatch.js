@@ -124,12 +124,12 @@ const Self = class ColorSwatch extends NudeElement {
 					let deltaString;
 					if (typeof value === "number" && this.vs) {
 						let {space, index} = Color.Space.resolveCoord(channel);
-						let spaceCoords = Object.values(space.coords);
 						let deltas = this.color.deltas(this.vs, this.color, {space}).coords;
 
 						let delta = deltas[index];
 						if (typeof delta === "number" && delta !== 0) {
-							let isAngle = spaceCoords[index].type === "angle";
+							let spaceCoord = Object.values(space.coords)[index];
+							let isAngle = spaceCoord.type === "angle";
 							if (!isAngle) {
 								delta = Math.abs(delta - value) / delta;
 							}
