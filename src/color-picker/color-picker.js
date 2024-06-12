@@ -111,7 +111,7 @@ const Self = class ColorPicker extends NudeElement {
 			},
 		},
 
-		color: {
+		defaultColor: {
 			type: Color,
 			convert (color) {
 				return color.to(this.space);
@@ -129,6 +129,12 @@ const Self = class ColorPicker extends NudeElement {
 			reflect: {
 				from: "color",
 			},
+		},
+
+		color: {
+			type: Color,
+			defaultProp: "defaultColor",
+			reflect: false,
 		},
 	};
 
