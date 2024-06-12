@@ -109,15 +109,23 @@ const Self = class ColorSwatch extends NudeElement {
 			this.style.setProperty("--color", colorString);
 		}
 
-		if (name === "coords" || name === "vs") {
-			if (this.coords.length) {
-				this._el.coords ??= Object.assign(document.createElement("dl"), {part: "coords"});
-				if (!this._el.coords.parentNode) {
-					this._el.colorWrapper.after(this._el.coords);
+		if (name === "data" || name === "vs") {
+			let dataHTML = [];
+			let coords = [];
+			let deltaE; // DeltaE algorithm
+
+			if (this.data.length || this.vs) {
+				this._el.data ??= Object.assign(document.createElement("dl"), {part: "data"});
+				if (!this._el.data.parentNode) {
+					this._el.colorWrapper.after(this._el.data);
 				}
 
-				let coords = [];
-				for (let coord of this.coords) {
+				coords = this.data.filter(item => !item.hasOwnProperty("ΔE"));
+				deltaE = this.data.find(item => item.hasOwnProperty("ΔE"))?.ΔE;
+			}
+
+			if (coords.length) {
+				for (let coord of coords) {
 					let [label, channel] = Object.entries(coord)[0];
 					let value = this.color.get(channel);
 
@@ -147,29 +155,20 @@ const Self = class ColorSwatch extends NudeElement {
 						html += deltaString;
 					}
 
-					coords.push(`<div class="coord">${ html }</div>`);
+					dataHTML.push(`<div class="data">${ html }</div>`);
 				}
-
-				this._el.coords.innerHTML = coords.join("\n");
 			}
-		}
 
-		if (name === "vs") {
-			if (!this.vs) {
-				this._el.deltaE?.remove();
-				this._el.deltaE = null;
-			}
-			else {
-				let value = this.color.deltaE(this.vs);
+			if (this.vs) {
+				let value = this.color.deltaE(this.vs, deltaE);
 				value = typeof value === "number" ? Number(value.toPrecision(4)) : value;
 				if (value !== 0) {
-					this._el.deltaE ??= Object.assign(document.createElement("dl"), {part: "deltaE"});
-					if (!this._el.deltaE.parentNode) {
-						(this._el.coords ?? this._el.colorWrapper).after(this._el.deltaE);
-					}
-
-					this._el.deltaE.innerHTML = `<dt>ΔE</dt><dd>${ value }</dd>`;
+					dataHTML.push(`<div class="data"><dt></dt><dd>${ value }</dd></div>`);
 				}
+			}
+
+			if (dataHTML.length) {
+				this._el.data.innerHTML = dataHTML.join("\n");
 			}
 		}
 	}
@@ -190,7 +189,7 @@ const Self = class ColorSwatch extends NudeElement {
 			},
 			reflect: {
 				from: "color",
-			}
+			},
 		},
 		color: {
 			type: Color,
@@ -206,7 +205,7 @@ const Self = class ColorSwatch extends NudeElement {
 			},
 			reflect: false,
 		},
-		coords: {
+		data: {
 			type: {
 				is: Array,
 				values: {
@@ -224,7 +223,7 @@ const Self = class ColorSwatch extends NudeElement {
 			type: Color,
 			dependencies: ["color"],
 		},
-	}
+	};
 
 	static events = {
 		colorchange: {
@@ -234,7 +233,7 @@ const Self = class ColorSwatch extends NudeElement {
 			propchange: "value",
 		},
 	};
-}
+};
 
 customElements.define(Self.tagName, Self);
 

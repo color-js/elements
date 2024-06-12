@@ -102,12 +102,12 @@ future_swatch_container.append(swatch);
 </script>
 ```
 
-### The `coords` attribute
+### The `data` attribute
 
 You can show any of the color coords in _any_ color space.
 
 ```html
-<color-swatch coords="oklch.l, oklch.c, oklch.h" size="large">
+<color-swatch data="oklch.l, oklch.c, oklch.h" size="large">
 	oklch(70% 0.25 138)
 </color-swatch>
 ```
@@ -115,7 +115,7 @@ You can show any of the color coords in _any_ color space.
 By default, the coord name will be used as a coord label. Add a label before the corresponding coord, followed by the colon to change this.
 
 ```html
-<color-swatch coords="L: oklch.l, C: oklch.c, H: oklch.h" size="large">
+<color-swatch data="L: oklch.l, C: oklch.c, H: oklch.h" size="large">
 	oklch(70% 0.25 138)
 </color-swatch>
 ```
@@ -133,7 +133,15 @@ You can pass another color via the `vs` attribute to show the delta (if it is no
 If the color coords are also specified, the (not zero) deltas from that color in its coordinates will also be shown.
 
 ```html
-<color-swatch coords="L: oklch.l, C: oklch.c, H: oklch.h" vs="oklch(70% 0.1 210)" size="large">
+<color-swatch data="L: oklch.l, C: oklch.c, H: oklch.h" vs="oklch(70% 0.1 210)" size="large">
+	oklch(70% 0.25 138)
+</color-swatch>
+```
+
+You can specify an algorithm used to calculate ΔE inside the `data` attribute:
+
+```html
+<color-swatch data="L: oklch.l, C: oklch.c, H: oklch.h, ΔE: 2000" vs="oklch(70% 0.1 210)" size="large">
 	oklch(70% 0.25 138)
 </color-swatch>
 ```

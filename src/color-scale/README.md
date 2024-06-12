@@ -38,15 +38,15 @@ You can only specify your core colors, and insert steps via interpolation:
 If you have more than 2 colors listed, this will insert steps between each pair.
 
 
-### The `coords` and `vs` attributes
+### The `data` and `vs` attributes
 
-You can show any of the colors coords in _any_ color space the same way you can do it for [`<color-swatch>`](../color-swatch/#the-coords-attribute):
+You can show any of the colors coords in _any_ color space the same way you can do it for [`<color-swatch>`](../color-swatch/#the-data-attribute):
 
 ```html
 <color-scale
 	space="oklch"
 	colors="#e3fafc, #c5f6fa, #99e9f2, #66d9e8, #3bc9db"
-	coords="L: oklch.l, C: oklch.c, H: oklch.h"
+	data="L: oklch.l, C: oklch.c, H: oklch.h"
 ></color-scale>
 ```
 
@@ -56,7 +56,18 @@ By adding the `vs` attribute without a value, you can also show deltas between t
 <color-scale
 	space="oklch"
 	colors="#e3fafc, #c5f6fa, #99e9f2, #66d9e8, #3bc9db"
-	coords="L: oklch.l, C: oklch.c, H: oklch.h"
+	data="L: oklch.l, C: oklch.c, H: oklch.h"
+	vs
+></color-scale>
+```
+
+You can also specify an algorithm used to calculate ΔE inside the `data` attribute:
+
+```html
+<color-scale
+	space="oklch"
+	colors="#e3fafc, #c5f6fa, #99e9f2, #66d9e8, #3bc9db"
+	data="L: oklch.l, C: oklch.c, H: oklch.h, ΔE: 2000"
 	vs
 ></color-scale>
 ```
@@ -67,7 +78,7 @@ If you need to show the difference between every color in the scale and another 
 <color-scale
 	space="oklch"
 	colors="#e3fafc, #c5f6fa, #99e9f2, #66d9e8, #3bc9db"
-	coords="L: oklch.l, C: oklch.c, H: oklch.h"
+	data="L: oklch.l, C: oklch.c, H: oklch.h"
 	vs="oklch(65% 0.15 210)"
 ></color-scale>
 ```

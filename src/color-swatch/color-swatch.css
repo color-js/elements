@@ -51,7 +51,7 @@ slot {
 	}
 }
 
-[part="coords"], [part="deltaE"] {
+[part="data"] {
 	margin: 0;
 	display: inline-flex;
 	gap: .5em;
@@ -65,11 +65,17 @@ slot {
 	&:is(:host([size="large"]) &) {
 		display: grid;
 		grid-template-columns: subgrid;
-	}
-}
 
-[part="coords"] {
-	.coord {
+		.data {
+			display: contents;
+
+			dd:not(.deltaE, :has(~ dd)) {
+				grid-column: span 2;
+			}
+		}
+	}
+
+	.data {
 		display: flex;
 		gap: .2em;
 
@@ -82,16 +88,6 @@ slot {
 
 			&.negative {
 				--_deltaE-color: var(--_negative-deltaE-color);
-			}
-		}
-	}
-
-	&:is(:host([size="large"]) &) {
-		.coord {
-			display: contents;
-
-			dd:not(.deltaE, :has(~ dd)) {
-				grid-column: span 2;
 			}
 		}
 	}
