@@ -245,7 +245,7 @@ If you don’t, the `<html>` element will be used.
 | Attribute | Property | Property type | Default value | Description |
 |-----------|----------|---------------|---------------|-------------|
 | `color` | `color` | `Color` &#124; `string` | - | The current color value. |
-| `coords` | `coords` | `string` | - | Comma-separated list of coords of the current color to be shown. |
+| `data` | `data` | `string` | - | Comma-separated list of coords of the current color to be shown and (optionally) an algorithm algorithm used to calculate ΔE. |
 | `value` | `value` | `string` | - | The current value of the swatch. |
 | `size` | - | `large` | - | The size of the swatch. Currently, it is used only to make a large swatch. |
 | `vs` | `vs` | `Color` &#124; `string` | - | The second color to use when calculating the difference (delta) with the current color. |
