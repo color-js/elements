@@ -120,6 +120,24 @@ By default, the coord name will be used as a coord label. Add a label before the
 </color-swatch>
 ```
 
+### The `vs` attribute
+
+You can pass another color via the `vs` attribute to show the delta (if it is not zero) between the current and that color.
+
+```html
+<color-swatch vs="oklch(55% 0.1 210)" size="large">
+	oklch(70% 0.25 138)
+</color-swatch>
+```
+
+If the color coords are also specified, the (not zero) deltas from that color in its coordinates will also be shown.
+
+```html
+<color-swatch coords="L: oklch.l, C: oklch.c, H: oklch.h" vs="oklch(70% 0.1 210)" size="large">
+	oklch(70% 0.25 138)
+</color-swatch>
+```
+
 ### With slot content
 
 Before and after:
@@ -222,6 +240,7 @@ If you don’t, the `<html>` element will be used.
 | `coords` | `coords` | `string` | - | Comma-separated list of coords of the current color to be shown. |
 | `value` | `value` | `string` | - | The current value of the swatch. |
 | `size` | - | `large` | - | The size of the swatch. Currently, it is used only to make a large swatch. |
+| `vs` | `vs` | `Color` &#124; `string` | - | The second color to use when calculating the difference (delta) with the current color. |
 | `property` | `property` | `string` | - | CSS property to bind to. |
 | `scope` | `scope` | `string` | `:root` | CSS selector to use as the scope for the specified CSS property. |
 | `gamuts` | `gamuts` | `string` | `srgb, p3, rec2020: P3+, prophoto: PP` | Comma-separated list of gamuts to be used by the gamut indicator. |
