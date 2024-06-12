@@ -163,7 +163,7 @@ const Self = class ColorSwatch extends NudeElement {
 				let value = this.color.deltaE(this.vs, deltaE);
 				value = typeof value === "number" ? Number(value.toPrecision(4)) : value;
 				if (value !== 0) {
-					dataHTML.push(`<div class="data"><dt></dt><dd>${ value }</dd></div>`);
+					dataHTML.push(`<div class="data"><dt>ΔE</dt><dd>${ value }</dd></div>`);
 				}
 			}
 
