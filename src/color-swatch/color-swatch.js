@@ -130,22 +130,41 @@ const Self = class ColorSwatch extends NudeElement {
 					let value = this.color.get(channel);
 
 					let deltaString;
-					if (typeof value === "number" && this.vs) {
-						let {space, index} = Color.Space.resolveCoord(channel);
-						let deltas = this.color.deltas(this.vs, {space}).coords;
+					if (this.vs) {
+						let vsValue = this.vs.get(channel);
 
-						let delta = deltas[index];
-						if (typeof delta === "number" && delta !== 0) {
+						let hasDelta = typeof value === "number" && !Number.isNaN(value) &&
+						               typeof vsValue === "number" && !Number.isNaN(vsValue);
+						if (hasDelta) {
+							let delta;
+
+							let {space, index} = Color.Space.resolveCoord(channel);
 							let spaceCoord = Object.values(space.coords)[index];
-							let isAngle = spaceCoord.type === "angle";
-							if (!isAngle) {
-								delta = delta / value * 100;
-							}
-							delta = Number(delta.toPrecision(isAngle ? 4 : 2));
 
-							let sign = delta > 0 ? "+" : "";
-							let className = delta > 0 ? "positive" : "negative";
-							deltaString = `<dd class="deltaE ${ className }">(${ sign }${ delta }${ !isAngle ? "%" : ""})</dd>`;
+							let isAngle = spaceCoord.type === "angle";
+							if (isAngle) {
+								// Constrain angles (shorter arc)
+								[value, vsValue] = [value, vsValue].map(v => ((v % 360) + 360) % 360);
+								let angleDiff = vsValue - value;
+								if (angleDiff > 180) {
+									value += 360;
+								}
+								else if (angleDiff < -180) {
+									vsValue += 360;
+								}
+
+								delta = value - vsValue;
+							}
+							else {
+								delta = (value - vsValue) / value * 100;
+							}
+
+							delta = Number(delta.toPrecision(isAngle ? 4 : 2));
+							if (delta !== 0) {
+								let sign = delta > 0 ? "+" : "";
+								let className = delta > 0 ? "positive" : "negative";
+								deltaString = `<dd class="deltaE ${ className }">(${ sign }${ delta }${ !isAngle ? "%" : ""})</dd>`;
+							}
 						}
 					}
 
