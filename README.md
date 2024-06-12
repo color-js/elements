@@ -3,6 +3,21 @@
 These are some **highly experimental** color-related web components.
 Use at your own risk, the API can change at any point.
 
+## All elements
+
+- [`<color-picker>`](src/color-picker/)
+- [`<color-scale>`](src/color-scale)
+- [`<color-slider>`](src/color-slider/)
+- [`<channel-slider>`](src/channel-slider/)
+- [`<color-swatch>`](src/color-swatch/)
+- [`<color-inline>`](src/color-inline/)
+- [`<gamut-badge>`](src/gamut-badge/)
+
+### Upcoming:
+
+- `<color-chart>`
+- `<color-plane>`
+
 ## Usage
 
 ### CDN
@@ -40,18 +55,3 @@ You can also import individual components:
 ```js
 import "color-elements/COMPONENT_NAME";
 ```
-
-## All elements
-
-- [`<color-picker>`](src/color-picker/)
-- [`<color-scale>`](src/color-scale)
-- [`<color-slider>`](src/color-slider/)
-- [`<channel-slider>`](src/channel-slider/)
-- [`<color-swatch>`](src/color-swatch/)
-- [`<color-inline>`](src/color-inline/)
-- [`<gamut-badge>`](src/gamut-badge/)
-
-### Upcoming:
-
-- `<color-chart>`
-- `<color-plane>`
