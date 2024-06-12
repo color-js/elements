@@ -21,6 +21,8 @@ const Self = class ColorScale extends NudeElement {
 			slot: this.shadowRoot.querySelector("slot"),
 			swatches: this.shadowRoot.getElementById("swatches"),
 		};
+
+		this.#hasVs = this.hasAttribute("vs");
 	}
 
 	connectedCallback() {
@@ -38,10 +40,6 @@ const Self = class ColorScale extends NudeElement {
 
 	propChangedCallback ({name, prop, detail: change}) {
 		if (name === "computedColors") {
-			if (!this.#hasVs) {
-				this.#hasVs = change.element.hasAttribute("vs");
-			}
-
 			// Re-render swatches
 			this.render();
 		}
