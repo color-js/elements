@@ -44,6 +44,7 @@ import "color-elements/COMPONENT_NAME";
 ## All elements
 
 - [`<color-picker>`](src/color-picker/)
+- [`<color-scale>`](src/color-scale)
 - [`<color-slider>`](src/color-slider/)
 - [`<channel-slider>`](src/channel-slider/)
 - [`<color-swatch>`](src/color-swatch/)
@@ -52,5 +53,5 @@ import "color-elements/COMPONENT_NAME";
 
 ### Upcoming:
 
-- [`<color-scale>`](src/color-scale)
+- `<color-chart>`
 - `<color-plane>`
