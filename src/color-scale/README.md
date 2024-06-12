@@ -38,7 +38,7 @@ You can only specify your core colors, and insert steps via interpolation:
 If you have more than 2 colors listed, this will insert steps between each pair.
 
 
-### The `coords`, `delta`, and `vs` attributes
+### The `coords` and `vs` attributes
 
 You can show any of the colors coords in _any_ color space the same way you can do it for [`<color-swatch>`](../color-swatch/#the-coords-attribute):
 
@@ -50,18 +50,18 @@ You can show any of the colors coords in _any_ color space the same way you can 
 ></color-scale>
 ```
 
-By specifying the `deltas` boolean attribute, you can also show deltas between the current and the previous color:
+By adding the `vs` attribute without a value, you can also show deltas between the current and the previous color:
 
 ```html
 <color-scale
 	space="oklch"
 	colors="#e3fafc, #c5f6fa, #99e9f2, #66d9e8, #3bc9db"
 	coords="L: oklch.l, C: oklch.c, H: oklch.h"
-	deltas
+	vs
 ></color-scale>
 ```
 
-If you need to show the difference between every color in the scale and another color, you can specify that color via the `vs` attribute:
+If you need to show the difference between every color in the scale and another color, you can specify that color as the `vs` attribute value:
 
 ```html
 <color-scale
@@ -69,7 +69,6 @@ If you need to show the difference between every color in the scale and another 
 	colors="#e3fafc, #c5f6fa, #99e9f2, #66d9e8, #3bc9db"
 	coords="L: oklch.l, C: oklch.c, H: oklch.h"
 	vs="oklch(65% 0.15 210)"
-	deltas
 ></color-scale>
 ```
 

@@ -38,11 +38,16 @@ const Self = class ColorScale extends NudeElement {
 
 	propChangedCallback ({name, prop, detail: change}) {
 		if (name === "computedColors") {
+			if (!this.#hasVs) {
+				this.#hasVs = change.element.hasAttribute("vs");
+			}
+
 			// Re-render swatches
 			this.render();
 		}
 	}
 
+	#hasVs;
 	#swatches = [];
 
 	render () {
@@ -72,15 +77,13 @@ const Self = class ColorScale extends NudeElement {
 				swatch.coords = this.coords;
 
 				// Deltas don't make sense without coords
-				if (this.deltas) {
-					if (this.vs) {
-						// If there is a vs color, use it as the reference for the deltas
-						swatch.vs = this.vs;
-					}
-					else if (i > 0) {
-						// Otherwise, use the previous color
-						swatch.vs = colors[i - 1].color;
-					}
+				if (this.vs) {
+					// If there is a vs color, use it as the reference for the deltas
+					swatch.vs = this.vs;
+				}
+				else if (this.#hasVs && i > 0) {
+					// Otherwise, use the previous color
+					swatch.vs = colors[i - 1].color;
 				}
 			}
 			i++;
@@ -161,14 +164,11 @@ const Self = class ColorScale extends NudeElement {
 
 				return colors;
 			},
-			additionalDependencies: ["coords", "vs", "deltas"],
+			additionalDependencies: ["coords", "vs"],
 		},
 		coords: {},
 		vs: {
 			type: Color,
-		},
-		deltas: {
-			type: Boolean,
 		},
 	};
 }
