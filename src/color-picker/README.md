@@ -14,6 +14,12 @@ Color spaces not supported by the browser also work:
 <color-picker space="okhsl" color="color(--okhsl 180 50% 50%)"></color-picker>
 ```
 
+If no color space or color is provided, the default ones will be used:
+
+```html
+<color-picker></color-picker>
+```
+
 ### Slots
 
 ```html
