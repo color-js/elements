@@ -61,7 +61,7 @@ By adding the `vs` attribute without a value, you can also show deltas between t
 ></color-scale>
 ```
 
-You can also specify an algorithm used to calculate ΔE inside the `data` attribute:
+You can also specify [an algorithm used to calculate ΔE](https://colorjs.io/docs/color-difference#delta-e-e) inside the `data` attribute:
 
 ```html
 <color-scale

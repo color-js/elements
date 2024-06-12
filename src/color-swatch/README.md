@@ -138,7 +138,7 @@ If the color coords are also specified, the (not zero) deltas from that color in
 </color-swatch>
 ```
 
-You can specify an algorithm used to calculate ΔE inside the `data` attribute:
+You can specify [an algorithm used to calculate ΔE](https://colorjs.io/docs/color-difference#delta-e-e) inside the `data` attribute:
 
 ```html
 <color-swatch data="L: oklch.l, C: oklch.c, H: oklch.h, ΔE: 2000" vs="oklch(70% 0.1 210)" size="large">
