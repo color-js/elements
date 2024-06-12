@@ -85,10 +85,6 @@ const Self = class ColorPicker extends NudeElement {
 
 			if (!this._el.swatch.color || !this.color.equals(this._el.swatch.color)) {
 				// Avoid typing e.g. "red" and having it replaced with "rgb(100% 0% 0%)" under your caret
-				if (change.source === "attribute") {
-					// <color-swatch> doesn't have a color attribute, so we must change the corresponding property
-					change.source = "property";
-				}
 				prop.applyChange(this._el.swatch, change);
 			}
 		}
