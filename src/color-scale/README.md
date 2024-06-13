@@ -1,5 +1,13 @@
 # `<color-scale>`
 
+Display a list of colors.
+
+## Features
+
+- Specify colors directly, via interpolation in any color space, or a mix of both
+- Display color coordinates, in any color space (or multiple!)
+- Coming soon: display deltas between consecutive colors
+
 ## Examples
 
 ### Basic usage
