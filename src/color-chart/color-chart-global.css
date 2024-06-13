@@ -1,0 +1,56 @@
+color-chart {
+	contain: size;
+	container-name: chart;
+	container-type: size;
+}
+
+@property --chart-width {
+	syntax: '<length-percentage>';
+	initial-value: 100%;
+	inherits: true;
+}
+
+color-chart > color-scale {
+	display: contents;
+	--chart-width: 100cqw;
+
+	&::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: var(--chart-width);
+		height: 1em;
+		background: red;
+
+	}
+
+	&::part(color-swatch) {
+		position: absolute;
+		top:  calc((1 - (var(--y) - var(--min-y)) / (var(--max-y) - var(--min-y))) * 100cqh);
+		left: calc( (var(--x) - var(--min-x)) / (var(--max-x) - var(--min-x)) * 100%);
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background: yellow;
+		min-block-size: 0;
+		transform: translate(-50%, -50%);
+	}
+
+	&::part(color-swatch)::before {
+		content: "Hi";
+		position: absolute;
+		top: calc()
+	}
+
+	&::part(info) {
+		display: none;
+		background: white;
+		position: absolute;
+	}
+
+	&::part(swatch) {
+		min-block-size: 0;
+		padding: .2em;
+	}
+}
