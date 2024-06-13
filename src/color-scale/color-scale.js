@@ -66,6 +66,7 @@ const Self = class ColorScale extends NudeElement {
 				this.#swatches[i] = swatch = document.createElement("color-swatch");
 				swatch.setAttribute("size", "large");
 				swatch.setAttribute("part", "color-swatch");
+				swatch.setAttribute("exportparts", "swatch, info");
 				newSwatches.push(swatch);
 			}
 

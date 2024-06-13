@@ -19,7 +19,7 @@ const Self = class ColorSwatch extends NudeElement {
 					<slot name="swatch-content"></slot>
 				</div>
 			</slot>
-			<div id="wrapper">
+			<div id="wrapper" part="info">
 				<slot name="before"></slot>
 				<div part="color-wrapper">
 					<slot></slot>
