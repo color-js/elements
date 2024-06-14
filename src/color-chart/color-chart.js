@@ -4,7 +4,7 @@ import Color from "../common/color.js";
 
 const Self = class ColorChart extends NudeElement {
 	static tagName = "color-chart";
-	static globalStyle = "color-chart-global.css"
+	static globalStyle = new URL("./color-chart-global.css", import.meta.url);
 	static Color = Color;
 
 	constructor () {
@@ -47,8 +47,11 @@ const Self = class ColorChart extends NudeElement {
 			for (let {name, color} of colorScale.computedColors) {
 				let swatch = colorScale._el.swatches.children[i];
 				color = color.to(this.space);
+				let parts = name.match(/^((?<label>.+)\s*\/)?\s*(?<x>\d+)$/)?.groups;
+
 				let y = color.get(this.y);
-				let x = Number(name.match(/\d+$/)?.[0] ?? i);
+				let x = Number(parts?.x ?? i);
+				let label = (parts?.label ?? name).trim();
 
 				minX = Math.min(minX, x);
 				maxX = Math.max(maxX, x);
@@ -58,6 +61,13 @@ const Self = class ColorChart extends NudeElement {
 				swatch.style.setProperty("--y", y);
 				swatch.style.setProperty("--x", x);
 				swatch.style.setProperty("--index", i++);
+				swatch.style.setProperty("--label", `"${label}"`);
+
+				let {space, index} = Color.Space.resolveCoord(this.y, {space: this.space});
+				let spaceCoord = Object.values(space.coords)[index];
+				let isAngle = spaceCoord?.type === "angle";
+				let info = isAngle ? y.toPrecision(4) : (y * 100).toPrecision(2) + "%";
+				swatch.title = `${ label }: ${ info }`;
 
 				if (prevY !== undefined) {
 					swatch.style.setProperty("--prev-y", prevY);

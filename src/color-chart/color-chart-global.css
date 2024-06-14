@@ -16,7 +16,7 @@ color-chart > color-scale {
 	display: contents;
 	--chart-width: 100cqw;
 
-	&::before {
+	/* &::before {
 		content: "";
 		position: absolute;
 		top: 0;
@@ -25,7 +25,7 @@ color-chart > color-scale {
 		height: 1em;
 		background: red;
 
-	}
+	} */
 
 	&::part(color-swatch) {
 		position: absolute;
@@ -40,9 +40,12 @@ color-chart > color-scale {
 	}
 
 	&::part(color-swatch)::before {
-		content: "Hi";
+		content: var(--label);
 		position: absolute;
-		top: calc()
+		/* top: calc(); */
+		top: .5em;
+		font-size: 70%;
+		white-space: nowrap;
 	}
 
 	&::part(info) {
