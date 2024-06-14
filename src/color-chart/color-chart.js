@@ -50,6 +50,7 @@ const Self = class ColorChart extends NudeElement {
 				let parts = name.match(/^((?<label>.+)\s*\/)?\s*(?<x>\d+)$/)?.groups;
 
 				let y = color.get(this.y);
+				// let x = Number(name.match(/\d+$/)?.[0] ?? i);
 				let x = Number(parts?.x ?? i);
 				let label = (parts?.label ?? name).trim();
 
