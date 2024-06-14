@@ -1,4 +1,6 @@
 color-chart {
+	display: block;
+	height: clamp(0em, 20em, 100vh);
 	contain: size;
 	container-name: chart;
 	container-type: size;
