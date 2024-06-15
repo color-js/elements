@@ -45,6 +45,13 @@ You can only specify your core colors, and insert steps via interpolation:
 
 If you have more than 2 colors listed, this will insert steps between each pair.
 
+You can specify the `info` attribute to show additional information about the colors, and it will be passed to the generated `<color-swatch`> instances:
+
+```html
+<color-scale space="oklch" info="L: oklch.l, C: oklch.c, H: oklch.h"
+             colors="#e3fafc, #c5f6fa, #99e9f2, #66d9e8, #3bc9db"></color-scale>
+```
+
 <!--
 If you want to insert interpolated colors only in specific places, you can use empty values:
 
