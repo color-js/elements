@@ -245,6 +245,16 @@ These properties are read-only.
 | `--transparcency-background` | `<color>` | The background color of the transparency gradient. |
 | `--transparency-darkness` | `<percentage>` | The opacity of the black color used for dark parts of the transparency gradient. |
 
+### Parts
+
+| Name | Description |
+|------|-------------|
+| `swatch` | The swatch used to render the color. |
+| `details` | Wrapper around all non-swatch content (color name, info, etc) |
+| `color-wrapper` | Wrapper around the color name itself |
+| `gamut` | Gamut indicator |
+| `info` | Any info generateed by the `info` attribute |
+
 ### Events
 
 | Name | Description |
