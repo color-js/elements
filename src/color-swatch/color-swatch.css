@@ -49,9 +49,10 @@ slot {
 	}
 }
 
-[part="coords"] {
+[part="info"] {
 	margin: 0;
 	display: inline-flex;
+	display: none;
 	gap: .5em;
 
 	&:is(:host([size="large"]) &) {

@@ -19,7 +19,7 @@ const Self = class ColorSwatch extends NudeElement {
 					<slot name="swatch-content"></slot>
 				</div>
 			</slot>
-			<div id="wrapper" part="info">
+			<div id="wrapper" part="details">
 				<slot name="before"></slot>
 				<div part="color-wrapper">
 					<slot></slot>
@@ -109,27 +109,27 @@ const Self = class ColorSwatch extends NudeElement {
 			this.style.setProperty("--color", colorString);
 		}
 
-		if (name === "coords") {
-			if (!this.coords.length) {
+		if (name === "info") {
+			if (!this.info.length) {
 				return;
 			}
 
-			this._el.coords ??= Object.assign(document.createElement("dl"), {part: "coords"});
-			if (!this._el.coords.parentNode) {
-				this._el.colorWrapper.after(this._el.coords);
+			this._el.info ??= Object.assign(document.createElement("dl"), {part: "info"});
+			if (!this._el.info.parentNode) {
+				this._el.colorWrapper.after(this._el.info);
 			}
 
-			let coords = [];
-			for (let coord of this.coords) {
+			let info = [];
+			for (let coord of this.info) {
 				let [label, channel] = Object.entries(coord)[0];
 
 				let value = this.color.get(channel);
 				value = typeof value === "number" ? Number(value.toPrecision(4)) : value;
 
-				coords.push(`<div class="coord"><dt>${ label }</dt><dd>${ value }</dd></div>`);
+				info.push(`<div class="coord"><dt>${ label }</dt><dd>${ value }</dd></div>`);
 			}
 
-			this._el.coords.innerHTML = coords.join("\n");
+			this._el.info.innerHTML = info.join("\n");
 		}
 	}
 
@@ -165,7 +165,7 @@ const Self = class ColorSwatch extends NudeElement {
 			},
 			reflect: false,
 		},
-		coords: {
+		info: {
 			type: {
 				is: Array,
 				values: {

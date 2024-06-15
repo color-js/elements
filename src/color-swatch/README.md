@@ -102,20 +102,22 @@ future_swatch_container.append(swatch);
 </script>
 ```
 
-### The `coords` attribute
+### The `info` attribute
 
-You can show any of the color coords in _any_ color space.
+You can use the `info` attribute to show information about the color.
+Currently, the only type of information supported is color coords (in any color space), but more will be added in the future.
 
 ```html
-<color-swatch coords="oklch.l, oklch.c, oklch.h" size="large">
+<color-swatch info="oklch.l, oklch.c, oklch.h" size="large">
 	oklch(70% 0.25 138)
 </color-swatch>
 ```
 
-By default, the coord name will be used as a coord label. Add a label before the corresponding coord, followed by the colon to change this.
+By default, the label for each value will be determined automatically from the type of information (e.g. the full coord name if a coord),
+but you can customize this by adding a label before the description of the data:
 
 ```html
-<color-swatch coords="L: oklch.l, C: oklch.c, H: oklch.h" size="large">
+<color-swatch info="L: oklch.l, C: oklch.c, H: oklch.h" size="large">
 	oklch(70% 0.25 138)
 </color-swatch>
 ```
@@ -219,7 +221,7 @@ If you don’t, the `<html>` element will be used.
 | Attribute | Property | Property type | Default value | Description |
 |-----------|----------|---------------|---------------|-------------|
 | `color` | `color` | `Color` &#124; `string` | - | The current color value. |
-| `coords` | `coords` | `string` | - | Comma-separated list of coords of the current color to be shown. |
+| `info` | `info` | `string` | - | Comma-separated list of coords of the current color to be shown. |
 | `value` | `value` | `string` | - | The current value of the swatch. |
 | `size` | - | `large` | - | The size of the swatch. Currently, it is used only to make a large swatch. |
 | `property` | `property` | `string` | - | CSS property to bind to. |
@@ -230,13 +232,13 @@ If you don’t, the `<html>` element will be used.
 
 These properties are read-only.
 
-| Property | Type | Description |
+| Name | Type | Description |
 |----------|------|-------------|
 | `gamut` | `string` | The id of the current gamut (e.g. `srgb`). |
 
 ### CSS variables
 
-| Variable | Type | Description |
+| Name | Type | Description |
 |----------|---------------|-------------|
 | `--transparency-grid` | `<image>` | Gradient used as a background for transparent parts of the swatch. |
 | `--transparency-cell-size` | `<length>` | The size of the cells of the transparency gradient. |

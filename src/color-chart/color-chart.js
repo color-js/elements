@@ -41,8 +41,10 @@ const Self = class ColorChart extends NudeElement {
 		let minY = Infinity, maxY = -Infinity;
 
 		for (let colorScale of this.querySelectorAll("color-scale")) {
-			let prevY;
+			let prevY, prevX, prevColor;
 			let i = 0;
+
+			colorScale.style.setProperty("--color-count", colorScale.computedColors.length);
 
 			for (let {name, color} of colorScale.computedColors) {
 				let swatch = colorScale._el.swatches.children[i];
@@ -55,14 +57,17 @@ const Self = class ColorChart extends NudeElement {
 				minY = Math.min(minY, y);
 				maxY = Math.max(maxY, y);
 
-				swatch.style.setProperty("--y", y);
 				swatch.style.setProperty("--x", x);
+				swatch.style.setProperty("--y", y);
 				swatch.style.setProperty("--index", i++);
 
-				if (prevY !== undefined) {
-					swatch.style.setProperty("--prev-y", prevY);
+				if (prevColor !== undefined) {
+					prevColor.style.setProperty("--next-color", swatch.style.getPropertyValue("--color"));
+					prevColor.style.setProperty("--next-x", x);
+					prevColor.style.setProperty("--next-y", y);
 				}
-				prevY = y;
+
+				prevColor = swatch;
 			}
 		}
 
