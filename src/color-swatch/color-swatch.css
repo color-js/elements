@@ -40,9 +40,21 @@ slot {
 		margin: .5rem;
 	}
 
-	&:not(:host([size="large"]) *):is(.static *) {
-		align-self: baseline;
+	&:not(:host([size="large"]) *) {
+		@container style(--details-style: compact) {
+			position: absolute;
+			font-size: 50%;
+			top: 0;
+			right: 0;
+			margin: .2rem;
+		}
+
+		&:is(.static *) {
+			align-self: baseline;
+		}
 	}
+
+
 
 	&[style*="--gamut-level: 0"] {
 		display: none;
@@ -79,11 +91,10 @@ slot {
 	}
 }
 
-#wrapper {
+[part="details"] {
 	display: flex;
 	flex-flow: inherit;
 	gap: inherit;
-
 
 	&.static {
 		&:is(:host([size="large"]) *) {
@@ -97,6 +108,52 @@ slot {
 
 	@container color-swatch (width <= 5rem) {
 		font-size: 80%;
+	}
+
+	@container style(--details-style: compact) {
+		--_border-color: var(--border-color, color-mix(in oklab, buttonborder 20%, oklab(none none none / 0%)));
+		--_pointer-height: var(--pointer-height, .5em);
+		--_transition-duration: var(--transition-duration, 400ms);
+		--_details-popup-width: var(--details-popup-width, max-content);
+
+		position: absolute;
+		left: 50%;
+		z-index: 2;
+		translate: -50% 0;
+		bottom: 100%;
+		margin-bottom: calc(var(--_pointer-height) * .8);
+		width: var(--_details-popup-width);
+		background: canvas;
+		border: 1px solid var(--_border-color);
+		padding: .6em 1em;
+		border-radius: .2rem;
+		box-shadow: 0 .05em 1em -.7em black;
+		transition: var(--_transition-duration) allow-discrete;
+		transition-property: all, display;
+		transition-delay: 0s, var(--_transition-duration);
+		transform-origin: 50% calc(100% + var(--_pointer-height));
+
+		/* Triangle pointer */
+		&::before {
+			content: "";
+			position: absolute;
+			top: 100%;
+			left: 50%;
+			translate: -50% -50%;
+			aspect-ratio: 1;
+			height: calc(var(--_pointer-height) * sqrt(2));
+			background: inherit;
+			border: inherit;
+			rotate: -45deg;
+			clip-path: polygon(0 0, 0 100%, 100% 100%);
+		}
+
+		&:not(:is(:host(:hover), :host(:focus-within), :host(:active), :host(:target), :host([open])) *),
+		&:is(:host([open=false]) *) {
+			display: none;
+			opacity: 0;
+			scale: 0;
+		}
 	}
 }
 
@@ -146,6 +203,7 @@ slot[name=swatch]::slotted(*),
 	&:not(:host([size="large"]) *) {
 		display: flex;
 		min-inline-size: 2em;
+		min-block-size: 1em;
 		font-size: 65%;
 		flex: 1;
 	}

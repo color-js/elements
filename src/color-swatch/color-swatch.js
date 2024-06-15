@@ -184,6 +184,7 @@ const Self = class ColorSwatch extends NudeElement {
 			dependencies: ["color"],
 		},
 		size: {},
+		open: {},
 	}
 
 	static events = {

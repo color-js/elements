@@ -50,6 +50,32 @@
 </tbody>
 </table>
 
+You can use a `--details-style: compact` CSS property to only show the details on user interaction:
+
+```html
+<color-swatch style="--details-style: compact">oklch(70% 0.25 138)</color-swatch>
+<color-swatch size="large" style="--details-style: compact">oklch(70% 0.25 138)</color-swatch>
+```
+
+Warning: This is not keyboard accessible by default.
+To make the element focusable and also show the popup when it is focused, you need to add `tabindex="0"` to your element:
+
+```html
+<color-swatch size="large" style="--details-style: compact" tabindex="0">oklch(70% 0.25 138)</color-swatch>
+```
+
+By default, the popup will be shown when the element is hovered, focused, `:active`, or the target of the URL hash.
+To circumvent user interaction and force the popup to be open use the `open` attribute.
+You can also use `open="false"` to force it to be closed regardless of interaction:
+
+```html
+<div style="--details-style: compact">
+	<color-swatch size="large">oklch(70% 0.25 138)</color-swatch>
+	<color-swatch size="large" open>oklch(70% 0.25 138)</color-swatch>
+	<color-swatch size="large" open="false">oklch(70% 0.25 138)</color-swatch>
+</div>
+```
+
 ### The `color` attribute
 
 You can provide the color via the `color` attribute,
@@ -120,6 +146,13 @@ but you can customize this by adding a label before the description of the data:
 <color-swatch info="L: oklch.l, C: oklch.c, H: oklch.h" size="large">
 	oklch(70% 0.25 138)
 </color-swatch>
+```
+
+
+The `info` attribute plays quite nicely with the `--details-style: compact` style:
+
+```html
+<color-swatch size="large" info="oklch.l, oklch.c, oklch.h" style="--details-style: compact">oklch(70% 0.25 138)</color-swatch>
 ```
 
 ### With slot content
@@ -227,6 +260,7 @@ If you don’t, the `<html>` element will be used.
 | `property` | `property` | `string` | - | CSS property to bind to. |
 | `scope` | `scope` | `string` | `:root` | CSS selector to use as the scope for the specified CSS property. |
 | `gamuts` | `gamuts` | `string` | `srgb, p3, rec2020: P3+, prophoto: PP` | Comma-separated list of gamuts to be used by the gamut indicator. |
+| `open` | `open` | | `null` | Force the details popup open or closed. |
 
 ### Getters
 
@@ -240,6 +274,7 @@ These properties are read-only.
 
 | Name | Type | Description |
 |----------|---------------|-------------|
+| `--details-style` | `compact` &#124; `normal` (default) | |
 | `--transparency-grid` | `<image>` | Gradient used as a background for transparent parts of the swatch. |
 | `--transparency-cell-size` | `<length>` | The size of the cells of the transparency gradient. |
 | `--transparcency-background` | `<color>` | The background color of the transparency gradient. |
