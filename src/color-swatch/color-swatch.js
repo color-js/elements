@@ -70,11 +70,15 @@ const Self = class ColorSwatch extends NudeElement {
 			}
 			else if (this.gamuts) {
 				if (!this._el.gamutIndicator) {
-					this._el.colorWrapper.insertAdjacentHTML("beforeend", `
-						<gamut-badge id="gamut" part="gamut" exportparts="label: gamutlabel" gamuts="${ this.gamuts }" color="${ this.color }"></gamut-badge>
-					`);
+					this._el.gamutIndicator = Object.assign(document.createElement("gamut-badge"), {
+						id: "gamut",
+						part: "gamut",
+						exportparts: "label: gamutLabel",
+						gamuts: this.gamuts,
+						color: this.color
+					});
 
-					this._el.gamutIndicator = this._el.colorWrapper.lastElementChild;
+					this.shadowRoot.append(this._el.gamutIndicator);
 
 					this._el.gamutIndicator.addEventListener("gamutchange", evt => {
 						let gamut = this._el.gamutIndicator.gamut;
