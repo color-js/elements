@@ -226,6 +226,14 @@ If you don’t, the `<html>` element will be used.
 | `scope` | `scope` | `string` | `:root` | CSS selector to use as the scope for the specified CSS property. |
 | `gamuts` | `gamuts` | `string` | `srgb, p3, rec2020: P3+, prophoto: PP` | Comma-separated list of gamuts to be used by the gamut indicator. |
 
+### Getters
+
+These properties are read-only.
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `gamut` | `string` | The id of the current gamut (e.g. `srgb`). |
+
 ### CSS variables
 
 | Variable | Type | Description |
@@ -234,14 +242,6 @@ If you don’t, the `<html>` element will be used.
 | `--transparency-cell-size` | `<length>` | The size of the cells of the transparency gradient. |
 | `--transparcency-background` | `<color>` | The background color of the transparency gradient. |
 | `--transparency-darkness` | `<percentage>` | The opacity of the black color used for dark parts of the transparency gradient. |
-
-### Getters
-
-These properties are read-only.
-
-| Property | Type | Description |
-|----------|------|-------------|
-| `gamut` | `string` | The id of the current gamut (e.g. `srgb`). |
 
 ### Events
 
