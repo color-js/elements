@@ -30,6 +30,7 @@ color-chart > color-scale {
 
 	&::part(color-swatch) {
 		--_point-size: var(--point-size, .6em);
+		--_line-width: var(--line-width, .2em);
 
 		position: absolute;
 		top:  calc((1 - (var(--y) - var(--min-y)) / (var(--max-y) - var(--min-y))) * 100cqh);
@@ -41,35 +42,37 @@ color-chart > color-scale {
 		min-block-size: 0;
 		translate: -50% -50%;
 		transition: 300ms;
-		transition-property: width, height;
+		transition-property: width;
 	}
 
 	&::part(color-swatch):hover {
 		/* Cannot use CSS transforms here because that also affects the line */
-		--_point-size: calc(var(--point-size, .6em) * 1.2);
+		--_point-size: calc(var(--point-size, .6em) * 1.5);
+		z-index: 1;
 	}
 
+	/* Lines */
 	&::part(color-swatch)::before {
 		--delta-x: calc(var(--next-x) - var(--x));
 		--delta-y: calc(var(--next-y) - var(--y));
 		--delta-y-abs: max(var(--delta-y), -1 * var(--delta-y));
+		--delta-y-sign: calc(var(--delta-y) / var(--delta-y-abs));
+
+		--width: calc( var(--chart-width) * var(--delta-x) / var(--extent-x));
+		--height: calc( var(--chart-height) * var(--delta-y-abs) / var(--extent-y));
 		--angle: atan2(var(--height), var(--width));
-		--offset: .1em / sin(var(--angle));
-		--width: calc(var(--delta-x) / var(--extent-x) * var(--chart-width));
-		--height: calc(var(--delta-y-abs) / var(--extent-y) * var(--chart-height));
 
 		content: "";
 		position: absolute;
-		left: 50%;
-		top: 50%;
-		width: var(--width);
-		height: var(--height);
-		/* if delta y is negative, this needs to be flipped */
-		transform: scaleY(calc(-1 * var(--delta-y) / var(--delta-y-abs)));
-		transform-origin: top;
-		background: linear-gradient(to bottom right, var(--color), var(--next-color));
-		clip-path: polygon(calc(-1 * var(--offset)) 0, calc(var(--offset)) 0, calc(100% + var(--offset)) 100%, calc(100% - var(--offset)) 100%);
 		z-index: 1;
+		left: calc(50% - var(--_line-width) / 2);
+		top: calc(50% - var(--_line-width) / 2);
+		width: calc((var(--width) + var(--_line-width)) / cos(var(--angle)));
+		height: var(--_line-width);
+		transform-origin: calc(var(--_line-width) / 2) calc(var(--_line-width) / 2);
+		/* if delta y is negative, this needs to rotate the other way */
+		rotate: calc(-1 * var(--delta-y-sign) * var(--angle));
+		background: linear-gradient(to right, var(--color), var(--next-color));
 	}
 
 	&::part(info) {
