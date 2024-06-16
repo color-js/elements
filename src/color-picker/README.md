@@ -106,7 +106,3 @@ The styling of `<color-picker>` is fully customizable via CSS variables provided
 | Name | Description |
 |------|-------------|
 | `swatch` | The default `<color-swatch>` element, used if the `swatch` slot has no slotted elements. |
-
-## Planned features
-
-- Alpha
