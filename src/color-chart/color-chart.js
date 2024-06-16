@@ -4,7 +4,7 @@ import Color from "../common/color.js";
 
 const Self = class ColorChart extends NudeElement {
 	static tagName = "color-chart";
-	static globalStyle = "color-chart-global.css"
+	static globalStyle = new URL("color-chart-global.css", import.meta.url);
 	static Color = Color;
 
 	constructor () {
