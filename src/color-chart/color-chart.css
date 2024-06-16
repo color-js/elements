@@ -8,4 +8,5 @@
 
 ::slotted(color-scale) {
 	display: contents !important;
+	--details-style: compact;
 }
