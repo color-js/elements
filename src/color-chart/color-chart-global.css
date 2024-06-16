@@ -64,6 +64,9 @@ color-chart > color-scale {
 		top: 50%;
 		width: var(--width);
 		height: var(--height);
+		/* if delta y is negative, this needs to be flipped */
+		transform: scaleY(calc(-1 * var(--delta-y) / var(--delta-y-abs)));
+		transform-origin: top;
 		background: linear-gradient(to bottom right, var(--color), var(--next-color));
 		clip-path: polygon(calc(-1 * var(--offset)) 0, calc(var(--offset)) 0, calc(100% + var(--offset)) 100%, calc(100% - var(--offset)) 100%);
 		z-index: 1;

@@ -38,7 +38,7 @@ const Self = class ColorChart extends NudeElement {
 
 	handleEvent (evt) {
 		if (evt.target.tagName === "COLOR-SCALE" && evt.name === "computedColors") {
-			//
+			this.render();
 		}
 	}
 
@@ -93,9 +93,9 @@ const Self = class ColorChart extends NudeElement {
 	}
 
 	propChangedCallback ({name, prop, detail: change}) {
-		if (name === "computedColors") {
+		if (name === "resolvedX" || name === "resolvedY") {
 			// Re-render swatches
-
+			this.render();
 		}
 	}
 
