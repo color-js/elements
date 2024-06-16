@@ -55,3 +55,28 @@ Reactivity:
 	<color-scale colors="Yellow 50: #fefce8, Yellow 100: #fef9c3, Yellow 200: #fef08a, Yellow 300: #fde047, Yellow 400: #facc15, Yellow 500: #eab308, Yellow 600: #ca8a04, Yellow 700: #a16207, Yellow 800: #854d0e, Yellow 900: #713f12, Yellow 950: #422006"></color-scale>
 </color-chart>
 ```
+
+## Reference
+
+### Attributes & Properties
+
+| Attribute | Property | Property type | Default value | Description |
+|-----------|----------|---------------|---------------|-------------|
+| `x` | `x` | `string` | `null` | The coord to plot on the X axis, if any |
+| `y` | `x` | `string` | `"oklch.l"` | The coord to plot on the Y axis, if any |
+
+### Events
+
+| Name | Description |
+|------|-------------|
+
+### CSS variables
+
+| Name | Type | Description |
+|------|------|-------------|
+| `--color-scale-type` | `discrete` or `normal` | Whether to draw lines between consecutive points. Works on individual color swatches (to prevent drawing a line to the *next* point), entire color scales, or the entire chart. |
+
+### Parts
+
+| Name | Description |
+|------|-------------|
