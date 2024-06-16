@@ -65,74 +65,98 @@ const Self = class ColorChart extends NudeElement {
 		for (let colorScale of colorScales) {
 			let scale = this.series.get(colorScale);
 
-			if (!scale || evt?.target === colorScale) {
+			if (!scale || !evt || evt.target === colorScale || evt.target.nodeName !== "COLOR-SCALE") {
 				scale = this.renderScale(colorScale);
 			}
 
-			minX = Math.min(scale.minX, minX);
-			maxX = Math.max(scale.maxX, maxX);
-			minY = Math.min(scale.minY, minY);
-			maxY = Math.max(scale.maxY, maxY);
+			if (!scale) {
+				continue;
+			}
+
+			minX = Math.min(scale.x.min, minX);
+			maxX = Math.max(scale.x.max, maxX);
+			minY = Math.min(scale.y.min, minY);
+			maxY = Math.max(scale.y.max, maxY);
 		}
 
-		let yAxis = getAxis(minY, maxY, 10);
-		let xAxis = getAxis(minX, maxX, 10);
+		if (isFinite(minX) && isFinite(maxX)) {
+			let xAxis = getAxis(minX, maxX, 10);
+			this._el.chart.style.setProperty("--min-x", xAxis.min);
+			this._el.chart.style.setProperty("--max-x", xAxis.max);
+			this._el.chart.style.setProperty("--steps-x", xAxis.steps);
+			this._el.xTicks.innerHTML = Array(xAxis.steps).fill().map((_, i) => "<div part='x tick'>" + +(xAxis.min + i * xAxis.step).toPrecision(15) + "</div>").join("\n");
+		}
 
-		this._el.chart.style.setProperty("--min-x", xAxis.min);
-		this._el.chart.style.setProperty("--max-x", xAxis.max);
-		this._el.chart.style.setProperty("--steps-x", xAxis.steps);
+		if (isFinite(minY) && isFinite(maxY)) {
+			let yAxis = getAxis(minY, maxY, 10);
 
-		this._el.chart.style.setProperty("--min-y", yAxis.min);
-		this._el.chart.style.setProperty("--max-y", yAxis.max);
-		this._el.chart.style.setProperty("--steps-y", yAxis.steps);
-
-		this._el.xTicks.innerHTML = Array(xAxis.steps).fill().map((_, i) => "<div part='x tick'>" + +(xAxis.min + i * xAxis.step).toPrecision(15) + "</div>").join("\n");
-		this._el.yTicks.innerHTML = Array(yAxis.steps).fill().map((_, i) => "<div part='y tick'>" + +(yAxis.min + i * yAxis.step).toPrecision(15) + "</div>").reverse().join("\n");
-
-		this._el.yLabel.textContent = this.space.name + " " + this.yResolved.name;
+			this._el.chart.style.setProperty("--min-y", yAxis.min);
+			this._el.chart.style.setProperty("--max-y", yAxis.max);
+			this._el.chart.style.setProperty("--steps-y", yAxis.steps);
+			this._el.yTicks.innerHTML = Array(yAxis.steps).fill().map((_, i) => "<div part='y tick'>" + +(yAxis.min + i * yAxis.step).toPrecision(15) + "</div>").reverse().join("\n");
+			this._el.yLabel.textContent = this.space.name + " " + this.yResolved.name;
+		}
 	}
 
 	renderScale (colorScale) {
-		let minX = Infinity, maxX = -Infinity;
-		let minY = Infinity, maxY = -Infinity;
-		let prevColor;
-		let i = 0;
-		let colors = colorScale.computedColors.slice();
-		// TODO sort by X
-
-		if (!colors?.length) {
-			colors = [];
+		if (!colorScale.computedColors) {
+			// Not yet initialized
+			return;
 		}
 
-		colorScale.style.setProperty("--color-count", colors.length);
+		let ret = {
+			element: colorScale,
+			swatches: new WeakMap(),
+			x: {min: Infinity, max: -Infinity, values: new WeakMap() },
+			y: {min: Infinity, max: -Infinity, values: new WeakMap()},
+			colors: colorScale.computedColors?.slice() ?? [],
+		}
 
-		for (let {name, color} of colors) {
-			let swatch = colorScale._el.swatches.children[i];
-			color = color.to(this.space);
+		colorScale.style.setProperty("--color-count", ret.colors.length);
+
+		let index = 0;
+		for (let {name, color} of ret.colors) {
+			let swatch = colorScale._el.swatches.children[index];
+			ret.colors[index] = color = color.to(this.space);
+			ret.swatches.set(color, swatch);
+
+			let x = Number(name.match(/\d+$/)?.[0] ?? index);
 			let y = color.get(this.y);
-			let x = Number(name.match(/\d+$/)?.[0] ?? i);
 
-			minX = Math.min(minX, x);
-			maxX = Math.max(maxX, x);
-			minY = Math.min(minY, y);
-			maxY = Math.max(maxY, y);
+			ret.x.values.set(color, x);
+			ret.y.values.set(color, y);
+
+			ret.x.min = Math.min(ret.x.min, x);
+			ret.x.max = Math.max(ret.x.max, x);
+			ret.y.min = Math.min(ret.y.min, y);
+			ret.y.max = Math.max(ret.y.max, y);
 
 			swatch.style.setProperty("--x", x);
 			swatch.style.setProperty("--y", y);
-			swatch.style.setProperty("--index", i++);
+			swatch.style.setProperty("--index", index);
+
+			index++;
+		}
+
+		// Sort colors by X (ascending)
+		ret.colors.sort((a, b) => ret.x.values.get(a) - ret.x.values.get(b));
+
+		let prevColor;
+		for (let color of ret.colors) {
+			let swatch = ret.swatches.get(color);
 
 			if (prevColor !== undefined) {
 				prevColor.style.setProperty("--next-color", swatch.style.getPropertyValue("--color"));
-				prevColor.style.setProperty("--next-x", x);
-				prevColor.style.setProperty("--next-y", y);
+				prevColor.style.setProperty("--next-x", ret.x.values.get(color));
+				prevColor.style.setProperty("--next-y", ret.y.values.get(color));
 			}
 
 			prevColor = swatch;
 		}
 
-		this.series.set(colorScale, {minX, maxX, minY, maxY});
+		this.series.set(colorScale, ret);
 
-		return {minX, maxX, minY, maxY};
+		return ret;
 	}
 
 	propChangedCallback (evt) {
