@@ -52,27 +52,29 @@ color-chart > color-scale {
 	}
 
 	/* Lines */
-	&::part(color-swatch)::before {
-		--delta-x: calc(var(--next-x) - var(--x));
-		--delta-y: calc(var(--next-y) - var(--y));
-		--delta-y-abs: max(var(--delta-y), -1 * var(--delta-y));
-		--delta-y-sign: calc(var(--delta-y) / var(--delta-y-abs));
+	@container not style(--color-scale-type: discrete) {
+		&::part(color-swatch)::before {
+			--delta-x: calc(var(--next-x) - var(--x));
+			--delta-y: calc(var(--next-y) - var(--y));
+			--delta-y-abs: max(var(--delta-y), -1 * var(--delta-y));
+			--delta-y-sign: calc(var(--delta-y) / var(--delta-y-abs));
 
-		--width: calc( var(--chart-width) * var(--delta-x) / var(--extent-x));
-		--height: calc( var(--chart-height) * var(--delta-y-abs) / var(--extent-y));
-		--angle: atan2(var(--height), var(--width));
+			--width: calc( var(--chart-width) * var(--delta-x) / var(--extent-x));
+			--height: calc( var(--chart-height) * var(--delta-y-abs) / var(--extent-y));
+			--angle: atan2(var(--height), var(--width));
 
-		content: "";
-		position: absolute;
-		z-index: 1;
-		left: calc(50% - var(--_line-width) / 2);
-		top: calc(50% - var(--_line-width) / 2);
-		width: calc((var(--width) + var(--_line-width)) / cos(var(--angle)));
-		height: var(--_line-width);
-		transform-origin: calc(var(--_line-width) / 2) calc(var(--_line-width) / 2);
-		/* if delta y is negative, this needs to rotate the other way */
-		rotate: calc(-1 * var(--delta-y-sign) * var(--angle));
-		background: linear-gradient(to right, var(--color), var(--next-color));
+			content: "";
+			position: absolute;
+			z-index: 1;
+			left: calc(50% - var(--_line-width) / 2);
+			top: calc(50% - var(--_line-width) / 2);
+			width: calc((var(--width) + var(--_line-width)) / cos(var(--angle)));
+			height: var(--_line-width);
+			transform-origin: calc(var(--_line-width) / 2) calc(var(--_line-width) / 2);
+			/* if delta y is negative, this needs to rotate the other way */
+			rotate: calc(-1 * var(--delta-y-sign) * var(--angle));
+			background: linear-gradient(to right, var(--color), var(--next-color));
+		}
 	}
 
 	&::part(info) {
