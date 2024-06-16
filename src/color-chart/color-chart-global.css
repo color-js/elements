@@ -1,11 +1,3 @@
-color-chart {
-	display: block;
-	height: clamp(0em, 20em, 100vh);
-	contain: size;
-	container-name: chart;
-	container-type: size;
-}
-
 @property --chart-width {
 	syntax: '<length-percentage>';
 	initial-value: 100%;
@@ -32,9 +24,7 @@ color-chart {
 
 color-chart > color-scale {
 	display: contents;
-	--chart-width: 100cqw;
-	--chart-height: 100cqh;
-	--step-x: calc(var(--chart-width) / (var(--color-count) - 1));
+
 	--extent-x: calc(var(--max-x) - var(--min-x));
 	--extent-y: calc(var(--max-y) - var(--min-y));
 
