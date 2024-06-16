@@ -43,10 +43,16 @@ const Self = class ColorChart extends NudeElement {
 	}
 
 	render () {
+		let colorScales = this.querySelectorAll("color-scale");
+
+		if (colorScales.length === 0) {
+			return;
+		}
+
 		let minX = Infinity, maxX = -Infinity;
 		let minY = Infinity, maxY = -Infinity;
 
-		for (let colorScale of this.querySelectorAll("color-scale")) {
+		for (let colorScale of colorScales) {
 			let prevColor;
 			let i = 0;
 
