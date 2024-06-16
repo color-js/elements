@@ -9,35 +9,57 @@
 }
 
 .axis {
-	> * {
-		font-size: 60%;
-		line-height: 1;
+	display: flex;
+
+	.ticks {
+		flex: 1;
+
+		> * {
+			font-size: 60%;
+			line-height: 1;
+		}
+	}
+
+	.label {
+		text-align: center;
 	}
 }
 
 #x_axis {
 	grid-column: 2;
 	grid-row: 2;
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
 
-	> * {
-		padding-block-start: .5em;
-		margin-inline-end: auto;
-		translate: -50% 0;
+	.ticks {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+
+		> * {
+			padding-block-start: .5em;
+			margin-inline-end: auto;
+			translate: -50% 0;
+		}
 	}
 }
 
 #y_axis {
-	display: flex;
 	grid-column: 1;
 	grid-row: 1;
-	flex-flow: column;
 
-	> * {
-		flex: 1;
-		padding-inline-end: .5em;
-		translate: 0 -.5lh;
+	.ticks {
+		display: flex;
+		flex-flow: column;
+
+		> * {
+			flex: 1;
+			padding-inline-end: .5em;
+			translate: 0 -.5lh;
+		}
+	}
+
+	.label {
+		writing-mode: vertical-lr;
+		rotate: .5turn;
+		margin-right: .5em;
 	}
 }
 

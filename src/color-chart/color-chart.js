@@ -19,15 +19,23 @@ const Self = class ColorChart extends NudeElement {
 					<slot></slot>
 				</div>
 			</div>
-			<div class="axis" id="y_axis"></div>
-			<div class="axis" id="x_axis"></div>
+			<div class="axis" id="y_axis">
+				<div class="label" part="y label"></div>
+				<div class="ticks" part="y ticks"></div>
+			</div>
+			<div class="axis" id="x_axis">
+				<div class="label" part="x label"></div>
+				<div class="ticks" part="x ticks"></div>
+			</div>
 		`;
 
 		this._el = {
-			slot: this.shadowRoot.querySelector("slot"),
-			chart: this.shadowRoot.getElementById("chart"),
-			yAxis: this.shadowRoot.getElementById("y_axis"),
-			xAxis: this.shadowRoot.getElementById("x_axis"),
+			slot:   this.shadowRoot.querySelector("slot"),
+			chart:  this.shadowRoot.getElementById("chart"),
+			xTicks: this.shadowRoot.querySelector("#x_axis .ticks"),
+			yTicks: this.shadowRoot.querySelector("#y_axis .ticks"),
+			xLabel: this.shadowRoot.querySelector("#x_axis .label"),
+			yLabel: this.shadowRoot.querySelector("#y_axis .label"),
 		};
 	}
 
@@ -94,12 +102,14 @@ const Self = class ColorChart extends NudeElement {
 		this._el.chart.style.setProperty("--max-y", yAxis.max);
 		this._el.chart.style.setProperty("--steps-y", yAxis.steps);
 
-		this._el.xAxis.innerHTML = Array(xAxis.steps).fill().map((_, i) => "<div>" + +(xAxis.min + i * xAxis.step).toPrecision(15) + "</div>").join("\n");
-		this._el.yAxis.innerHTML = Array(yAxis.steps).fill().map((_, i) => "<div>" + +(yAxis.min + i * yAxis.step).toPrecision(15) + "</div>").reverse().join("\n");
+		this._el.xTicks.innerHTML = Array(xAxis.steps).fill().map((_, i) => "<div part='x tick'>" + +(xAxis.min + i * xAxis.step).toPrecision(15) + "</div>").join("\n");
+		this._el.yTicks.innerHTML = Array(yAxis.steps).fill().map((_, i) => "<div part='y tick'>" + +(yAxis.min + i * yAxis.step).toPrecision(15) + "</div>").reverse().join("\n");
+
+		this._el.yLabel.textContent = this.space.name + " " + this.yResolved.name;
 	}
 
 	propChangedCallback ({name, prop, detail: change}) {
-		if (name === "resolvedX" || name === "resolvedY") {
+		if (name === "resolvedX" || name === "yResolved") {
 			// Re-render swatches
 			this.render();
 		}
@@ -110,7 +120,7 @@ const Self = class ColorChart extends NudeElement {
 			default: "oklch.l"
 		},
 
-		resolvedY: {
+		yResolved: {
 			get () {
 				return Color.Space.resolveCoord(this.y, "oklch")
 			},
@@ -120,7 +130,7 @@ const Self = class ColorChart extends NudeElement {
 		space: {
 			default: "oklch",
 			get () {
-				return this.resolvedY.space;
+				return this.yResolved.space;
 			},
 		},
 	};

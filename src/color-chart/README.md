@@ -80,3 +80,7 @@ Reactivity:
 
 | Name | Description |
 |------|-------------|
+| `axis` | The axis line |
+| `ticks` | The container of ticks |
+| `tick` | A tick mark |
+| `label` | A label on the axis |
