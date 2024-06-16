@@ -46,11 +46,13 @@ const Self = class ColorChart extends NudeElement {
 
 	handleEvent (evt) {
 		if (evt.target.tagName === "COLOR-SCALE" && evt.name === "computedColors") {
-			this.render();
+			this.render(evt);
 		}
 	}
 
-	render () {
+	series = new WeakMap();
+
+	render (evt) {
 		let colorScales = this.querySelectorAll("color-scale");
 
 		if (colorScales.length === 0) {
@@ -61,34 +63,16 @@ const Self = class ColorChart extends NudeElement {
 		let minY = Infinity, maxY = -Infinity;
 
 		for (let colorScale of colorScales) {
-			let prevColor;
-			let i = 0;
+			let scale = this.series.get(colorScale);
 
-			colorScale.style.setProperty("--color-count", colorScale.computedColors.length);
-
-			for (let {name, color} of colorScale.computedColors) {
-				let swatch = colorScale._el.swatches.children[i];
-				color = color.to(this.space);
-				let y = color.get(this.y);
-				let x = Number(name.match(/\d+$/)?.[0] ?? i);
-
-				minX = Math.min(minX, x);
-				maxX = Math.max(maxX, x);
-				minY = Math.min(minY, y);
-				maxY = Math.max(maxY, y);
-
-				swatch.style.setProperty("--x", x);
-				swatch.style.setProperty("--y", y);
-				swatch.style.setProperty("--index", i++);
-
-				if (prevColor !== undefined) {
-					prevColor.style.setProperty("--next-color", swatch.style.getPropertyValue("--color"));
-					prevColor.style.setProperty("--next-x", x);
-					prevColor.style.setProperty("--next-y", y);
-				}
-
-				prevColor = swatch;
+			if (!scale || evt?.target === colorScale) {
+				scale = this.renderScale(colorScale);
 			}
+
+			minX = Math.min(scale.minX, minX);
+			maxX = Math.max(scale.maxX, maxX);
+			minY = Math.min(scale.minY, minY);
+			maxY = Math.max(scale.maxY, maxY);
 		}
 
 		let yAxis = getAxis(minY, maxY, 10);
@@ -108,10 +92,55 @@ const Self = class ColorChart extends NudeElement {
 		this._el.yLabel.textContent = this.space.name + " " + this.yResolved.name;
 	}
 
-	propChangedCallback ({name, prop, detail: change}) {
+	renderScale (colorScale) {
+		let minX = Infinity, maxX = -Infinity;
+		let minY = Infinity, maxY = -Infinity;
+		let prevColor;
+		let i = 0;
+		let colors = colorScale.computedColors.slice();
+		// TODO sort by X
+
+		if (!colors?.length) {
+			colors = [];
+		}
+
+		colorScale.style.setProperty("--color-count", colors.length);
+
+		for (let {name, color} of colors) {
+			let swatch = colorScale._el.swatches.children[i];
+			color = color.to(this.space);
+			let y = color.get(this.y);
+			let x = Number(name.match(/\d+$/)?.[0] ?? i);
+
+			minX = Math.min(minX, x);
+			maxX = Math.max(maxX, x);
+			minY = Math.min(minY, y);
+			maxY = Math.max(maxY, y);
+
+			swatch.style.setProperty("--x", x);
+			swatch.style.setProperty("--y", y);
+			swatch.style.setProperty("--index", i++);
+
+			if (prevColor !== undefined) {
+				prevColor.style.setProperty("--next-color", swatch.style.getPropertyValue("--color"));
+				prevColor.style.setProperty("--next-x", x);
+				prevColor.style.setProperty("--next-y", y);
+			}
+
+			prevColor = swatch;
+		}
+
+		this.series.set(colorScale, {minX, maxX, minY, maxY});
+
+		return {minX, maxX, minY, maxY};
+	}
+
+	propChangedCallback (evt) {
+		let {name, prop, detail: change} = evt;
+
 		if (name === "resolvedX" || name === "yResolved") {
 			// Re-render swatches
-			this.render();
+			this.render(evt);
 		}
 	}
 
