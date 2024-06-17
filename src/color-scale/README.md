@@ -45,51 +45,27 @@ You can only specify your core colors, and insert steps via interpolation:
 
 If you have more than 2 colors listed, this will insert steps between each pair.
 
+### Customizing the color swatches
 
-### The `data` and `vs` attributes
+Under the hood, `<color-scale>` generates and uses a series of [`<color-swatch>`](../color-swatch/) elements.
 
-You can show any of the colors coords in _any_ color space the same way you can do it for [`<color-swatch>`](../color-swatch/#the-data-attribute):
-
-```html
-<color-scale
-	space="oklch"
-	colors="#e3fafc, #c5f6fa, #99e9f2, #66d9e8, #3bc9db"
-	data="L: oklch.l, C: oklch.c, H: oklch.h"
-></color-scale>
-```
-
-By adding the `vs` attribute without a value, you can also show deltas between the current and the previous color:
+You can specify the `info` attribute to show additional information about the colors, and it will be passed to the generated `<color-swatch`> instances:
 
 ```html
-<color-scale
-	space="oklch"
-	colors="#e3fafc, #c5f6fa, #99e9f2, #66d9e8, #3bc9db"
-	data="L: oklch.l, C: oklch.c, H: oklch.h"
-	vs
-></color-scale>
+<color-scale space="oklch" info="L: oklch.l, C: oklch.c, H: oklch.h"
+             colors="#e3fafc, #c5f6fa, #99e9f2, #66d9e8, #3bc9db"></color-scale>
 ```
 
-You can also specify [an algorithm used to calculate ΔE](https://colorjs.io/docs/color-difference#delta-e-e) inside the `data` attribute:
+You can also create compact color scales, by simply setting `--details-style: compact`:
+
 
 ```html
-<color-scale
-	space="oklch"
-	colors="#e3fafc, #c5f6fa, #99e9f2, #66d9e8, #3bc9db"
-	data="L: oklch.l, C: oklch.c, H: oklch.h, ΔE: 2000"
-	vs
-></color-scale>
+<color-scale space="oklch" info="L: oklch.l, C: oklch.c, H: oklch.h"
+             style="--details-style: compact"
+             colors="#e3fafc, #c5f6fa, #99e9f2, #66d9e8, #3bc9db"></color-scale>
 ```
 
-If you need to show the difference between every color in the scale and another color, you can specify that color as the `vs` attribute value:
-
-```html
-<color-scale
-	space="oklch"
-	colors="#e3fafc, #c5f6fa, #99e9f2, #66d9e8, #3bc9db"
-	data="L: oklch.l, C: oklch.c, H: oklch.h"
-	vs="oklch(65% 0.15 210)"
-></color-scale>
-```
+Issue: How to make them focusable??
 
 <!--
 If you want to insert interpolated colors only in specific places, you can use empty values:

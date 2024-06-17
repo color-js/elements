@@ -14,6 +14,12 @@ Color spaces not supported by the browser also work:
 <color-picker space="okhsl" color="color(--okhsl 180 50% 50%)"></color-picker>
 ```
 
+If no color space or color is provided, the default ones will be used: `oklch` for the space and `oklch(50% 50% 180)` for the color.
+
+```html
+<color-picker></color-picker>
+```
+
 ### Slots
 
 ```html
@@ -100,7 +106,3 @@ The styling of `<color-picker>` is fully customizable via CSS variables provided
 | Name | Description |
 |------|-------------|
 | `swatch` | The default `<color-swatch>` element, used if the `swatch` slot has no slotted elements. |
-
-## Planned features
-
-- Alpha

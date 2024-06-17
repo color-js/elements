@@ -1,11 +1,94 @@
+:host {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-template-rows: 1fr auto;
+	height: clamp(0em, 20em, 100vh);
+	contain: size;
+	container-name: chart;
+	container-type: size;
+}
+
+.axis {
+	display: flex;
+
+	.ticks {
+		flex: 1;
+
+		> * {
+			font-size: 60%;
+			line-height: 1;
+		}
+	}
+
+	.label {
+		text-align: center;
+	}
+}
+
+#x_axis {
+	grid-column: 2;
+	grid-row: 2;
+
+	.ticks {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+
+		> * {
+			padding-block-start: .5em;
+			margin-inline-end: auto;
+			translate: -50% 0;
+		}
+	}
+}
+
+#y_axis {
+	grid-column: 1;
+	grid-row: 1;
+
+	.ticks {
+		display: flex;
+		flex-flow: column;
+
+		> * {
+			flex: 1;
+			padding-inline-end: .5em;
+			translate: 0 -.5lh;
+		}
+	}
+
+	.label {
+		writing-mode: vertical-lr;
+		rotate: .5turn;
+		margin-right: .5em;
+	}
+}
+
+@property --chart-width {
+	syntax: '<length-percentage>';
+	initial-value: 100%;
+	inherits: true;
+}
+
+#chart-container {
+	container-name: chart;
+	container-type: inline-size;
+
+}
+
 #chart {
 	position: relative;
 	border: 1px solid gray;
-	min-height: 200px;
-	container-name: chart;
-	container-type: inline-size;
+	min-height: 100%;
+	background: linear-gradient(to bottom, hsl(220 10% 50% / 40%) 0 1px, transparent 0) 0 -1px / 100% calc(100% / var(--steps-y, 10)),
+	            linear-gradient(to right, hsl(220 10% 50% / 30%) 0 1px, transparent 0) -1px 0 / calc(100% / var(--steps-x, 10)) 100%;
+
+	--chart-width: 100cqw;
+	--chart-height: 100cqh;
+	--extent-x: calc(var(--max-x) - var(--min-x));
+	--extent-y: calc(var(--max-y) - var(--min-y));
 }
 
 ::slotted(color-scale) {
 	display: contents !important;
+	--details-style: compact;
 }

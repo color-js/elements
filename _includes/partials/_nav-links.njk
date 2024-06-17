@@ -3,10 +3,17 @@
 	<a href="{{ page | relative }}">Elements</a>
 	<ul>
 		{% for name in components %}
-			<li><a href="{{ page | relative }}/src/{{ name }}/"><code>&lt;{{ name }}&gt;</code></a></span>
+			<li><a href="{{ page | relative }}/src/{{ name }}/"><code>&lt;{{ name }}&gt;</code></a></li>
 		{% endfor %}
 	</ul>
 </div>
 
-<a href="https://github.com/color-js/elements">GitHub</a>
-<a href="https://github.com/color-js/elements/issues/new" class="footer">File bug</a>
+<a href="https://github.com/color-js/elements{{ ('/tree/main/src/' + name) if name }}" target="_blank">GitHub</a>
+<div class="menu">
+	<a href="https://github.com/color-js/elements/issues{{ ('?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+%5B' + name + '%5D+in%3Atitle') if name }}" target="_blank">Issues</a>
+	<ul>
+		<li><a href="https://github.com/color-js/elements/issues/new{{ ('?title=[' + name + '] ') if name }}">New</a></li>
+	</ul>
+</div>
+
+

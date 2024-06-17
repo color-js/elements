@@ -72,8 +72,8 @@ const Self = class ColorScale extends NudeElement {
 
 			swatch.color = color;
 			swatch.textContent = name;
-			if (this.data) {
-				swatch.data = this.data;
+			if (this.info) {
+				swatch.info = this.info;
 
 				// Deltas don't make sense without coords
 				if (this.vs) {
@@ -163,9 +163,9 @@ const Self = class ColorScale extends NudeElement {
 
 				return colors;
 			},
-			additionalDependencies: ["data", "vs"],
+			additionalDependencies: ["info"],
 		},
-		data: {},
+		info: {},
 		vs: {
 			type: Color,
 		},

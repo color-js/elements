@@ -19,7 +19,7 @@ const Self = class ColorSwatch extends NudeElement {
 					<slot name="swatch-content"></slot>
 				</div>
 			</slot>
-			<div id="wrapper" part="info">
+			<div id="wrapper" part="details">
 				<slot name="before"></slot>
 				<div part="color-wrapper">
 					<slot></slot>
@@ -70,11 +70,15 @@ const Self = class ColorSwatch extends NudeElement {
 			}
 			else if (this.gamuts) {
 				if (!this._el.gamutIndicator) {
-					this._el.colorWrapper.insertAdjacentHTML("beforeend", `
-						<gamut-badge id="gamut" part="gamut" exportparts="label: gamutlabel" gamuts="${ this.gamuts }" color="${ this.color }"></gamut-badge>
-					`);
+					this._el.gamutIndicator = Object.assign(document.createElement("gamut-badge"), {
+						id: "gamut",
+						part: "gamut",
+						exportparts: "label: gamutLabel",
+						gamuts: this.gamuts,
+						color: this.color,
+					});
 
-					this._el.gamutIndicator = this._el.colorWrapper.lastElementChild;
+					this.shadowRoot.append(this._el.gamutIndicator);
 
 					this._el.gamutIndicator.addEventListener("gamutchange", evt => {
 						let gamut = this._el.gamutIndicator.gamut;
@@ -109,15 +113,15 @@ const Self = class ColorSwatch extends NudeElement {
 			this.style.setProperty("--color", colorString);
 		}
 
-		if (name === "data" || name === "vs") {
+		if (name === "info" || name === "vs") {
 			let dataHTML = [];
 			let coords = [];
 			let deltaE; // DeltaE algorithm
 
-			if (this.data.length || this.vs) {
-				this._el.data ??= Object.assign(document.createElement("dl"), {part: "data"});
-				if (!this._el.data.parentNode) {
-					this._el.colorWrapper.after(this._el.data);
+			if (this.info.length || this.vs) {
+				this._el.info ??= Object.assign(document.createElement("dl"), {part: "info"});
+				if (!this._el.info.parentNode) {
+					this._el.colorWrapper.after(this._el.info);
 				}
 
 				coords = this.data.filter(item => !item.hasOwnProperty("ΔE"));
@@ -224,7 +228,7 @@ const Self = class ColorSwatch extends NudeElement {
 			},
 			reflect: false,
 		},
-		data: {
+		info: {
 			type: {
 				is: Array,
 				values: {
@@ -238,6 +242,8 @@ const Self = class ColorSwatch extends NudeElement {
 			},
 			dependencies: ["color"],
 		},
+		size: {},
+		open: {},
 		vs: {
 			type: Color,
 			dependencies: ["color"],

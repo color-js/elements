@@ -50,6 +50,32 @@
 </tbody>
 </table>
 
+You can use a `--details-style: compact` CSS property to only show the details on user interaction:
+
+```html
+<color-swatch style="--details-style: compact">oklch(70% 0.25 138)</color-swatch>
+<color-swatch size="large" style="--details-style: compact">oklch(70% 0.25 138)</color-swatch>
+```
+
+Warning: This is not keyboard accessible by default.
+To make the element focusable and also show the popup when it is focused, you need to add `tabindex="0"` to your element:
+
+```html
+<color-swatch size="large" style="--details-style: compact" tabindex="0">oklch(70% 0.25 138)</color-swatch>
+```
+
+By default, the popup will be shown when the element is hovered, focused, `:active`, or the target of the URL hash.
+To circumvent user interaction and force the popup to be open use the `open` attribute.
+You can also use `open="false"` to force it to be closed regardless of interaction:
+
+```html
+<div style="--details-style: compact">
+	<color-swatch size="large">oklch(70% 0.25 138)</color-swatch>
+	<color-swatch size="large" open>oklch(70% 0.25 138)</color-swatch>
+	<color-swatch size="large" open="false">oklch(70% 0.25 138)</color-swatch>
+</div>
+```
+
 ### The `color` attribute
 
 You can provide the color via the `color` attribute,
@@ -102,48 +128,31 @@ future_swatch_container.append(swatch);
 </script>
 ```
 
-### The `data` attribute
+### The `info` attribute
 
-You can show any of the color coords in _any_ color space.
+You can use the `info` attribute to show information about the color.
+Currently, the only type of information supported is color coords (in any color space), but more will be added in the future.
 
 ```html
-<color-swatch data="oklch.l, oklch.c, oklch.h" size="large">
+<color-swatch info="oklch.l, oklch.c, oklch.h" size="large">
 	oklch(70% 0.25 138)
 </color-swatch>
 ```
 
-By default, the coord name will be used as a coord label. Add a label before the corresponding coord, followed by the colon to change this.
+By default, the label for each value will be determined automatically from the type of information (e.g. the full coord name if a coord),
+but you can customize this by adding a label before the description of the data:
 
 ```html
-<color-swatch data="L: oklch.l, C: oklch.c, H: oklch.h" size="large">
+<color-swatch info="L: oklch.l, C: oklch.c, H: oklch.h" size="large">
 	oklch(70% 0.25 138)
 </color-swatch>
 ```
 
-### The `vs` attribute
 
-You can pass another color via the `vs` attribute to show the delta (if it is not zero) between the current and that color.
-
-```html
-<color-swatch vs="oklch(55% 0.1 210)" size="large">
-	oklch(70% 0.25 138)
-</color-swatch>
-```
-
-If the color coords are also specified, the (not zero) deltas from that color in its coordinates will also be shown.
+The `info` attribute plays quite nicely with the `--details-style: compact` style:
 
 ```html
-<color-swatch data="L: oklch.l, C: oklch.c, H: oklch.h" vs="oklch(70% 0.1 210)" size="large">
-	oklch(70% 0.25 138)
-</color-swatch>
-```
-
-You can specify [an algorithm used to calculate ΔE](https://colorjs.io/docs/color-difference#delta-e-e) inside the `data` attribute:
-
-```html
-<color-swatch data="L: oklch.l, C: oklch.c, H: oklch.h, ΔE: 2000" vs="oklch(70% 0.1 210)" size="large">
-	oklch(70% 0.25 138)
-</color-swatch>
+<color-swatch size="large" info="oklch.l, oklch.c, oklch.h" style="--details-style: compact">oklch(70% 0.25 138)</color-swatch>
 ```
 
 ### With slot content
@@ -245,30 +254,42 @@ If you don’t, the `<html>` element will be used.
 | Attribute | Property | Property type | Default value | Description |
 |-----------|----------|---------------|---------------|-------------|
 | `color` | `color` | `Color` &#124; `string` | - | The current color value. |
-| `data` | `data` | `string` | - | Comma-separated list of coords of the current color to be shown and (optionally) an algorithm algorithm used to calculate ΔE. |
+| `info` | `info` | `string` | - | Comma-separated list of coords of the current color to be shown. |
 | `value` | `value` | `string` | - | The current value of the swatch. |
 | `size` | - | `large` | - | The size of the swatch. Currently, it is used only to make a large swatch. |
 | `vs` | `vs` | `Color` &#124; `string` | - | The second color to use when calculating the difference (delta) with the current color. |
 | `property` | `property` | `string` | - | CSS property to bind to. |
 | `scope` | `scope` | `string` | `:root` | CSS selector to use as the scope for the specified CSS property. |
 | `gamuts` | `gamuts` | `string` | `srgb, p3, rec2020: P3+, prophoto: PP` | Comma-separated list of gamuts to be used by the gamut indicator. |
-
-### CSS variables
-
-| Variable | Type | Description |
-|----------|---------------|-------------|
-| `--transparency-grid` | `<image>` | Gradient used as a background for transparent parts of the swatch. |
-| `--transparency-cell-size` | `<length>` | The size of the cells of the transparency gradient. |
-| `--transparcency-background` | `<color>` | The background color of the transparency gradient. |
-| `--transparency-darkness` | `<percentage>` | The opacity of the black color used for dark parts of the transparency gradient. |
+| `open` | `open` | | `null` | Force the details popup open or closed. |
 
 ### Getters
 
 These properties are read-only.
 
-| Property | Type | Description |
+| Name | Type | Description |
 |----------|------|-------------|
 | `gamut` | `string` | The id of the current gamut (e.g. `srgb`). |
+
+### CSS variables
+
+| Name | Type | Description |
+|----------|---------------|-------------|
+| `--details-style` | `compact` &#124; `normal` (default) | |
+| `--transparency-grid` | `<image>` | Gradient used as a background for transparent parts of the swatch. |
+| `--transparency-cell-size` | `<length>` | The size of the cells of the transparency gradient. |
+| `--transparcency-background` | `<color>` | The background color of the transparency gradient. |
+| `--transparency-darkness` | `<percentage>` | The opacity of the black color used for dark parts of the transparency gradient. |
+
+### Parts
+
+| Name | Description |
+|------|-------------|
+| `swatch` | The swatch used to render the color. |
+| `details` | Wrapper around all non-swatch content (color name, info, etc) |
+| `color-wrapper` | Wrapper around the color name itself |
+| `gamut` | Gamut indicator |
+| `info` | Any info generateed by the `info` attribute |
 
 ### Events
 
