@@ -124,8 +124,8 @@ const Self = class ColorSwatch extends NudeElement {
 					this._el.colorWrapper.after(this._el.info);
 				}
 
-				coords = this.data.filter(item => !item.hasOwnProperty("ΔE"));
-				deltaE = this.data.find(item => item.hasOwnProperty("ΔE"))?.ΔE;
+				coords = this.info.filter(item => !item.hasOwnProperty("ΔE"));
+				deltaE = this.info.find(item => item.hasOwnProperty("ΔE"))?.ΔE;
 			}
 
 			if (coords.length) {
@@ -191,7 +191,7 @@ const Self = class ColorSwatch extends NudeElement {
 			}
 
 			if (dataHTML.length) {
-				this._el.data.innerHTML = dataHTML.join("\n");
+				this._el.info.innerHTML = dataHTML.join("\n");
 			}
 		}
 	}
