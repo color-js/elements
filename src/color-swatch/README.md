@@ -257,7 +257,7 @@ If you don’t, the `<html>` element will be used.
 | `info` | `info` | `string` | - | Comma-separated list of coords of the current color to be shown. |
 | `value` | `value` | `string` | - | The current value of the swatch. |
 | `size` | - | `large` | - | The size of the swatch. Currently, it is used only to make a large swatch. |
-| `vs` | `vs` | `Color` &#124; `string` | - | The second color to use when calculating the difference (delta) with the current color. |
+| `vs` | `vs` | `Color` &#124; `string` | - | The second color to use when calculating the difference (delta) and contrast with the current color. |
 | `property` | `property` | `string` | - | CSS property to bind to. |
 | `scope` | `scope` | `string` | `:root` | CSS selector to use as the scope for the specified CSS property. |
 | `gamuts` | `gamuts` | `string` | `srgb, p3, rec2020: P3+, prophoto: PP` | Comma-separated list of gamuts to be used by the gamut indicator. |
