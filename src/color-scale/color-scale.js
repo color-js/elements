@@ -75,7 +75,7 @@ const Self = class ColorScale extends NudeElement {
 			if (this.info) {
 				swatch.info = this.info;
 
-				// Deltas don't make sense without coords
+				// Deltas and contrast don't make sense without coords
 				if (this.vs) {
 					// If there is a vs color, use it as the reference for the deltas
 					swatch.vs = this.vs;
