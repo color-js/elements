@@ -63,7 +63,7 @@ Reactivity:
 | Attribute | Property | Property type | Default value | Description |
 |-----------|----------|---------------|---------------|-------------|
 | `x` | `x` | `string` | `null` | The coord to plot on the X axis, if any |
-| `y` | `x` | `string` | `"oklch.l"` | The coord to plot on the Y axis, if any |
+| `y` | `y` | `string` | `"oklch.l"` | The coord to plot on the Y axis, if any |
 
 ### Events
 
