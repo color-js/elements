@@ -2,7 +2,9 @@ import "../channel-slider/channel-slider.js";
 import "../color-swatch/color-swatch.js";
 import NudeElement from "../../node_modules/nude-element/src/Element.js";
 import * as dom from "../common/dom.js";
-import Color from "../common/color.js";
+// See https://bugs.webkit.org/show_bug.cgi?id=242740
+import ColorJS from "../common/color.js";
+const Color = await ColorJS;
 
 const Self = class ColorPicker extends NudeElement {
 	static tagName = "color-picker";

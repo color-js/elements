@@ -1,6 +1,9 @@
 import "../color-slider/color-slider.js";
 import * as dom from "../common/dom.js";
-import Color from "../common/color.js";
+// See https://bugs.webkit.org/show_bug.cgi?id=242740
+import ColorJS from "../common/color.js";
+const Color = await ColorJS;
+
 import NudeElement from "../../node_modules/nude-element/src/Element.js";
 import { getStep } from "../common/util.js";
 

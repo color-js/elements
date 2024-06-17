@@ -9,6 +9,6 @@ catch (e) {
 	specifier = "https://colorjs.io/dist/color.js";
 }
 
-let Color = await import(specifier).then(module => module.default);
+let Color = import(specifier).then(module => module.default);
 
 export default Color;
