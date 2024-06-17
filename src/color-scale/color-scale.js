@@ -73,6 +73,19 @@ const Self = class ColorScale extends NudeElement {
 			swatch.textContent = name;
 			if (this.info) {
 				swatch.info = this.info;
+
+				if (this.vs && !["previous", "next"].includes(this.vs)) {
+					// If there is a vs color, use it as the reference for the deltas
+					swatch.vs = this.vs;
+				}
+				else if (this.vs === "previous" && i > 0) {
+					// Otherwise, use the previous color
+					swatch.vs = colors[i - 1].color;
+				}
+				else if (this.vs === "next" && i < colors.length - 1) {
+					// Or the next color
+					swatch.vs = colors[i + 1].color;
+				}
 			}
 			i++;
 		}
@@ -155,6 +168,15 @@ const Self = class ColorScale extends NudeElement {
 			additionalDependencies: ["info"],
 		},
 		info: {},
+		vs: {
+			parse (value) {
+				if (value instanceof Color || value === "previous" || value === "next" || value === null || value === undefined) {
+					return value;
+				}
+
+				return new Color(value);
+			},
+		},
 	};
 }
 

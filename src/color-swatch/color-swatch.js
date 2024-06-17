@@ -78,7 +78,7 @@ const Self = class ColorSwatch extends NudeElement {
 						part: "gamut",
 						exportparts: "label: gamutLabel",
 						gamuts: this.gamuts,
-						color: this.color
+						color: this.color,
 					});
 
 					this.shadowRoot.append(this._el.gamutIndicator);
@@ -116,27 +116,103 @@ const Self = class ColorSwatch extends NudeElement {
 			this.style.setProperty("--color", colorString);
 		}
 
-		if (name === "info") {
-			if (!this.info.length) {
-				return;
+		if (name === "info" || name === "vs") {
+			let infoHTML = [];
+			let coords = [];
+			let other = []; // DeltaE and contrast
+
+			if (this.info.length || this.vs) {
+				this._el.info ??= Object.assign(document.createElement("dl"), {part: "info"});
+				if (!this._el.info.parentNode) {
+					this._el.colorWrapper.after(this._el.info);
+				}
+
+				for (let item of this.info) {
+					let [label, data] = Object.entries(item)[0];
+					if (label === "deltaE" || label === "contrast") {
+						let method = label;
+						let algorithm = data.replace(/(^deltaE)|(\s+contrast$)/, "");
+						label = algorithm;
+
+						if (method === "deltaE") {
+							label = "ΔE " + label;
+						}
+
+						other.push({method, label, algorithm});
+					}
+					else {
+						// Color coord
+						coords.push([label, data]);
+					}
+				}
 			}
 
-			this._el.info ??= Object.assign(document.createElement("dl"), {part: "info"});
-			if (!this._el.info.parentNode) {
-				this._el.colorWrapper.after(this._el.info);
+			if (coords.length) {
+				for (let [label, channel] of coords) {
+					let value = this.color.get(channel);
+
+					let deltaString;
+					if (this.vs) {
+						let vsValue = this.vs.get(channel);
+
+						let hasDelta = typeof value === "number" && !Number.isNaN(value) &&
+						               typeof vsValue === "number" && !Number.isNaN(vsValue);
+						if (hasDelta) {
+							let delta;
+
+							let {space, index} = Color.Space.resolveCoord(channel);
+							let spaceCoord = Object.values(space.coords)[index];
+
+							let isAngle = spaceCoord.type === "angle";
+							if (isAngle) {
+								// Constrain angles (shorter arc)
+								[value, vsValue] = [value, vsValue].map(v => ((v % 360) + 360) % 360);
+								let angleDiff = vsValue - value;
+								if (angleDiff > 180) {
+									value += 360;
+								}
+								else if (angleDiff < -180) {
+									vsValue += 360;
+								}
+
+								delta = value - vsValue;
+							}
+							else {
+								delta = (value - vsValue) / value * 100;
+							}
+
+							delta = Number(delta.toPrecision(isAngle ? 4 : 2));
+							if (delta !== 0) {
+								let sign = delta > 0 ? "+" : "";
+								let className = delta > 0 ? "positive" : "negative";
+								deltaString = `<dd class="deltaE ${ className }">(${ sign }${ delta }${ !isAngle ? "%" : ""})</dd>`;
+							}
+						}
+					}
+
+					value = typeof value === "number" ? Number(value.toPrecision(4)) : value;
+					let html = `<dt>${ label }</dt><dd>${ value }</dd>`;
+					if (deltaString) {
+						html += deltaString;
+					}
+
+					infoHTML.push(`<div class="info">${ html }</div>`);
+				}
 			}
 
-			let info = [];
-			for (let coord of this.info) {
-				let [label, channel] = Object.entries(coord)[0];
-
-				let value = this.color.get(channel);
-				value = typeof value === "number" ? Number(value.toPrecision(4)) : value;
-
-				info.push(`<div class="coord"><dt>${ label }</dt><dd>${ value }</dd></div>`);
+			if (this.vs) {
+				for (let {label, algorithm, method} of other) {
+					if (algorithm) {
+						let value = this.color[method](this.vs, algorithm);
+						value = typeof value === "number" ? Number(value.toPrecision(4)) : value;
+						infoHTML.push(`<div class="info"><dt>${ label ?? algorithm }</dt><dd>${ value }</dd></div>`);
+					}
+				}
 			}
 
-			this._el.info.innerHTML = info.join("\n");
+			if (infoHTML.length) {
+				this._el.info.innerHTML = infoHTML.join("\n");
+			}
 		}
 	}
 
@@ -156,7 +232,7 @@ const Self = class ColorSwatch extends NudeElement {
 			},
 			reflect: {
 				from: "color",
-			}
+			},
 		},
 		color: {
 			type: Color,
@@ -177,7 +253,17 @@ const Self = class ColorSwatch extends NudeElement {
 				is: Array,
 				values: {
 					is: Object,
-					defaultKey: (coord, i) => Color.Space.resolveCoord(coord)?.name,
+					defaultKey: (coord, i) => {
+						if (coord.includes(".")) {
+							return Color.Space.resolveCoord(coord)?.name;
+						}
+						else if (coord.startsWith("deltaE")) {
+							return "deltaE";
+						}
+						else if (coord.endsWith("contrast")) {
+							return "contrast";
+						}
+					},
 				},
 			},
 			default: [],
@@ -188,7 +274,11 @@ const Self = class ColorSwatch extends NudeElement {
 		},
 		size: {},
 		open: {},
-	}
+		vs: {
+			type: Color,
+			dependencies: ["color"],
+		},
+	};
 
 	static events = {
 		colorchange: {
@@ -198,7 +288,7 @@ const Self = class ColorSwatch extends NudeElement {
 			propchange: "value",
 		},
 	};
-}
+};
 
 customElements.define(Self.tagName, Self);
 
