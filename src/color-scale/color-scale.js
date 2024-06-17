@@ -23,8 +23,6 @@ const Self = class ColorScale extends NudeElement {
 			slot: this.shadowRoot.querySelector("slot"),
 			swatches: this.shadowRoot.getElementById("swatches"),
 		};
-
-		this.#hasVs = this.hasAttribute("vs");
 	}
 
 	connectedCallback() {
@@ -47,7 +45,6 @@ const Self = class ColorScale extends NudeElement {
 		}
 	}
 
-	#hasVs;
 	#swatches = [];
 
 	render () {
@@ -77,14 +74,17 @@ const Self = class ColorScale extends NudeElement {
 			if (this.info) {
 				swatch.info = this.info;
 
-				// Deltas and contrast don't make sense without coords
-				if (this.vs) {
+				if (this.vs && !["previous", "next"].includes(this.vs)) {
 					// If there is a vs color, use it as the reference for the deltas
 					swatch.vs = this.vs;
 				}
-				else if (this.#hasVs && i > 0) {
+				else if (this.vs === "previous" && i > 0) {
 					// Otherwise, use the previous color
 					swatch.vs = colors[i - 1].color;
+				}
+				else if (this.vs === "next" && i < colors.length - 1) {
+					// Or the next color
+					swatch.vs = colors[i + 1].color;
 				}
 			}
 			i++;
@@ -169,7 +169,13 @@ const Self = class ColorScale extends NudeElement {
 		},
 		info: {},
 		vs: {
-			type: Color,
+			parse (value) {
+				if (value instanceof Color || value === "previous" || value === "next" || value === null || value === undefined) {
+					return value;
+				}
+
+				return new Color(value);
+			},
 		},
 	};
 }
