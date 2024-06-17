@@ -79,7 +79,7 @@ slot {
 		display: grid;
 		grid-template-columns: subgrid;
 
-		.data {
+		.info {
 			display: contents;
 
 			dd:not(.deltaE, :has(~ dd)) {
@@ -88,7 +88,7 @@ slot {
 		}
 	}
 
-	.data {
+	.info {
 		display: flex;
 		gap: .2em;
 

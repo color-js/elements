@@ -114,9 +114,9 @@ const Self = class ColorSwatch extends NudeElement {
 		}
 
 		if (name === "info" || name === "vs") {
-			let dataHTML = [];
+			let infoHTML = [];
 			let coords = [];
-			let deltaE; // DeltaE algorithm
+			let other = []; // DeltaE and contrast
 
 			if (this.info.length || this.vs) {
 				this._el.info ??= Object.assign(document.createElement("dl"), {part: "info"});
@@ -124,13 +124,28 @@ const Self = class ColorSwatch extends NudeElement {
 					this._el.colorWrapper.after(this._el.info);
 				}
 
-				coords = this.info.filter(item => !item.hasOwnProperty("ΔE"));
-				deltaE = this.info.find(item => item.hasOwnProperty("ΔE"))?.ΔE;
+				for (let item of this.info) {
+					let [label, data] = Object.entries(item)[0];
+					if (label === "deltaE" || label === "contrast") {
+						let method = label;
+						let algorithm = data.replace(/(^deltaE)|(\s+contrast$)/, "");
+						label = algorithm;
+
+						if (method === "deltaE") {
+							label = "ΔE " + label;
+						}
+
+						other.push({method, label, algorithm});
+					}
+					else {
+						// Color coord
+						coords.push([label, data]);
+					}
+				}
 			}
 
 			if (coords.length) {
-				for (let coord of coords) {
-					let [label, channel] = Object.entries(coord)[0];
+				for (let [label, channel] of coords) {
 					let value = this.color.get(channel);
 
 					let deltaString;
@@ -178,20 +193,22 @@ const Self = class ColorSwatch extends NudeElement {
 						html += deltaString;
 					}
 
-					dataHTML.push(`<div class="data">${ html }</div>`);
+					infoHTML.push(`<div class="info">${ html }</div>`);
 				}
 			}
 
 			if (this.vs) {
-				let value = this.color.deltaE(this.vs, deltaE);
-				value = typeof value === "number" ? Number(value.toPrecision(4)) : value;
-				if (value !== 0) {
-					dataHTML.push(`<div class="data"><dt>ΔE</dt><dd>${ value }</dd></div>`);
+				for (let {label, algorithm, method} of other) {
+					if (algorithm) {
+						let value = this.color[method](this.vs, algorithm);
+						value = typeof value === "number" ? Number(value.toPrecision(4)) : value;
+						infoHTML.push(`<div class="info"><dt>${ label ?? algorithm }</dt><dd>${ value }</dd></div>`);
+					}
 				}
 			}
 
-			if (dataHTML.length) {
-				this._el.info.innerHTML = dataHTML.join("\n");
+			if (infoHTML.length) {
+				this._el.info.innerHTML = infoHTML.join("\n");
 			}
 		}
 	}
@@ -233,7 +250,17 @@ const Self = class ColorSwatch extends NudeElement {
 				is: Array,
 				values: {
 					is: Object,
-					defaultKey: (coord, i) => Color.Space.resolveCoord(coord)?.name,
+					defaultKey: (coord, i) => {
+						if (coord.includes(".")) {
+							return Color.Space.resolveCoord(coord)?.name;
+						}
+						else if (coord.startsWith("deltaE")) {
+							return "deltaE";
+						}
+						else if (coord.endsWith("contrast")) {
+							return "contrast";
+						}
+					},
 				},
 			},
 			default: [],
