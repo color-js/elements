@@ -31,10 +31,11 @@ const Self = class ColorSwatch extends NudeElement {
 			</div>
 		`;
 
-		this._el = {};
-		this._el.wrapper = this.shadowRoot.querySelector("#wrapper");
-		this._el.colorWrapper = this.shadowRoot.querySelector("[part=color-wrapper]");
-		this._el.slot = this.shadowRoot.querySelector("slot:not([name])");
+		this._el = {
+			wrapper: this.shadowRoot.querySelector("#wrapper"),
+			colorWrapper: this.shadowRoot.querySelector("[part=color-wrapper]"),
+			slot: this.shadowRoot.querySelector("slot:not([name])"),
+		};
 
 		this.#updateStatic();
 		this._el.slot.addEventListener("slotchange", evt => this.#updateStatic());
@@ -141,6 +142,8 @@ const Self = class ColorSwatch extends NudeElement {
 	}
 
 	static props = {
+		size: {},
+		open: {},
 		gamuts: {
 			default: "srgb, p3, rec2020: P3+, prophoto: PP",
 		},
@@ -186,8 +189,6 @@ const Self = class ColorSwatch extends NudeElement {
 			},
 			dependencies: ["color"],
 		},
-		size: {},
-		open: {},
 	}
 
 	static events = {
