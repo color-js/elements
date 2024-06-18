@@ -157,7 +157,7 @@ slot {
 	}
 }
 
-[part="color-wrapper"] {
+[part="color"] {
 	display: flex;
 	gap: .2em;
 }
