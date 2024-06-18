@@ -73,6 +73,9 @@
 	container-name: chart;
 	container-type: inline-size;
 
+	&:hover ~ #y_axis {
+		z-index: -1;
+	}
 }
 
 #chart {
