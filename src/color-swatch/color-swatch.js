@@ -153,6 +153,10 @@ const Self = class ColorSwatch extends NudeElement {
 		value: {
 			type: String,
 			default () {
+				if (this.props.color !== undefined) {
+					return this.color;
+				}
+
 				if (this._el.input) {
 					return this._el.input.value;
 				}
@@ -160,21 +164,32 @@ const Self = class ColorSwatch extends NudeElement {
 				// Children that are not assigned to another slot
 				return [...this.childNodes].filter(n => !n.slot).map(n => n.textContent).join("").trim();
 			},
+			changed (change) {
+				if (change.source === "property") {
+					delete this.props.color;
+				}
+			},
 			reflect: {
 				from: true,
 			},
 		},
 		color: {
 			type: Color,
-			get () {
-				if (!this.value) {
+			defaultProp: "value",
+			parse (value) {
+				if (!value) {
 					return null;
 				}
 
-				return Color.get(this.value);
+				return Color.get(value);
 			},
-			set (value) {
-				this.value = Color.get(value)?.display();
+			stringify (value) {
+				return Color.get(value)?.display();
+			},
+			changed (change) {
+				if (change.source === "property") {
+					delete this.props.value;
+				}
 			},
 			reflect: false,
 		},
