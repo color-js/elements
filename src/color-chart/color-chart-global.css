@@ -74,6 +74,9 @@ color-chart > color-scale {
 			/* if delta y is negative, this needs to rotate the other way */
 			rotate: calc(-1 * var(--delta-y-sign) * var(--angle));
 			background: linear-gradient(to right, var(--color), var(--next-color));
+
+			/* Don't show points tooltips on hovering the line */
+			pointer-events: none;
 		}
 	}
 
