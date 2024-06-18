@@ -76,9 +76,9 @@ You can also use `open="false"` to force it to be closed regardless of interacti
 </div>
 ```
 
-### The `color` attribute
+### The `value` attribute
 
-You can provide the color via the `color` attribute,
+You can provide the color via the `value` attribute,
 which can be more convenient when you have slotted content.
 
 In that case, the content of the element is merely presentational
@@ -98,14 +98,14 @@ If you don’t specify any content, no text will be shown.
 <td>
 
 ```html
-<color-swatch color="oklch(70% 0.25 138)" size="large">red</color-swatch>
+<color-swatch value="oklch(70% 0.25 138)" size="large">red</color-swatch>
 ```
 
 </td>
 <td>
 
 ```html
-<color-swatch color="oklch(70% 0.25 138)" size="large">
+<color-swatch value="oklch(70% 0.25 138)" size="large">
 	<input />
 </color-swatch>
 ```
@@ -121,7 +121,7 @@ You can also use this as a property when creating color swatches dynamically:
 <div id="future_swatch_container"></div>
 <script>
 let swatch = document.createElement("color-swatch");
-swatch.color = "oklch(65% 0.15 210)";
+swatch.value = "oklch(65% 0.15 210)";
 swatch.setAttribute("size", "large");
 swatch.textContent = "Turquoise";
 future_swatch_container.append(swatch);

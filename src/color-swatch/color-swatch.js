@@ -161,8 +161,8 @@ const Self = class ColorSwatch extends NudeElement {
 				return [...this.childNodes].filter(n => !n.slot).map(n => n.textContent).join("").trim();
 			},
 			reflect: {
-				from: "color",
-			}
+				from: true,
+			},
 		},
 		color: {
 			type: Color,
