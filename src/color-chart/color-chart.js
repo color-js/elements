@@ -122,7 +122,7 @@ const Self = class ColorChart extends NudeElement {
 			ret.colors[index] = color = color.to(this.space);
 			ret.swatches.set(color, swatch);
 
-			let x = Number(name.match(/\d+$/)?.[0] ?? index);
+			let x = Number(name.match(/-?\d*\.?\d+$/)?.[0] ?? index);
 			let y = color.get(this.y);
 
 			ret.x.values.set(color, x);
