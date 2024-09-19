@@ -91,3 +91,9 @@ color-chart > color-scale {
 		padding: .2em;
 	}
 }
+
+color-chart:has(> color-scale:hover) {
+	> color-scale:not(:hover) {
+		opacity: .4;
+	}
+}
