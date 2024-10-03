@@ -26,6 +26,12 @@ color-swatch {
 		grid-row: 1 / span 2;
 		display: grid;
 		grid-template-rows: subgrid;
+		/*
+		  Container queries don't play well together with subgrid in Chrome 129.
+		  See https://issues.chromium.org/issues/369331413
+		  This is a workaround to avoid the issue until the new Chrome version is released.
+		*/
+		contain: inline-size layout;
 
 		&::part(swatch) {
 			grid-row: 1;

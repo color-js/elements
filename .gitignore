@@ -14,6 +14,6 @@ index.html
 _build/filters.js
 _includes/partials/_nav.njk
 _includes/page.njk
-_data/eleventyComputed.js
+data/eleventyComputed.js
 _includes/plain.njk
 _build/eleventy-original.js
