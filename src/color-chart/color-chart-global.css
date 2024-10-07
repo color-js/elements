@@ -78,11 +78,7 @@ color-chart > color-scale {
 		}
 	}
 
-	&::part(info) {
-		display: none;
-		background: white;
-		position: absolute;
-	}
+	&::part(info) {}
 
 	&::part(swatch) {
 		min-block-size: 0;
