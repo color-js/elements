@@ -71,8 +71,7 @@
 
 #chart-container {
 	container-name: chart;
-	container-type: inline-size;
-
+	container-type: size;
 }
 
 #chart {
