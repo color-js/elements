@@ -88,6 +88,15 @@
 }
 
 ::slotted(color-scale) {
-	display: contents !important;
 	--details-style: compact;
+
+	/*
+	  We want color scales to be easy to style: one can hide them, lower their opacity, etc.
+	  At the same time, we don't want their containers to mess up with other chart parts.
+	  For example, we don't want color scales to get the hover styles when one moves the cursor to the top left part of the chart,
+	  where all the color scale containers reside. So, we need to shrink them.
+	*/
+	display: block;
+	width: 0;
+	height: 0;
 }
