@@ -23,8 +23,6 @@
 }
 
 color-chart > color-scale {
-	display: contents;
-
 	--extent-x: calc(var(--max-x) - var(--min-x));
 	--extent-y: calc(var(--max-y) - var(--min-y));
 
