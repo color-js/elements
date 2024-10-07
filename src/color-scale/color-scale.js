@@ -31,6 +31,7 @@ const Self = class ColorScale extends NudeElement {
 	}
 
 	disconnectedCallback() {
+		this.#swatches = [];
 		this._el.swatches.removeEventListener("colorchange", this, {capture: true});
 	}
 
@@ -84,10 +85,6 @@ const Self = class ColorScale extends NudeElement {
 			// Remove but keep them around in this.#swatches
 			[...this._el.swatches.children].slice(colorCount).forEach(child => child.remove());
 		}
-	}
-
-	disconnectedCallback () {
-		this.#swatches = [];
 	}
 
 	static props = {
