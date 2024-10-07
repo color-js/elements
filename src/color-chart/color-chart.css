@@ -13,6 +13,7 @@
 
 	.ticks {
 		flex: 1;
+		display: grid;
 
 		> * {
 			font-size: 60%;
@@ -30,7 +31,6 @@
 	grid-row: 2;
 
 	.ticks {
-		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
 
 		> * {
@@ -46,13 +46,11 @@
 	grid-row: 1;
 
 	.ticks {
-		display: flex;
-		flex-flow: column;
+		align-items: end;
 
 		> * {
-			flex: 1;
 			padding-inline-end: .5em;
-			translate: 0 -.5lh;
+			translate: 0 .5lh;
 		}
 	}
 
