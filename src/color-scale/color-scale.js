@@ -25,17 +25,17 @@ const Self = class ColorScale extends NudeElement {
 		};
 	}
 
-	connectedCallback() {
+	connectedCallback () {
 		super.connectedCallback?.();
 		this._el.swatches.addEventListener("colorchange", this, {capture: true});
 	}
 
-	disconnectedCallback() {
+	disconnectedCallback () {
 		this.#swatches = [];
 		this._el.swatches.removeEventListener("colorchange", this, {capture: true});
 	}
 
-	handleEvent(event) {
+	handleEvent (event) {
 		this.dispatchEvent(new event.constructor(event.type, {...event}));
 	}
 
@@ -153,7 +153,7 @@ const Self = class ColorScale extends NudeElement {
 		},
 		info: {},
 	};
-}
+};
 
 customElements.define(Self.tagName, Self);
 

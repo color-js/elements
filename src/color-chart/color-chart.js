@@ -41,7 +41,7 @@ const Self = class ColorChart extends NudeElement {
 		};
 	}
 
-	connectedCallback() {
+	connectedCallback () {
 		super.connectedCallback();
 		customElements.whenDefined("color-scale").then(() => this.render());
 	}
@@ -112,7 +112,7 @@ const Self = class ColorChart extends NudeElement {
 			x: {min: Infinity, max: -Infinity, values: new WeakMap() },
 			y: {min: Infinity, max: -Infinity, values: new WeakMap()},
 			colors: colorScale.computedColors?.slice() ?? [],
-		}
+		};
 
 		colorScale.style.setProperty("--color-count", ret.colors.length);
 
@@ -172,12 +172,12 @@ const Self = class ColorChart extends NudeElement {
 
 	static props = {
 		y: {
-			default: "oklch.l"
+			default: "oklch.l",
 		},
 
 		yResolved: {
 			get () {
-				return Color.Space.resolveCoord(this.y, "oklch")
+				return Color.Space.resolveCoord(this.y, "oklch");
 			},
 			// rawProp: "coord",
 		},
@@ -189,7 +189,7 @@ const Self = class ColorChart extends NudeElement {
 			},
 		},
 	};
-}
+};
 
 customElements.define(Self.tagName, Self);
 

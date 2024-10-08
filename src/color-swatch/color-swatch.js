@@ -82,7 +82,7 @@ const Self = class ColorSwatch extends NudeElement {
 						part: "gamut",
 						exportparts: "label: gamutLabel",
 						gamuts: this.gamuts,
-						color: this.color
+						color: this.color,
 					});
 
 					this.shadowRoot.append(this._el.gamutIndicator);
@@ -192,7 +192,7 @@ const Self = class ColorSwatch extends NudeElement {
 			},
 			dependencies: ["color"],
 		},
-	}
+	};
 
 	static events = {
 		colorchange: {
@@ -202,7 +202,7 @@ const Self = class ColorSwatch extends NudeElement {
 			propchange: "value",
 		},
 	};
-}
+};
 
 customElements.define(Self.tagName, Self);
 

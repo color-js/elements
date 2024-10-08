@@ -6,7 +6,7 @@ import * as filters from "./filters-extra.js";
 
 let data = {
 	"permalink": "{{ page.filePathStem | replace('README', '') | replace('index', '') }}/index.html",
-	"body_classes": "cn-ignore"
+	"body_classes": "cn-ignore",
 };
 
 let md = markdownIt({

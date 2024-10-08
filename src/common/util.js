@@ -9,7 +9,7 @@ export function defineInstanceProperty (
 	{writable = true, configurable = true, enumerable = false} = {}) {
 	let setter = function (value) {
 		Object.defineProperty(this, name, { value, writable, configurable, enumerable });
-	}
+	};
 	Object.defineProperty(Class.prototype, name, {
 		get () {
 			let value = getValue.call(this, this);
@@ -32,7 +32,7 @@ export function defineLazyProperty (object, name, options) {
 
 	let setter = function (value) {
 		Object.defineProperty(this, name, { value, writable, configurable, enumerable });
-	}
+	};
 	Object.defineProperty(object, name, {
 		get () {
 			let value = get.call(this);
@@ -65,7 +65,7 @@ export function defineComputed (Class, computed = Class.computed) {
 	if (dependencies.size > 0) {
 		let _propChangedCallback = Class.prototype.propChangedCallback;
 
-		Class.prototype.propChangedCallback = function(name, change) {
+		Class.prototype.propChangedCallback = function (name, change) {
 			if (dependencies.has(name)) {
 				for (let prop of dependencies.get(name)) {
 					this[prop] = computed[prop].get.call(this, this);
@@ -73,7 +73,7 @@ export function defineComputed (Class, computed = Class.computed) {
 			}
 
 			_propChangedCallback?.call(this, name, change);
-		}
+		};
 	}
 }
 
