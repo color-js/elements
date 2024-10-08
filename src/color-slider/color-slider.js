@@ -35,14 +35,14 @@ const Self = class ColorSlider extends NudeElement {
 		};
 	}
 
-	connectedCallback() {
+	connectedCallback () {
 		super.connectedCallback?.();
 
 		this._el.slider.addEventListener("input", this);
 		this._el.spinner.addEventListener("input", this);
 	}
 
-	disconnectedCallback() {
+	disconnectedCallback () {
 		this._el.slider.removeEventListener("input", this);
 		this._el.spinner.removeEventListener("input", this);
 	}
@@ -160,7 +160,7 @@ const Self = class ColorSlider extends NudeElement {
 		let stops = this.stops;
 		let tessellated = [];
 
-		for (let i=1; i<stops.length; i++) {
+		for (let i = 1; i < stops.length; i++) {
 			let start = stops[i - 1];
 			let end = stops[i];
 			let steps = start.steps(end, { space: this.space, ...options });
@@ -234,7 +234,7 @@ const Self = class ColorSlider extends NudeElement {
 				is: Array,
 				values: Color,
 			},
-			default: el => []
+			default: el => [],
 		},
 		defaultValue: {
 			type: Number,
@@ -281,7 +281,7 @@ const Self = class ColorSlider extends NudeElement {
 				let stops = this.stops;
 				let scales = [];
 
-				for (let i=1; i<stops.length; i++) {
+				for (let i = 1; i < stops.length; i++) {
 					let start = stops[i - 1];
 					let end = stops[i];
 					let range = start.range(end, { space: this.space });
@@ -302,7 +302,7 @@ const Self = class ColorSlider extends NudeElement {
 		change: {
 			from () {
 				return this._el.slider;
-			}
+			},
 		},
 		valuechange: {
 			propchange: "value",
@@ -318,7 +318,7 @@ const Self = class ColorSlider extends NudeElement {
 		valueProp: "value",
 		changeEvent: "valuechange",
 	};
-}
+};
 
 customElements.define(Self.tagName, Self);
 

@@ -29,17 +29,17 @@ export default class ChannelSlider extends NudeElement {
 		this._el.slot = this.shadowRoot.querySelector("slot");
 	}
 
-	connectedCallback() {
+	connectedCallback () {
 		super.connectedCallback?.();
 
 		this._el.slider.addEventListener("input", this);
 	}
 
-	disconnectedCallback() {
+	disconnectedCallback () {
 		this._el.slider.removeEventListener("input", this);
 	}
 
-	handleEvent(event) {
+	handleEvent (event) {
 		if (event.type === "input") {
 			this.value = event.target.value;
 		}
@@ -91,7 +91,7 @@ export default class ChannelSlider extends NudeElement {
 	propChangedCallback ({name, prop, detail: change}) {
 		if (["space", "min", "max", "step", "value", "defaultValue"].includes(name)) {
 			prop.applyChange(this._el.slider, change);
-		};
+		}
 
 		if (name === "defaultColor" || name === "space" || name === "channel" || name === "min" || name === "max") {
 			this._el.slider.stops = this.stops;
@@ -153,7 +153,7 @@ export default class ChannelSlider extends NudeElement {
 				}
 
 				return channelSpec;
-			}
+			},
 		},
 		refRange: {
 			get () {
@@ -225,18 +225,18 @@ export default class ChannelSlider extends NudeElement {
 				this.value = this.defaultValue;
 			},
 		},
-	}
+	};
 
 	static events = {
 		change: {
 			from () {
 				return this._el.slider;
-			}
+			},
 		},
 		input: {
 			from () {
 				return this._el.slider;
-			}
+			},
 		},
 		valuechange: {
 			propchange: "value",

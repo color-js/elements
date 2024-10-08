@@ -29,18 +29,18 @@ const Self = class ColorPicker extends NudeElement {
 		this._el = dom.named(this);
 	}
 
-	connectedCallback() {
+	connectedCallback () {
 		super.connectedCallback?.();
 		this._el.sliders.addEventListener("input", this);
 		this._el.swatch.addEventListener("input", this);
 	}
 
-	disconnectedCallback() {
+	disconnectedCallback () {
 		this._el.sliders.removeEventListener("input", this);
 		this._el.swatch.removeEventListener("input", this);
 	}
 
-	handleEvent(event) {
+	handleEvent (event) {
 		let source = event.target;
 
 		if (this._el.sliders.contains(source)) {
@@ -140,18 +140,18 @@ const Self = class ColorPicker extends NudeElement {
 		change: {
 			from () {
 				return [this._el.sliders, this._el.swatch];
-			}
+			},
 		},
 		input: {
 			from () {
 				return [this._el.sliders, this._el.swatch];
-			}
+			},
 		},
 		colorchange: {
 			propchange: "color",
 		},
 	};
-}
+};
 
 customElements.define(Self.tagName, Self);
 
