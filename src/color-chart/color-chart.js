@@ -43,11 +43,11 @@ const Self = class ColorChart extends NudeElement {
 
 	connectedCallback () {
 		super.connectedCallback();
-		this._el.slot.addEventListener("colorschange", this, {capture: true});
+		this._el.chart.addEventListener("colorschange", this, {capture: true});
 	}
 
 	disconnectedCallback () {
-		this._el.slot.removeEventListener("colorschange", this, {capture: true});
+		this._el.chart.removeEventListener("colorschange", this, {capture: true});
 	}
 
 	handleEvent (evt) {
