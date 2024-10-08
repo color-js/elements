@@ -120,7 +120,7 @@ const Self = class ColorSwatch extends NudeElement {
 			this.style.setProperty("--color", colorString);
 		}
 
-		if (name === "info") {
+		if (name === "info" || name === "color") {
 			if (!this.info.length) {
 				return;
 			}
