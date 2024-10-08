@@ -43,11 +43,15 @@ const Self = class ColorChart extends NudeElement {
 
 	connectedCallback () {
 		super.connectedCallback();
-		customElements.whenDefined("color-scale").then(() => this.render());
+		this._el.slot.addEventListener("colorschange", this, {capture: true});
+	}
+
+	disconnectedCallback () {
+		this._el.slot.removeEventListener("colorschange", this, {capture: true});
 	}
 
 	handleEvent (evt) {
-		if (evt.target.tagName === "COLOR-SCALE" && evt.name === "computedColors") {
+		if (evt.target.tagName === "COLOR-SCALE" && evt.name === "colors") {
 			this.render(evt);
 		}
 	}
