@@ -51,7 +51,7 @@ const Self = class ColorChart extends NudeElement {
 	}
 
 	handleEvent (evt) {
-		if (evt.target.tagName === "COLOR-SCALE" && evt.name === "colors") {
+		if (evt.target.tagName === "COLOR-SCALE" && evt.name === "computedColors") {
 			this.render(evt);
 		}
 	}
