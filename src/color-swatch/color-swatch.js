@@ -1,15 +1,10 @@
-// See https://bugs.webkit.org/show_bug.cgi?id=242740
-import ColorJS from "../common/color.js";
-const Color = await ColorJS;
-
-import NudeElement from "../../node_modules/nude-element/src/Element.js";
+import ColorElement from "../common/color-element.js";
 import "../gamut-badge/gamut-badge.js";
 
 let importIncrementable;
 
-const Self = class ColorSwatch extends NudeElement {
+const Self = class ColorSwatch extends ColorElement {
 	static tagName = "color-swatch";
-	static Color = Color;
 
 	constructor () {
 		super();
@@ -165,16 +160,18 @@ const Self = class ColorSwatch extends NudeElement {
 			},
 		},
 		color: {
-			type: Color,
+			get type () {
+				return ColorSwatch.Color;
+			},
 			get () {
 				if (!this.value) {
 					return null;
 				}
 
-				return Color.get(this.value);
+				return ColorSwatch.Color.get(this.value);
 			},
 			set (value) {
-				this.value = Color.get(value)?.display();
+				this.value = ColorSwatch.Color.get(value)?.display();
 			},
 			reflect: false,
 		},
@@ -183,7 +180,7 @@ const Self = class ColorSwatch extends NudeElement {
 				is: Array,
 				values: {
 					is: Object,
-					defaultKey: (coord, i) => Color.Space.resolveCoord(coord)?.name,
+					defaultKey: (coord, i) => ColorSwatch.Color.Space.resolveCoord(coord)?.name,
 				},
 			},
 			default: [],

@@ -1,5 +1,5 @@
-import "../color-swatch/color-swatch.js";
 import ColorElement from "../common/color-element.js";
+import "../color-swatch/color-swatch.js";
 
 const Self = class ColorScale extends ColorElement {
 	static tagName = "color-scale";
