@@ -7,6 +7,7 @@ Use at your own risk, the API can change at any point.
 
 - [`<color-picker>`](src/color-picker/)
 - [`<color-scale>`](src/color-scale)
+- [`<color-chart>`](src/color-chart/)
 - [`<color-slider>`](src/color-slider/)
 - [`<channel-slider>`](src/channel-slider/)
 - [`<color-swatch>`](src/color-swatch/)
@@ -15,7 +16,6 @@ Use at your own risk, the API can change at any point.
 
 ### Upcoming:
 
-- `<color-chart>`
 - `<color-plane>`
 
 ## Usage
