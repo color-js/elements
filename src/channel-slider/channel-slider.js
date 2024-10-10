@@ -1,22 +1,16 @@
 import "../color-slider/color-slider.js";
 import * as dom from "../common/dom.js";
-// See https://bugs.webkit.org/show_bug.cgi?id=242740
-import ColorJS from "../common/color.js";
-const Color = await ColorJS;
-
-import NudeElement from "../../node_modules/nude-element/src/Element.js";
+import ColorElement from "../common/color-element.js";
 import { getStep } from "../common/util.js";
 
-export const tagName = "channel-slider";
-
-export default class ChannelSlider extends NudeElement {
-	static Color = Color;
+const Self = class ChannelSlider extends ColorElement {
+	static tagName = "channel-slider";
 
 	constructor () {
 		super();
 
 		this.attachShadow({mode: "open"});
-		let styleURL = new URL(`./${tagName}.css`, import.meta.url);
+		let styleURL = new URL(`./${Self.tagName}.css`, import.meta.url);
 		this.shadowRoot.innerHTML = `
 			<style>@import url("${ styleURL }")</style>
 			<label class="color-slider-label" part="label">
@@ -112,13 +106,13 @@ export default class ChannelSlider extends NudeElement {
 		space: {
 			default: "oklch",
 			parse (value) {
-				if (value instanceof Color.Space || value === null || value === undefined) {
+				if (value instanceof Self.Color.Space || value === null || value === undefined) {
 					return value;
 				}
 
 				value += "";
 
-				return Color.Space.get(value);
+				return Self.Color.Space.get(value);
 			},
 			stringify (value) {
 				return value?.id;
@@ -196,7 +190,9 @@ export default class ChannelSlider extends NudeElement {
 		},
 
 		defaultColor: {
-			type: Color,
+			get type () {
+				return Self.Color;
+			},
 			convert (color) {
 				return color.to(this.space);
 			},
@@ -208,14 +204,16 @@ export default class ChannelSlider extends NudeElement {
 					coords.push((range[0] + range[1]) / 2);
 				}
 
-				return new Color(this.space, coords);
+				return new Self.Color(this.space, coords);
 			},
 			reflect: {
 				from: "color",
 			},
 		},
 		color: {
-			type: Color,
+			get type () {
+				return Self.Color;
+			},
 			get () {
 				return this.colorAt(this.value);
 			},
@@ -252,6 +250,8 @@ export default class ChannelSlider extends NudeElement {
 		valueProp: "value",
 		changeEvent: "valuechange",
 	};
-}
+};
 
-customElements.define(tagName, ChannelSlider);
+customElements.define(Self.tagName, Self);
+
+export default Self;

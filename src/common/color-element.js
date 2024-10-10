@@ -4,5 +4,6 @@ import ColorJS from "./color.js";
 const Color = await ColorJS;
 
 export default class ColorElement extends NudeElement {
+	// TODO make lazy
 	static Color = Color;
 }

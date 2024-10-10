@@ -1,11 +1,7 @@
-import NudeElement from "../../node_modules/nude-element/src/Element.js";
-// See https://bugs.webkit.org/show_bug.cgi?id=242740
-import ColorJS from "../common/color.js";
-const Color = await ColorJS;
+import ColorElement from "../common/color-element.js";
 
-const Self = class GamutBadge extends NudeElement {
+const Self = class GamutBadge extends ColorElement {
 	static tagName = "gamut-badge";
-	static Color = Color;
 	#label;
 
 	constructor () {
@@ -49,7 +45,9 @@ const Self = class GamutBadge extends NudeElement {
 
 	static props = {
 		color: {
-			type: Color,
+			get type () {
+				return Self.Color;
+			},
 		},
 		gamuts: {
 			type: Array,
@@ -75,7 +73,7 @@ const Self = class GamutBadge extends NudeElement {
 
 					gamut = gamut.trim().split(/\s*:\s*/);
 					let id = gamut[0];
-					let label = gamut[1] ?? Color.spaces[id]?.name ?? id;
+					let label = gamut[1] ?? Self.Color.spaces[id]?.name ?? id;
 					return {id, label, level};
 				});
 

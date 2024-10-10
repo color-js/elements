@@ -1,9 +1,4 @@
-
-// See https://bugs.webkit.org/show_bug.cgi?id=242740
-import ColorJS from "../common/color.js";
-const Color = await ColorJS;
-
-import NudeElement from "../../node_modules/nude-element/src/Element.js";
+import ColorElement from "../common/color-element.js";
 import { getStep } from "../common/util.js";
 
 let supports = {
@@ -11,9 +6,8 @@ let supports = {
 	fieldSizing: CSS?.supports("field-sizing", "content"),
 };
 
-const Self = class ColorSlider extends NudeElement {
+const Self = class ColorSlider extends ColorElement {
 	static tagName = "color-slider";
-	static Color = Color;
 
 	constructor () {
 		super();
@@ -232,7 +226,9 @@ const Self = class ColorSlider extends NudeElement {
 		stops: {
 			type: {
 				is: Array,
-				values: Color,
+				get values () {
+					return Self.Color;
+				},
 			},
 			default: el => [],
 		},
@@ -256,13 +252,13 @@ const Self = class ColorSlider extends NudeElement {
 				return this.stops[0]?.space ?? "oklab";
 			},
 			parse (value) {
-				if (value instanceof Color.Space || value === null || value === undefined) {
+				if (value instanceof Self.Color.Space || value === null || value === undefined) {
 					return value;
 				}
 
 				value += "";
 
-				return Color.Space.get(value);
+				return Self.Color.Space.get(value);
 			},
 			stringify (value) {
 				return value?.id;
@@ -270,7 +266,9 @@ const Self = class ColorSlider extends NudeElement {
 		},
 
 		color: {
-			type: Color,
+			get type () {
+				return Self.Color;
+			},
 			get () {
 				return this.colorAt(this.value);
 			},

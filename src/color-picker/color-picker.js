@@ -1,14 +1,10 @@
 import "../channel-slider/channel-slider.js";
 import "../color-swatch/color-swatch.js";
-import NudeElement from "../../node_modules/nude-element/src/Element.js";
+import ColorElement from "../common/color-element.js";
 import * as dom from "../common/dom.js";
-// See https://bugs.webkit.org/show_bug.cgi?id=242740
-import ColorJS from "../common/color.js";
-const Color = await ColorJS;
 
-const Self = class ColorPicker extends NudeElement {
+const Self = class ColorPicker extends ColorElement {
 	static tagName = "color-picker";
-	static Color = Color;
 
 	constructor () {
 		super();
@@ -46,7 +42,7 @@ const Self = class ColorPicker extends NudeElement {
 		if (this._el.sliders.contains(source)) {
 			// From sliders
 			let coords = [...this._el.sliders.children].map(el => el.value);
-			this.color = new Color(this.space, coords);
+			this.color = new Self.Color(this.space, coords);
 		}
 		else if (this._el.swatch.contains(source)) {
 			// From swatch
@@ -96,13 +92,13 @@ const Self = class ColorPicker extends NudeElement {
 		space: {
 			default: "oklch",
 			parse (value) {
-				if (value instanceof Color.Space || value === null || value === undefined) {
+				if (value instanceof Self.Color.Space || value === null || value === undefined) {
 					return value;
 				}
 
 				value += "";
 
-				return Color.Space.get(value);
+				return Self.Color.Space.get(value);
 			},
 			stringify (value) {
 				return value?.id;
@@ -110,7 +106,9 @@ const Self = class ColorPicker extends NudeElement {
 		},
 
 		defaultColor: {
-			type: Color,
+			get type () {
+				return Self.Color;
+			},
 			convert (color) {
 				return color.to(this.space);
 			},
@@ -122,7 +120,7 @@ const Self = class ColorPicker extends NudeElement {
 					coords.push((range[0] + range[1]) / 2);
 				}
 
-				return new Color(this.space, coords);
+				return new Self.Color(this.space, coords);
 			},
 			reflect: {
 				from: "color",
@@ -130,7 +128,9 @@ const Self = class ColorPicker extends NudeElement {
 		},
 
 		color: {
-			type: Color,
+			get type () {
+				return Self.Color;
+			},
 			defaultProp: "defaultColor",
 			reflect: false,
 		},

@@ -1,11 +1,6 @@
-// See https://bugs.webkit.org/show_bug.cgi?id=242740
-import ColorJS from "../common/color.js";
-const Color = await ColorJS;
+import ColorElement from "../common/color-element.js";
 
-import NudeElement from "../../node_modules/nude-element/src/Element.js";
-
-const Self = class ColorInline extends NudeElement {
-	static Color = Color;
+const Self = class ColorInline extends ColorElement {
 	static tagName = "color-inline";
 
 	constructor () {
@@ -59,14 +54,16 @@ const Self = class ColorInline extends NudeElement {
 			},
 		},
 		color: {
-			type: Color,
+			get type () {
+				return Self.Color;
+			},
 			defaultProp: "value",
 			parse (value) {
 				if (!value) {
 					return null;
 				}
 
-				return Color.get(value);
+				return Self.Color.get(value);
 			},
 			reflect: false,
 		},
