@@ -178,6 +178,12 @@ const Self = class ColorChart extends NudeElement {
 			// Re-render swatches
 			this.render(evt);
 		}
+
+		if (name === "info") {
+			for (let colorScale of this.children) {
+				colorScale.info = this.info;
+			}
+		}
 	}
 
 	static props = {
@@ -198,6 +204,8 @@ const Self = class ColorChart extends NudeElement {
 				return this.yResolved.space;
 			},
 		},
+
+		info: {},
 	};
 };
 
