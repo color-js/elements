@@ -17,3 +17,4 @@ _includes/page.njk
 data/eleventyComputed.js
 _includes/plain.njk
 _build/eleventy-original.js
+package-lock.json
