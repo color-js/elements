@@ -43,7 +43,11 @@ const Self = class ColorChart extends NudeElement {
 
 	connectedCallback () {
 		super.connectedCallback();
-		customElements.whenDefined("color-scale").then(() => this.render());
+		this._el.chart.addEventListener("colorschange", this, {capture: true});
+	}
+
+	disconnectedCallback () {
+		this._el.chart.removeEventListener("colorschange", this, {capture: true});
 	}
 
 	handleEvent (evt) {
@@ -154,6 +158,12 @@ const Self = class ColorChart extends NudeElement {
 			}
 
 			prevColor = swatch;
+		}
+
+		if (prevColor !== undefined) {
+			// When we update colors, and we have fewer colors than before,
+			// we need to make sure the last swatch is not connected to the non-existent next swatch
+			["--next-color", "--next-x", "--next-y"].forEach(prop => prevColor.style.removeProperty(prop));
 		}
 
 		this.series.set(colorScale, ret);

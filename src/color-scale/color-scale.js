@@ -153,6 +153,12 @@ const Self = class ColorScale extends NudeElement {
 		},
 		info: {},
 	};
+
+	static events = {
+		colorschange: {
+			propchange: "computedColors",
+		},
+	};
 };
 
 customElements.define(Self.tagName, Self);
