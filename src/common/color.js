@@ -1,6 +1,7 @@
 let specifier;
 
 try {
+	// Is already loaded? (e.g. via an import map, or if we're in Node)
 	import.meta.resolve("colorjs.io");
 	specifier = "colorjs.io";
 }

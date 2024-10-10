@@ -1,12 +1,8 @@
 import "../color-swatch/color-swatch.js";
-import NudeElement from "../../node_modules/nude-element/src/Element.js";
-// See https://bugs.webkit.org/show_bug.cgi?id=242740
-import ColorJS from "../common/color.js";
-const Color = await ColorJS;
+import ColorElement from "../common/color-element.js";
 
-const Self = class ColorScale extends NudeElement {
+const Self = class ColorScale extends ColorElement {
 	static tagName = "color-scale";
-	static Color = Color;
 
 	constructor () {
 		super();
@@ -91,13 +87,14 @@ const Self = class ColorScale extends NudeElement {
 		space: {
 			default: "oklch",
 			parse (value) {
-				if (value instanceof Color.Space || value === null || value === undefined) {
+				let ColorSpace = ColorScale.Color.Space;
+				if (value instanceof ColorSpace || value === null || value === undefined) {
 					return value;
 				}
 
 				value += "";
 
-				return Color.Space.get(value);
+				return ColorSpace.get(value);
 			},
 			stringify (value) {
 				return value?.id;
@@ -106,7 +103,10 @@ const Self = class ColorScale extends NudeElement {
 		colors: {
 			type: {
 				is: Object,
-				values: Color,
+				// Support overriding the Color object
+				get values () {
+					return ColorScale.Color;
+				},
 				defaultKey: (v, i) => v,
 			},
 		},
@@ -129,7 +129,7 @@ const Self = class ColorScale extends NudeElement {
 					for (let i = 1; i < colors.length; i++) {
 						let start = colors[i - 1];
 						let end = colors[i];
-						let steps = Color.steps(start.color, end.color, { space: this.space, steps: this.steps + 2 });
+						let steps = ColorScale.Color.steps(start.color, end.color, { space: this.space, steps: this.steps + 2 });
 
 						steps.shift();
 						steps.pop();
