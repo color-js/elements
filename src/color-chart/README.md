@@ -39,6 +39,16 @@ You can also specify a whole label, and if it contains a number, the number will
 
 _(Colors courtesy of Tailwind)_
 
+### Plotting hues { #hues}
+
+Hues will be shifted as needed to produce a better result:
+
+```html
+<color-chart y="hsl.h" info="L: oklch.l, C: oklch.c, H: oklch.h">
+	<color-scale colors="hsl(5 50% 50%), hsl(355 50% 50%), hsl(10 50% 50%), hsl(-10 50% 50%)"></color-scale>
+</color-chart>
+```
+
 ### The `info` attribute
 
 You can use the `info` attribute to show information about the color scale points. Currently, the only type of information supported is color coords (in any color space), but more will be added in the future.

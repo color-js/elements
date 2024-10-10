@@ -115,6 +115,12 @@ const Self = class ColorChart extends ColorElement {
 		};
 
 		colorScale.style.setProperty("--color-count", ret.colors.length);
+		let yAll = ret.colors.map(({color}) => color.to(this.space).get(this.y));
+
+		if (this.yResolved.type === "angle") {
+			// First, normalize
+			yAll = normalizeAngles(yAll);
+		}
 
 		let index = 0;
 		for (let {name, color} of ret.colors) {
@@ -123,7 +129,7 @@ const Self = class ColorChart extends ColorElement {
 			ret.swatches.set(color, swatch);
 
 			let x = Number(name.match(/-?\d*\.?\d+$/)?.[0] ?? index);
-			let y = color.get(this.y);
+			let y = yAll[index];
 
 			ret.x.values.set(color, x);
 			ret.y.values.set(color, y);
@@ -232,4 +238,32 @@ function getAxis (min, max, initialSteps) {
 		ret[prop] = +ret[prop].toPrecision(15);
 	}
 	return ret;
+}
+
+function normalizeAngles (angles) {
+	// First, normalize
+	angles = angles.map(h => ((h % 360) + 360) % 360);
+
+	// Remove top and bottom 25% and find average
+	let averageHue = angles.toSorted((a, b) => a - b).slice(angles.length / 4, -angles.length / 4).reduce((a, b) => a + b, 0) / angles.length;
+
+	angles = angles.map((h, i) => {
+		let prevHue = angles[i - 1];
+		let delta = h - prevHue;
+
+		if (Math.abs(delta) > 180) {
+			// Offset hue to minimize difference in the direction that brings it closer to the average
+			let delta = h - averageHue;
+			if (delta < -180) {
+				h += 360;
+			}
+			else if (delta > 180) {
+				h -= 360;
+			}
+		}
+
+		return h;
+	});
+
+	return angles;
 }
