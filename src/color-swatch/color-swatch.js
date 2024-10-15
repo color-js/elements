@@ -125,8 +125,17 @@ const Self = class ColorSwatch extends ColorElement {
 				this._el.colorWrapper.after(this._el.info);
 			}
 
-			let html = Object.entries(this.colorInfo).map(([key, value]) => `<div class="coord"><dt>${ this.infoLabels[key] }</dt><dd>${ value }</dd></div>`);
-			this._el.info.innerHTML = html.join("\n");
+			let info = [];
+			for (let coord of this.info) {
+				let [label, channel] = Object.entries(coord)[0];
+
+				let value = this.color.get(channel);
+				value = typeof value === "number" ? Number(value.toPrecision(4)) : value;
+
+				info.push(`<div class="coord"><dt>${ label }</dt><dd>${ value }</dd></div>`);
+			}
+
+			this._el.info.innerHTML = info.join("\n");
 		}
 	}
 
@@ -179,17 +188,6 @@ const Self = class ColorSwatch extends ColorElement {
 				from: true,
 			},
 			dependencies: ["color"],
-		},
-		infoLabels: {
-			get () {
-				let labels = {};
-				for (let data of this.info) {
-					let [label, channel] = Object.entries(data)[0];
-					labels[channel] = label;
-				}
-
-				return labels;
-			},
 		},
 		colorInfo: {
 			get () {
