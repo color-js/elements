@@ -199,9 +199,7 @@ const Self = class ColorSwatch extends ColorElement {
 				for (let coord of this.info) {
 					let [label, channel] = Object.entries(coord)[0];
 
-					let value = this.color.get(channel);
-					value = typeof value === "number" ? Number(value.toPrecision(4)) : value;
-					ret[channel] = value;
+					ret[channel] = this.color.get(channel);
 				}
 
 				return ret;
