@@ -130,6 +130,10 @@ const Self = class ColorSwatch extends ColorElement {
 				let [label, channel] = Object.entries(coord)[0];
 
 				let value = this.colorInfo[channel];
+				if (value === undefined) {
+					continue;
+				}
+
 				value = typeof value === "number" ? Number(value.toPrecision(4)) : value;
 
 				info.push(`<div class="coord"><dt>${ label }</dt><dd>${ value }</dd></div>`);
@@ -198,8 +202,12 @@ const Self = class ColorSwatch extends ColorElement {
 				let ret = {};
 				for (let coord of this.info) {
 					let [label, channel] = Object.entries(coord)[0];
-
-					ret[channel] = this.color.get(channel);
+					try {
+						ret[channel] = this.color.get(channel);
+					}
+					catch (e) {
+						console.error(e);
+					}
 				}
 
 				return ret;
