@@ -347,7 +347,6 @@ const Self = class ColorSwatch extends ColorElement {
 			get type () {
 				return Self.Color;
 			},
-			dependencies: ["color"],
 		},
 		vsInfo: {
 			get () {
