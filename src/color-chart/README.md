@@ -10,7 +10,7 @@ Display lists of colors as a scatterplot or line chart.
 
 ### Basic usage
 
-Plotting a single color scale:
+Plotting a single color scale (buggy order, see [#103](https://github.com/color-js/elements/issues/103)):
 
 ```html
 <color-chart y="oklch.l">
