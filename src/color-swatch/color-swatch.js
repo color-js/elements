@@ -160,7 +160,7 @@ const Self = class ColorSwatch extends ColorElement {
 
 					delta = isAngle ? delta : delta / rawValue * 100;
 					delta = typeof delta === "number" ? Number(delta.toPrecision(4)) : delta;
-					ret += `<dd class="deltaE ${className}">(${ sign }${ delta }${ !isAngle ? "%" : ""})</dd>`;
+					ret += `<dd class="delta ${className}">(${ sign }${ delta }${ !isAngle ? "%" : ""})</dd>`;
 				}
 
 				ret += "</div>";
