@@ -7,8 +7,8 @@
 		0 0 / calc(2 * var(--_transparency-cell-size)) calc(2 * var(--_transparency-cell-size))
 		content-box border-box var(--_transparency-background)
 	);
-	--_positive-deltaE-color: var(--positive-deltaE-color, hsl(120, 80%, 25%));
-	--_negative-deltaE-color: var(--negative-deltaE-color, hsl(0, 85%, 40%));
+	--_positive-delta-color: var(--positive-delta-color, hsl(120, 80%, 25%));
+	--_negative-delta-color: var(--negative-delta-color, hsl(0, 85%, 40%));
 
 	position: relative;
 	display: inline-flex;
@@ -82,7 +82,7 @@ slot {
 		.data {
 			display: contents;
 
-			dd:not(.deltaE, :has(~ dd)) {
+			dd:not(.delta, :has(~ dd)) {
 				grid-column: span 2;
 			}
 		}
@@ -97,15 +97,15 @@ slot {
 			font-weight: bold;
 			font-variant-numeric: tabular-nums;
 
-			&.deltaE {
-				color: var(--_deltaE-color);
+			&.delta {
+				color: var(--_delta-color);
 
 				&.positive {
-					--_deltaE-color: var(--_positive-deltaE-color);
+					--_delta-color: var(--_positive-delta-color);
 				}
 
 				&.negative {
-					--_deltaE-color: var(--_negative-deltaE-color);
+					--_delta-color: var(--_negative-delta-color);
 				}
 			}
 		}
