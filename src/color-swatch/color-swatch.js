@@ -115,8 +115,8 @@ const Self = class ColorSwatch extends ColorElement {
 			this.style.setProperty("--color", colorString);
 		}
 
-		if (name === "info" || name === "color") {
-			if (!this.info.length) {
+		if (name === "colorInfo") {
+			if (!this.colorInfo) {
 				return;
 			}
 
@@ -129,7 +129,11 @@ const Self = class ColorSwatch extends ColorElement {
 			for (let coord of this.info) {
 				let [label, channel] = Object.entries(coord)[0];
 
-				let value = this.color.get(channel);
+				let value = this.colorInfo[channel];
+				if (value === undefined) {
+					continue;
+				}
+
 				value = typeof value === "number" ? Number(value.toPrecision(4)) : value;
 
 				info.push(`<div class="coord"><dt>${ label }</dt><dd>${ value }</dd></div>`);
@@ -188,6 +192,26 @@ const Self = class ColorSwatch extends ColorElement {
 				from: true,
 			},
 			dependencies: ["color"],
+		},
+		colorInfo: {
+			get () {
+				if (!this.info.length || !this.color) {
+					return;
+				}
+
+				let ret = {};
+				for (let coord of this.info) {
+					let [label, channel] = Object.entries(coord)[0];
+					try {
+						ret[channel] = this.color.get(channel);
+					}
+					catch (e) {
+						console.error(e);
+					}
+				}
+
+				return ret;
+			},
 		},
 	};
 
