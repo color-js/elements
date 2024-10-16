@@ -189,7 +189,7 @@ If used as a property and is not defined via the `label` attribute, its value is
 ### The `info` attribute
 
 You can use the `info` attribute to show information about the color.
-Currently, the only type of information supported is color coords (in any color space), but more will be added in the future.
+Currently, the types of information supported are color coords (in any color space), the difference (delta) and contrast between the current color and another one (specified via [the `vs` attribute](./#the-vs-attribute)).
 
 ```html
 <color-swatch info="oklch.l, oklch.c, oklch.h" size="large">
@@ -211,6 +211,25 @@ The `info` attribute plays quite nicely with the `--details-style: compact` styl
 
 ```html
 <color-swatch size="large" info="oklch.l, oklch.c, oklch.h" style="--details-style: compact">oklch(70% 0.25 138)</color-swatch>
+```
+
+### The `vs` attribute
+
+You can calculate the difference (delta) and contrast between the current color and another one.
+To do so, provide the new color via the `vs` attribute and specify one of the [supported algorithms for calculating the difference](https://colorjs.io/docs/color-difference#delta-e-e) ([contrast](https://colorjs.io/docs/contrast) or both) between two colors inside [the `info` attribute](./#the-info-attribute).
+
+```html
+<color-swatch info="deltaE2000, WCAG21: WCAG21 contrast" vs="white" size="large">
+	oklch(70% 0.25 138)
+</color-swatch>
+```
+
+If color coords are also specified, the deltas on a coord-by-coord basis will be shown:
+
+```html
+<color-swatch info="oklch.l, oklch.c, oklch.h, deltaE2000, WCAG21: WCAG21 contrast" vs="white" size="large">
+	oklch(70% 0.25 138)
+</color-swatch>
 ```
 
 ### With slot content
@@ -316,6 +335,7 @@ If you don’t, the `<html>` element will be used.
 | `value` | `value` | `string` | - | The current value of the swatch. |
 | `label` | `label` | `string` | - | The label of the swatch (e.g., color name). Defaults to the element text content. |
 | `size` | - | `large` | - | The size of the swatch. Currently, it is used only to make a large swatch. |
+| `vs` | `vs` | `Color` &#124; `string` | - | The second color to use when calculating the difference (delta) and contrast with the current color. |
 | `property` | `property` | `string` | - | CSS property to bind to. |
 | `scope` | `scope` | `string` | `:root` | CSS selector to use as the scope for the specified CSS property. |
 | `gamuts` | `gamuts` | `string` | `srgb, p3, rec2020: P3+, prophoto: PP` | Comma-separated list of gamuts to be used by the gamut indicator. |
@@ -338,6 +358,8 @@ These properties are read-only.
 | `--transparency-cell-size` | `<length>` | The size of the cells of the transparency gradient. |
 | `--transparcency-background` | `<color>` | The background color of the transparency gradient. |
 | `--transparency-darkness` | `<percentage>` | The opacity of the black color used for dark parts of the transparency gradient. |
+| `--positive-deltaE-color` | `<color>` | The color used for the positive color difference in color coords. |
+| `--negative-deltaE-color` | `<color>` | The color used for the negative color difference in color coords. |
 
 ### Parts
 
