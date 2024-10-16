@@ -358,8 +358,8 @@ These properties are read-only.
 | `--transparency-cell-size` | `<length>` | The size of the cells of the transparency gradient. |
 | `--transparcency-background` | `<color>` | The background color of the transparency gradient. |
 | `--transparency-darkness` | `<percentage>` | The opacity of the black color used for dark parts of the transparency gradient. |
-| `--positive-deltaE-color` | `<color>` | The color used for the positive color difference in color coords. |
-| `--negative-deltaE-color` | `<color>` | The color used for the negative color difference in color coords. |
+| `--positive-delta-color` | `<color>` | The color used for the positive color difference in color coords. |
+| `--negative-delta-color` | `<color>` | The color used for the negative color difference in color coords. |
 
 ### Parts
 
