@@ -109,6 +109,7 @@ const Self = class ColorChart extends ColorElement {
 		let ret = {
 			element: colorScale,
 			swatches: new WeakMap(),
+			labels: new WeakMap(),
 			x: {min: Infinity, max: -Infinity, values: new WeakMap() },
 			y: {min: Infinity, max: -Infinity, values: new WeakMap()},
 			colors: colorScale.computedColors?.slice() ?? [],
@@ -128,7 +129,22 @@ const Self = class ColorChart extends ColorElement {
 			ret.colors[index] = color = color.to(this.space);
 			ret.swatches.set(color, swatch);
 
-			let x = Number(name.match(/-?\d*\.?\d+$/)?.[0] ?? index);
+			let x = name.match(/-?\d*\.?\d+$/)?.[0];
+			if (x !== undefined) {
+				// Transform `Label / X-coord` to `Label`
+				// (there should be at least one space before and after the slash so the number is treated as an X-coord)
+				let regexp = new RegExp(`\\s+\\/\\s+${x}$`);
+				name = name.replace(regexp, "").trim();
+				swatch.textContent = name;
+
+				x = Number(x);
+			}
+			else {
+				x = index;
+			}
+
+			ret.labels.set(color, name);
+
 			let y = yAll[index];
 
 			ret.x.values.set(color, x);
@@ -184,6 +200,16 @@ const Self = class ColorChart extends ColorElement {
 		if (name === "info") {
 			for (let colorScale of this.children) {
 				colorScale.info = this.info;
+
+				// Update color labels
+				// (they might have changed to the default color name after the info object was set/updated)
+				let scale = this.series.get(colorScale);
+				if (scale) {
+					for (let color of scale.colors) {
+						let swatch = scale.swatches.get(color);
+						swatch.textContent = scale.labels.get(color);
+					}
+				}
 			}
 		}
 	}
