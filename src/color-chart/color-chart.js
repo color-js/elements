@@ -133,8 +133,11 @@ const Self = class ColorChart extends ColorElement {
 			if (x !== undefined) {
 				// Transform `Label / X-coord` to `Label`
 				// (there should be at least one space before and after the slash so the number is treated as an X-coord)
-				let regexp = new RegExp(`\\s+\\/\\s+${x}$`);
-				name = name.replace(regexp, "").trim();
+				let label = name.slice(0, -x.length).trim();
+				if (label.endsWith("/")) {
+					name = label.slice(0, -1).trim();
+				}
+
 				swatch.textContent = name;
 
 				x = Number(x);
