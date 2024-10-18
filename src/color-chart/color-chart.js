@@ -129,7 +129,7 @@ const Self = class ColorChart extends ColorElement {
 			ret.colors[index] = color = color.to(this.space);
 			ret.swatches.set(color, swatch);
 
-			let x = name.match(/-?\d*\.?\d+$/)?.[0];
+			let x = name.match(/(?:^|\s)-?\d*\.?\d+$/)?.[0];
 			if (x !== undefined) {
 				// Transform `Label / X-coord` to `Label`
 				// (there should be at least one space before and after the slash so the number is treated as an X-coord)
