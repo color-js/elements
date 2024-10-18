@@ -219,7 +219,7 @@ You can calculate the difference (delta) and contrast between the current color 
 To do so, provide the new color via the `vs` attribute and specify one of the [supported algorithms for calculating the difference](https://colorjs.io/docs/color-difference#delta-e-e) ([contrast](https://colorjs.io/docs/contrast) or both) between two colors inside [the `info` attribute](./#the-info-attribute).
 
 ```html
-<color-swatch info="deltaE2000, WCAG21: WCAG21 contrast" vs="white" size="large">
+<color-swatch info="deltaE.2000, WCAG21: contrast.WCAG21" vs="white" size="large">
 	oklch(70% 0.25 138)
 </color-swatch>
 ```
@@ -227,7 +227,7 @@ To do so, provide the new color via the `vs` attribute and specify one of the [s
 If color coords are also specified, the deltas on a coord-by-coord basis will be shown:
 
 ```html
-<color-swatch info="oklch.l, oklch.c, oklch.h, deltaE2000, WCAG21: WCAG21 contrast" vs="white" size="large">
+<color-swatch info="oklch.l, oklch.c, oklch.h, deltaE.2000, WCAG21: contrast.WCAG21" vs="white" size="large">
 	oklch(70% 0.25 138)
 </color-swatch>
 ```
