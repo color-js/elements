@@ -198,12 +198,13 @@ const Self = class ColorSwatch extends ColorElement {
 				values: {
 					is: Object,
 					defaultKey: (value, i) => {
-						if (value.includes(".")) {
-							return Self.Color.Space.resolveCoord(value)?.name;
+						if (value.startsWith("deltaE.") || value.startsWith("contrast.")) {
+							let [method, algorithm] = value.split(".");
+							let label = method === "deltaE" ? `ΔE ${algorithm}` : `${algorithm} Contrast`;
+							return label;
 						}
-						else if (value.startsWith("deltaE")) {
-							let algorithm = value.replace("deltaE", "");
-							return "ΔE " + algorithm;
+						else if (value.includes(".")) {
+							return Self.Color.Space.resolveCoord(value)?.name;
 						}
 						else {
 							return value;
@@ -226,7 +227,7 @@ const Self = class ColorSwatch extends ColorElement {
 				let ret = [];
 				for (let data of this.info) {
 					let [key, value] = Object.entries(data)[0];
-					if (value.includes(".")) {
+					if (value.includes(".") && !value.startsWith("deltaE") && !value.startsWith("contrast")) {
 						ret.push(value);
 					}
 				}
@@ -263,7 +264,7 @@ const Self = class ColorSwatch extends ColorElement {
 				let ret = [];
 				for (let data of this.info) {
 					let [key, value] = Object.entries(data)[0];
-					if (!value.includes(".")) {
+					if (!this.infoCoords.includes(value)) {
 						ret.push(value);
 					}
 				}
@@ -292,7 +293,7 @@ const Self = class ColorSwatch extends ColorElement {
 		},
 		colorDeltas: {
 			get () {
-				if (!this.infoCoordsResolved || !this.vsInfo || !this.infoOther?.some(value => value.startsWith("deltaE"))) {
+				if (!this.infoCoordsResolved || !this.vsInfo) {
 					return;
 				}
 
@@ -343,11 +344,7 @@ const Self = class ColorSwatch extends ColorElement {
 				}
 
 				for (let data of this.infoOther) {
-					let regexp = /(^(?<deltaE>deltaE)(?<deltaE_algorithm>.+))|((?<contrast_algorithm>.+)\s+(?<contrast>contrast)$)/;
-					let { deltaE, deltaE_algorithm, contrast, contrast_algorithm } = regexp.exec(data)?.groups ?? {};
-
-					let method = deltaE || contrast;
-					let algorithm = deltaE_algorithm || contrast_algorithm;
+					let [method, algorithm] = data.split(".");
 
 					if (method && algorithm) {
 						try {
