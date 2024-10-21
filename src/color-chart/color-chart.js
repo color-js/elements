@@ -129,7 +129,12 @@ const Self = class ColorChart extends ColorElement {
 			ret.colors[index] = color = color.to(this.space);
 			ret.swatches.set(color, swatch);
 
-			let x = name.match(/-?\d*\.?\d+$/)?.[0];
+			// It's not always possible to use the last number in the color label as the X-coord;
+			// for example, the number “9” can't be interpreted as the X-coord in the “#90caf9” label.
+			// It might cause bugs with color order (see https://github.com/color-js/elements/issues/103).
+			// We expect the valid X-coord to be the only number in the color label (e.g., 50)
+			// or separated from the previous text with a space (e.g., Red 50 or Red / 50).
+			let x = name.match(/(?:^|\s)-?\d*\.?\d+$/)?.[0];
 			if (x !== undefined) {
 				// Transform `Label / X-coord` to `Label`
 				// (there should be at least one space before and after the slash so the number is treated as an X-coord)
