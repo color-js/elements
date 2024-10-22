@@ -11,7 +11,7 @@ const Self = class ColorPicker extends ColorElement {
 	static shadowTemplate = `
 		<div id="sliders" part="sliders"></div>
 		<slot name="swatch">
-			<color-swatch size="large" id="swatch" part="swatch">
+			<color-swatch size="large" id="swatch" part="swatch" exportparts="swatch: swatch-base, gamut, details, info, color-wrapper">
 				<slot slot="swatch-content"></slot>
 				<input value="oklch(70% 0.25 138)" id="color" />
 			</color-swatch>
