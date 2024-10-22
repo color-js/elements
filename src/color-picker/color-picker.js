@@ -6,22 +6,18 @@ import * as dom from "../common/dom.js";
 const Self = class ColorPicker extends ColorElement {
 	static tagName = "color-picker";
 	static url = import.meta.url;
-
-	constructor () {
-		super();
-
-		this.attachShadow({mode: "open"});
-		let styleURL = new URL(`./${Self.tagName}.css`, import.meta.url);
-		this.shadowRoot.innerHTML = `
-			<style>@import url("${ styleURL }")</style>
-			<div id=sliders></div>
+	static shadowStyle = true;
+	static shadowTemplate = `
+		<div id=sliders></div>
 			<slot name="swatch">
 				<color-swatch size="large" id="swatch" part="swatch">
 					<slot slot="swatch-content"></slot>
 					<input value="oklch(70% 0.25 138)" id="color" />
 				</color-swatch>
-			</slot>
-		`;
+			</slot>`;
+
+	constructor () {
+		super();
 
 		this._el = dom.named(this);
 	}
