@@ -6,15 +6,16 @@ import * as dom from "../common/dom.js";
 const Self = class ColorPicker extends ColorElement {
 	static tagName = "color-picker";
 	static url = import.meta.url;
+	static dependencies = new Set(["channel-slider"]);
 	static shadowStyle = true;
 	static shadowTemplate = `
 		<div id="sliders" part="sliders"></div>
-			<slot name="swatch">
-				<color-swatch size="large" id="swatch" part="swatch">
-					<slot slot="swatch-content"></slot>
-					<input value="oklch(70% 0.25 138)" id="color" />
-				</color-swatch>
-			</slot>`;
+		<slot name="swatch">
+			<color-swatch size="large" id="swatch" part="swatch">
+				<slot slot="swatch-content"></slot>
+				<input value="oklch(70% 0.25 138)" id="color" />
+			</color-swatch>
+		</slot>`;
 
 	constructor () {
 		super();
@@ -64,7 +65,7 @@ const Self = class ColorPicker extends ColorElement {
 					slider.channel = channel;
 				}
 				else {
-					this._el.sliders.insertAdjacentHTML("beforeend", `<channel-slider space="${ this.space.id }" channel="${ channel }"></channel-slider>`);
+					this._el.sliders.insertAdjacentHTML("beforeend", `<channel-slider space="${ this.space.id }" channel="${ channel }" part="channel-slider"></channel-slider>`);
 				}
 			}
 
