@@ -3,18 +3,16 @@ import ColorElement from "../common/color-element.js";
 const Self = class GamutBadge extends ColorElement {
 	static tagName = "gamut-badge";
 	static url = import.meta.url;
+	static shadowStyle = true;
+	static shadowTemplate = `
+		<slot>
+			<span id="label" part="label"></span>
+		</slot>`;
+
 	#label;
 
 	constructor () {
 		super();
-		this.attachShadow({mode: "open"});
-		let styleURL = new URL(`./${ Self.tagName }.css`, import.meta.url);
-		this.shadowRoot.innerHTML = `
-			<style>@import url("${ styleURL }")</style>
-			<slot>
-				<span id="label" part="label"></span>
-			</slot>
-		`;
 
 		if (!this.#label) {
 			this.#label = this.shadowRoot.querySelector("#label");
