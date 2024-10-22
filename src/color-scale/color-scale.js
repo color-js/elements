@@ -4,17 +4,14 @@ import "../color-swatch/color-swatch.js";
 const Self = class ColorScale extends ColorElement {
 	static tagName = "color-scale";
 	static url = import.meta.url;
+	static dependencies = new Set(["color-swatch"]);
+	static shadowStyle = true;
+	static shadowTemplate = `
+		<div id=swatches></div>
+		<slot></slot>`;
 
 	constructor () {
 		super();
-
-		this.attachShadow({mode: "open"});
-		let styleURL = new URL(`./${Self.tagName}.css`, import.meta.url);
-		this.shadowRoot.innerHTML = `
-			<style>@import url("${ styleURL }")</style>
-			<div id=swatches></div>
-			<slot></slot>
-		`;
 
 		this._el = {
 			slot: this.shadowRoot.querySelector("slot"),
