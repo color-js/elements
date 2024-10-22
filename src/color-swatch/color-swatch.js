@@ -6,26 +6,24 @@ let importIncrementable;
 const Self = class ColorSwatch extends ColorElement {
 	static tagName = "color-swatch";
 	static url = import.meta.url;
+	static dependencies = new Set(["gamut-badge"]);
+	static shadowStyle = true;
+	static shadowTemplate = `
+		<slot name="swatch">
+			<div id="swatch" part="swatch">
+				<slot name="swatch-content"></slot>
+			</div>
+		</slot>
+		<div id="wrapper" part="details">
+			<slot name="before"></slot>
+			<div part="color">
+				<slot></slot>
+			</div>
+			<slot name="after"></slot>
+		</div>`;
 
 	constructor () {
 		super();
-		this.attachShadow({mode: "open"});
-		let styleURL = new URL("./color-swatch.css", import.meta.url);
-		this.shadowRoot.innerHTML = `
-			<style>@import url("${ styleURL }")</style>
-			<slot name="swatch">
-				<div id="swatch" part="swatch">
-					<slot name="swatch-content"></slot>
-				</div>
-			</slot>
-			<div id="wrapper" part="details">
-				<slot name="before"></slot>
-				<div part="color">
-					<slot></slot>
-				</div>
-				<slot name="after"></slot>
-			</div>
-		`;
 
 		this._el = {
 			wrapper: this.shadowRoot.querySelector("#wrapper"),
