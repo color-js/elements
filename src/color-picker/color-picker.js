@@ -8,7 +8,7 @@ const Self = class ColorPicker extends ColorElement {
 	static url = import.meta.url;
 	static shadowStyle = true;
 	static shadowTemplate = `
-		<div id=sliders></div>
+		<div id="sliders" part="sliders"></div>
 			<slot name="swatch">
 				<color-swatch size="large" id="swatch" part="swatch">
 					<slot slot="swatch-content"></slot>
