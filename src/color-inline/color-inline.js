@@ -3,16 +3,15 @@ import ColorElement from "../common/color-element.js";
 const Self = class ColorInline extends ColorElement {
 	static tagName = "color-inline";
 	static url = import.meta.url;
-
-	constructor () {
-		super();
-		this.attachShadow({mode: "open"});
-		let styleURL = new URL("./color-inline.css", import.meta.url);
-		this.shadowRoot.innerHTML = `<style>@import url("${ styleURL }");</style>
+	static shadowStyle = true;
+	static shadowTemplate = `
 		<div part="swatch-wrapper">
 			<div id="swatch" part="swatch"></div>
 			<slot></slot>
 		</div>`;
+
+	constructor () {
+		super();
 
 		this._el = {};
 		this._el.swatch = this.shadowRoot.querySelector("#swatch");
