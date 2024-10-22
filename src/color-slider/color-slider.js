@@ -9,20 +9,16 @@ let supports = {
 const Self = class ColorSlider extends ColorElement {
 	static tagName = "color-slider";
 	static url = import.meta.url;
-
-	constructor () {
-		super();
-		this.attachShadow({mode: "open"});
-
-		let styleURL = new URL(`./${this.constructor.tagName}.css`, import.meta.url);
-		this.shadowRoot.innerHTML = `
-			<style>@import url("${ styleURL }")</style>
-			<input type="range" class="color-slider" part="slider" min="0" max="1" step="0.01" />
+	static shadowStyle = true;
+	static shadowTemplate = `
+		<input type="range" class="color-slider" part="slider" min="0" max="1" step="0.01" />
 			<slot name="tooltip" class="slider-tooltip">
 				<input type="number" part="spinner" min="0" max="1" step="0.01" />
 			</slot>
-			<slot></slot>
-			`;
+		<slot></slot>`;
+
+	constructor () {
+		super();
 
 		this._el = {
 			slider: this.shadowRoot.querySelector(".color-slider"),
