@@ -1,4 +1,8 @@
 export async function wait (ms) {
+	if (ms === undefined) {
+		return new Promise(resolve => requestAnimationFrame(resolve));
+	}
+
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
