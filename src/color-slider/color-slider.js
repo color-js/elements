@@ -8,6 +8,7 @@ let supports = {
 
 const Self = class ColorSlider extends ColorElement {
 	static tagName = "color-slider";
+	static url = import.meta.url;
 
 	constructor () {
 		super();

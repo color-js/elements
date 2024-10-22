@@ -3,29 +3,27 @@ import ColorElement from "../common/color-element.js";
 
 const Self = class ColorChart extends ColorElement {
 	static tagName = "color-chart";
+	static url = import.meta.url;
+	static shadowStyle = true;
+	static shadowTemplate = `
+		<div id="chart-container">
+			<div id="chart">
+				<slot></slot>
+			</div>
+		</div>
+		<div class="axis" id="y_axis">
+			<div class="label" part="y label"></div>
+			<div class="ticks" part="y ticks"></div>
+		</div>
+		<div class="axis" id="x_axis">
+			<div class="label" part="x label"></div>
+			<div class="ticks" part="x ticks"></div>
+		</div>`;
+	static dependencies = new Set(["color-scale"]);
 	static globalStyle = new URL("color-chart-global.css", import.meta.url);
 
 	constructor () {
 		super();
-
-		this.attachShadow({mode: "open"});
-		let styleURL = new URL(`./${Self.tagName}.css`, import.meta.url);
-		this.shadowRoot.innerHTML = `
-			<style>@import url("${ styleURL }")</style>
-			<div id="chart-container">
-				<div id="chart">
-					<slot></slot>
-				</div>
-			</div>
-			<div class="axis" id="y_axis">
-				<div class="label" part="y label"></div>
-				<div class="ticks" part="y ticks"></div>
-			</div>
-			<div class="axis" id="x_axis">
-				<div class="label" part="x label"></div>
-				<div class="ticks" part="x ticks"></div>
-			</div>
-		`;
 
 		this._el = {
 			slot:   this.shadowRoot.querySelector("slot"),

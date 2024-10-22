@@ -5,6 +5,7 @@ import { getStep } from "../common/util.js";
 
 const Self = class ChannelSlider extends ColorElement {
 	static tagName = "channel-slider";
+	static url = import.meta.url;
 
 	constructor () {
 		super();

@@ -1,10 +1,11 @@
+import ColorElement from "../common/color-element.js";
 import "../channel-slider/channel-slider.js";
 import "../color-swatch/color-swatch.js";
-import ColorElement from "../common/color-element.js";
 import * as dom from "../common/dom.js";
 
 const Self = class ColorPicker extends ColorElement {
 	static tagName = "color-picker";
+	static url = import.meta.url;
 
 	constructor () {
 		super();

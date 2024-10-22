@@ -2,6 +2,7 @@ import ColorElement from "../common/color-element.js";
 
 const Self = class GamutBadge extends ColorElement {
 	static tagName = "gamut-badge";
+	static url = import.meta.url;
 	#label;
 
 	constructor () {

@@ -3,6 +3,7 @@ import "../color-swatch/color-swatch.js";
 
 const Self = class ColorScale extends ColorElement {
 	static tagName = "color-scale";
+	static url = import.meta.url;
 
 	constructor () {
 		super();

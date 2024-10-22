@@ -5,6 +5,7 @@ let importIncrementable;
 
 const Self = class ColorSwatch extends ColorElement {
 	static tagName = "color-swatch";
+	static url = import.meta.url;
 
 	constructor () {
 		super();

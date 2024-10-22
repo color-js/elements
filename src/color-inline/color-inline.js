@@ -2,6 +2,7 @@ import ColorElement from "../common/color-element.js";
 
 const Self = class ColorInline extends ColorElement {
 	static tagName = "color-inline";
+	static url = import.meta.url;
 
 	constructor () {
 		super();
