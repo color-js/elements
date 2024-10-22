@@ -73,6 +73,8 @@
 }
 
 #chart {
+	overflow: hidden;
+
 	position: relative;
 	border: 1px solid gray;
 	min-height: 100%;

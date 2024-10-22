@@ -114,7 +114,10 @@ const Self = class ColorChart extends ColorElement {
 		};
 
 		colorScale.style.setProperty("--color-count", ret.colors.length);
+
 		let yAll = ret.colors.map(({color}) => color.to(this.space).get(this.y));
+		let yMin = this.ymin === "auto" ? -Infinity : this.ymin;
+		let yMax = this.ymax === "auto" ? Infinity : this.ymax;
 
 		if (this.yResolved.type === "angle") {
 			// First, normalize
@@ -156,10 +159,14 @@ const Self = class ColorChart extends ColorElement {
 			ret.x.values.set(color, x);
 			ret.y.values.set(color, y);
 
-			ret.x.min = Math.min(ret.x.min, x);
-			ret.x.max = Math.max(ret.x.max, x);
-			ret.y.min = Math.min(ret.y.min, y);
-			ret.y.max = Math.max(ret.y.max, y);
+			let outOfRange = (isFinite(yMin) && y < yMin) || (isFinite(yMax) && y > yMax);
+			if (!outOfRange) {
+				// Only swatches that are in range participate in the min/max calculation
+				ret.x.min = Math.min(ret.x.min, x);
+				ret.x.max = Math.max(ret.x.max, x);
+				ret.y.min = Math.min(ret.y.min, y);
+				ret.y.max = Math.max(ret.y.max, y);
+			}
 
 			swatch.style.setProperty("--x", x);
 			swatch.style.setProperty("--y", y);
@@ -198,7 +205,7 @@ const Self = class ColorChart extends ColorElement {
 	propChangedCallback (evt) {
 		let {name, prop, detail: change} = evt;
 
-		if (name === "resolvedX" || name === "yResolved") {
+		if (name === "yResolved" || name === "ymin" || name === "ymax") {
 			// Re-render swatches
 			this.render(evt);
 		}
@@ -230,6 +237,46 @@ const Self = class ColorChart extends ColorElement {
 				return Self.Color.Space.resolveCoord(this.y, "oklch");
 			},
 			// rawProp: "coord",
+		},
+
+		yRange: {
+			get () {
+				return this.yResolved.range ?? this.yResolved.refRange ?? [0, 100];
+			},
+		},
+
+		ymin: {
+			default: "auto",
+			convert (value) {
+				// Is a supported keyword?
+				if (["auto", "coord"].includes(value)) {
+					return value === "coord" ? this.yRange[0] : value;
+				}
+
+				try {
+					return Number(value);
+				}
+				catch (e) {
+					return "auto";
+				}
+			},
+		},
+
+		ymax: {
+			default: "auto",
+			convert (value) {
+				// Is a supported keyword?
+				if (["auto", "coord"].includes(value)) {
+					return value === "coord" ? this.yRange[1] : value;
+				}
+
+				try {
+					return Number(value);
+				}
+				catch (e) {
+					return "auto";
+				}
+			},
 		},
 
 		space: {
@@ -279,7 +326,7 @@ function normalizeAngles (angles) {
 	// Remove top and bottom 25% and find average
 	let averageHue = angles.toSorted((a, b) => a - b).slice(angles.length / 4, -angles.length / 4).reduce((a, b) => a + b, 0) / angles.length;
 
-	for (let i=0; i<angles.length; i++) {
+	for (let i = 0; i < angles.length; i++) {
 		let h = angles[i];
 		let prevHue = angles[i - 1];
 		let delta = h - prevHue;
