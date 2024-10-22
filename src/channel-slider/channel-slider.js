@@ -96,8 +96,6 @@ const Self = class ChannelSlider extends ColorElement {
 		}
 	}
 
-
-
 	get channelName () {
 		return this.channelSpec?.name ?? this.channel;
 	}
@@ -252,6 +250,6 @@ const Self = class ChannelSlider extends ColorElement {
 	};
 };
 
-customElements.define(Self.tagName, Self);
+Self.define();
 
 export default Self;

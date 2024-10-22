@@ -117,6 +117,6 @@ const Self = class GamutBadge extends ColorElement {
 	};
 };
 
-customElements.define(Self.tagName, Self);
+Self.define();
 
 export default Self;

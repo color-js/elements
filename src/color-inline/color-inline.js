@@ -80,6 +80,6 @@ const Self = class ColorInline extends ColorElement {
 };
 
 
-customElements.define(Self.tagName, Self);
+Self.define();
 
 export default Self;

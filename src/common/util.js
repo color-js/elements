@@ -45,3 +45,11 @@ export function pick (obj, properties) {
 
 	return Object.fromEntries(Object.entries(obj).filter(([key]) => properties.includes(key)));
 }
+
+export function getType (value) {
+	if (value === null || value === undefined) {
+		return value + "";
+	}
+
+	return Object.prototype.toString.call(value).slice(8, -1);
+}

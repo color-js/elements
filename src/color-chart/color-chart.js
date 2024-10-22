@@ -245,7 +245,7 @@ const Self = class ColorChart extends ColorElement {
 	};
 };
 
-customElements.define(Self.tagName, Self);
+Self.define();
 
 export default Self;
 

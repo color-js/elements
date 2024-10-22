@@ -153,6 +153,6 @@ const Self = class ColorPicker extends ColorElement {
 	};
 };
 
-customElements.define(Self.tagName, Self);
+Self.define();
 
 export default Self;

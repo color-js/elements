@@ -225,6 +225,6 @@ const Self = class ColorSwatch extends ColorElement {
 	};
 };
 
-customElements.define(Self.tagName, Self);
+Self.define();
 
 export default Self;
