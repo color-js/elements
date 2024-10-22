@@ -6,19 +6,15 @@ import { getStep } from "../common/util.js";
 const Self = class ChannelSlider extends ColorElement {
 	static tagName = "channel-slider";
 	static url = import.meta.url;
+	static shadowStyle = true;
+	static shadowTemplate = `
+		<label class="color-slider-label" part="label">
+			<slot></slot>
+			<color-slider part="color_slider" exportparts="slider" id="slider" tooltip></color-slider>
+		</label>`;
 
 	constructor () {
 		super();
-
-		this.attachShadow({mode: "open"});
-		let styleURL = new URL(`./${Self.tagName}.css`, import.meta.url);
-		this.shadowRoot.innerHTML = `
-			<style>@import url("${ styleURL }")</style>
-			<label class="color-slider-label" part="label">
-				<slot></slot>
-				<color-slider part="color_slider" exportparts="slider" id="slider" tooltip></color-slider>
-			</label>
-		`;
 
 		this._el = dom.named(this);
 		this._el.slot = this.shadowRoot.querySelector("slot");
