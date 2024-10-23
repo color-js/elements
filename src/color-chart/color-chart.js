@@ -116,8 +116,8 @@ const Self = class ColorChart extends ColorElement {
 		colorScale.style.setProperty("--color-count", ret.colors.length);
 
 		let yAll = ret.colors.map(({color}) => color.to(this.space).get(this.y));
-		let yMin = this.ymin === "auto" ? -Infinity : this.ymin;
-		let yMax = this.ymax === "auto" ? Infinity : this.ymax;
+		let yMin = this.yMin === "auto" ? -Infinity : this.yMin;
+		let yMax = this.yMax === "auto" ? Infinity : this.yMax;
 
 		if (this.yResolved.type === "angle") {
 			// First, normalize
@@ -205,7 +205,7 @@ const Self = class ColorChart extends ColorElement {
 	propChangedCallback (evt) {
 		let {name, prop, detail: change} = evt;
 
-		if (name === "yResolved" || name === "ymin" || name === "ymax") {
+		if (name === "yResolved" || name === "yMin" || name === "yMax") {
 			// Re-render swatches
 			this.render(evt);
 		}
@@ -245,7 +245,7 @@ const Self = class ColorChart extends ColorElement {
 			},
 		},
 
-		yΜin: {
+		yMin: {
 			default: "auto",
 			convert (value) {
 				// Is a supported keyword?
@@ -260,9 +260,12 @@ const Self = class ColorChart extends ColorElement {
 					return "auto";
 				}
 			},
+			reflect: {
+				from: "ymin",
+			},
 		},
 
-		yΜax: {
+		yMax: {
 			default: "auto",
 			convert (value) {
 				// Is a supported keyword?
@@ -276,6 +279,9 @@ const Self = class ColorChart extends ColorElement {
 				catch (e) {
 					return "auto";
 				}
+			},
+			reflect: {
+				from: "ymax",
 			},
 		},
 
