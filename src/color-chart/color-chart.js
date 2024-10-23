@@ -245,7 +245,7 @@ const Self = class ColorChart extends ColorElement {
 			},
 		},
 
-		ymin: {
+		yΜin: {
 			default: "auto",
 			convert (value) {
 				// Is a supported keyword?
