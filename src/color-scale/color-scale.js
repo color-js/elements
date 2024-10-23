@@ -114,7 +114,9 @@ const Self = class ColorScale extends ColorElement {
 		},
 		computedColors: {
 			get () {
-				if (!this.colors) {
+				if (!this.colors || typeof this.colors !== "object") {
+					// We need to make sure the colors prop was parsed before we can use it
+					// Why it might not be parsed? If it is set programmatically before the element is fully initialized
 					return null;
 				}
 
