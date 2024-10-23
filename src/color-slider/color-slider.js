@@ -67,7 +67,7 @@ const Self = class ColorSlider extends ColorElement {
 					value = ({ min: 1, max: 100, step: 1 })[name];
 				}
 			}
-			prop.applyChange(this._el.spinner, {...change, value});
+			prop.applyChange(this._el.spinner, {...change, value: +(+value).toPrecision(4)});
 		}
 
 		if (name === "stops") {
