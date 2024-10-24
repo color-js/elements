@@ -89,7 +89,13 @@ const Self = class SpacePicker extends ColorElement {
 			default: () => Self.Color.spaces,
 			convert (value) {
 				// Drop non-existing spaces
-				return Object.fromEntries(Object.entries(value).filter(([id, space]) => space));
+				let spaces = Object.fromEntries(Object.entries(value).filter(([id, space]) => space));
+				if (Object.keys(spaces).length === 0) {
+					console.warn("No color spaces with the specified ids were found. Using all the available ones instead.");
+					return Self.Color.spaces;
+				}
+
+				return spaces;
 			},
 			stringify (value) {
 				return Object.entries(value).map(([id, space]) => id).join(", ");
