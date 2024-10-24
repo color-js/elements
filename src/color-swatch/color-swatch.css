@@ -100,12 +100,28 @@ slot {
 			&.delta {
 				color: var(--_delta-color);
 
+				&::before {
+					content: "(";
+				}
+
+				&::after {
+					content: ")";
+				}
+
 				&.positive {
 					--_delta-color: var(--_positive-delta-color);
+
+					&::before {
+						content: "(+";
+					}
 				}
 
 				&.negative {
 					--_delta-color: var(--_negative-delta-color);
+				}
+
+				&:not(.angle)::after {
+					content: "%)";
 				}
 			}
 		}
