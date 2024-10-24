@@ -3,10 +3,7 @@
 	--_transparency-background: var(--transparency-background, transparent);
 	--_transparency-darkness: var(--transparency-darkness, 5%);
 	--_transparency-grid: var(--transparency-grid,
-		repeating-conic-gradient(transparent 0 25%, rgb(0 0 0 / var(--_transparency-darkness)) 0 50%)
-		0 0 / calc(2 * var(--_transparency-cell-size)) calc(2 * var(--_transparency-cell-size))
-		content-box border-box var(--_transparency-background)
-	);
+			repeating-conic-gradient(transparent 0 25%, rgb(0 0 0 / var(--_transparency-darkness)) 0 50%) 0 0 / calc(2 * var(--_transparency-cell-size)) calc(2 * var(--_transparency-cell-size)) content-box border-box var(--_transparency-background));
 	--_positive-delta-color: var(--positive-delta-color, hsl(120, 80%, 25%));
 	--_negative-delta-color: var(--negative-delta-color, hsl(0, 85%, 40%));
 
@@ -100,12 +97,28 @@ slot {
 			&.delta {
 				color: var(--_delta-color);
 
+				&::before {
+					content: "(";
+				}
+
+				&::after {
+					content: ")";
+				}
+
 				&.positive {
 					--_delta-color: var(--_positive-delta-color);
+
+					&::before {
+						content: "(+";
+					}
 				}
 
 				&.negative {
 					--_delta-color: var(--_negative-delta-color);
+				}
+
+				&:not(.angle)::after {
+					content: "%)";
 				}
 			}
 		}

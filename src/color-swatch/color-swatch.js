@@ -154,13 +154,17 @@ const Self = class ColorSwatch extends ColorElement {
 
 				if (this.colorDeltas?.[key] && this.infoCoordsResolved?.[key]) {
 					let delta = this.colorDeltas[key];
-					let sign = delta > 0 ? "+" : "";
-					let className = delta > 0 ? "positive" : "negative";
-					let isAngle = this.infoCoordsResolved[key]?.type === "angle";
+					let classes = delta > 0 ? "positive" : "negative";
 
-					delta = isAngle ? delta : delta / rawValue * 100;
+					if (this.infoCoordsResolved[key]?.type === "angle") {
+						classes += " angle";
+					}
+					else {
+						delta = delta / rawValue * 100;
+					}
+
 					delta = typeof delta === "number" ? Number(delta.toPrecision(4)) : delta;
-					ret += `<dd class="delta ${className}">(${ sign }${ delta }${ !isAngle ? "%" : ""})</dd>`;
+					ret += `<dd class="delta ${classes}">${ delta }</dd>`;
 				}
 
 				ret += "</div>";
