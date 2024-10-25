@@ -82,6 +82,16 @@ const Self = class ColorScale extends ColorElement {
 	}
 
 	static props = {
+		colors: {
+			type: {
+				is: Object,
+				// Support overriding the Color object
+				get values () {
+					return ColorScale.Color;
+				},
+				defaultKey: (v, i) => v,
+			},
+		},
 		space: {
 			default: "oklch",
 			parse (value) {
@@ -96,16 +106,6 @@ const Self = class ColorScale extends ColorElement {
 			},
 			stringify (value) {
 				return value?.id;
-			},
-		},
-		colors: {
-			type: {
-				is: Object,
-				// Support overriding the Color object
-				get values () {
-					return ColorScale.Color;
-				},
-				defaultKey: (v, i) => v,
 			},
 		},
 		steps: {
