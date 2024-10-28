@@ -190,7 +190,6 @@ const Self = class ColorSwatch extends ColorElement {
 			reflect: {
 				from: true,
 			},
-			dependencies: ["color"],
 		},
 		colorInfo: {
 			get () {
