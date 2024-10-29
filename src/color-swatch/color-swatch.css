@@ -14,6 +14,8 @@
 	width: fit-content;
 	margin: .3em;
 	border-radius: .2rem;
+
+	anchor-name: --color-swatch-anchor;
 }
 
 :host([size="large"]) {
@@ -129,9 +131,27 @@ slot {
 		border-radius: .2rem;
 		box-shadow: 0 .05em 1em -.7em black;
 		transition: var(--_transition-duration) allow-discrete;
-		transition-property: all, display;
+		/*
+			This following line crashes the browser for some reason 🤷‍♂️
+			transition-property: all, display;
+		*/
+		transition-property: all;
 		transition-delay: 0s, var(--_transition-duration);
 		transform-origin: 50% calc(100% + var(--_pointer-height));
+
+		&[popover] {
+			/* Make the triangle pointer visible */
+			overflow: visible;
+
+			@supports (position-anchor: --color-swatch-anchor) {
+				/* Bring the popover back on the screen */
+				inset: unset;
+
+				position-anchor: --color-swatch-anchor;
+				position-area: y-start center;
+				margin-bottom: calc(var(--_pointer-height) * 1.6);
+			}
+		}
 
 		/* Triangle pointer */
 		&::before {
