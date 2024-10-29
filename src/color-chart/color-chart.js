@@ -258,26 +258,22 @@ const Self = class ColorChart extends ColorElement {
 			// rawProp: "coord",
 		},
 
-		yRange: {
-			get () {
-				return this.yResolved.range ?? this.yResolved.refRange ?? [0, 100];
-			},
-		},
-
 		yMin: {
 			default: "auto",
 			convert (value) {
 				// Is a supported keyword?
 				if (["auto", "coord"].includes(value)) {
-					return value === "coord" ? this.yRange[0] : value;
+					if (value === "coord") {
+						let range = this.yResolved.refRange ?? this.yResolved.range ?? [0, 100];
+						return range[0];
+					}
+
+					return value;
 				}
 
-				try {
-					return Number(value);
-				}
-				catch (e) {
-					return "auto";
-				}
+				value = Number(value);
+
+				return Number.isNaN(value) ? "auto" : value;
 			},
 			reflect: {
 				from: "ymin",
@@ -289,15 +285,17 @@ const Self = class ColorChart extends ColorElement {
 			convert (value) {
 				// Is a supported keyword?
 				if (["auto", "coord"].includes(value)) {
-					return value === "coord" ? this.yRange[1] : value;
+					if (value === "coord") {
+						let range = this.yResolved.refRange ?? this.yResolved.range ?? [0, 100];
+						return range[1];
+					}
+
+					return value;
 				}
 
-				try {
-					return Number(value);
-				}
-				catch (e) {
-					return "auto";
-				}
+				value = Number(value);
+
+				return Number.isNaN(value) ? "auto" : value;
 			},
 			reflect: {
 				from: "ymax",
