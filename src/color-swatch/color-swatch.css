@@ -142,8 +142,8 @@ slot {
 			inset: unset;
 
 			/* And position it relative to the parent swatch */
-			left: var(--_swatch-left);
-			top: var(--_swatch-top);
+			left: var(--_popover-left);
+			top: var(--_popover-top);
 			translate: -50% -100%;
 		}
 

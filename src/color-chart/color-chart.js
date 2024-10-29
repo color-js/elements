@@ -183,8 +183,8 @@ const Self = class ColorChart extends ColorElement {
 					// Position the popover relative to the parent swatch
 					// (instead of the center of the viewport by default)
 					let rect = swatch.getBoundingClientRect();
-					popover.style.setProperty("--_swatch-left", rect.left + rect.width / 2 + "px");
-					popover.style.setProperty("--_swatch-top", rect.top - rect.height / 2 + "px");
+					popover.style.setProperty("--_popover-left", rect.left + rect.width / 2 + "px");
+					popover.style.setProperty("--_popover-top", rect.top - rect.height / 2 + "px");
 
 					popover.showPopover();
 				});
