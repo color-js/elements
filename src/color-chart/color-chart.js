@@ -174,12 +174,21 @@ const Self = class ColorChart extends ColorElement {
 
 			if (HTMLElement.prototype.hasOwnProperty("popover") && !swatch._el.wrapper.hasAttribute("popover")) {
 				// The Popover API is supported
-				swatch._el.wrapper.setAttribute("popover", "");
+				let popover = swatch._el.wrapper;
+				popover.setAttribute("popover", "");
 
 				// We need these for the popover to be correctly activated and positioned,
 				// otherwise, it won't be on the top layer
-				swatch.addEventListener("pointerenter", evt => evt.target._el.wrapper.showPopover());
-				swatch.addEventListener("pointerleave", evt => evt.target._el.wrapper.hidePopover());
+				swatch.addEventListener("pointerenter", evt => {
+					// Position the popover relative to the parent swatch
+					// (instead of the center of the viewport by default)
+					let rect = swatch.getBoundingClientRect();
+					popover.style.setProperty("--_swatch-left", rect.left + rect.width / 2 + "px");
+					popover.style.setProperty("--_swatch-top", rect.top - rect.height / 2 + "px");
+
+					popover.showPopover();
+				});
+				swatch.addEventListener("pointerleave", evt => popover.hidePopover());
 			}
 
 			index++;
