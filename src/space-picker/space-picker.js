@@ -24,29 +24,52 @@ const Self = class SpacePicker extends ColorElement {
 	}
 
 	handleEvent (event) {
-		if (event.type === "change" && event.target === this._el.picker) {
-			this.value = this._el.picker.value;
+		if (event.type === "change" && event.target === this._el.picker && event.target.value !== this.value) {
+			this.value = event.target.value;
 		}
-
-		this.dispatchEvent(new event.constructor(event.type, {...event}));
 	}
 
 	propChangedCallback ({name, prop, detail: change}) {
 		if (name === "spaces") {
-			this._el.picker.innerHTML = Object.entries(this.spaces)
-				.map(([id, space]) => `<option value="${id}">${space.name}</option>`)
-				.join("\n");
+			let groups = this.groups(this.spaces);
+
+			// Remove empty groups
+			groups = Object.entries(groups).filter(([type, spaces]) => {
+				if (Object.keys(spaces).length === 0) {
+					console.warn(`Removed empty group of color spaces with the label "${ type }."`);
+					return false;
+				}
+
+				return true;
+			});
+
+			if (!groups.length) {
+				console.warn("All provided groups of color spaces are empty. Falling back to default grouping.");
+				groups = Object.entries(this.defaultGroups(this.spaces));
+			}
+
+			this._el.picker.innerHTML = groups.map(([type, spaces]) => `
+				<optgroup label="${ type }">
+					${ Object.entries(spaces)
+						.map(([id, space]) => `<option value="${ id }">${ space.name }</option>`)
+						.join("\n") }
+				</optgroup>
+			`).join("\n");
+
+			this._el.picker.value = this.value;
 		}
 
-		if (name === "value" || name === "spaces") {
-			if (this.value?.id !== this._el.picker.value) {
-				if (this.value.id in this.spaces) {
-					this._el.picker.value = this.value.id;
+		if (name === "value") {
+			let value = this.value;
+
+			if (value !== undefined && value !== null) {
+				if (!(value in this.spaces)) {
+					let spaces = Object.keys(this.spaces).join(", ");
+					console.warn(`No color space found with id = "${value}". Choose one of the following: ${spaces}.`);
 				}
-				else {
-					let currentValue = this.spaces[this._el.picker.value];
-					console.warn(`No color space with id = “${ this.value.id }” was found among the specified ones. Using the current one (${ currentValue.id }) instead.`);
-					this.value = currentValue;
+
+				if (this._el.picker.value !== value) {
+					this._el.picker.value = value;
 				}
 			}
 		}
@@ -55,19 +78,21 @@ const Self = class SpacePicker extends ColorElement {
 	static props = {
 		value: {
 			default () {
-				return Self.Color.Space.get(this._el.picker.value);
+				let groups = this.groups(this.spaces);
+				let firstGroup = Object.values(groups)[0];
+
+				return firstGroup && Object.keys(firstGroup)[0];
 			},
-			parse (value) {
-				if (value instanceof Self.Color.Space || value === null || value === undefined) {
-					return value;
+		},
+
+		selectedSpace: {
+			get () {
+				let value = this.value;
+				if (value === undefined || value === null) {
+					return;
 				}
 
-				value += "";
-
-				return Self.Color.Space.get(value);
-			},
-			stringify (value) {
-				return value?.id;
+				return this.spaces[value];
 			},
 		},
 
@@ -88,18 +113,35 @@ const Self = class SpacePicker extends ColorElement {
 			},
 			default: () => Self.Color.spaces,
 			convert (value) {
-				// Drop non-existing spaces
-				let spaces = Object.fromEntries(Object.entries(value).filter(([id, space]) => space));
-				if (Object.keys(spaces).length === 0) {
-					console.warn("No color spaces with the specified ids were found. Using all the available ones instead.");
-					return Self.Color.spaces;
+				// Replace non-existing spaces with { id, name: id }
+				for (let id in value) {
+					if (!value[id]) {
+						value[id] = { id, name: id };
+					}
 				}
 
-				return spaces;
+				return value;
 			},
 			stringify (value) {
 				return Object.entries(value).map(([id, space]) => id).join(", ");
 			},
+		},
+
+		defaultGroups: {
+			get () {
+				return (spaces) => {
+					return {"All spaces": spaces};
+				};
+			},
+		},
+
+		groups: {
+			type: {
+				is: Function,
+				arguments: ["spaces"],
+			},
+			defaultProp: "defaultGroups",
+			reflect: false,
 		},
 	};
 
@@ -109,16 +151,23 @@ const Self = class SpacePicker extends ColorElement {
 				return this._el.picker;
 			},
 		},
-		spacechange: {
+		input: {
+			from () {
+				return this._el.picker;
+			},
+		},
+		valuechange: {
 			propchange: "value",
+		},
+		spacechange: {
+			propchange: "selectedSpace",
 		},
 	};
 
 	static formAssociated = {
 		like: el => el._el.picker,
 		role: "combobox",
-		valueProp: "value",
-		changeEvent: "spacechange",
+		changeEvent: "change",
 	};
 };
 
