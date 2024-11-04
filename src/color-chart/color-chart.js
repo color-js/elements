@@ -87,6 +87,9 @@ const Self = class ColorChart extends ColorElement {
 			this._el.xTicks.innerHTML = Array(xAxis.steps).fill().map((_, i) => "<div part='x tick'>" + +(xAxis.min + i * xAxis.step).toPrecision(15) + "</div>").join("\n");
 		}
 
+		minY = this.yMinAsNumber === undefined || Number.isNaN(this.yMinAsNumber) ? minY : this.yMinAsNumber;
+		maxY = this.yMaxAsNumber === undefined || Number.isNaN(this.yMaxAsNumber) ? maxY : this.yMaxAsNumber;
+
 		if (isFinite(minY) && isFinite(maxY)) {
 			let yAxis = getAxis(minY, maxY, 10);
 
@@ -114,7 +117,10 @@ const Self = class ColorChart extends ColorElement {
 		};
 
 		colorScale.style.setProperty("--color-count", ret.colors.length);
+
 		let yAll = ret.colors.map(({color}) => color.to(this.space).get(this.y));
+		let yMin = this.yMin === "auto" || this.yMinAsNumber === undefined || Number.isNaN(this.yMinAsNumber) ? -Infinity : this.yMinAsNumber;
+		let yMax = this.yMax === "auto" || this.yMaxAsNumber === undefined || Number.isNaN(this.yMaxAsNumber) ? Infinity : this.yMaxAsNumber;
 
 		if (this.yResolved.type === "angle") {
 			// First, normalize
@@ -156,14 +162,37 @@ const Self = class ColorChart extends ColorElement {
 			ret.x.values.set(color, x);
 			ret.y.values.set(color, y);
 
-			ret.x.min = Math.min(ret.x.min, x);
-			ret.x.max = Math.max(ret.x.max, x);
-			ret.y.min = Math.min(ret.y.min, y);
-			ret.y.max = Math.max(ret.y.max, y);
+			let outOfRange = (isFinite(yMin) && y < yMin) || (isFinite(yMax) && y > yMax);
+			if (!outOfRange) {
+				// Only swatches that are in range participate in the min/max calculation
+				ret.x.min = Math.min(ret.x.min, x);
+				ret.x.max = Math.max(ret.x.max, x);
+				ret.y.min = Math.min(ret.y.min, y);
+				ret.y.max = Math.max(ret.y.max, y);
+			}
 
 			swatch.style.setProperty("--x", x);
 			swatch.style.setProperty("--y", y);
 			swatch.style.setProperty("--index", index);
+
+			if (HTMLElement.prototype.hasOwnProperty("popover") && !swatch._el.wrapper.hasAttribute("popover")) {
+				// The Popover API is supported
+				let popover = swatch._el.wrapper;
+				popover.setAttribute("popover", "");
+
+				// We need these for the popover to be correctly activated and positioned,
+				// otherwise, it won't be on the top layer
+				swatch.addEventListener("pointerenter", evt => {
+					// Position the popover relative to the parent swatch
+					// (instead of the center of the viewport by default)
+					let rect = swatch.getBoundingClientRect();
+					popover.style.setProperty("--_popover-left", rect.left + rect.width / 2 + "px");
+					popover.style.setProperty("--_popover-top", rect.top - rect.height / 2 + "px");
+
+					popover.showPopover();
+				});
+				swatch.addEventListener("pointerleave", evt => popover.hidePopover());
+			}
 
 			index++;
 		}
@@ -198,7 +227,7 @@ const Self = class ColorChart extends ColorElement {
 	propChangedCallback (evt) {
 		let {name, prop, detail: change} = evt;
 
-		if (name === "resolvedX" || name === "yResolved") {
+		if (["yResolved", "yMinAsNumber", "yMaxAsNumber"].includes(name)) {
 			// Re-render swatches
 			this.render(evt);
 		}
@@ -230,6 +259,101 @@ const Self = class ColorChart extends ColorElement {
 				return Self.Color.Space.resolveCoord(this.y, "oklch");
 			},
 			// rawProp: "coord",
+		},
+
+		yMin: {
+			default: "auto",
+			changed (change) {
+				let { value } = change;
+
+				if (value === "auto") {
+					// `this.yMinAsNumber` will become `undefined` (i.e., get a new value), and the chart will be re-rendered
+					this._el.chart.style.removeProperty("--min-y");
+				}
+			},
+			reflect: {
+				from: "ymin",
+			},
+		},
+
+		yMinAsNumber: {
+			get () {
+				if (this.yMin === "coord") {
+					let range = this.yResolved.refRange ?? this.yResolved.range ?? [0, 100];
+					return range[0];
+				}
+				else if (this.yMin === "auto") {
+					let minY = this._el.chart.style.getPropertyValue("--min-y");
+
+					if (minY !== "") {
+						return Number(minY);
+					}
+
+					// Intermediate state (the chart is not rendered yet)
+					return;
+				}
+
+				return Number(this.yMin);
+			},
+			set (value) {
+				value = Number(value);
+
+				if (Number.isNaN(value)) {
+					this.yMin = "auto";
+				}
+				else {
+					this.yMin = value.toString();
+				}
+
+			},
+		},
+
+		yMax: {
+			default: "auto",
+			changed (change) {
+				let { value } = change;
+
+				if (value === "auto") {
+					// `this.yMaxAsNumber` will become `undefined` (i.e., get a new value), and the chart will be re-rendered
+					this._el.chart.style.removeProperty("--max-y");
+				}
+			},
+			reflect: {
+				from: "ymax",
+			},
+		},
+
+		yMaxAsNumber: {
+			get () {
+				if (this.yMax === "coord") {
+					let range = this.yResolved.refRange ?? this.yResolved.range ?? [0, 100];
+					return range[1];
+				}
+				else if (this.yMax === "auto") {
+					let maxY = this._el.chart.style.getPropertyValue("--max-y");
+
+					if (maxY !== "") {
+						return Number(maxY);
+					}
+
+					// Intermediate state (the chart is not rendered yet)
+					return;
+				}
+
+				return Number(this.yMax);
+
+			},
+			set (value) {
+				value = Number(value);
+
+				if (Number.isNaN(value)) {
+					this.yMax = "auto";
+				}
+				else {
+					this.yMax = value.toString();
+				}
+
+			},
 		},
 
 		space: {
@@ -279,7 +403,7 @@ function normalizeAngles (angles) {
 	// Remove top and bottom 25% and find average
 	let averageHue = angles.toSorted((a, b) => a - b).slice(angles.length / 4, -angles.length / 4).reduce((a, b) => a + b, 0) / angles.length;
 
-	for (let i=0; i<angles.length; i++) {
+	for (let i = 0; i < angles.length; i++) {
 		let h = angles[i];
 		let prevHue = angles[i - 1];
 		let delta = h - prevHue;

@@ -133,6 +133,20 @@ slot {
 		transition-delay: 0s, var(--_transition-duration);
 		transform-origin: 50% calc(100% + var(--_pointer-height));
 
+		&[popover] {
+			/* Make the triangle pointer visible */
+			overflow: visible;
+
+			/* Bring the popover back on the screen */
+			position: fixed;
+			inset: unset;
+
+			/* And position it relative to the parent swatch */
+			left: var(--_popover-left);
+			top: var(--_popover-top);
+			translate: -50% -100%;
+		}
+
 		/* Triangle pointer */
 		&::before {
 			content: "";
