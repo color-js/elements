@@ -86,7 +86,7 @@ color-chart > color-scale {
 	}
 
 	&::part(gamut) {
-		display: none;
+		font-size: 40%;
 	}
 }
 
