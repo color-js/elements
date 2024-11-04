@@ -87,6 +87,9 @@ const Self = class ColorChart extends ColorElement {
 			this._el.xTicks.innerHTML = Array(xAxis.steps).fill().map((_, i) => "<div part='x tick'>" + +(xAxis.min + i * xAxis.step).toPrecision(15) + "</div>").join("\n");
 		}
 
+		minY = this.yMinAsNumber === undefined || Number.isNaN(this.yMinAsNumber) ? minY : this.yMinAsNumber;
+		maxY = this.yMaxAsNumber === undefined || Number.isNaN(this.yMaxAsNumber) ? maxY : this.yMaxAsNumber;
+
 		if (isFinite(minY) && isFinite(maxY)) {
 			let yAxis = getAxis(minY, maxY, 10);
 
@@ -116,8 +119,8 @@ const Self = class ColorChart extends ColorElement {
 		colorScale.style.setProperty("--color-count", ret.colors.length);
 
 		let yAll = ret.colors.map(({color}) => color.to(this.space).get(this.y));
-		let yMin = this.yMin === "auto" ? -Infinity : this.yMin;
-		let yMax = this.yMax === "auto" ? Infinity : this.yMax;
+		let yMin = this.yMin === "auto" || this.yMinAsNumber === undefined || Number.isNaN(this.yMinAsNumber) ? -Infinity : this.yMinAsNumber;
+		let yMax = this.yMax === "auto" || this.yMaxAsNumber === undefined || Number.isNaN(this.yMaxAsNumber) ? Infinity : this.yMaxAsNumber;
 
 		if (this.yResolved.type === "angle") {
 			// First, normalize
@@ -224,7 +227,7 @@ const Self = class ColorChart extends ColorElement {
 	propChangedCallback (evt) {
 		let {name, prop, detail: change} = evt;
 
-		if (name === "yResolved" || name === "yMin" || name === "yMax") {
+		if (["yResolved", "yMinAsNumber", "yMaxAsNumber"].includes(name)) {
 			// Re-render swatches
 			this.render(evt);
 		}
@@ -260,45 +263,96 @@ const Self = class ColorChart extends ColorElement {
 
 		yMin: {
 			default: "auto",
-			convert (value) {
-				// Is a supported keyword?
-				if (["auto", "coord"].includes(value)) {
-					if (value === "coord") {
-						let range = this.yResolved.refRange ?? this.yResolved.range ?? [0, 100];
-						return range[0];
-					}
+			changed (change) {
+				let { value } = change;
 
-					return value;
+				if (value === "auto") {
+					// `this.yMinAsNumber` will become `undefined` (i.e., get a new value), and the chart will be re-rendered
+					this._el.chart.style.removeProperty("--min-y");
 				}
-
-				value = Number(value);
-
-				return Number.isNaN(value) ? "auto" : value;
 			},
 			reflect: {
 				from: "ymin",
 			},
 		},
 
-		yMax: {
-			default: "auto",
-			convert (value) {
-				// Is a supported keyword?
-				if (["auto", "coord"].includes(value)) {
-					if (value === "coord") {
-						let range = this.yResolved.refRange ?? this.yResolved.range ?? [0, 100];
-						return range[1];
+		yMinAsNumber: {
+			get () {
+				if (this.yMin === "coord") {
+					let range = this.yResolved.refRange ?? this.yResolved.range ?? [0, 100];
+					return range[0];
+				}
+				else if (this.yMin === "auto") {
+					let minY = this._el.chart.style.getPropertyValue("--min-y");
+
+					if (minY !== "") {
+						return Number(minY);
 					}
 
-					return value;
+					// Intermediate state (the chart is not rendered yet)
+					return;
 				}
 
+				return Number(this.yMin);
+			},
+			set (value) {
 				value = Number(value);
 
-				return Number.isNaN(value) ? "auto" : value;
+				if (Number.isNaN(value)) {
+					this.yMin = "auto";
+				}
+				else {
+					this.yMin = value.toString();
+				}
+
+			},
+		},
+
+		yMax: {
+			default: "auto",
+			changed (change) {
+				let { value } = change;
+
+				if (value === "auto") {
+					// `this.yMaxAsNumber` will become `undefined` (i.e., get a new value), and the chart will be re-rendered
+					this._el.chart.style.removeProperty("--max-y");
+				}
 			},
 			reflect: {
 				from: "ymax",
+			},
+		},
+
+		yMaxAsNumber: {
+			get () {
+				if (this.yMax === "coord") {
+					let range = this.yResolved.refRange ?? this.yResolved.range ?? [0, 100];
+					return range[1];
+				}
+				else if (this.yMax === "auto") {
+					let maxY = this._el.chart.style.getPropertyValue("--max-y");
+
+					if (maxY !== "") {
+						return Number(maxY);
+					}
+
+					// Intermediate state (the chart is not rendered yet)
+					return;
+				}
+
+				return Number(this.yMax);
+
+			},
+			set (value) {
+				value = Number(value);
+
+				if (Number.isNaN(value)) {
+					this.yMax = "auto";
+				}
+				else {
+					this.yMax = value.toString();
+				}
+
 			},
 		},
 
