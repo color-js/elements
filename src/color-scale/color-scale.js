@@ -60,7 +60,7 @@ const Self = class ColorScale extends ColorElement {
 				this.#swatches[i] = swatch = document.createElement("color-swatch");
 				swatch.setAttribute("size", "large");
 				swatch.setAttribute("part", "color-swatch");
-				swatch.setAttribute("exportparts", "swatch, info");
+				swatch.setAttribute("exportparts", "swatch, info, gamut");
 				newSwatches.push(swatch);
 			}
 

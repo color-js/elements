@@ -84,6 +84,10 @@ color-chart > color-scale {
 		min-block-size: 0;
 		padding: .2em;
 	}
+
+	&::part(gamut) {
+		font-size: 40%;
+	}
 }
 
 color-chart:has(> color-scale:hover) {
