@@ -31,30 +31,37 @@ const Self = class SpacePicker extends ColorElement {
 
 	propChangedCallback ({name, prop, detail: change}) {
 		if (name === "spaces") {
-			let groups = this.groups(this.spaces);
+			if (!this.groups) {
+				this._el.picker.innerHTML = Object.entries(this.spaces)
+					.map(([id, space]) => `<option value="${id}">${space.name}</option>`)
+					.join("\n");
+			}
+			else {
+				let groups = this.groups;
 
-			// Remove empty groups
-			groups = Object.entries(groups).filter(([type, spaces]) => {
-				if (Object.keys(spaces).length === 0) {
-					console.warn(`Removed empty group of color spaces with the label "${ type }."`);
-					return false;
+				// Remove empty groups
+				groups = Object.entries(groups).filter(([type, spaces]) => {
+					if (Object.keys(spaces).length === 0) {
+						console.warn(`Removed empty group of color spaces with the label "${type}."`);
+						return false;
+					}
+
+					return true;
+				});
+
+				if (!groups.length) {
+					console.warn("All provided groups of color spaces are empty. Falling back to default grouping.");
+					groups = [["All spaces", this.spaces]];
 				}
 
-				return true;
-			});
-
-			if (!groups.length) {
-				console.warn("All provided groups of color spaces are empty. Falling back to default grouping.");
-				groups = Object.entries(this.defaultGroups(this.spaces));
+				this._el.picker.innerHTML = groups.map(([type, spaces]) => `
+					<optgroup label="${type}">
+						${Object.entries(spaces)
+							.map(([id, space]) => `<option value="${id}">${space.name}</option>`)
+							.join("\n")}
+					</optgroup>
+				`).join("\n");
 			}
-
-			this._el.picker.innerHTML = groups.map(([type, spaces]) => `
-				<optgroup label="${ type }">
-					${ Object.entries(spaces)
-						.map(([id, space]) => `<option value="${ id }">${ space.name }</option>`)
-						.join("\n") }
-				</optgroup>
-			`).join("\n");
 
 			this._el.picker.value = this.value;
 		}
@@ -78,10 +85,15 @@ const Self = class SpacePicker extends ColorElement {
 	static props = {
 		value: {
 			default () {
-				let groups = this.groups(this.spaces);
-				let firstGroup = Object.values(groups)[0];
+				if (this.groups) {
+					let groups = this.groups;
+					let firstGroup = Object.values(groups)[0];
 
-				return firstGroup && Object.keys(firstGroup)[0];
+					return firstGroup && Object.keys(firstGroup)[0];
+				}
+				else {
+					return Object.keys(this.spaces)[0];
+				}
 			},
 		},
 
@@ -127,21 +139,30 @@ const Self = class SpacePicker extends ColorElement {
 			},
 		},
 
-		defaultGroups: {
-			get () {
-				return (spaces) => {
-					return {"All spaces": spaces};
-				};
+		groupBy: {
+			type: {
+				is: Function,
+				arguments: ["space"],
 			},
+			reflect: false,
 		},
 
 		groups: {
-			type: {
-				is: Function,
-				arguments: ["spaces"],
+			get () {
+				if (!this.groupBy) {
+					return;
+				}
+
+				let ret = {};
+				for (let [id, space] of Object.entries(this.spaces)) {
+					let group = this.groupBy(space);
+					if (group) {
+						(ret[group] ??= {})[id] = space;
+					}
+				}
+
+				return ret;
 			},
-			defaultProp: "defaultGroups",
-			reflect: false,
 		},
 	};
 
