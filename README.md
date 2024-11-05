@@ -17,6 +17,7 @@ Use at your own risk, the API can change at any point.
 ### Upcoming:
 
 - `<color-plane>`
+- `<space-picker>`
 
 ## Usage
 
