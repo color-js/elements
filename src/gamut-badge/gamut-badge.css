@@ -36,11 +36,14 @@
 	align-items: center;
 	justify-content: center;
 	border-radius: .2em;
-	color: white;
 	background-color: var(--color);
 	font-weight: bold;
 	padding-inline: .4em;
 	line-height: 1.4;
+
+	/* See https://lea.verou.me/blog/2024/contrast-color/ */
+	--l: clamp(0, (l / var(--l-threshold, 0.7) - 1) * -infinity, 1);
+	color: oklch(from var(--color) var(--l) 0 h);
 }
 
 :host([gamut="none"]) {
