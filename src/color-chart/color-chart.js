@@ -87,8 +87,8 @@ const Self = class ColorChart extends ColorElement {
 			this._el.xTicks.innerHTML = Array(xAxis.steps).fill().map((_, i) => "<div part='x tick'>" + +(xAxis.min + i * xAxis.step).toPrecision(15) + "</div>").join("\n");
 		}
 
-		minY = this.yMinAsNumber === undefined || Number.isNaN(this.yMinAsNumber) ? minY : this.yMinAsNumber;
-		maxY = this.yMaxAsNumber === undefined || Number.isNaN(this.yMaxAsNumber) ? maxY : this.yMaxAsNumber;
+		minY = this.yMin === "auto" || this.yMinAsNumber === undefined || Number.isNaN(this.yMinAsNumber) ? minY : this.yMinAsNumber;
+		maxY = this.yMax === "auto" || this.yMaxAsNumber === undefined || Number.isNaN(this.yMaxAsNumber) ? maxY : this.yMaxAsNumber;
 
 		if (isFinite(minY) && isFinite(maxY)) {
 			let yAxis = getAxis(minY, maxY, 10);
