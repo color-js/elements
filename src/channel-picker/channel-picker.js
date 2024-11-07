@@ -17,6 +17,9 @@ const Self = class ChannelPicker extends ColorElement {
 
 		// We need to start listening for this event as soon as the <space-picker> is created
 		this._el.space_picker.addEventListener("spacechange", this);
+
+		// We need to render the picker as soon as possible so as not to choke on invalid initial values
+		this.#render();
 	}
 
 	connectedCallback () {
@@ -104,6 +107,8 @@ const Self = class ChannelPicker extends ColorElement {
 							this._el.picker.value = channel;
 						}
 						else {
+							currentCoord = coords.includes(currentCoord) ? currentCoord : coords[0];
+
 							let message = `Color space "${ space }" has no coordinate "${ channel }".`;
 							if (coords.length) {
 								message += ` Choose one of the following: ${ coords.join(", ") }.`;
