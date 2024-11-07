@@ -90,6 +90,14 @@ or [`<channel-slider>`](../channel-slider):
 |-----------|----------|---------------|---------------|----------------------------------|
 | `value`   | `value`  | `string`      | `oklch.l`     | The current value of the picker. |
 
+### Getters
+
+These properties are read-only.
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `selectedSpace` | `ColorSpace` | Color space object corresponding to the space picker current value. |
+| `selectedChannel` | `object` | The current channel metadata.|
 
 ### Events
 

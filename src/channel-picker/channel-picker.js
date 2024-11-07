@@ -35,6 +35,11 @@ const Self = class ChannelPicker extends ColorElement {
 	get selectedSpace () {
 		return this._el.space_picker.selectedSpace;
 	}
+
+	get selectedChannel () {
+		return this.selectedSpace.coords?.[this._el.picker.value];
+	}
+
 	#render () {
 		let space = this._el.space_picker.selectedSpace;
 		let coords = space?.coords;
