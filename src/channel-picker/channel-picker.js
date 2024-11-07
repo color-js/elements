@@ -83,6 +83,18 @@ const Self = class ChannelPicker extends ColorElement {
 				}
 
 				if (channel && this._el.picker.value !== channel) {
+					let coords = Object.keys(this.selectedSpace.coords ?? {});
+
+					if (!coords.includes(channel)) {
+						let message = `Color space "${ space }" has no coordinate "${ channel }".`;
+
+						if (coords.length) {
+							message += ` Choose one of the following: ${ coords.join(", ") }.`;
+						}
+
+						console.warn(message);
+					}
+
 					this._el.picker.value = channel;
 				}
 			}
