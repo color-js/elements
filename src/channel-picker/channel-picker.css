@@ -1,7 +1,8 @@
 :host {
 	display: inline-flex;
-	gap: .3em;
-	
+	align-items: baseline;
+	gap: .2em;
+
 	padding: .3em .5em;
 
 	border: 1px solid;
@@ -9,18 +10,12 @@
 }
 
 #picker {
-	appearance: none;
 	font: inherit;
 	color: inherit;
 	background: inherit;
 	border: none;
-	border-block-end: 1px dashed transparent;
 	field-sizing: content;
 	cursor: pointer;
-
-	&:is(:hover, :focus, :active) {
-		border-block-end-color: currentColor;
-	}
 
 	&:focus:not(:focus-visible) {
 		outline: none;
