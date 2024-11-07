@@ -21,9 +21,9 @@ You can hide the `space_picker` part with CSS to show only the coordinates of th
 <channel-picker id="picker" value="hsl.h"></channel-picker>
 
 <style>
-    #picker::part(space_picker) {
-        display: none;
-    }
+	#picker::part(space_picker) {
+		display: none;
+	}
 </style>
 ```
 
@@ -66,17 +66,17 @@ or [`<channel-slider>`](../channel-slider):
 <channel-slider id="channel_slider" color="oklch(50% 50% 180)"></channel-slider>
 
 <style>
-    #channel_picker::part(space_picker) {
-        display: none;
-    }
+	#channel_picker::part(space_picker) {
+		display: none;
+	}
 </style>
 
 <script>
-    function updateSlider() {
-        let [space, channel] = channel_picker.value.split(".");
+	function updateSlider() {
+		let [space, channel] = channel_picker.value.split(".");
 		channel_slider.space = space;
 		channel_slider.channel = channel;
-    }
+	}
 	
 	channel_picker.onvaluechange = updateSlider;
 </script>
