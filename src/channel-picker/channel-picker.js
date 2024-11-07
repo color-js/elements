@@ -79,7 +79,16 @@ const Self = class ChannelPicker extends ColorElement {
 				let [space, channel] = this.value.split(".");
 
 				if (space && this._el.space_picker.value !== space) {
-					this._el.space_picker.value = space;
+					let spaces = Object.keys(this._el.space_picker.spaces);
+
+					if (spaces.includes(space)) {
+						this._el.space_picker.value = space;
+					}
+					else {
+						let spaceId = this._el.space_picker.selectedSpace.id;
+						console.warn(`No "${ space }" color space found. Choose one of the following: ${ spaces.join(", ") }. Falling back to "${ spaceId }".`);
+						this.value = `${ spaceId }.${ channel }`;
+					}
 				}
 
 				if (channel && this._el.picker.value !== channel) {
