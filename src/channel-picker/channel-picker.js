@@ -56,11 +56,11 @@ const Self = class ChannelPicker extends ColorElement {
 	}
 
 	handleEvent (event) {
-		if ([this._el.space_picker, this._el.picker].includes(event.target)) {
-			if (event.type === "spacechange") {
-				this.#render();
-			}
+		if (event.type === "spacechange") {
+			this.#render();
+		}
 
+		if ([this._el.space_picker, this._el.picker].includes(event.target)) {
 			let value = `${ this._el.space_picker.value }.${ this._el.picker.value }`;
 			if (value !== this.value) {
 				this.value = value;
