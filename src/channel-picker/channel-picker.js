@@ -32,6 +32,9 @@ const Self = class ChannelPicker extends ColorElement {
 		this._el.picker.removeEventListener("change", this);
 	}
 
+	get selectedSpace () {
+		return this._el.space_picker.selectedSpace;
+	}
 	#render () {
 		let space = this._el.space_picker.selectedSpace;
 		let coords = space?.coords;
