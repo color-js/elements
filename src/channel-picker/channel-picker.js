@@ -42,7 +42,7 @@ const Self = class ChannelPicker extends ColorElement {
 
 	#render () {
 		let space = this.selectedSpace;
-		let coords = space?.coords;
+		let coords = space.coords;
 
 		if (space && !coords) {
 			console.warn(`Color space "${ space.name }" has no coordinates.`);
@@ -74,40 +74,44 @@ const Self = class ChannelPicker extends ColorElement {
 	}
 
 	propChangedCallback ({name, prop, detail: change}) {
-		if (name === "value") {
-			if (this.value) {
-				let [space, channel] = this.value.split(".");
+		if (name === "value" && this.value) {
+			let [space, channel] = (this.value + "").split(".");
 
-				if (space && this._el.space_picker.value !== space) {
-					let spaces = Object.keys(this._el.space_picker.spaces);
+			let currentSpace = this._el.space_picker.value;
+			let currentCoord = this._el.picker.value;
+			let currentValue = `${ currentSpace }.${ currentCoord }`;
 
-					if (spaces.includes(space)) {
+			if (!space || !channel) {
+				console.warn(`Invalid value "${ this.value }". Expected format: "space.channel". Falling back to "${ currentValue }".`);
+				this.value = currentValue;
+			}
+			else {
+				let spaces = Object.keys(this._el.space_picker.spaces);
+
+				if (!spaces.includes(space)) {
+					console.warn(`No "${ space }" color space found. Choose one of the following: ${ spaces.join(", ") }. Falling back to "${ currentValue }".`);
+					this.value = currentValue;
+				}
+				else {
+					if (currentSpace !== space) {
 						this._el.space_picker.value = space;
 					}
-					else {
-						let spaceId = this._el.space_picker.selectedSpace.id;
-						console.warn(`No "${ space }" color space found. Choose one of the following: ${ spaces.join(", ") }. Falling back to "${ spaceId }".`);
-						this.value = `${ spaceId }.${ channel }`;
-					}
-				}
 
-				if (channel && this._el.picker.value !== channel) {
-					let coords = Object.keys(this.selectedSpace.coords ?? {});
+					if (currentCoord && currentCoord !== channel) {
+						let coords = Object.keys(this.selectedSpace.coords ?? {});
 
-					if (coords.includes(channel)) {
-						this._el.picker.value = channel;
-					}
-					else {
-						let currentChannel = this._el.picker.value;
-
-						let message = `Color space "${ space }" has no coordinate "${ channel }".`;
-						if (coords.length) {
-							message += ` Choose one of the following: ${ coords.join(", ") }.`;
+						if (coords.includes(channel)) {
+							this._el.picker.value = channel;
 						}
-						message += ` Falling back to "${ currentChannel }".`;
-
-						console.warn(message);
-						this.value = `${ space }.${ currentChannel }`;
+						else {
+							let message = `Color space "${ space }" has no coordinate "${ channel }".`;
+							if (coords.length) {
+								message += ` Choose one of the following: ${ coords.join(", ") }.`;
+							}
+							message += ` Falling back to "${ currentCoord }".`;
+							console.warn(message);
+							this.value = `${ space }.${ currentCoord }`;
+						}
 					}
 				}
 			}
