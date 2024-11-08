@@ -1,9 +1,12 @@
 :host {
-	display: inline-block;
+	--border-width: 1px;
+	--border-color: rgb(0 0 0 / .2);
+	--border-radius: .2em;
+
 	padding: .3em .5em;
 
-	border: 1px solid;
-	border-radius: .2em;
+	border-radius: var(--border-radius);
+	border: var(--border-width) solid var(--border-color);
 }
 
 #picker {

@@ -1,12 +1,12 @@
 :host {
-	display: inline-flex;
-	align-items: baseline;
-	gap: .2em;
+	--border-width: 1px;
+	--border-color: rgb(0 0 0 / .2);
+	--border-radius: .2em;
 
 	padding: .3em .5em;
 
-	border: 1px solid;
-	border-radius: .2em;
+	border: var(--border-width) solid var(--border-color);
+	border-radius: var(--border-radius);
 }
 
 #picker {
@@ -24,5 +24,8 @@
 
 #space_picker {
 	padding: initial;
+	padding-inline-end: .4em;
+	border-radius: 0;
 	border: none;
+	border-inline-end: var(--border-width) solid var(--border-color);
 }
