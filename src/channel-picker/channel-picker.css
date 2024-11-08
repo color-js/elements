@@ -5,8 +5,8 @@
 
 	padding: .3em .5em;
 
-	border-radius: var(--border-radius);
 	border: var(--border-width) solid var(--border-color);
+	border-radius: var(--border-radius);
 }
 
 #picker {
@@ -20,4 +20,12 @@
 	&:focus:not(:focus-visible) {
 		outline: none;
 	}
+}
+
+#space_picker {
+	padding: initial;
+	padding-inline-end: .4em;
+	border-radius: 0;
+	border: none;
+	border-inline-end: var(--border-width) solid var(--border-color);
 }

@@ -18,6 +18,7 @@ Use at your own risk, the API can change at any point.
 
 - `<color-plane>`
 - `<space-picker>`
+- `<channel-picker>`
 
 ## Usage
 
