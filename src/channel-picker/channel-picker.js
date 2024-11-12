@@ -7,8 +7,12 @@ const Self = class ChannelPicker extends ColorElement {
 	static url = import.meta.url;
 	static shadowStyle = true;
 	static shadowTemplate = `
-		<space-picker part="space_picker" exportparts="picker:space_select" id="space_picker"></space-picker>
-		<select id="picker" part="picker"></select>`;
+		<div id="space_picker_wrapper">
+			<space-picker part="space_picker" exportparts="picker:space_select" id="space_picker"></space-picker>
+		</div>
+		<div id="picker_wrapper">
+			<select id="picker" part="picker"></select>
+		</div>`;
 
 	constructor () {
 		super();
@@ -46,6 +50,14 @@ const Self = class ChannelPicker extends ColorElement {
 	#render () {
 		let space = this.selectedSpace;
 		let coords = space.coords;
+
+		let spacePickerHidden = getComputedStyle(this._el.space_picker).display === "none";
+		if (spacePickerHidden) {
+			this.classList.add("no-space-picker");
+		}
+		else {
+			this.classList.remove("no-space-picker");
+		}
 
 		if (space && !coords) {
 			console.warn(`Color space "${ space.name }" has no coordinates.`);
