@@ -43,6 +43,12 @@ const Self = class ChannelPicker extends ColorElement {
 		return this.selectedSpace.coords?.[this._el.picker.value];
 	}
 
+	/**
+	 * Previously selected channels for each space.
+	 * Keys are space IDs. Values are coords.
+	 */
+	#history = {};
+
 	#render () {
 		let space = this.selectedSpace;
 		let coords = space.coords;
@@ -56,10 +62,18 @@ const Self = class ChannelPicker extends ColorElement {
 			.map(([id, coord]) => `<option value="${ id }">${ coord.name }</option>`)
 			.join("\n");
 
-		let channel = this.value?.split(".")[1];
-		if (channel && channel in coords) {
-			// Preserve the channel if it exists in the new space
-			this._el.picker.value = channel;
+		let [prevSpace, prevChannel] = this.value?.split(".") ?? [];
+		if (prevSpace && prevChannel) {
+			let prevChannelName = this._el.space_picker.spaces[prevSpace].coords[prevChannel].name;
+			let currentChannelName = coords[prevChannel]?.name;
+			if (prevChannelName === currentChannelName) {
+				// Preserve the channel if it exists in the new space and has the same name ("b" in "oklab" is not the same as "b" in "p3")
+				this._el.picker.value = prevChannel;
+			}
+			else if (this.#history?.[space.id]) {
+				// Otherwise, try to restore the last channel used
+				this._el.picker.value = this.#history[space.id];
+			}
 		}
 	}
 
@@ -116,8 +130,11 @@ const Self = class ChannelPicker extends ColorElement {
 							message += ` Falling back to "${ currentCoord }".`;
 							console.warn(message);
 							this.value = `${ space }.${ currentCoord }`;
+							channel = currentCoord;
 						}
 					}
+
+					this.#history[space] = channel;
 				}
 			}
 		}
