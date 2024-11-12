@@ -69,10 +69,15 @@ const Self = class SpacePicker extends ColorElement {
 		if (name === "value") {
 			let value = this.value;
 
-			if (value !== undefined && value !== null) {
+			if (value) {
 				if (!(value in this.spaces)) {
-					let spaces = Object.keys(this.spaces).join(", ");
-					console.warn(`No color space found with id = "${ value }". Choose one of the following: ${ spaces }.`);
+					let spaces = Object.keys(this.spaces);
+					let firstSpace = spaces[0];
+					let currentSpace = this._el.picker.value;
+					let fallback = spaces.includes(currentSpace) ? currentSpace : firstSpace;
+
+					console.warn(`No color space found with id = "${ value }". Choose one of the following: ${ spaces.join(", ") }. Falling back to "${ fallback }".`);
+					this.value = value = fallback;
 				}
 
 				if (this._el.picker.value !== value) {
