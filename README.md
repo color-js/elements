@@ -27,13 +27,13 @@ Use at your own risk, the API can change at any point.
 To include all components at once:
 
 ```html
-<script src="https://elements.colorjs.io/index.js"></script>
+<script src="https://elements.colorjs.io/index.js" type="module"></script>
 ```
 
 To cherry-pick individual components, follow the instructions within the component’s page, but it generally looks like this:
 
 ```html
-<script src="https://elements.colorjs.io/src/COMPONENT_NAME/COMPONENT_NAME.js"></script>
+<script src="https://elements.colorjs.io/src/COMPONENT_NAME/COMPONENT_NAME.js" type="module"></script>
 ```
 
 Each component imports its own dependencies and styles.
