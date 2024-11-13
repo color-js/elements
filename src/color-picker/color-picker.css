@@ -4,6 +4,13 @@
 	gap: 1em;
 }
 
+#space_picker {
+	flex: 0 1 100%; /* occupy the entire row */
+	padding: initial;
+	border: none;
+	font-size: 150%;
+}
+
 #sliders {
 	flex: 3;
 	display: flex;
@@ -23,4 +30,3 @@ slot[name="swatch"]::slotted(*) {
 		flex: 1;
 	}
 }
-

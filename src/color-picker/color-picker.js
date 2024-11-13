@@ -1,14 +1,17 @@
 import ColorElement from "../common/color-element.js";
 import "../channel-slider/channel-slider.js";
 import "../color-swatch/color-swatch.js";
+import "../space-picker/space-picker.js";
 import * as dom from "../common/dom.js";
 
 const Self = class ColorPicker extends ColorElement {
 	static tagName = "color-picker";
 	static url = import.meta.url;
 	static dependencies = new Set(["channel-slider"]);
+	static globalStyle = new URL("color-picker-global.css", import.meta.url);
 	static shadowStyle = true;
 	static shadowTemplate = `
+		<space-picker id="space_picker" part="space-picker" exportparts="picker: space-picker-base"></space-picker>
 		<div id="sliders" part="sliders"></div>
 		<slot name="swatch">
 			<color-swatch size="large" id="swatch" part="swatch" exportparts="swatch: swatch-base, gamut, details, info, color-wrapper">
@@ -27,14 +30,22 @@ const Self = class ColorPicker extends ColorElement {
 		super.connectedCallback?.();
 		this._el.sliders.addEventListener("input", this);
 		this._el.swatch.addEventListener("input", this);
+		this._el.space_picker.addEventListener("spacechange", this);
 	}
 
 	disconnectedCallback () {
 		this._el.sliders.removeEventListener("input", this);
 		this._el.swatch.removeEventListener("input", this);
+		this._el.space_picker.removeEventListener("spacechange", this);
 	}
 
 	handleEvent (event) {
+		if (event.type === "spacechange") {
+			this.space = event.target.value;
+			this.color = this.color.to(this.space);
+			return;
+		}
+
 		let source = event.target;
 
 		if (this._el.sliders.contains(source)) {
@@ -54,18 +65,31 @@ const Self = class ColorPicker extends ColorElement {
 		this.dispatchEvent(new event.constructor(event.type, {...event}));
 	}
 
+	get spaceResolved () {
+		return this._el.space_picker.selectedSpace;
+	}
+
 	propChangedCallback ({name, prop, detail: change}) {
 		if (name === "space") {
+			if (this._el.space_picker.value !== this.space) {
+				this._el.space_picker.value = this.space;
+			}
+
+			if (this.color.space !== this.space) {
+				this.color = this.color.to(this.space);
+			}
+
+			let space = this.spaceResolved;
 			let i = 0;
-			for (let channel in this.space.coords) {
+			for (let channel in space.coords) {
 				let slider = this._el.sliders.children[i++];
 
 				if (slider) {
-					slider.space = this.space;
+					slider.space = space;
 					slider.channel = channel;
 				}
 				else {
-					this._el.sliders.insertAdjacentHTML("beforeend", `<channel-slider space="${ this.space.id }" channel="${ channel }" part="channel-slider"></channel-slider>`);
+					this._el.sliders.insertAdjacentHTML("beforeend", `<channel-slider space="${ space.id }" channel="${ channel }" part="channel-slider"></channel-slider>`);
 				}
 			}
 
@@ -89,18 +113,6 @@ const Self = class ColorPicker extends ColorElement {
 	static props = {
 		space: {
 			default: "oklch",
-			parse (value) {
-				if (value instanceof Self.Color.Space || value === null || value === undefined) {
-					return value;
-				}
-
-				value += "";
-
-				return Self.Color.Space.get(value);
-			},
-			stringify (value) {
-				return value?.id;
-			},
 		},
 
 		defaultColor: {
@@ -112,13 +124,14 @@ const Self = class ColorPicker extends ColorElement {
 			},
 			default () {
 				let coords = [];
-				for (let channel in this.space.coords) {
-					let spec = this.space.coords[channel];
+				let space = this.spaceResolved;
+				for (let channel in space.coords) {
+					let spec = space.coords[channel];
 					let range = spec.refRange ?? spec.range;
 					coords.push((range[0] + range[1]) / 2);
 				}
 
-				return new Self.Color(this.space, coords);
+				return new Self.Color(space, coords);
 			},
 			reflect: {
 				from: "color",
@@ -143,6 +156,11 @@ const Self = class ColorPicker extends ColorElement {
 		input: {
 			from () {
 				return [this._el.sliders, this._el.swatch];
+			},
+		},
+		spacechange: {
+			from () {
+				return this._el.space_picker;
 			},
 		},
 		colorchange: {

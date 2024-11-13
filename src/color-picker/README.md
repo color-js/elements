@@ -48,7 +48,7 @@ As with other components, you can listen to the `colorchange` event:
 </color-picker>
 ```
 
-### Dynamic
+<!-- ### Dynamic
 
 All attributes are reactive:
 
@@ -71,7 +71,7 @@ All attributes are reactive:
 
 	space_select.oninput = () => dynamic_picker.space = space_select.value;
 </script>
-```
+``` -->
 
 ## Reference
 
