@@ -54,17 +54,20 @@ or the color space object itself (the `selectedSpace` property):
 
 All properties are reactive and can be set programmatically:
 ```html
-<button onclick="this.nextElementSibling.value = 'oklch'">Switch to Oklch</button>
+<button onclick="this.nextElementSibling.value = 'oklch'">Switch to OKLCh</button>
 <space-picker value="p3"></space-picker>
 ```
 
 `<space-picker>` plays nicely with other color elements:
 ```html
-<label>
+<label style="display: block; margin-block-end: .5em">
     Space:
-    <space-picker value="oklch" onspacechange="this.parentElement.nextElementSibling.space = this.selectedSpace"></space-picker>
+    <space-picker value="oklch" oninput="this.parentElement.nextElementSibling.space = this.selectedSpace"></space-picker>
 </label>
-<color-picker color="oklch(60% 30% 180)"></color-picker>
+<color-slider space="oklch"
+              stops="oklch(80% 50% 70), oklch(65% 50% 180)"
+              oncolorchange="this.nextElementSibling.textContent = this.color"></color-slider>
+<color-inline></color-inline>
 ```
 
 ## Reference
