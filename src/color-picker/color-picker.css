@@ -1,18 +1,22 @@
 :host {
-	display: flex;
-	flex-wrap: wrap;
+	display: grid;
+	grid-template-columns: 3fr 1fr;
 	gap: 1em;
 }
 
 #space_picker {
-	flex: 0 1 100%; /* occupy the entire row */
-	padding: initial;
-	border: none;
+	grid-column: 1 / -1;
+	justify-self: start;
+	margin-inline-start: -.7em; /* align with the channel names */
 	font-size: 150%;
+	transition: border-color .2s;
+
+	&:not(:hover) {
+		border-color: transparent;
+	}
 }
 
 #sliders {
-	flex: 3;
 	display: flex;
 	flex-flow: column;
 	justify-content: space-between;
@@ -22,11 +26,6 @@
 
 [part="swatch"],
 slot[name="swatch"]::slotted(*) {
-	flex: 1;
 	width: auto;
 	margin: 0;
-
-	&::part(swatch) {
-		flex: 1;
-	}
 }

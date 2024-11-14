@@ -8,10 +8,11 @@ const Self = class ColorPicker extends ColorElement {
 	static tagName = "color-picker";
 	static url = import.meta.url;
 	static dependencies = new Set(["channel-slider"]);
-	static globalStyle = new URL("color-picker-global.css", import.meta.url);
 	static shadowStyle = true;
 	static shadowTemplate = `
-		<space-picker id="space_picker" part="space-picker" exportparts="picker: space-picker-base"></space-picker>
+		<slot name="space-picker">
+			<space-picker id="space_picker" part="space-picker" exportparts="picker: space-picker-base"></space-picker>
+		</slot>
 		<div id="sliders" part="sliders"></div>
 		<slot name="swatch">
 			<color-swatch size="large" id="swatch" part="swatch" exportparts="swatch: swatch-base, gamut, details, info, color-wrapper">
@@ -24,28 +25,23 @@ const Self = class ColorPicker extends ColorElement {
 		super();
 
 		this._el = dom.named(this);
+		this._slots = dom.slots(this);
 	}
 
 	connectedCallback () {
 		super.connectedCallback?.();
 		this._el.sliders.addEventListener("input", this);
 		this._el.swatch.addEventListener("input", this);
-		this._el.space_picker.addEventListener("spacechange", this);
+		this._slots["space-picker"].addEventListener("input", this);
 	}
 
 	disconnectedCallback () {
 		this._el.sliders.removeEventListener("input", this);
 		this._el.swatch.removeEventListener("input", this);
-		this._el.space_picker.removeEventListener("spacechange", this);
+		this._slots["space-picker"].removeEventListener("input", this);
 	}
 
 	handleEvent (event) {
-		if (event.type === "spacechange") {
-			this.space = event.target.value;
-			this.color = this.color.to(this.space);
-			return;
-		}
-
 		let source = event.target;
 
 		if (this._el.sliders.contains(source)) {
@@ -60,6 +56,10 @@ const Self = class ColorPicker extends ColorElement {
 				return;
 			}
 			this.color = this._el.swatch.color;
+		}
+		else if (this._el.space_picker.contains(source)) {
+			this.space = event.target.value;
+			this.color = this.color.to(this.space);
 		}
 
 		this.dispatchEvent(new event.constructor(event.type, {...event}));
@@ -156,11 +156,6 @@ const Self = class ColorPicker extends ColorElement {
 		input: {
 			from () {
 				return [this._el.sliders, this._el.swatch];
-			},
-		},
-		spacechange: {
-			from () {
-				return this._el.space_picker;
 			},
 		},
 		colorchange: {
