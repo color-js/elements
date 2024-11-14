@@ -5,8 +5,6 @@
 }
 
 #space_picker {
-	grid-column: 1 / -1;
-	justify-self: start;
 	margin-inline-start: -.7em; /* align with the channel names */
 	font-size: 150%;
 	transition: border-color .2s;
@@ -14,6 +12,12 @@
 	&:not(:hover) {
 		border-color: transparent;
 	}
+}
+
+[part="space-picker"],
+slot[name="space-picker"]::slotted(*) {
+	grid-column: 1 / -1;
+	justify-self: start;
 }
 
 #sliders {
