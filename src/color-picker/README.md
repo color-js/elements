@@ -40,7 +40,7 @@ You can use your component instead of the default color swatch:
 or the default space picker:
 
 ```html
-<color-picker id="custom-space-select" space="oklch" color="oklch(60% 30% 180)">
+<color-picker space="oklch" color="oklch(60% 30% 180)">
 	<select slot="space-picker" size="3" class="horizontal"
 			onchange="this.parentElement.space = this.value">
 		<option value="oklch" selected>OKLCh</option>
