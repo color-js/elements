@@ -25,20 +25,22 @@ const Self = class ColorPicker extends ColorElement {
 		super();
 
 		this._el = dom.named(this);
-		this._slots = dom.slots(this);
+		this._slots = {
+			space_picker: this.shadowRoot.querySelector("slot[name=space-picker]"),
+		};
 	}
 
 	connectedCallback () {
 		super.connectedCallback?.();
 		this._el.sliders.addEventListener("input", this);
 		this._el.swatch.addEventListener("input", this);
-		this._slots["space-picker"].addEventListener("input", this);
+		this._slots.space_picker.addEventListener("input", this);
 	}
 
 	disconnectedCallback () {
 		this._el.sliders.removeEventListener("input", this);
 		this._el.swatch.removeEventListener("input", this);
-		this._slots["space-picker"].removeEventListener("input", this);
+		this._slots.space_picker.removeEventListener("input", this);
 	}
 
 	handleEvent (event) {
