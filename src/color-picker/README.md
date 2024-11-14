@@ -41,8 +41,7 @@ or the default space picker:
 
 ```html
 <color-picker space="oklch" color="oklch(60% 30% 180)">
-	<select slot="space-picker" size="3" class="horizontal"
-			onchange="this.parentElement.space = this.value">
+	<select slot="space-picker" size="3" class="horizontal">
 		<option value="oklch" selected>OKLCh</option>
 		<option value="hwb">HWB</option>
 		<option value="hpluv">HPLuv</option>

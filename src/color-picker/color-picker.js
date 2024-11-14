@@ -59,7 +59,7 @@ const Self = class ColorPicker extends ColorElement {
 			}
 			this.color = this._el.swatch.color;
 		}
-		else if (this._el.space_picker.contains(source)) {
+		else if (this._el.space_picker.contains(source) || this._slots.space_picker.assignedElements().includes(source)) {
 			this.space = event.target.value;
 			this.color = this.color.to(this.space);
 		}
