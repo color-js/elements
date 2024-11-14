@@ -75,7 +75,7 @@ const Self = class ColorPicker extends ColorElement {
 				this._el.space_picker.value = this.space;
 			}
 
-			if (this.color.space !== this.space) {
+			if (this.color.space.id !== this.space) {
 				this.color = this.color.to(this.space);
 			}
 
