@@ -37,6 +37,31 @@ You can use your component instead of the default color swatch:
 </color-picker>
 ```
 
+or the default space picker:
+
+```html
+<color-picker id="custom-space-select" space="oklch" color="oklch(60% 30% 180)">
+	<select slot="space-picker" size="3" class="horizontal"
+			onchange="this.parentElement.space = this.value">
+		<option value="oklch" selected>OKLCh</option>
+		<option value="hwb">HWB</option>
+		<option value="hpluv">HPLuv</option>
+	</select>
+</color-picker>
+
+<style>
+	select.horizontal {
+		writing-mode: tb;
+		field-sizing: content;
+
+		option {
+			writing-mode: horizontal-tb;
+			padding: .5em;
+		}
+	}
+</style>
+```
+
 ### Events
 
 As with other components, you can listen to the `colorchange` event:
@@ -80,6 +105,7 @@ All attributes are reactive:
 | Name | Description |
 |------|-------------|
 | (default) | The color picker's main content. Goes into the swatch. |
+| `space-picker` | An element used to set the picker color space. |
 | `swatch` | An element used to provide a visual preview of the current color. |
 
 ### Attributes & Properties
@@ -89,12 +115,20 @@ All attributes are reactive:
 | `space` | `space` | `ColorSpace` &#124; `string` | `oklch` | The color space to use for interpolation. |
 | `color` | `color` | `Color` &#124; `string` | `oklch(50% 50% 180)` | The current color value. |
 
+### Getters
+
+These properties are read-only.
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `spaceResolved` | `ColorSpace` | Color space object corresponding to the `space` property. |
+
 ### Events
 
 | Name | Description |
 |------|-------------|
-| `input` | Fired when the color changes due to user action, either with the sliders or the color swatch's input field. |
-| `change` | Fired when the color changes due to user action, either with the sliders or the color swatch's input field. |
+| `input` | Fired when the color changes due to user action, either with the space picker, sliders or the color swatch's input field. |
+| `change` | Fired when the color changes due to user action, either with the space picker, sliders or the color swatch's input field. |
 | `colorchange` | Fired when the color changes for any reason, and once during initialization. |
 
 ### CSS variables
@@ -105,4 +139,5 @@ The styling of `<color-picker>` is fully customizable via CSS variables provided
 
 | Name | Description |
 |------|-------------|
+| `space-picker` | The default `<space-picker>` element, used if the `space-picker` slot has no slotted elements. |
 | `swatch` | The default `<color-swatch>` element, used if the `swatch` slot has no slotted elements. |

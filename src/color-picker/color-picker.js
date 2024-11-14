@@ -150,12 +150,12 @@ const Self = class ColorPicker extends ColorElement {
 	static events = {
 		change: {
 			from () {
-				return [this._el.sliders, this._el.swatch];
+				return [this._el.space_picker, this._el.sliders, this._el.swatch];
 			},
 		},
 		input: {
 			from () {
-				return [this._el.sliders, this._el.swatch];
+				return [this._el.space_picker, this._el.sliders, this._el.swatch];
 			},
 		},
 		colorchange: {
