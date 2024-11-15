@@ -10,8 +10,8 @@ const Self = class ColorPicker extends ColorElement {
 	static dependencies = new Set(["channel-slider"]);
 	static shadowStyle = true;
 	static shadowTemplate = `
-		<slot name="space-picker">
-			<space-picker id="space_picker" part="space-picker" exportparts="picker: space-picker-base"></space-picker>
+		<slot name="color-space">
+			<space-picker id="space_picker" part="color-space" exportparts="picker: color-space-base"></space-picker>
 		</slot>
 		<div id="sliders" part="sliders"></div>
 		<slot name="swatch">
@@ -26,7 +26,7 @@ const Self = class ColorPicker extends ColorElement {
 
 		this._el = dom.named(this);
 		this._slots = {
-			space_picker: this.shadowRoot.querySelector("slot[name=space-picker]"),
+			color_space: this.shadowRoot.querySelector("slot[name=color-space]"),
 		};
 	}
 
@@ -34,13 +34,13 @@ const Self = class ColorPicker extends ColorElement {
 		super.connectedCallback?.();
 		this._el.sliders.addEventListener("input", this);
 		this._el.swatch.addEventListener("input", this);
-		this._slots.space_picker.addEventListener("input", this);
+		this._slots.color_space.addEventListener("input", this);
 	}
 
 	disconnectedCallback () {
 		this._el.sliders.removeEventListener("input", this);
 		this._el.swatch.removeEventListener("input", this);
-		this._slots.space_picker.removeEventListener("input", this);
+		this._slots.color_space.removeEventListener("input", this);
 	}
 
 	handleEvent (event) {
@@ -59,7 +59,7 @@ const Self = class ColorPicker extends ColorElement {
 			}
 			this.color = this._el.swatch.color;
 		}
-		else if (this._el.space_picker.contains(source) || this._slots.space_picker.assignedElements().includes(source)) {
+		else if (this._el.space_picker.contains(source) || this._slots.color_space.assignedElements().includes(source)) {
 			this.space = event.target.value;
 			this.color = this.color.to(this.space);
 		}

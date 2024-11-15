@@ -41,7 +41,7 @@ or your own form element instead of the default space picker:
 
 ```html
 <color-picker space="oklch" color="oklch(60% 30% 180)">
-	<select slot="space-picker" size="3" class="horizontal">
+	<select slot="color-space" size="3" class="horizontal">
 		<option value="oklch" selected>OKLCh</option>
 		<option value="hwb">HWB</option>
 		<option value="hpluv">HPLuv</option>
@@ -104,7 +104,7 @@ All attributes are reactive:
 | Name | Description |
 |------|-------------|
 | (default) | The color picker's main content. Goes into the swatch. |
-| `space-picker` | An element used to set the picker color space. |
+| `color-space` | An element used to set the picker color space. |
 | `swatch` | An element used to provide a visual preview of the current color. |
 
 ### Attributes & Properties
@@ -138,5 +138,6 @@ The styling of `<color-picker>` is fully customizable via CSS variables provided
 
 | Name | Description |
 |------|-------------|
-| `space-picker` | The default `<space-picker>` element, used if the `space-picker` slot has no slotted elements. |
+| `color-space` | The default `<space-picker>` element, used if the `color-space` slot has no slotted elements. |
+| `color-space-base` | The internal `<select>` element of the default `<space-picker>` element. |
 | `swatch` | The default `<color-swatch>` element, used if the `swatch` slot has no slotted elements. |

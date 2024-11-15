@@ -14,8 +14,8 @@
 	}
 }
 
-[part="space-picker"],
-slot[name="space-picker"]::slotted(*) {
+[part="color-space"],
+slot[name="color-space"]::slotted(*) {
 	grid-column: 1 / -1;
 	justify-self: start;
 }
