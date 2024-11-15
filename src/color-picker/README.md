@@ -37,7 +37,7 @@ You can use your component instead of the default color swatch:
 </color-picker>
 ```
 
-or the default space picker:
+or your own form element instead of the default space picker:
 
 ```html
 <color-picker space="oklch" color="oklch(60% 30% 180)">
