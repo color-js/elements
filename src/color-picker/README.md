@@ -40,25 +40,15 @@ You can use your component instead of the default color swatch:
 or your own form element instead of the default space picker:
 
 ```html
-<color-picker space="oklch" color="oklch(60% 30% 180)">
-	<select slot="color-space" size="3" class="horizontal">
-		<option value="oklch" selected>OKLCh</option>
-		<option value="hwb">HWB</option>
-		<option value="hpluv">HPLuv</option>
+<color-picker space="oklab" color="oklab(60% -0.12 0)">
+	<select slot="color-space" size="4">
+		<optgroup label="Rectangular Spaces">
+			<option value="lab">Lab</option>
+			<option value="oklab" selected>Oklab</option>
+			<option value="prophoto">ProPhoto</option>
+		</optgroup>
 	</select>
 </color-picker>
-
-<style>
-	select.horizontal {
-		writing-mode: tb;
-		field-sizing: content;
-
-		option {
-			writing-mode: horizontal-tb;
-			padding: .5em;
-		}
-	}
-</style>
 ```
 
 ### Events
@@ -72,30 +62,38 @@ As with other components, you can listen to the `colorchange` event:
 </color-picker>
 ```
 
-<!-- ### Dynamic
+### Dynamic
 
 All attributes are reactive:
 
 ```html
-<label>
-	Space:
-	<select id="space_select" size="3"></select>
-</label>
+<color-picker space="oklch" color="oklch(60% 30% 180)" id="dynamic_picker">
+	<fieldset slot="color-space">
+		<legend>Polar Spaces</legend>
 
-<color-picker id="dynamic_picker" space="oklch" color="oklch(60% 30% 180)"></color-picker>
+		<label>
+			<input type="radio" name="space" value="oklch" checked /> OKLCh
+		</label>
+		<label>
+			<input type="radio" name="space" value="hwb" /> HWB
+		</label>
+		<label>
+			<input type="radio" name="space" value="hsl" /> HSL
+		</label>
+	</fieldset>
+</color-picker>
 
-<script type="module">
-	import Color from "https://colorjs.io/dist/color.js";
-
-	space_select.innerHTML = Object.entries(Color.spaces)
-		.map(([id, space]) => `<option value="${id}">${space.name}</option>`)
-		.join('\n');
-
-	space_select.value = "oklch";
-
-	space_select.oninput = () => dynamic_picker.space = space_select.value;
+<script>
+	let radios = dynamic_picker.querySelectorAll("input[name=space]");
+	radios.forEach(radio => radio.addEventListener("change", evt => dynamic_picker.space = evt.target.value));
 </script>
-``` -->
+
+<style>
+	label + label {
+		margin-inline-start: .3em;
+	}
+</style>
+```
 
 ## Reference
 
