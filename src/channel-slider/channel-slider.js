@@ -9,8 +9,11 @@ const Self = class ChannelSlider extends ColorElement {
 	static shadowStyle = true;
 	static shadowTemplate = `
 		<label class="color-slider-label" part="label">
-			<slot></slot>
-			<color-slider part="color_slider" exportparts="slider" id="slider" tooltip></color-slider>
+			<slot>
+				<span id="channel_info" part="channel-info"></span>
+				<input type="number" part="spinner" min="0" max="1" step="0.01" id="spinner" />
+			</slot>
+			<color-slider part="color_slider" exportparts="slider" id="slider"></color-slider>
 		</label>`;
 
 	constructor () {
@@ -24,10 +27,12 @@ const Self = class ChannelSlider extends ColorElement {
 		super.connectedCallback?.();
 
 		this._el.slider.addEventListener("input", this);
+		this._el.slot.addEventListener("input", this);
 	}
 
 	disconnectedCallback () {
 		this._el.slider.removeEventListener("input", this);
+		this._el.slot.removeEventListener("input", this);
 	}
 
 	handleEvent (event) {
@@ -82,13 +87,26 @@ const Self = class ChannelSlider extends ColorElement {
 	propChangedCallback ({name, prop, detail: change}) {
 		if (["space", "min", "max", "step", "value", "defaultValue"].includes(name)) {
 			prop.applyChange(this._el.slider, change);
+
+			if (["min", "max", "step", "value", "defaultValue"].includes(name)) {
+				prop.applyChange(this._el.spinner, change);
+
+				if (name === "value" && this.value !== undefined) {
+					this._el.spinner.value = Number(this.value.toPrecision(4));
+
+					if (!CSS.supports("field-sizing", "content")) {
+						let valueStr = this._el.spinner.value;
+						this._el.spinner.style.setProperty("--value-length", valueStr.length);
+					}
+				}
+			}
 		}
 
 		if (name === "defaultColor" || name === "space" || name === "channel" || name === "min" || name === "max") {
 			this._el.slider.stops = this.stops;
 
 			if (name === "space" || name === "channel" || name === "min" || name === "max") {
-				this._el.slot.innerHTML = `${ this.channelName } <em>(${ this.min }&thinsp;&ndash;&thinsp;${ this.max })</em>`;
+				this._el.channel_info.innerHTML = `${ this.channelName } <em>(${ this.min }&thinsp;&ndash;&thinsp;${ this.max })</em>`;
 			}
 		}
 	}

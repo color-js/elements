@@ -6,14 +6,46 @@
 
 	em {
 		opacity: 60%;
+		transition: opacity .2s;
+	}
+
+	&:not(:hover, :focus-within) em {
+		opacity: 0;
+	}
+
+	input[type=number] {
+		all: unset;
+
+		--content-width: calc(var(--value-length) * 1ch);
+		width: calc(var(--content-width, 2ch) + 1.2em);
+		min-width: calc(2ch + 1.2em);
+		box-sizing: content-box;
+		margin-inline-end: -1.2em; /* align the value to the right edge of the slider */
+
+		&::-webkit-textfield-decoration-container {
+			gap: .2em;
+		}
+
+		&:not(:hover, :focus) {
+			opacity: 60%;
+
+			/* Hide spin buttons in Firefox */
+			appearance: textfield;
+
+			/* Hide spin buttons in Safari */
+			&::-webkit-inner-spin-button {
+				opacity: 0;
+			}
+		}
+
+		@supports (field-sizing: content) {
+			field-sizing: content;
+			width: auto;
+			margin-inline-end: -.9em;
+		}
 	}
 }
 
 color-slider {
 	grid-column: 1 / -1;
 }
-
-
-
-
-
