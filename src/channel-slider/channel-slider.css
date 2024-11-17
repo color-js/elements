@@ -1,12 +1,14 @@
 .color-slider-label {
+	--_transition-duration: var(--transition-duration, 200ms);
+
 	display: grid;
 	grid-template-columns: 1fr auto;
 	gap: .3em;
-	position: relative;
+	align-items: center;
 
 	em {
 		opacity: 60%;
-		transition: opacity .2s;
+		transition: opacity var(--_transition-duration);
 	}
 
 	&:not(:hover, :focus-within) em {
@@ -14,34 +16,45 @@
 	}
 
 	input[type=number] {
+		--_border-color: var(--border-color, color-mix(in oklab, currentcolor calc(var(--_current-color-percent, 30) * 1%), oklab(none none none / 0%)));
+
 		all: unset;
 
 		--content-width: calc(var(--value-length) * 1ch);
 		width: calc(var(--content-width, 2ch) + 1.2em);
 		min-width: calc(2ch + 1.2em);
 		box-sizing: content-box;
-		margin-inline-end: -1.2em; /* align the value to the right edge of the slider */
+		padding: .1em .2em;
+		border-radius: .2em;
+		border: 1px solid var(--_border-color);
+		text-align: center;
+		font-size: 90%;
+		transition: var(--_transition-duration) allow-discrete;
+		transition-property: opacity, border-color, display;
 
 		&::-webkit-textfield-decoration-container {
 			gap: .2em;
 		}
 
 		&:not(:hover, :focus) {
+			--_current-color-percent: 10;
+
 			opacity: 60%;
+			border-color: var(--_border-color);
 
 			/* Hide spin buttons in Firefox */
 			appearance: textfield;
 
-			/* Hide spin buttons in Safari */
+			/* Hide spin buttons in Safari and Chrome */
 			&::-webkit-inner-spin-button {
 				opacity: 0;
+				display: none;
 			}
 		}
 
 		@supports (field-sizing: content) {
 			field-sizing: content;
 			width: auto;
-			margin-inline-end: -.9em;
 		}
 	}
 }
