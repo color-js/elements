@@ -107,7 +107,23 @@ const Self = class ColorPicker extends ColorElement {
 	static props = {
 		spaceRaw: {
 			default: "oklch",
+			convert (value) {
+				if (value === null || value === undefined) {
+					return value;
+				}
+				else if (value instanceof Self.Color.Space) {
+					return value.id;
+				}
+
+				return value + "";
+			},
 			changed ({parsedValue, ...change}) {
+				if (!parsedValue) {
+					// Something went wrong. We should always have a value. Falling back to the current space
+					this.spaceRaw = this.space.id;
+					return;
+				}
+
 				if (this.props.space && this.props.space.id !== parsedValue) {
 					// The space object we have in the cache is outdated. We need to delete it so that the space getter returns the updated one
 					delete this.props.space;
