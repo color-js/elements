@@ -60,28 +60,20 @@ const Self = class ColorPicker extends ColorElement {
 			this.color = this._el.swatch.color;
 		}
 		else if (this._el.space_picker.contains(source) || this._slots.color_space.assignedElements().includes(source)) {
-			this.space = event.target.value;
-			this.color = this.color.to(this.space);
+			this.spaceRaw = event.target.value;
 		}
 
 		this.dispatchEvent(new event.constructor(event.type, {...event}));
 	}
 
-	get spaceResolved () {
-		return this._el.space_picker.selectedSpace;
-	}
-
 	propChangedCallback ({name, prop, detail: change}) {
 		if (name === "space") {
-			if (this._el.space_picker.value !== this.space) {
-				this._el.space_picker.value = this.space;
+			let space = this.space;
+
+			if (this.color.space !== space) {
+				this.color = this.color.to(space);
 			}
 
-			if (this.color.space.id !== this.space) {
-				this.color = this.color.to(this.space);
-			}
-
-			let space = this.spaceResolved;
 			let i = 0;
 			for (let channel in space.coords) {
 				let slider = this._el.sliders.children[i++];
@@ -113,8 +105,43 @@ const Self = class ColorPicker extends ColorElement {
 	}
 
 	static props = {
-		space: {
+		spaceRaw: {
 			default: "oklch",
+			changed ({parsedValue, ...change}) {
+				if (this.props.space && this.props.space.id !== parsedValue) {
+					// The space object we have in the cache is outdated. We need to delete it so that the space getter returns the updated one
+					delete this.props.space;
+				}
+			},
+			reflect: {
+				from: "space",
+			},
+		},
+
+		space: {
+			get () {
+				return this._el.space_picker.selectedSpace;
+			},
+			set: true,
+			changed ({parsedValue, ...change}) {
+				if (!parsedValue) {
+					// this.spaceRaw changed
+					if (this._el.space_picker.value !== this.spaceRaw) {
+						this._el.space_picker.value = this.spaceRaw;
+					}
+
+					return;
+				}
+
+				parsedValue = parsedValue instanceof Self.Color.Space ? parsedValue.id : parsedValue;
+				if (this.spaceRaw !== parsedValue) {
+					this._el.space_picker.value = parsedValue;
+					this.spaceRaw = parsedValue;
+				}
+			},
+			dependencies: ["spaceRaw"],
+			defaultProp: "spaceRaw",
+			reflect: false,
 		},
 
 		defaultColor: {
@@ -126,7 +153,7 @@ const Self = class ColorPicker extends ColorElement {
 			},
 			default () {
 				let coords = [];
-				let space = this.spaceResolved;
+				let space = this.space;
 				for (let channel in space.coords) {
 					let spec = space.coords[channel];
 					let range = spec.refRange ?? spec.range;

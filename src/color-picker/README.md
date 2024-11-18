@@ -109,16 +109,9 @@ All attributes are reactive:
 
 | Attribute | Property | Property type | Default value | Description |
 |-----------|----------|---------------|---------------|-------------|
-| `space` | `space` | `ColorSpace` &#124; `string` | `oklch` | The color space to use for interpolation. |
+| `space` | `spaceRaw` | `string` | `oklch` | The color space to use for interpolation. |
+| – | `space` | `ColorSpace` | `OKLCh` | Color space object corresponding to the `space` attribute. |
 | `color` | `color` | `Color` &#124; `string` | `oklch(50% 50% 180)` | The current color value. |
-
-### Getters
-
-These properties are read-only.
-
-| Property | Type | Description |
-|----------|------|-------------|
-| `spaceResolved` | `ColorSpace` | Color space object corresponding to the `space` property. |
 
 ### Events
 
