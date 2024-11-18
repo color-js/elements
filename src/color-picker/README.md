@@ -102,7 +102,7 @@ All attributes are reactive:
 | Name | Description |
 |------|-------------|
 | (default) | The color picker's main content. Goes into the swatch. |
-| `color-space` | An element used to set the picker color space. |
+| `color-space` | An element to display (and if writable, also set) the current color space. If not provided, a [`<space-picker>`](../space-picker/) is used. |
 | `swatch` | An element used to provide a visual preview of the current color. |
 
 ### Attributes & Properties
@@ -124,8 +124,8 @@ These properties are read-only.
 
 | Name | Description |
 |------|-------------|
-| `input` | Fired when the color changes due to user action, either with the space picker, sliders or the color swatch's input field. |
-| `change` | Fired when the color changes due to user action, either with the space picker, sliders or the color swatch's input field. |
+| `input` | Fired when the color changes due to user action, such as adjusting the sliders, entering a color in the swatch's text field, or choosing a different color space. |
+| `change` | Fired when the color changes due to user action, such as adjusting the sliders, entering a color in the swatch's text field, or choosing a different color space. |
 | `colorchange` | Fired when the color changes for any reason, and once during initialization. |
 
 ### CSS variables
@@ -136,6 +136,6 @@ The styling of `<color-picker>` is fully customizable via CSS variables provided
 
 | Name | Description |
 |------|-------------|
-| `color-space` | The default `<space-picker>` element, used if the `color-space` slot has no slotted elements. |
-| `color-space-base` | The internal `<select>` element of the default `<space-picker>` element. |
-| `swatch` | The default `<color-swatch>` element, used if the `swatch` slot has no slotted elements. |
+| `color-space` | The default [`<space-picker>`](../space-picker/) element, used if the `color-space` slot has no slotted elements. |
+| `color-space-base` | The internal `<select>` element of the default [`<space-picker>`](../space-picker/) element. |
+| `swatch` | The default [`<color-swatch>`](../color-swatch/) element, used if the `swatch` slot has no slotted elements. |
