@@ -174,14 +174,13 @@ const Self = class ColorPicker extends ColorElement {
 			},
 			default () {
 				let coords = [];
-				let space = this.space;
-				for (let channel in space.coords) {
-					let spec = space.coords[channel];
+				for (let channel in this.space.coords) {
+					let spec = this.space.coords[channel];
 					let range = spec.refRange ?? spec.range;
 					coords.push((range[0] + range[1]) / 2);
 				}
 
-				return new Self.Color(space, coords);
+				return new Self.Color(this.space, coords);
 			},
 			reflect: {
 				from: "color",
