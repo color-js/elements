@@ -85,7 +85,7 @@ All attributes are reactive:
 
 <script>
 	let radios = dynamic_picker.querySelectorAll("input[name=space]");
-	radios.forEach(radio => radio.addEventListener("change", evt => dynamic_picker.space = evt.target.value));
+	radios.forEach(radio => radio.addEventListener("change", evt => dynamic_picker.spaceId = evt.target.value));
 </script>
 
 <style>
