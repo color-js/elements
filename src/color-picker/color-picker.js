@@ -60,7 +60,7 @@ const Self = class ColorPicker extends ColorElement {
 			this.color = this._el.swatch.color;
 		}
 		else if (this._el.space_picker.contains(source) || this._slots.color_space.assignedElements().includes(source)) {
-			this.spaceRaw = event.target.value;
+			this.spaceId = event.target.value;
 		}
 
 		this.dispatchEvent(new event.constructor(event.type, {...event}));
@@ -105,7 +105,7 @@ const Self = class ColorPicker extends ColorElement {
 	}
 
 	static props = {
-		spaceRaw: {
+		spaceId: {
 			default: "oklch",
 			convert (value) {
 				if (value === null || value === undefined) {
@@ -120,7 +120,7 @@ const Self = class ColorPicker extends ColorElement {
 			changed ({parsedValue, source, ...change}) {
 				if (!parsedValue && source !== "default") {
 					// Something went wrong. We should always have a value. Falling back to the current space
-					this.spaceRaw = this.space.id;
+					this.spaceId = this.space.id;
 					return;
 				}
 
@@ -141,9 +141,9 @@ const Self = class ColorPicker extends ColorElement {
 			set: true,
 			changed ({parsedValue, ...change}) {
 				if (parsedValue === undefined) {
-					// this.spaceRaw changed
-					if (this._el.space_picker.value !== this.spaceRaw) {
-						this._el.space_picker.value = this.spaceRaw;
+					// this.spaceId changed
+					if (this._el.space_picker.value !== this.spaceId) {
+						this._el.space_picker.value = this.spaceId;
 					}
 
 					return;
@@ -155,13 +155,13 @@ const Self = class ColorPicker extends ColorElement {
 				}
 
 				parsedValue = parsedValue instanceof Self.Color.Space ? parsedValue.id : parsedValue;
-				if (this.spaceRaw !== parsedValue) {
+				if (this.spaceId !== parsedValue) {
 					this._el.space_picker.value = parsedValue;
-					this.spaceRaw = parsedValue;
+					this.spaceId = parsedValue;
 				}
 			},
-			dependencies: ["spaceRaw"],
-			defaultProp: "spaceRaw",
+			dependencies: ["spaceId"],
+			defaultProp: "spaceId",
 			reflect: false,
 		},
 
