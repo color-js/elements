@@ -117,8 +117,8 @@ const Self = class ColorPicker extends ColorElement {
 
 				return value + "";
 			},
-			changed ({parsedValue, ...change}) {
-				if (!parsedValue) {
+			changed ({parsedValue, source, ...change}) {
+				if (!parsedValue && source !== "default") {
 					// Something went wrong. We should always have a value. Falling back to the current space
 					this.spaceRaw = this.space.id;
 					return;
