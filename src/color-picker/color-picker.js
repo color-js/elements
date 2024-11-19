@@ -140,12 +140,17 @@ const Self = class ColorPicker extends ColorElement {
 			},
 			set: true,
 			changed ({parsedValue, ...change}) {
-				if (!parsedValue) {
+				if (parsedValue === undefined) {
 					// this.spaceRaw changed
 					if (this._el.space_picker.value !== this.spaceRaw) {
 						this._el.space_picker.value = this.spaceRaw;
 					}
 
+					return;
+				}
+				else if (!parsedValue) {
+					// Something went wrong. We should always have a value. Falling back to the current space
+					this.space = this._el.space_picker.selectedSpace;
 					return;
 				}
 
