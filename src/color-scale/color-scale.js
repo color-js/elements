@@ -81,7 +81,7 @@ const Self = class ColorScale extends ColorElement {
 
 					addButton.addEventListener("click", evt => {
 						let {name, color} = this.defaultColor?.() ?? {};
-						[name, color] = [name ?? "New color", color ?? this.computedColors.at(-1)?.color ?? new Self.Color("#f06").to(this.space)];
+						[name, color] = [name ?? "New color", color ?? this.computedColors.at(-1)?.color ?? new Self.Color("#f06")];
 
 						if (this.colors[name]) {
 							// Name already exists
@@ -93,7 +93,7 @@ const Self = class ColorScale extends ColorElement {
 							name = `${ name } ${ i }`;
 						}
 
-						this.colors = {...this.colors, [name]: color};
+						this.colors = {...this.colors, [name]: color.to(this.space)};
 						this.render();
 
 						// Focus the new color input and select its content
