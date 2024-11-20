@@ -55,24 +55,14 @@ const Self = class ColorScale extends ColorElement {
 			return;
 		}
 
-		let colors = Object.entries(this.colors);
-		let swatchIndex = this.#swatches.indexOf(source.closest("color-swatch"));
-		if (swatchIndex > -1) {
-			if (event.type === "colorchange") {
-				colors[swatchIndex][1] = source.color;
-			}
-			else if (event.type === "input") {
-				// Color name changed
-				colors[swatchIndex][0] = source.value;
-			}
-			else if (event.type === "click" && source.matches("[part=remove-button]")) {
-				colors.splice(swatchIndex, 1);
-				this.colors = Object.fromEntries(colors);
-				this.render();
-				return;
-			}
-
-			this.colors = Object.fromEntries(colors);
+		if (event.type === "colorchange") {
+			// Update color
+		}
+		else if (event.type === "input") {
+			// Update color name
+		}
+		else if (event.type === "click" && source.matches("[part=remove-button]")) {
+			// Remove color
 		}
 
 		this.dispatchEvent(new event.constructor(event.type, {...event}));
