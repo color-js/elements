@@ -59,6 +59,42 @@ const Self = class ColorScale extends ColorElement {
 			// Only if nothing is being edited, otherwise the input would be lost
 			// or, e.g., "red" would be converted to "rgb(100%, 0%, 0%)" right after the typing is done
 			this.render();
+
+			if (name === "editable") {
+				let addButton = this._el.addButton;
+				if (this.editable?.color) {
+					if (!addButton) {
+						addButton = this._el.addButton = Object.assign(document.createElement("button"), {
+							id: "add-button",
+							part: "add-button",
+							textContent: "Add color",
+						});
+
+						addButton.addEventListener("click", evt => {
+							let {name, color} = this.defaultColor?.() ?? {};
+							[name, color] = [name ?? "New color", color ?? this.computedColors.at(-1).color];
+
+							if (this.colors[name]) {
+								// Name already exists
+								// Append a number to the name
+								let i = 1;
+								while (this.colors[`${ name } ${ i }`]) {
+									i++;
+								}
+								name = `${ name } ${ i }`;
+							}
+
+							this.colors = {...this.colors, [name]: color};
+							this.render();
+						});
+					}
+
+					this._el.swatches.after(addButton);
+				}
+				else {
+					addButton?.remove();
+				}
+			}
 		}
 	}
 
@@ -220,6 +256,12 @@ const Self = class ColorScale extends ColorElement {
 			reflect: {
 				from: true,
 			},
+		},
+		defaultColor: {
+			type: {
+				is: Function,
+			},
+			reflect: false,
 		},
 		info: {},
 	};
