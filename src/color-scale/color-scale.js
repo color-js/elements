@@ -8,6 +8,9 @@ const Self = class ColorScale extends ColorElement {
 	static shadowStyle = true;
 	static shadowTemplate = `
 		<div id=swatches></div>
+		<slot name="add-button">
+			<button id="add-button" part="add-button">Add color</button>
+		</slot>
 		<slot></slot>`;
 
 	constructor () {
@@ -16,6 +19,11 @@ const Self = class ColorScale extends ColorElement {
 		this._el = {
 			slot: this.shadowRoot.querySelector("slot"),
 			swatches: this.shadowRoot.getElementById("swatches"),
+			add_button: this.shadowRoot.getElementById("add-button"),
+		};
+
+		this._slots = {
+			add_button: this.shadowRoot.querySelector("slot[name=add-button]"),
 		};
 	}
 
@@ -24,6 +32,7 @@ const Self = class ColorScale extends ColorElement {
 		this._el.swatches.addEventListener("input", this, {capture: true});
 		this._el.swatches.addEventListener("colorchange", this, {capture: true});
 		this._el.swatches.addEventListener("click", this, {capture: true});
+		this._slots.add_button.addEventListener("click", this);
 	}
 
 	disconnectedCallback () {
@@ -31,24 +40,32 @@ const Self = class ColorScale extends ColorElement {
 		this._el.swatches.removeEventListener("input", this, {capture: true});
 		this._el.swatches.removeEventListener("colorchange", this, {capture: true});
 		this._el.swatches.removeEventListener("click", this, {capture: true});
+		this._slots.add_button.removeEventListener("click", this);
 	}
 
 	handleEvent (event) {
-		if (event.type === "input" && (!this.editable?.name || !event.target.matches("input[slot=before]"))) {
+		let source = event.target;
+
+		if (event.type === "input" && (!this.editable?.name || !source.matches("input[slot=before]"))) {
+			return;
+		}
+
+		if (source === this._el.add_button || this._slots.add_button.assignedElements().includes(source)) {
+			this.addColor();
 			return;
 		}
 
 		let colors = Object.entries(this.colors);
-		let swatchIndex = this.#swatches.indexOf(event.target.closest("color-swatch"));
+		let swatchIndex = this.#swatches.indexOf(source.closest("color-swatch"));
 		if (swatchIndex > -1) {
 			if (event.type === "colorchange") {
-				colors[swatchIndex][1] = event.target.color;
+				colors[swatchIndex][1] = source.color;
 			}
 			else if (event.type === "input") {
 				// Color name changed
-				colors[swatchIndex][0] = event.target.value;
+				colors[swatchIndex][0] = source.value;
 			}
-			else if (event.type === "click" && event.target.matches("[part=remove-button]")) {
+			else if (event.type === "click" && source.matches("[part=remove-button]")) {
 				colors.splice(swatchIndex, 1);
 				this.colors = Object.fromEntries(colors);
 				this.render();
@@ -70,47 +87,11 @@ const Self = class ColorScale extends ColorElement {
 		}
 
 		if (name === "editable") {
-			let addButton = this._el.addButton;
 			if (this.editable?.color) {
-				if (!addButton) {
-					addButton = this._el.addButton = Object.assign(document.createElement("button"), {
-						id: "add-button",
-						part: "add-button",
-						textContent: "Add color",
-					});
-
-					addButton.addEventListener("click", evt => {
-						let {name, color} = this.defaultColor?.() ?? {};
-						[name, color] = [name ?? "New color", color ?? this.computedColors.at(-1)?.color ?? new Self.Color("#f06")];
-
-						if (this.colors[name]) {
-							// Name already exists
-							// Append a number to the name
-							let i = 1;
-							while (this.colors[`${ name } ${ i }`]) {
-								i++;
-							}
-							name = `${ name } ${ i }`;
-						}
-
-						this.colors = {...this.colors, [name]: color.to(this.space)};
-						this.render();
-
-						// Focus the new color input and select its content
-						let swatch = this._el.swatches.lastElementChild;
-						let input = swatch.querySelector("input:not([slot]");
-						input.focus();
-						input.select();
-					});
-
-					this._el.swatches.after(addButton);
-				}
-				else {
-					addButton.style.removeProperty("display");
-				}
+				this._el.add_button.style.removeProperty("display");
 			}
 			else {
-				addButton?.style.setProperty("display", "none");
+				this._el.add_button.style.setProperty("display", "none");
 			}
 
 			this.render();
@@ -118,6 +99,33 @@ const Self = class ColorScale extends ColorElement {
 	}
 
 	#swatches = [];
+
+	addColor () {
+		let {name, color} = this.defaultColor?.() ?? {};
+		name ??= "New color";
+		color ??= this.computedColors.at(-1)?.color ?? new Self.Color("#f06");
+
+		if (this.colors[name]) {
+			// Name already exists
+			// Append a number to the name
+			let i = 1;
+			while (this.colors[`${ name } ${ i }`]) {
+				i++;
+			}
+			name = `${ name } ${ i }`;
+		}
+
+		this.colors = {...this.colors, [name]: color.to(this.space)};
+		this.render();
+
+		if (this.editable?.color) {
+			// Focus the new color input and select its content
+			let swatch = this._el.swatches.lastElementChild;
+			let input = swatch.querySelector("input:not([slot]");
+			input.focus();
+			input.select();
+		}
+	}
 
 	render () {
 		let colors = this.computedColors;
