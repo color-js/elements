@@ -21,21 +21,43 @@ const Self = class ColorScale extends ColorElement {
 
 	connectedCallback () {
 		super.connectedCallback?.();
+		this._el.swatches.addEventListener("input", this, {capture: true});
 		this._el.swatches.addEventListener("colorchange", this, {capture: true});
 	}
 
 	disconnectedCallback () {
 		this.#swatches = [];
+		this._el.swatches.removeEventListener("input", this, {capture: true});
 		this._el.swatches.removeEventListener("colorchange", this, {capture: true});
 	}
 
 	handleEvent (event) {
+		if (event.type === "input" && (!this.editable?.name || !event.target.matches("input[slot=before]"))) {
+			return;
+		}
+
+		let colors = Object.entries(this.colors);
+		let swatchIndex = this.#swatches.indexOf(event.target.closest("color-swatch"));
+		if (swatchIndex > -1) {
+			if (event.type === "colorchange") {
+				colors[swatchIndex][1] = event.target.color;
+			}
+			else {
+				// Color name changed
+				colors[swatchIndex][0] = event.target.value;
+			}
+
+			this.colors = Object.fromEntries(colors);
+		}
+
 		this.dispatchEvent(new event.constructor(event.type, {...event}));
 	}
 
 	propChangedCallback ({name, prop, detail: change}) {
-		if (name === "computedColors") {
+		if ((name === "computedColors" && !this.editable?.name && !this.editable?.color) || name === "editable") {
 			// Re-render swatches
+			// Only if nothing is being edited, otherwise the input would be lost
+			// or, e.g., "red" would be converted to "rgb(100%, 0%, 0%)" right after the typing is done
 			this.render();
 		}
 	}
@@ -65,7 +87,26 @@ const Self = class ColorScale extends ColorElement {
 			}
 
 			swatch.color = color;
-			swatch.label = name;
+			if (this.editable?.name || this.editable?.color) {
+				let html = "";
+
+				if (this.editable.name) {
+					html += `<input slot="before" value="${ name }" />`;
+				}
+				else {
+					html += `<span slot="before">${ name }</span>`;
+				}
+
+				if (this.editable.color) {
+					html += `<input value="${ color }" />`;
+				}
+
+				swatch.innerHTML = html;
+			}
+			else {
+				swatch.textContent = name;
+			}
+
 			if (this.info) {
 				swatch.info = this.info;
 			}
@@ -148,6 +189,37 @@ const Self = class ColorScale extends ColorElement {
 				return colors;
 			},
 			additionalDependencies: ["info"],
+		},
+		editable: {
+			parse (value) {
+				if (value === undefined || value === null || value === false || value === "false") {
+					return;
+				}
+
+				if (value === "" || value === true || value === "true") {
+					// Boolean attribute
+					return {
+						name: true,
+						color: true,
+					};
+				}
+
+				if (typeof value === "string") {
+					// Convert to object
+					let entries = value.split(/\s*[,\s]\s*/).map(key => [key.trim(), true]);
+					return Object.fromEntries(entries);
+				}
+
+				if (typeof value === "object") {
+					return value;
+				}
+
+				console.warn(`The specified value "${ value }" cannot be used as a value of the "editable" property.`);
+				return;
+			},
+			reflect: {
+				from: true,
+			},
 		},
 		info: {},
 	};
