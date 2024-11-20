@@ -252,7 +252,7 @@ const Self = class ColorScale extends ColorElement {
 					return;
 				}
 
-				if (value === "" || value === true || value === "true") {
+				if (value === "" || value === "editable" || value === true || value === "true") {
 					// Boolean attribute
 					return {
 						name: true,
