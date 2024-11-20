@@ -45,6 +45,7 @@
 			&::-webkit-inner-spin-button {
 				/* Fade out the spin buttons in Chrome and Safari */
 				opacity: .35;
+				filter: contrast(2);
 			}
 		}
 
