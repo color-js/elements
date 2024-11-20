@@ -42,7 +42,7 @@ const Self = class ColorSwatch extends ColorElement {
 
 	#updateStatic () {
 		let previousInput = this._el.input;
-		let input = this._el.input = this.querySelector("input");
+		let input = this._el.input = this.querySelector("input:not([slot])");
 
 		this.static = !input;
 
