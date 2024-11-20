@@ -95,6 +95,12 @@ const Self = class ColorScale extends ColorElement {
 
 						this.colors = {...this.colors, [name]: color};
 						this.render();
+
+						// Focus the new color input and select its content
+						let swatch = this._el.swatches.lastElementChild;
+						let input = swatch.querySelector("input:not([slot]");
+						input.focus();
+						input.select();
 					});
 
 					this._el.swatches.after(addButton);
