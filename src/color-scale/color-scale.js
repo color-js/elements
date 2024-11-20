@@ -23,12 +23,14 @@ const Self = class ColorScale extends ColorElement {
 		super.connectedCallback?.();
 		this._el.swatches.addEventListener("input", this, {capture: true});
 		this._el.swatches.addEventListener("colorchange", this, {capture: true});
+		this._el.swatches.addEventListener("click", this, {capture: true});
 	}
 
 	disconnectedCallback () {
 		this.#swatches = [];
 		this._el.swatches.removeEventListener("input", this, {capture: true});
 		this._el.swatches.removeEventListener("colorchange", this, {capture: true});
+		this._el.swatches.removeEventListener("click", this, {capture: true});
 	}
 
 	handleEvent (event) {
@@ -42,9 +44,15 @@ const Self = class ColorScale extends ColorElement {
 			if (event.type === "colorchange") {
 				colors[swatchIndex][1] = event.target.color;
 			}
-			else {
+			else if (event.type === "input") {
 				// Color name changed
 				colors[swatchIndex][0] = event.target.value;
+			}
+			else if (event.type === "click" && event.target.matches("[part=remove-button]")) {
+				colors.splice(swatchIndex, 1);
+				this.colors = Object.fromEntries(colors);
+				this.render();
+				return;
 			}
 
 			this.colors = Object.fromEntries(colors);
@@ -54,47 +62,52 @@ const Self = class ColorScale extends ColorElement {
 	}
 
 	propChangedCallback ({name, prop, detail: change}) {
-		if ((name === "computedColors" && !this.editable?.name && !this.editable?.color) || name === "editable") {
+		if ((name === "computedColors" && !this.editable?.name && !this.editable?.color)) {
 			// Re-render swatches
 			// Only if nothing is being edited, otherwise the input would be lost
 			// or, e.g., "red" would be converted to "rgb(100%, 0%, 0%)" right after the typing is done
 			this.render();
+		}
 
-			if (name === "editable") {
-				let addButton = this._el.addButton;
-				if (this.editable?.color) {
-					if (!addButton) {
-						addButton = this._el.addButton = Object.assign(document.createElement("button"), {
-							id: "add-button",
-							part: "add-button",
-							textContent: "Add color",
-						});
+		if (name === "editable") {
+			let addButton = this._el.addButton;
+			if (this.editable?.color) {
+				if (!addButton) {
+					addButton = this._el.addButton = Object.assign(document.createElement("button"), {
+						id: "add-button",
+						part: "add-button",
+						textContent: "Add color",
+					});
 
-						addButton.addEventListener("click", evt => {
-							let {name, color} = this.defaultColor?.() ?? {};
-							[name, color] = [name ?? "New color", color ?? this.computedColors.at(-1).color];
+					addButton.addEventListener("click", evt => {
+						let {name, color} = this.defaultColor?.() ?? {};
+						[name, color] = [name ?? "New color", color ?? this.computedColors.at(-1)?.color ?? new Self.Color("#f06").to(this.space)];
 
-							if (this.colors[name]) {
-								// Name already exists
-								// Append a number to the name
-								let i = 1;
-								while (this.colors[`${ name } ${ i }`]) {
-									i++;
-								}
-								name = `${ name } ${ i }`;
+						if (this.colors[name]) {
+							// Name already exists
+							// Append a number to the name
+							let i = 1;
+							while (this.colors[`${ name } ${ i }`]) {
+								i++;
 							}
+							name = `${ name } ${ i }`;
+						}
 
-							this.colors = {...this.colors, [name]: color};
-							this.render();
-						});
-					}
+						this.colors = {...this.colors, [name]: color};
+						this.render();
+					});
 
 					this._el.swatches.after(addButton);
 				}
 				else {
-					addButton?.remove();
+					addButton.style.removeProperty("display");
 				}
 			}
+			else {
+				addButton?.style.setProperty("display", "none");
+			}
+
+			this.render();
 		}
 	}
 
@@ -118,7 +131,7 @@ const Self = class ColorScale extends ColorElement {
 				this.#swatches[i] = swatch = document.createElement("color-swatch");
 				swatch.setAttribute("size", "large");
 				swatch.setAttribute("part", "color-swatch");
-				swatch.setAttribute("exportparts", "swatch, info, gamut");
+				swatch.setAttribute("exportparts", "swatch, info, gamut, remove-button");
 				newSwatches.push(swatch);
 			}
 
@@ -135,6 +148,7 @@ const Self = class ColorScale extends ColorElement {
 
 				if (this.editable.color) {
 					html += `<input value="${ color }" />`;
+					html += `<button slot="swatch-content" part="remove-button" title="Remove color">❌</button>`;
 				}
 
 				swatch.innerHTML = html;
