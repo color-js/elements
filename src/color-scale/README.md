@@ -67,6 +67,15 @@ You can also create compact color scales, by simply setting `--details-style: co
 
 Issue: How to make them focusable??
 
+### The `editable` attribute
+
+```html
+<label>
+	<input type="checkbox" onchange="this.parentElement.nextElementSibling.editable = this.checked">Editable
+</label>
+<color-scale space="oklch" colors="Peach: #F6D6D6, Yellow: #F6F7C4, Mint: #A1EEBD, Blue: #7BD3EA"></color-scale>
+```
+
 <!--
 If you want to insert interpolated colors only in specific places, you can use empty values:
 
