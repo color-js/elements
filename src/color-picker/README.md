@@ -37,6 +37,20 @@ You can use your component instead of the default color swatch:
 </color-picker>
 ```
 
+or your own form element instead of the default space picker:
+
+```html
+<color-picker space="oklab" color="oklab(60% -0.12 0)">
+	<select slot="color-space" size="4">
+		<optgroup label="Rectangular Spaces">
+			<option value="lab">Lab</option>
+			<option value="oklab" selected>Oklab</option>
+			<option value="prophoto">ProPhoto</option>
+		</optgroup>
+	</select>
+</color-picker>
+```
+
 ### Events
 
 As with other components, you can listen to the `colorchange` event:
@@ -53,24 +67,32 @@ As with other components, you can listen to the `colorchange` event:
 All attributes are reactive:
 
 ```html
-<label>
-	Space:
-	<select id="space_select" size="3"></select>
-</label>
+<color-picker space="oklch" color="oklch(60% 30% 180)" id="dynamic_picker">
+	<fieldset slot="color-space">
+		<legend>Polar Spaces</legend>
 
-<color-picker id="dynamic_picker" space="oklch" color="oklch(60% 30% 180)"></color-picker>
+		<label>
+			<input type="radio" name="space" value="oklch" checked /> OKLCh
+		</label>
+		<label>
+			<input type="radio" name="space" value="hwb" /> HWB
+		</label>
+		<label>
+			<input type="radio" name="space" value="hsl" /> HSL
+		</label>
+	</fieldset>
+</color-picker>
 
-<script type="module">
-	import Color from "https://colorjs.io/dist/color.js";
-
-	space_select.innerHTML = Object.entries(Color.spaces)
-		.map(([id, space]) => `<option value="${id}">${space.name}</option>`)
-		.join('\n');
-
-	space_select.value = "oklch";
-
-	space_select.oninput = () => dynamic_picker.space = space_select.value;
+<script>
+	let radios = dynamic_picker.querySelectorAll("input[name=space]");
+	radios.forEach(radio => radio.addEventListener("change", evt => dynamic_picker.spaceId = evt.target.value));
 </script>
+
+<style>
+	label + label {
+		margin-inline-start: .3em;
+	}
+</style>
 ```
 
 ## Reference
@@ -80,21 +102,23 @@ All attributes are reactive:
 | Name | Description |
 |------|-------------|
 | (default) | The color picker's main content. Goes into the swatch. |
+| `color-space` | An element to display (and if writable, also set) the current color space. If not provided, a [`<space-picker>`](../space-picker/) is used. |
 | `swatch` | An element used to provide a visual preview of the current color. |
 
 ### Attributes & Properties
 
 | Attribute | Property | Property type | Default value | Description |
 |-----------|----------|---------------|---------------|-------------|
-| `space` | `space` | `ColorSpace` &#124; `string` | `oklch` | The color space to use for interpolation. |
+| `space` | `spaceId` | `string` | `oklch` | The color space to use for interpolation. |
+| – | `space` | `ColorSpace` | `OKLCh` | Color space object corresponding to the `space` attribute. |
 | `color` | `color` | `Color` &#124; `string` | `oklch(50% 50% 180)` | The current color value. |
 
 ### Events
 
 | Name | Description |
 |------|-------------|
-| `input` | Fired when the color changes due to user action, either with the sliders or the color swatch's input field. |
-| `change` | Fired when the color changes due to user action, either with the sliders or the color swatch's input field. |
+| `input` | Fired when the color changes due to user action, such as adjusting the sliders, entering a color in the swatch's text field, or choosing a different color space. |
+| `change` | Fired when the color changes due to user action, such as adjusting the sliders, entering a color in the swatch's text field, or choosing a different color space. |
 | `colorchange` | Fired when the color changes for any reason, and once during initialization. |
 
 ### CSS variables
@@ -105,4 +129,6 @@ The styling of `<color-picker>` is fully customizable via CSS variables provided
 
 | Name | Description |
 |------|-------------|
-| `swatch` | The default `<color-swatch>` element, used if the `swatch` slot has no slotted elements. |
+| `color-space` | The default [`<space-picker>`](../space-picker/) element, used if the `color-space` slot has no slotted elements. |
+| `color-space-base` | The internal `<select>` element of the default [`<space-picker>`](../space-picker/) element. |
+| `swatch` | The default [`<color-swatch>`](../color-swatch/) element, used if the `swatch` slot has no slotted elements. |
