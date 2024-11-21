@@ -217,7 +217,6 @@ const Self = class ColorScale extends ColorElement {
 
 			swatch.classList[intermediate ? "add" : "remove"]("intermediate");
 
-			swatch.color = color;
 			if (!intermediate && (this.editable?.name || this.editable?.color)) {
 				let html = "";
 
@@ -238,6 +237,8 @@ const Self = class ColorScale extends ColorElement {
 			else {
 				swatch.textContent = name;
 			}
+
+			swatch.color = color;
 
 			if (this.info) {
 				swatch.info = this.info;
