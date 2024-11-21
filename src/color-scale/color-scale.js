@@ -47,6 +47,7 @@ const Self = class ColorScale extends ColorElement {
 		let source = event.target;
 
 		if (event.type === "input" && (!this.editable?.name || !source.matches("input[slot=before]"))) {
+			// Ignore input events from the color input: the color changes are handled by the colorchange event
 			return;
 		}
 
