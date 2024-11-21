@@ -69,12 +69,56 @@ Issue: How to make them focusable??
 
 ### The `editable` attribute
 
+The `editable` attribute allows you to make the color scale editable, enabling the addition of new colors and editing or the removal of existing ones. You can specify whether the color names, color values, or both should be editable.
+
+Editing colors (including adding and removing):
+
+```html
+<color-scale editable="color" space="oklch" colors="#e3fafc, #c5f6fa, #99e9f2, #66d9e8, #3bc9db"></color-scale>
+```
+
+Editing color names:
+
+```html
+<color-scale editable="name" space="oklch" colors="#c5f6fa, #99e9f2, #3bc9db"></color-scale>
+```
+
+Or both:
+
+```html
+<color-scale editable="name color" space="oklch" colors="
+	Gray 300: #d1d5db,
+	Gray 400: #9ca3af,
+	Gray 500: #6b7280
+"></color-scale>
+```
+
+There is a shorter way to achieve the same result—use `editable` as a boolean attribute (or set it to `true` programmatically):
+
+```html
+<color-scale editable space="oklch" colors="
+	Gray 300: #d1d5db,
+	Gray 400: #9ca3af,
+	Gray 500: #6b7280
+"></color-scale>
+```
+
+Keep in mind that interpolated colors are generated automatically and are not editable:
+
+```html
+<color-scale editable="color" colors="#e3fafc, #0b7285" steps="4" space="oklch"></color-scale>
+```
+
+The `editable` attribute is reactive and can be set programmatically:
+
 ```html
 <label>
 	<input type="checkbox" onchange="this.parentElement.nextElementSibling.editable = this.checked">Editable
 </label>
-<color-scale space="oklch" colors="Peach: #F6D6D6, Yellow: #F6F7C4, Mint: #A1EEBD, Blue: #7BD3EA"></color-scale>
+<color-scale space="oklch" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd"></color-scale>
 ```
+
+All the actions with colors are also available in JS via the following methods: `addColor([color[, name]])`, `updateColor(swatch, color)`, `updateColorName(swatch, newName)`, `removeColor(swatch)`.
 
 <!--
 If you want to insert interpolated colors only in specific places, you can use empty values:
