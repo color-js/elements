@@ -118,7 +118,31 @@ The `editable` attribute is reactive and can be set programmatically:
 <color-scale space="oklch" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd"></color-scale>
 ```
 
-All the actions with colors are also available in JS via the following methods: `addColor([color[, name]])`, `updateColor(swatch, color)`, `updateColorName(swatch, newName)`, `removeColor(swatch)`.
+You can also add colors programmatically with the `addColor()` method, providing the color to add and, optionally, its name:
+
+```html
+<button onclick="this.nextElementSibling.addColor('#7bd3ea', 'Blue')">Add blue color</button>
+<color-scale space="oklch" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd"></color-scale>
+```
+
+Or don't provide any of them. In that case, the added swatch will get the color of the last one:
+
+```html
+<button onclick="this.nextElementSibling.addColor()">Add default color</button>
+<color-scale space="oklch" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd"></color-scale>
+```
+
+Don't want added swatches to get the color of the last one? No problem. You can change that, too.
+Add the `defaultColor()` method to the color scale and return an object with the desired color and (optional) name from it:
+
+```html
+<button onclick="this.nextElementSibling.addColor()">Add my color</button>
+<color-scale id="custom_color" space="oklch" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd"></color-scale>
+
+<script>
+	custom_color.defaultColor = () => ({ color: "#f06", name: "My awesome color" });
+</script>
+```
 
 <!--
 If you want to insert interpolated colors only in specific places, you can use empty values:
