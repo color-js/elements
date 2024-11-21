@@ -12,12 +12,24 @@ color-swatch {
 	margin: 0;
 	flex: 1;
 
-	.remove-button {
-		--_border-color: var(--border-color, color-mix(in oklab, buttonborder 20%, oklab(none none none / 0%)));
+	.color-name, input.color {
+		--_border-color: var(--border-color, color-mix(in oklab, currentcolor 70%, oklab(none none none / 0%)));
 
+		font: inherit;
+		box-sizing: border-box;
+		padding: .1em .2em;
+		border-radius: .2rem;
+		border: 1px solid var(--_border-color);
+
+		&:not(.editable) {
+			border-color: transparent;
+		}
+	}
+
+	.remove-button {
 		all: unset;
 		position: absolute;
-		inset-inline-end: .3em;
+		inset-inline-end: .1em;
 		inset-block-start: .3em;
 
 		display: grid;
@@ -31,7 +43,7 @@ color-swatch {
 		text-align: center;
 
 		border-radius: 50%;
-		border: 1px solid var(--_border-color);
+		border: 1px solid color-mix(in oklab, currentcolor 20%, oklab(none none none / 0%));
 		box-shadow: 0 .05em 1em -.7em black;
 		background-color: white;
 
@@ -43,6 +55,10 @@ color-swatch {
 			transform: scale(1.1);
 		}
 	}
+}
+
+#add-button {
+	margin-block-start: .5em;
 }
 
 @supports (grid-template-columns: subgrid) {

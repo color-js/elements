@@ -221,21 +221,21 @@ const Self = class ColorScale extends ColorElement {
 				let html = "";
 
 				if (this.editable.name) {
-					html += `<input slot="before" value="${ name }" />`;
+					html += `<input slot="before" class="color-name editable" value="${ name }" />`;
 				}
 				else {
-					html += `<span slot="before">${ name }</span>`;
+					html += `<span slot="before" class="color-name">${ name }</span>`;
 				}
 
 				if (this.editable.color) {
-					html += `<input value="${ color }" />`;
+					html += `<input class="color editable" value="${ color }" />`;
 					html += `<button slot="swatch-content" class="remove-button" title="Remove color">❌</button>`;
 				}
 
 				swatch.innerHTML = html;
 			}
 			else {
-				swatch.textContent = name;
+				swatch.innerHTML = `<span slot="before" class="color-name">${ name }</span>`;
 			}
 
 			swatch.color = color;
