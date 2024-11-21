@@ -51,7 +51,7 @@ const Self = class ColorScale extends ColorElement {
 			return;
 		}
 
-		if (source === this._el.add_button || this._slots.add_button.assignedElements().includes(source)) {
+		if (event.type === "click" && source === this._el.add_button || this._slots.add_button.assignedElements().includes(source)) {
 			this.addColor();
 			return;
 		}
