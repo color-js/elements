@@ -8,8 +8,41 @@
 }
 
 color-swatch {
+	position: relative;
 	margin: 0;
 	flex: 1;
+
+	.remove-button {
+		--_border-color: var(--border-color, color-mix(in oklab, buttonborder 20%, oklab(none none none / 0%)));
+
+		all: unset;
+		position: absolute;
+		inset-inline-end: .3em;
+		inset-block-start: .3em;
+
+		display: grid;
+		place-items: center;
+		inline-size: 1.5em;
+		padding: .2em;
+		aspect-ratio: 1;
+
+		font-size: 70%;
+		line-height: 1;
+		text-align: center;
+
+		border-radius: 50%;
+		border: 1px solid var(--_border-color);
+		box-shadow: 0 .05em 1em -.7em black;
+		background-color: white;
+
+		cursor: pointer;
+
+		transition: transform .2s;
+
+		&:is(:hover, :focus) {
+			transform: scale(1.1);
+		}
+	}
 }
 
 @supports (grid-template-columns: subgrid) {
