@@ -46,7 +46,7 @@ const Self = class ColorScale extends ColorElement {
 	handleEvent (event) {
 		let source = event.target;
 
-		if (event.type === "input" && (!this.editable?.name || !source.matches("input[slot=before]"))) {
+		if (event.type === "input" && (!this.editable?.name || !source.matches(".color-name.editable"))) {
 			// Ignore input events from the color input: the color changes are handled by the colorchange event
 			return;
 		}
@@ -116,7 +116,7 @@ const Self = class ColorScale extends ColorElement {
 		if (this.editable?.color) {
 			// Focus the new color input and select its content
 			let swatch = this._el.swatches.lastElementChild;
-			let input = swatch.querySelector("input:not([slot]");
+			let input = swatch.querySelector("input.color.editable");
 			input.focus();
 			input.select();
 		}
@@ -132,7 +132,7 @@ const Self = class ColorScale extends ColorElement {
 			return;
 		}
 
-		let colorNameElement = swatch.querySelector("[slot=before]");
+		let colorNameElement = swatch.querySelector(".color-name");
 		let colorName = colorNameElement?.value ?? colorNameElement?.textContent ?? swatch.textContent;
 
 		this.colors = {...this.colors, [colorName]: color};
@@ -178,7 +178,7 @@ const Self = class ColorScale extends ColorElement {
 			return;
 		}
 
-		let colorNameElement = swatch.querySelector("[slot=before]");
+		let colorNameElement = swatch.querySelector(".color-name");
 		let colorName = colorNameElement?.value ?? colorNameElement?.textContent ?? swatch.textContent;
 
 		swatch.remove();
