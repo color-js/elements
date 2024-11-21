@@ -66,6 +66,7 @@ const Self = class ColorScale extends ColorElement {
 		}
 		else if (event.type === "click" && source.matches("[part=remove-button]")) {
 			// Remove color
+			this.removeColor(source.closest("color-swatch"));
 		}
 
 		this.dispatchEvent(new event.constructor(event.type, {...event}));
@@ -165,6 +166,31 @@ const Self = class ColorScale extends ColorElement {
 		colors.splice(index, 1, [newName, swatch.color]);
 
 		this.colors = Object.fromEntries(colors);
+	}
+
+	removeColor (swatch) {
+		if (!swatch) {
+			return;
+		}
+
+		if (swatch.matches(".intermediate")) {
+			console.warn("Cannot remove intermediate colors. They are calculated automatically and will be re-added when the color scale is re-rendered the next time.");
+			return;
+		}
+
+		let colorNameElement = swatch.querySelector("[slot=before]");
+		let colorName = colorNameElement?.value ?? colorNameElement?.textContent ?? swatch.textContent;
+
+		swatch.remove();
+
+		let colors = {...this.colors};
+		delete colors[colorName];
+		this.colors = colors;
+
+		if (this.editable) {
+			// If we are in the edit mode, we need to force re-render the swatches
+			this.render();
+		}
 	}
 
 	render () {
