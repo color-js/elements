@@ -64,7 +64,7 @@ const Self = class ColorScale extends ColorElement {
 			// Update color name
 			this.updateColorName(source.closest("color-swatch"), source.value);
 		}
-		else if (event.type === "click" && source.matches("[part=remove-button]")) {
+		else if (event.type === "click" && source.matches("button.remove-button")) {
 			// Remove color
 			this.removeColor(source.closest("color-swatch"));
 		}
@@ -211,7 +211,7 @@ const Self = class ColorScale extends ColorElement {
 				this.#swatches[i] = swatch = document.createElement("color-swatch");
 				swatch.setAttribute("size", "large");
 				swatch.setAttribute("part", "color-swatch");
-				swatch.setAttribute("exportparts", "swatch, info, gamut, remove-button");
+				swatch.setAttribute("exportparts", "swatch, info, gamut");
 				newSwatches.push(swatch);
 			}
 
@@ -229,7 +229,7 @@ const Self = class ColorScale extends ColorElement {
 
 				if (this.editable.color) {
 					html += `<input value="${ color }" />`;
-					html += `<button slot="swatch-content" part="remove-button" title="Remove color">❌</button>`;
+					html += `<button slot="swatch-content" class="remove-button" title="Remove color">❌</button>`;
 				}
 
 				swatch.innerHTML = html;
