@@ -56,8 +56,9 @@ const Self = class ColorScale extends ColorElement {
 			return;
 		}
 
-		if (event.type === "colorchange") {
-			// Update color
+		if (event.type === "colorchange" && source.matches("color-swatch:not(.intermediate)")) {
+			// Update color if it’s not an intermediate one
+			this.updateColor(source);
 		}
 		else if (event.type === "input") {
 			// Update color name
@@ -118,6 +119,34 @@ const Self = class ColorScale extends ColorElement {
 		}
 	}
 
+	updateColor (swatch, color = swatch?.color) {
+		if (!swatch) {
+			return;
+		}
+
+		if (swatch.matches(".intermediate")) {
+			console.warn("Cannot update intermediate colors.");
+			return;
+		}
+
+		let colorNameElement = swatch.querySelector("[slot=before]");
+		let colorName = colorNameElement?.value ?? colorNameElement?.textContent ?? swatch.textContent;
+
+		this.colors = {...this.colors, [colorName]: color};
+
+		if (this.steps) {
+			// Update the UI to reflect the new intermediate colors
+			// If there are no intermediate colors, the UI is already up-to-date
+			this.render();
+
+			// Preserve the cursor position — set it to the end of the input
+			let input = swatch.querySelector("input:not([slot]");
+			let end = input.value.length;
+			input.setSelectionRange(end, end);
+			input.focus();
+		}
+	}
+
 	render () {
 		let colors = this.computedColors;
 
@@ -139,6 +168,8 @@ const Self = class ColorScale extends ColorElement {
 				swatch.setAttribute("exportparts", "swatch, info, gamut, remove-button");
 				newSwatches.push(swatch);
 			}
+
+			swatch.classList[intermediate ? "add" : "remove"]("intermediate");
 
 			swatch.color = color;
 			if (!intermediate && (this.editable?.name || this.editable?.color)) {
