@@ -221,13 +221,16 @@ const Self = class ColorScale extends ColorElement {
 				let html = "";
 
 				if (this.editable.name) {
+					// FIXME: What if there is content in the slot?
 					html += `<input slot="before" class="color-name editable" value="${ name }" />`;
 				}
 				else {
+					// FIXME: What if there is content in the slot?
 					html += `<span slot="before" class="color-name">${ name }</span>`;
 				}
 
 				if (this.editable.color) {
+					// FIXME: What if there is content in the slots?
 					html += `<input class="color editable" value="${ color }" />`;
 					html += `<button slot="swatch-content" class="remove-button" title="Remove color">❌</button>`;
 				}
@@ -235,6 +238,7 @@ const Self = class ColorScale extends ColorElement {
 				swatch.innerHTML = html;
 			}
 			else {
+				// FIXME: What if there is content in the slot?
 				swatch.innerHTML = `<span slot="before" class="color-name">${ name }</span>`;
 			}
 
