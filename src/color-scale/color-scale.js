@@ -92,10 +92,11 @@ const Self = class ColorScale extends ColorElement {
 
 	#swatches = [];
 
-	addColor () {
-		let {name, color} = this.defaultColor?.() ?? {};
-		name ??= "New color";
-		color ??= this.computedColors.at(-1)?.color ?? new Self.Color("#f06");
+	addColor (color, name) {
+		let {name: defaultName, color: defaultColor} = this.defaultColor?.() ?? {};
+
+		name ??= defaultName ?? "New color";
+		color ??= defaultColor ?? this.computedColors.at(-1)?.color ?? new Self.Color("#f06");
 
 		if (this.colors[name]) {
 			// Name already exists
@@ -107,7 +108,7 @@ const Self = class ColorScale extends ColorElement {
 			name = `${ name } ${ i }`;
 		}
 
-		this.colors = {...this.colors, [name]: color.to(this.space)};
+		this.colors = {...this.colors, [name]: color};
 		this.render();
 
 		if (this.editable?.color) {
