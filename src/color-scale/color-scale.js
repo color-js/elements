@@ -127,7 +127,7 @@ const Self = class ColorScale extends ColorElement {
 		}
 
 		if (swatch.matches(".intermediate")) {
-			console.warn("Cannot update intermediate colors.");
+			console.warn("Cannot update intermediate colors. They are calculated automatically and will be overwritten when the color scale is re-rendered the next time.");
 			return;
 		}
 
@@ -155,7 +155,7 @@ const Self = class ColorScale extends ColorElement {
 		}
 
 		if (swatch.matches(".intermediate")) {
-			console.warn("Cannot update names of intermediate colors.");
+			console.warn("Cannot update names of intermediate colors. They are calculated automatically and will be overwritten when the color scale is re-rendered the next time.");
 			return;
 		}
 
