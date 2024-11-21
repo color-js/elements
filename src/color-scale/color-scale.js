@@ -129,7 +129,7 @@ const Self = class ColorScale extends ColorElement {
 
 		let i = 0;
 		let newSwatches = [];
-		for (let {name, color} of colors) {
+		for (let {name, color, intermediate} of colors) {
 			let swatch = this.#swatches[i] = this._el.swatches.children[i];
 
 			if (!swatch) {
@@ -141,7 +141,7 @@ const Self = class ColorScale extends ColorElement {
 			}
 
 			swatch.color = color;
-			if (this.editable?.name || this.editable?.color) {
+			if (!intermediate && (this.editable?.name || this.editable?.color)) {
 				let html = "";
 
 				if (this.editable.name) {
@@ -227,7 +227,7 @@ const Self = class ColorScale extends ColorElement {
 
 						steps.shift();
 						steps.pop();
-						steps = steps.map(color => ({name: color + "", color}));
+						steps = steps.map(color => ({name: color + "", color, intermediate: true}));
 
 						tessellated.push(start, ...steps);
 
