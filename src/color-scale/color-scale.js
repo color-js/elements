@@ -62,6 +62,7 @@ const Self = class ColorScale extends ColorElement {
 		}
 		else if (event.type === "input") {
 			// Update color name
+			this.updateColorName(source.closest("color-swatch"), source.value);
 		}
 		else if (event.type === "click" && source.matches("[part=remove-button]")) {
 			// Remove color
@@ -146,6 +147,24 @@ const Self = class ColorScale extends ColorElement {
 			input.setSelectionRange(end, end);
 			input.focus();
 		}
+	}
+
+	updateColorName (swatch, newName) {
+		if (!swatch || !newName) {
+			return;
+		}
+
+		if (swatch.matches(".intermediate")) {
+			console.warn("Cannot update names of intermediate colors.");
+			return;
+		}
+
+		// Update the name of the existing color preserving the colors order
+		let colors = Object.entries(this.colors);
+		let index = colors.findIndex(([name, color]) => color.equals(swatch.color));
+		colors.splice(index, 1, [newName, swatch.color]);
+
+		this.colors = Object.fromEntries(colors);
 	}
 
 	render () {
