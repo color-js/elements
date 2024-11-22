@@ -12,6 +12,13 @@ color-swatch {
 	margin: 0;
 	flex: 1;
 
+	&:not(:hover, :focus-within) {
+		.delete-button {
+			opacity: 0;
+			transition-duration: 0ms;
+		}
+	}
+
 	.color-name, input.color {
 		--_border-color: var(--border-color, color-mix(in oklab, currentcolor 70%, oklab(none none none / 0%)));
 
@@ -26,7 +33,7 @@ color-swatch {
 		}
 	}
 
-	.remove-button {
+	.delete-button {
 		all: unset;
 		position: absolute;
 		inset-inline-end: .1em;
@@ -49,7 +56,7 @@ color-swatch {
 
 		cursor: pointer;
 
-		transition: transform .2s;
+		transition: transform .2s, opacity .2s;
 
 		&:is(:hover, :focus) {
 			transform: scale(1.1);

@@ -61,12 +61,10 @@ const Self = class ColorScale extends ColorElement {
 			this.updateColor(source);
 		}
 		else if (event.type === "input") {
-			// Update color name
 			this.updateColorName(source.closest("color-swatch"), source.value);
 		}
-		else if (event.type === "click" && source.matches("button.remove-button")) {
-			// Remove color
-			this.removeColor(source.closest("color-swatch"));
+		else if (event.type === "click" && source.matches("button.delete-button")) {
+			this.deleteColor(source.closest("color-swatch"));
 		}
 
 		this.dispatchEvent(new event.constructor(event.type, {...event}));
@@ -143,7 +141,7 @@ const Self = class ColorScale extends ColorElement {
 			this.render();
 
 			// Preserve the cursor position — set it to the end of the input
-			let input = swatch.querySelector("input:not([slot]");
+			let input = swatch.querySelector("input.color.editable");
 			let end = input.value.length;
 			input.setSelectionRange(end, end);
 			input.focus();
@@ -168,13 +166,13 @@ const Self = class ColorScale extends ColorElement {
 		this.colors = Object.fromEntries(colors);
 	}
 
-	removeColor (swatch) {
+	deleteColor (swatch) {
 		if (!swatch) {
 			return;
 		}
 
 		if (swatch.matches(".intermediate")) {
-			console.warn("Cannot remove intermediate colors. They are calculated automatically and will be re-added when the color scale is re-rendered the next time.");
+			console.warn("Cannot delete intermediate colors. They are calculated automatically and will be re-added when the color scale is re-rendered the next time.");
 			return;
 		}
 
@@ -232,7 +230,7 @@ const Self = class ColorScale extends ColorElement {
 				if (this.editable.color) {
 					// FIXME: What if there is content in the slots?
 					html += `<input class="color editable" value="${ color }" />`;
-					html += `<button slot="swatch-content" class="remove-button" title="Remove color">❌</button>`;
+					html += `<button slot="swatch-content" class="delete-button" title="Delete color">❌</button>`;
 				}
 
 				swatch.innerHTML = html;
