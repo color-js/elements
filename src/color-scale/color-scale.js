@@ -63,7 +63,7 @@ const Self = class ColorScale extends ColorElement {
 		else if (event.type === "input") {
 			this.updateColorName(source.closest("color-swatch"), source.value);
 		}
-		else if (event.type === "click" && source.matches("button.delete-button")) {
+		else if (event.type === "click" && source.closest("button.delete-button")) {
 			this.deleteColor(source.closest("color-swatch"));
 		}
 
