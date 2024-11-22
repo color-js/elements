@@ -20,7 +20,7 @@ color-swatch {
 	}
 
 	.color-name, input.color {
-		--_border-color: var(--border-color, color-mix(in oklab, currentcolor 70%, oklab(none none none / 0%)));
+		--_border-color: var(--border-color, color-mix(in oklab, buttonborder 70%, oklab(none none none / 0%)));
 
 		font: inherit;
 		box-sizing: border-box;
@@ -34,32 +34,30 @@ color-swatch {
 	}
 
 	.delete-button {
+		--_foreground-color: red;
+		--_background-color: white;
+
 		all: unset;
-		position: absolute;
-		inset-inline-end: .1em;
-		inset-block-start: .3em;
 
 		display: grid;
 		place-items: center;
 		inline-size: 1.5em;
-		padding: .2em;
 		aspect-ratio: 1;
+		padding: .2em;
 
-		font-size: 70%;
-		line-height: 1;
-		text-align: center;
+		color: var(--_foreground-color);
+		background-color: var(--_background-color);
 
-		border-radius: 50%;
-		border: 1px solid color-mix(in oklab, currentcolor 20%, oklab(none none none / 0%));
+		border-radius: .3em;
 		box-shadow: 0 .05em 1em -.7em black;
-		background-color: white;
 
 		cursor: pointer;
 
-		transition: transform .2s, opacity .2s;
+		transition: opacity .2s;
 
 		&:is(:hover, :focus) {
-			transform: scale(1.1);
+			color: var(--_background-color);
+			background-color: var(--_foreground-color);
 		}
 	}
 }
