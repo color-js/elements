@@ -30,7 +30,7 @@
 		text-align: center;
 		font-size: 90%;
 		transition: var(--_transition-duration) allow-discrete;
-		transition-property: opacity, border-color, display;
+		transition-property: opacity, border-color;
 
 		&::-webkit-textfield-decoration-container {
 			gap: .2em;
@@ -42,13 +42,10 @@
 			opacity: 60%;
 			border-color: var(--_border-color);
 
-			/* Hide spin buttons in Firefox */
-			appearance: textfield;
-
-			/* Hide spin buttons in Safari and Chrome */
 			&::-webkit-inner-spin-button {
-				opacity: 0;
-				display: none;
+				/* Fade out the spin buttons in Chrome and Safari */
+				opacity: .35;
+				filter: contrast(2);
 			}
 		}
 
