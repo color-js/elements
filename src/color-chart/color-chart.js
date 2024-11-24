@@ -1,4 +1,5 @@
 import "../color-scale/color-scale.js";
+import "../channel-picker/channel-picker.js";
 import ColorElement from "../common/color-element.js";
 
 const Self = class ColorChart extends ColorElement {
@@ -6,6 +7,9 @@ const Self = class ColorChart extends ColorElement {
 	static url = import.meta.url;
 	static shadowStyle = true;
 	static shadowTemplate = `
+		<slot name="color-channel">
+			<channel-picker id="channel_picker" part="color-channel"></channel-picker>
+		</slot>
 		<div id="chart-container">
 			<div id="chart">
 				<slot></slot>
@@ -26,27 +30,39 @@ const Self = class ColorChart extends ColorElement {
 		super();
 
 		this._el = {
-			slot:   this.shadowRoot.querySelector("slot"),
+			slot:   this.shadowRoot.querySelector("slot:not([name])"),
+			channel_picker: this.shadowRoot.getElementById("channel_picker"),
 			chart:  this.shadowRoot.getElementById("chart"),
 			xTicks: this.shadowRoot.querySelector("#x_axis .ticks"),
 			yTicks: this.shadowRoot.querySelector("#y_axis .ticks"),
 			xLabel: this.shadowRoot.querySelector("#x_axis .label"),
 			yLabel: this.shadowRoot.querySelector("#y_axis .label"),
 		};
+
+		this._slots = {
+			color_channel: this.shadowRoot.querySelector("slot[name=color-channel]"),
+		};
 	}
 
 	connectedCallback () {
 		super.connectedCallback();
 		this._el.chart.addEventListener("colorschange", this, {capture: true});
+		this._slots.color_channel.addEventListener("change", this, {capture: true});
 	}
 
 	disconnectedCallback () {
 		this._el.chart.removeEventListener("colorschange", this, {capture: true});
+		this._slots.color_channel.removeEventListener("change", this, {capture: true});
 	}
 
 	handleEvent (evt) {
-		if (evt.target.tagName === "COLOR-SCALE" && evt.name === "computedColors") {
+		let source = evt.target;
+		if (source.tagName === "COLOR-SCALE" && evt.name === "computedColors") {
 			this.render(evt);
+		}
+
+		if (this._el.channel_picker === source || this._slots.color_channel.assignedElements().includes(source)) {
+			this.y = source.value;
 		}
 	}
 
@@ -224,6 +240,10 @@ const Self = class ColorChart extends ColorElement {
 	propChangedCallback (evt) {
 		let {name, prop, detail: change} = evt;
 
+		if (name === "y") {
+			this._el.channel_picker.value = change.value;
+		}
+
 		if (["yResolved", "yMinAsNumber", "yMaxAsNumber"].includes(name)) {
 			// Re-render swatches
 			this.render(evt);
@@ -243,7 +263,15 @@ const Self = class ColorChart extends ColorElement {
 
 		yResolved: {
 			get () {
-				return Self.Color.Space.resolveCoord(this.y, "oklch");
+				try {
+					return Self.Color.Space.resolveCoord(this.y, "oklch");
+				}
+				catch {
+					// Falling back to the channel picker's current value or the default one
+					let y = this._el.channel_picker?.value ?? "oklch.l";
+					this.y = y;
+					return Self.Color.Space.resolveCoord(y);
+				}
 			},
 			// rawProp: "coord",
 		},
