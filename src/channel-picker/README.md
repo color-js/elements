@@ -49,9 +49,7 @@ All properties are reactive and can be set programmatically:
 `<channel-picker>` plays nicely with other color elements, like [`<color-chart>`](../color-chart):
 
 ```html
-<label>Coord:
-	<channel-picker onvaluechange="this.parentNode.nextElementSibling.y = this.value"></channel-picker>
-</label>
+<channel-picker onvaluechange="this.nextElementSibling.y = this.value"></channel-picker>
 <color-chart>
 	<color-scale colors="Red 50: #fef2f2, Red 100: #fee2e2, Red 200: #fecaca, Red 300: #fca5a5, Red 400: #f87171, Red 500: #ef4444, Red 600: #dc2626, Red 700: #b91c1c, Red 800: #991b1b, Red 900: #7f1d1d, Red 950: #450a0a"></color-scale>
 	<color-scale colors="Orange 50: #fff7ed, Orange 100: #ffedd5, Orange 200: #fed7aa, Orange 300: #fdba74, Orange 400: #fb923c, Orange 500: #f97316, Orange 600: #ea580c, Orange 700: #c2410c, Orange 800: #9a3412, Orange 900: #7c2d12, Orange 950: #431407"></color-scale>
@@ -111,6 +109,7 @@ These properties are read-only.
 
 | Name           | Description                                          |
 |----------------|------------------------------------------------------|
-| `space_picker` | The internal `<space-picker>` element.               |
-| `space_select` | The internal `<select>` element of `<space-picker>`. |
-| `picker`       | The internal `<select>` element.                     |
+| `wrapper` | The component's wrapper element. |
+| `space_picker` | The internal [`<space-picker>`](../space-picker/) element.               |
+| `space_select` | The internal `<select>` element of [`<space-picker>`](../space-picker/). |
+| `channels` | The container that wraps the current color space channels.  |
