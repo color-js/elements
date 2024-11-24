@@ -1,31 +1,24 @@
-:host {
+[part=wrapper] {
 	--border-width: 1px;
 	--border-color: rgb(0 0 0 / .2);
 	--border-radius: .2em;
 
+	inline-size: fit-content;
 	padding: .3em .5em;
 
 	border: var(--border-width) solid var(--border-color);
 	border-radius: var(--border-radius);
-}
 
-#picker {
-	font: inherit;
-	color: inherit;
-	background: inherit;
-	border: none;
-	field-sizing: content;
-	cursor: pointer;
+	legend {
+		padding: 0;
 
-	&:focus:not(:focus-visible) {
-		outline: none;
+		space-picker {
+			margin-inline: .15em;
+		}
 	}
 }
 
-#space_picker {
-	padding: initial;
-	padding-inline-end: .4em;
-	border-radius: 0;
-	border: none;
-	border-inline-end: var(--border-width) solid var(--border-color);
+#channels {
+	display: flex;
+	gap: .5em;
 }
