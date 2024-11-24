@@ -1,7 +1,7 @@
 :host {
 	display: grid;
 	grid-template-columns: auto 1fr;
-	grid-template-rows: 1fr auto;
+	grid-template-rows: auto 1fr auto;
 	height: clamp(0em, 20em, 100vh);
 	contain: size;
 	container-name: chart;
@@ -26,9 +26,19 @@
 	}
 }
 
+[part="color-channel"],
+slot[name="color-channel"]::slotted(*) {
+	grid-column: 1 / -1;
+	justify-self: start;
+
+	margin-block: .5em .7em;
+	/* margin-inline-start: -.5em; */
+	font-size: 130%;
+}
+
 #x_axis {
 	grid-column: 2;
-	grid-row: 2;
+	grid-row: 3;
 
 	.ticks {
 		grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
@@ -43,7 +53,7 @@
 
 #y_axis {
 	grid-column: 1;
-	grid-row: 1;
+	grid-row: 2;
 
 	.ticks {
 		align-items: end;
