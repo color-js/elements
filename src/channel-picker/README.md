@@ -103,8 +103,9 @@ These properties are read-only.
 
 ### Parts
 
-| Name                 | Description                                                              |
-| -------------------- | ------------------------------------------------------------------------ |
-| `color-space`        | The internal [`<space-picker>`](../space-picker/) element.               |
-| `color-space-base`   | The internal `<select>` element of [`<space-picker>`](../space-picker/). |
-| `color-channel-base` | The internal `<select>` element.                                         |
+| Name               | Description                                                              |
+| ------------------ | ------------------------------------------------------------------------ |
+| `wrapper`          | The component's wrapper element.                                         |
+| `color-space`      | The internal [`<space-picker>`](../space-picker/) element.               |
+| `color-space-base` | The internal `<select>` element of [`<space-picker>`](../space-picker/). |
+| `channels`         | The container that wraps the current color space channels.               |
