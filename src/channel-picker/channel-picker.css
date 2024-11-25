@@ -16,53 +16,88 @@
 	display: flex;
 	gap: .3em;
 	align-items: baseline;
-}
-
-[part="space-picker"] {
-	&:not(:hover) {
-		border-color: transparent;
-	}
-}
-
-
-#channels {
-	display: flex;
 	inline-size: fit-content;
+}
+
+:host(:is(.compact, [compact])) {
+	padding: .3em .5em;
 
 	border: var(--_border-width) solid var(--_border-color);
 	border-radius: var(--_border-radius);
 
-	label {
-		display: grid;
-		place-items: center;
-		min-inline-size: 5ch;
-		padding: .3em .5em;
+	[part="space-picker"] {
+		padding: initial;
+		padding-inline-end: .4em;
+		border-radius: 0;
+		border: none;
+		border-inline-end: var(--_border-width) solid var(--_border-color);
+	}
 
+	[part="picker"] {
+		font: inherit;
+		color: inherit;
+		background: inherit;
+		border: none;
+		field-sizing: content;
 		cursor: pointer;
 
-		&:hover {
-			background-color: var(--_accent-color);
+		&:focus:not(:focus-visible) {
+			outline: none;
 		}
+	}
+}
 
-		& + & {
-			border-inline-start: var(--_border-width) solid var(--_border-color);
-		}
+:host(:not(.compact, [compact])) {
+	[part="space-picker"] {
+		font-weight: 600;
 
-		&:has(:checked) {
-			background: var(--_selected-channel-background);
-			box-shadow: var(--_selected-channel-shadow);
+		&:not(:hover) {
+			border-color: transparent;
 		}
 	}
 
-	.sr-only {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		padding: 0;
-		margin: -1px;
-		overflow: hidden;
-		clip: rect(0, 0, 0, 0);
-		white-space: nowrap;
-		border-width: 0;
+	#channels {
+		display: flex;
+		inline-size: fit-content;
+
+		border: var(--_border-width) solid var(--_border-color);
+		border-radius: var(--_border-radius);
+
+		font-size: 80%;
+
+		label {
+			display: grid;
+			place-items: center;
+			min-inline-size: 5ch;
+			padding: .3em .5em;
+
+			cursor: pointer;
+
+			&:hover {
+				background-color: var(--_accent-color);
+			}
+
+			& + & {
+				border-inline-start: var(--_border-width) solid var(--_border-color);
+			}
+
+			&:has(:checked) {
+				background: var(--_selected-channel-background);
+				box-shadow: var(--_selected-channel-shadow);
+			}
+		}
+
+		/* Visually hide the radio buttons */
+		.sr-only {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+			white-space: nowrap;
+			border-width: 0;
+		}
 	}
 }

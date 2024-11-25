@@ -15,6 +15,12 @@ the default `oklch.l` will be used:
 <channel-picker></channel-picker>
 ```
 
+If you need a more compact version of the picker, add the `compact` boolean attribute to get one:
+
+```html
+<channel-picker value="oklch.c" compact></channel-picker>
+```
+
 You can hide the `space-picker` part with CSS to show only the coordinates of the specified space:
 
 ```html
@@ -43,6 +49,13 @@ All properties are reactive and can be set programmatically:
 
 ```html
 <button onclick="this.nextElementSibling.value = 'p3.b'">Switch to P3 Blue</button>
+<channel-picker></channel-picker>
+```
+
+```html
+<label>
+	<input type="checkbox" onchange="this.parentElement.nextElementSibling.compact = this.checked" /> Compact picker
+</label>
 <channel-picker></channel-picker>
 ```
 
@@ -87,6 +100,7 @@ or [`<channel-slider>`](../channel-slider):
 | Attribute | Property | Property type | Default value | Description                      |
 |-----------|----------|---------------|---------------|----------------------------------|
 | `value`   | `value`  | `string`      | `oklch.l`     | The current value of the picker. |
+| `compact` | `compact`  | `boolean` | `false` | Whether the picker should be rendered compact or not. |
 
 ### Getters
 
@@ -109,7 +123,7 @@ These properties are read-only.
 
 | Name           | Description                                          |
 |----------------|------------------------------------------------------|
-| `wrapper` | The component's wrapper element. |
 | `space-picker` | The internal [`<space-picker>`](../space-picker/) element.               |
 | `space-select` | The internal `<select>` element of [`<space-picker>`](../space-picker/). |
 | `channels` | The container that wraps the current color space channels.  |
+| `picker` | If the picker is compact, the internal `<select>` element used to render the channels.  |
