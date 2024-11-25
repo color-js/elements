@@ -15,13 +15,13 @@ the default `oklch.l` will be used:
 <channel-picker></channel-picker>
 ```
 
-You can hide the `space_picker` part with CSS to show only the coordinates of the specified space:
+You can hide the `space-picker` part with CSS to show only the coordinates of the specified space:
 
 ```html
 <channel-picker id="picker" value="hsl.h"></channel-picker>
 
 <style>
-	#picker::part(space_picker) {
+	#picker::part(space-picker) {
 		display: none;
 	}
 </style>
@@ -64,7 +64,7 @@ or [`<channel-slider>`](../channel-slider):
 <channel-slider id="channel_slider" color="oklch(50% 50% 180)"></channel-slider>
 
 <style>
-	#channel_picker::part(space_picker) {
+	#channel_picker::part(space-picker) {
 		display: none;
 	}
 </style>
@@ -110,6 +110,6 @@ These properties are read-only.
 | Name           | Description                                          |
 |----------------|------------------------------------------------------|
 | `wrapper` | The component's wrapper element. |
-| `space_picker` | The internal [`<space-picker>`](../space-picker/) element.               |
-| `space_select` | The internal `<select>` element of [`<space-picker>`](../space-picker/). |
+| `space-picker` | The internal [`<space-picker>`](../space-picker/) element.               |
+| `space-select` | The internal `<select>` element of [`<space-picker>`](../space-picker/). |
 | `channels` | The container that wraps the current color space channels.  |
