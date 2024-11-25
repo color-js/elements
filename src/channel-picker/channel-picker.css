@@ -1,24 +1,68 @@
-[part=wrapper] {
-	--border-width: 1px;
-	--border-color: rgb(0 0 0 / .2);
-	--border-radius: .2em;
+:host {
+	--_color-neutral: var(--neutral-color, hsl(0 0% 0%));
+	--_color-neutral-5a: color-mix(in oklch, var(--_color-neutral) 5%, oklch(none none none / 0));
+	--_color-neutral-7a: color-mix(in oklch, var(--_color-neutral) 7%, oklch(none none none / 0));
+	--_color-neutral-10a: color-mix(in oklch, var(--_color-neutral) 10%, oklch(none none none / 0));
+	--_color-neutral-20a: color-mix(in oklch, var(--_color-neutral) 20%, oklch(none none none / 0));
 
-	inline-size: fit-content;
-	padding: .3em .5em;
+	--_accent-color: var(--accent-color, var(--_color-neutral-5a));
 
-	border: var(--border-width) solid var(--border-color);
-	border-radius: var(--border-radius);
+	--_selected-channel-background: var(--selected-channel-background, var(--_color-neutral-5a));
+	--_selected-channel-shadow: 0 .1em .2em var(--_color-neutral-10a) inset, 0 0 0 2em var(--_color-neutral-7a) inset;
+	--_border-width: var(--border-width, 1px);
+	--_border-color: var(--border-color, var(--_color-neutral-20a));
+	--_border-radius: var(--border-radius, .2em);
 
-	legend {
-		padding: 0;
+	display: flex;
+	gap: .3em;
+	align-items: baseline;
+}
 
-		space-picker {
-			margin-inline: .15em;
-		}
+[part="space-picker"] {
+	&:not(:hover) {
+		border-color: transparent;
 	}
 }
 
+
 #channels {
 	display: flex;
-	gap: .5em;
+	inline-size: fit-content;
+
+	border: var(--_border-width) solid var(--_border-color);
+	border-radius: var(--_border-radius);
+
+	label {
+		display: grid;
+		place-items: center;
+		min-inline-size: 5ch;
+		padding: .3em .5em;
+
+		cursor: pointer;
+
+		&:hover {
+			background-color: var(--_accent-color);
+		}
+
+		& + & {
+			border-inline-start: var(--_border-width) solid var(--_border-color);
+		}
+
+		&:has(:checked) {
+			background: var(--_selected-channel-background);
+			box-shadow: var(--_selected-channel-shadow);
+		}
+	}
+
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border-width: 0;
+	}
 }

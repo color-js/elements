@@ -7,12 +7,8 @@ const Self = class ChannelPicker extends ColorElement {
 	static url = import.meta.url;
 	static shadowStyle = true;
 	static shadowTemplate = `
-		<fieldset part="wrapper">
-			<legend>
-				<space-picker part="color-space" exportparts="base: color-space-base" id="space_picker"></space-picker>
-			</legend>
-			<div id="channels" part="channels"></div>
-		</fieldset>
+		<space-picker part="color-space" exportparts="base: color-space-base" id="space_picker"></space-picker>
+		<div id="channels" part="channels"></div>
 	`;
 
 	constructor () {
@@ -76,7 +72,7 @@ const Self = class ChannelPicker extends ColorElement {
 
 		// By default, the first channel is selected
 		this._el.channels.innerHTML = Object.entries(coords)
-			.map(([id, coord], index) => `<label><input type="radio" name="channel" value="${ id }" ${ index === 0 ? "checked" : "" } /> ${ coord.name }</label>`)
+			.map(([id, coord], index) => `<label><input type="radio" name="channel" value="${ id }" ${ index === 0 ? "checked" : "" } class="sr-only" /> ${ coord.name }</label>`)
 			.join("\n");
 
 		let [prevSpace, prevChannel] = this.value?.split(".") ?? [];
