@@ -128,6 +128,64 @@ future_swatch_container.append(swatch);
 </script>
 ```
 
+### The `label` attribute
+
+You can provide the color label via the `label` attribute.
+
+<table>
+<thead>
+	<tr>
+		<th></th>
+		<th>Default</th>
+		<th>Large</th>
+	</tr>
+</thead>
+<tbody>
+<tr>
+<th>Static</th>
+<td>
+
+```html
+<color-swatch label="Turquoise">oklch(65% 0.15 210)</color-swatch>
+```
+</td>
+<td>
+
+```html
+<color-swatch label="Turquoise" size="large">oklch(65% 0.15 210)</color-swatch>
+```
+</td>
+</tr>
+<tr>
+<th>Editable</th>
+<td>
+
+```html
+<color-swatch label="Turquoise">
+	<input value="oklch(65% 0.15 210)" />
+</color-swatch>
+```
+</td>
+<td>
+
+```html
+<color-swatch label="Turquoise" size="large">
+	<input value="oklch(65% 0.15 210)" />
+</color-swatch>
+```
+</td>
+</tr>
+</tbody>
+</table>
+
+If the attribute's value matches the element's content, no additional text with the label will be shown.
+
+```html
+<color-swatch label="Turquoise" value="oklch(65% 0.15 210)" size="large">Turquoise</color-swatch>
+```
+
+If used as a property and is not defined via the `label` attribute, its value is that of the element text content.
+
 ### The `info` attribute
 
 You can use the `info` attribute to show information about the color.
@@ -256,6 +314,7 @@ If you don’t, the `<html>` element will be used.
 | `color` | `color` | `Color` &#124; `string` | - | The current color value. |
 | `info` | `info` | `string` | - | Comma-separated list of coords of the current color to be shown. |
 | `value` | `value` | `string` | - | The current value of the swatch. |
+| `label` | `label` | `string` | - | The label of the swatch (e.g., color name). Defaults to the element text content. |
 | `size` | - | `large` | - | The size of the swatch. Currently, it is used only to make a large swatch. |
 | `property` | `property` | `string` | - | CSS property to bind to. |
 | `scope` | `scope` | `string` | `:root` | CSS selector to use as the scope for the specified CSS property. |
@@ -286,6 +345,7 @@ These properties are read-only.
 |------|-------------|
 | `swatch` | The swatch used to render the color. |
 | `details` | Wrapper around all non-swatch content (color name, info, etc) |
+| `label` | The label of the swatch |
 | `color-wrapper` | Wrapper around the color name itself |
 | `gamut` | Gamut indicator |
 | `info` | Any info generateed by the `info` attribute |

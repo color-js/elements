@@ -16,6 +16,7 @@ const Self = class ColorSwatch extends ColorElement {
 		</slot>
 		<div id="wrapper" part="details">
 			<slot name="before"></slot>
+			<div part="label"></div>
 			<div part="color">
 				<slot></slot>
 			</div>
@@ -27,6 +28,7 @@ const Self = class ColorSwatch extends ColorElement {
 
 		this._el = {
 			wrapper: this.shadowRoot.querySelector("#wrapper"),
+			label: this.shadowRoot.querySelector("[part=label]"),
 			colorWrapper: this.shadowRoot.querySelector("[part=color]"),
 		};
 
@@ -59,6 +61,11 @@ const Self = class ColorSwatch extends ColorElement {
 
 	get gamut () {
 		return this._el.gamutIndicator.gamut;
+	}
+
+	get textContent () {
+		// Children that are not assigned to another slot
+		return [...this.childNodes].filter(n => !n.slot).map(n => n.textContent).join("").trim();
 	}
 
 	propChangedCallback ({name, prop, detail: change}) {
@@ -98,6 +105,15 @@ const Self = class ColorSwatch extends ColorElement {
 		if (name === "value") {
 			if (input && (!input.value || input.value !== this.value)) {
 				input.value = this.value;
+			}
+		}
+
+		if (name === "label") {
+			if (this.label.length && this.label !== this.textContent) {
+				this._el.label.textContent = this.label;
+			}
+			else {
+				this._el.label.textContent = "";
 			}
 		}
 
@@ -155,11 +171,19 @@ const Self = class ColorSwatch extends ColorElement {
 					return this._el.input.value;
 				}
 
-				// Children that are not assigned to another slot
-				return [...this.childNodes].filter(n => !n.slot).map(n => n.textContent).join("").trim();
+				return this.textContent;
 			},
 			reflect: {
 				from: true,
+			},
+		},
+		label: {
+			type: String,
+			default () {
+				return this.textContent;
+			},
+			convert (value) {
+				return value.trim();
 			},
 		},
 		color: {
