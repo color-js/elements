@@ -15,8 +15,19 @@ default `oklch.l` will be used:
 <channel-picker></channel-picker>
 ```
 
-You can hide the `color-space` part with CSS to show only the coordinates of the
-specified space:
+If you need a more compact version of the picker, add the `compact` boolean attribute to get one:
+
+```html
+<channel-picker value="oklch.c" compact></channel-picker>
+```
+
+If you need a more compact version of the picker, add the `compact` boolean attribute to get one:
+
+```html
+<channel-picker value="oklch.c" compact></channel-picker>
+```
+
+You can hide the `color-space` part with CSS to show only the coordinates of the specified space:
 
 ```html
 <channel-picker id="picker" value="hsl.h"></channel-picker>
@@ -46,9 +57,14 @@ preserved (if it is in the new space) or reset to the first available one:
 All properties are reactive and can be set programmatically:
 
 ```html
-<button onclick="this.nextElementSibling.value = 'p3.b'">
-	Switch to P3 Blue
-</button>
+<button onclick="this.nextElementSibling.value = 'p3.b'">Switch to P3 Blue</button>
+<channel-picker></channel-picker>
+```
+
+```html
+<label>
+	<input type="checkbox" onchange="this.parentElement.nextElementSibling.compact = this.checked" /> Compact picker
+</label>
 <channel-picker></channel-picker>
 ```
 
@@ -83,6 +99,7 @@ All properties are reactive and can be set programmatically:
 | Attribute | Property | Property type | Default value | Description                      |
 | --------- | -------- | ------------- | ------------- | -------------------------------- |
 | `value`   | `value`  | `string`      | `oklch.l`     | The current value of the picker. |
+| `compact` | `compact`  | `boolean` | `false` | Whether the picker should be rendered compact or not. |
 
 ### Getters
 
@@ -103,9 +120,9 @@ These properties are read-only.
 
 ### Parts
 
-| Name               | Description                                                              |
-| ------------------ | ------------------------------------------------------------------------ |
-| `wrapper`          | The component's wrapper element.                                         |
-| `color-space`      | The internal [`<space-picker>`](../space-picker/) element.               |
+| Name           | Description                                          |
+|----------------|------------------------------------------------------|
+| `color-space` | The internal [`<space-picker>`](../space-picker/) element. |
 | `color-space-base` | The internal `<select>` element of [`<space-picker>`](../space-picker/). |
-| `channels`         | The container that wraps the current color space channels.               |
+| `channels` | The container that wraps the current color space channels. |
+| `color-channel-base` | If the picker is compact, the internal `<select>` element used to render the channels.  |

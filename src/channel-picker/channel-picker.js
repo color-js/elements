@@ -41,7 +41,7 @@ const Self = class ChannelPicker extends ColorElement {
 	}
 
 	get selectedChannel () {
-		return this.selectedSpace.coords?.[this.#checkedChannel];
+		return this.selectedSpace.coords?.[this.compact ? this.#channelSelect.value : this.#checkedChannel];
 	}
 
 	get #checkedChannel () {
@@ -53,6 +53,10 @@ const Self = class ChannelPicker extends ColorElement {
 		if (input) {
 			input.checked = true;
 		}
+	}
+
+	get #channelSelect () {
+		return this._el.channels.querySelector("select[part=picker]");
 	}
 
 	/**
@@ -70,10 +74,23 @@ const Self = class ChannelPicker extends ColorElement {
 			return;
 		}
 
+		let compact = this.compact;
+		this.classList.toggle("compact", compact);
+
+		let html = compact ? `<select part="picker">` : "";
 		// By default, the first channel is selected
-		this._el.channels.innerHTML = Object.entries(coords)
-			.map(([id, coord], index) => `<label><input type="radio" name="channel" value="${ id }" ${ index === 0 ? "checked" : "" } class="sr-only" /> ${ coord.name }</label>`)
+		html += Object.entries(coords)
+			.map(([id, coord], index) => {
+				if (compact) {
+					return `<option value="${ id }" ${ index === 0 ? "selected" : "" }>${ coord.name }</option>`;
+				}
+				else {
+					return `<label><input type="radio" name="channel" value="${ id }" ${ index === 0 ? "checked" : "" } class="sr-only" /> ${ coord.name }</label>`;
+				}
+			})
 			.join("\n");
+		html += compact ? "</select>" : "";
+		this._el.channels.innerHTML = html;
 
 		let [prevSpace, prevChannel] = this.value?.split(".") ?? [];
 		if (prevSpace && prevChannel) {
@@ -81,11 +98,21 @@ const Self = class ChannelPicker extends ColorElement {
 			let currentChannelName = coords[prevChannel]?.name;
 			if (prevChannelName === currentChannelName) {
 				// Preserve the channel if it exists in the new space and has the same name ("b" in "oklab" is not the same as "b" in "p3")
-				this.#checkedChannel = prevChannel;
+				if (compact) {
+					this.#channelSelect.value = prevChannel;
+				}
+				else {
+					this.#checkedChannel = prevChannel;
+				}
 			}
 			else if (this.#history?.[space.id]) {
 				// Otherwise, try to restore the last channel used
-				this.#checkedChannel = this.#history[space.id];
+				if (compact) {
+					this.#channelSelect.value = this.#history[space.id];
+				}
+				else {
+					this.#checkedChannel = this.#history[space.id];
+				}
 			}
 		}
 	}
@@ -95,8 +122,10 @@ const Self = class ChannelPicker extends ColorElement {
 			this.#render();
 		}
 
-		if (this._el.space_picker === event.target || event.target.matches("input[type=radio]")) {
-			let value = `${ this._el.space_picker.value }.${ this.#checkedChannel }`;
+		if (this._el.space_picker === event.target || this.#channelSelect === event.target || event.target.matches("input[type=radio]")) {
+			let space = this._el.space_picker.value;
+			let channel = this.compact ? this.#channelSelect.value : this.#checkedChannel;
+			let value = `${ space }.${ channel }`;
 			if (value !== this.value) {
 				this.value = value;
 			}
@@ -108,7 +137,7 @@ const Self = class ChannelPicker extends ColorElement {
 			let [space, channel] = (this.value + "").split(".");
 
 			let currentSpace = this._el.space_picker.value;
-			let currentCoord = this.#checkedChannel;
+			let currentCoord = this.compact ? this.#channelSelect?.value : this.#checkedChannel;
 			let currentValue = `${ currentSpace }.${ currentCoord }`;
 
 			if (!space || !channel) {
@@ -131,7 +160,12 @@ const Self = class ChannelPicker extends ColorElement {
 						let coords = Object.keys(this.selectedSpace.coords ?? {});
 
 						if (coords.includes(channel)) {
-							this.#checkedChannel = channel;
+							if (this.compact) {
+								this.#channelSelect.value = channel;
+							}
+							else {
+								this.#checkedChannel = channel;
+							}
 						}
 						else {
 							currentCoord = coords.includes(currentCoord) ? currentCoord : coords[0];
@@ -151,11 +185,32 @@ const Self = class ChannelPicker extends ColorElement {
 				}
 			}
 		}
+
+		if (name === "compact") {
+			this.#render();
+		}
 	}
 
 	static props = {
 		value: {
 			default: "oklch.l",
+		},
+
+		compact: {
+			default: false,
+			parse (value) {
+				if (value === undefined || value === null || value === false || value === "false") {
+					return false;
+				}
+
+				if (value === "" || value === "compact" || value === true || value === "true") {
+					// Boolean attribute
+					return true;
+				}
+			},
+			reflect: {
+				from: true,
+			},
 		},
 	};
 
