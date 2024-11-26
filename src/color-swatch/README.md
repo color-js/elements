@@ -189,7 +189,7 @@ If used as a property and is not defined via the `label` attribute, its value is
 ### The `info` attribute
 
 You can use the `info` attribute to show information about the color.
-Currently, the types of information supported are color coords (in any color space), the difference (delta) and contrast between the current color and another one (specified via [the `vs` attribute](./#the-vs-attribute)).
+Currently, the types of information supported are color coords (in any color space), the difference (deltaE) and contrast between the current color and another one (specified via [the `vs` attribute](./#the-vs-attribute)).
 
 ```html
 <color-swatch info="oklch.l, oklch.c, oklch.h" size="large">
@@ -215,7 +215,7 @@ The `info` attribute plays quite nicely with the `--details-style: compact` styl
 
 ### The `vs` attribute
 
-You can calculate the difference (delta) and contrast between the current color and another one.
+You can calculate the difference (deltaE) and contrast between the current color and another one.
 To do so, provide the new color via the `vs` attribute and specify one of the [supported algorithms for calculating the difference](https://colorjs.io/docs/color-difference#delta-e-e) ([contrast](https://colorjs.io/docs/contrast) or both) between two colors inside [the `info` attribute](./#the-info-attribute).
 
 ```html
