@@ -47,12 +47,12 @@ const Self = class ColorChart extends ColorElement {
 	connectedCallback () {
 		super.connectedCallback();
 		this._el.chart.addEventListener("colorschange", this, {capture: true});
-		this._slots.color_channel.addEventListener("change", this, {capture: true});
+		this._slots.color_channel.addEventListener("input", this, {capture: true});
 	}
 
 	disconnectedCallback () {
 		this._el.chart.removeEventListener("colorschange", this, {capture: true});
-		this._slots.color_channel.removeEventListener("change", this, {capture: true});
+		this._slots.color_channel.removeEventListener("input", this, {capture: true});
 	}
 
 	handleEvent (evt) {
