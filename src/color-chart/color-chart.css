@@ -32,7 +32,6 @@ slot[name="color-channel"]::slotted(*) {
 	justify-self: start;
 
 	margin-block: .5em .7em;
-	/* margin-inline-start: -.5em; */
 	font-size: 130%;
 }
 
