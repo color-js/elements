@@ -19,6 +19,12 @@ Basic example:
 <channel-slider space="oklch" channel="h"></channel-slider>
 ```
 
+The alpha channel is also supported:
+
+```html
+<channel-slider space="oklch" channel="alpha"></channel-slider>
+```
+
 In most cases you’d also want to set a color to set the other channels and the initial value:
 
 ```html
@@ -81,6 +87,7 @@ All attributes are reactive:
 		<option>l</option>
 		<option>c</option>
 		<option>h</option>
+		<option>alpha</option>
 	</select>
 </label>
 
@@ -90,7 +97,7 @@ All attributes are reactive:
 <script>
 	function fromSlider () {
 		space_select.value = dynamic_slider.space.id;
-		channel_select.innerHTML = Object.keys(dynamic_slider.space.coords).map(c => `<option>${c}</option>`).join('\n');
+		channel_select.innerHTML = [...Object.keys(dynamic_slider.space.coords).map(c => `<option>${c}</option>`), "<option>alpha</option>"].join('\n');
 		channel_select.value = dynamic_slider.channel;
 	}
 
