@@ -33,7 +33,7 @@ const Self = class SpacePicker extends ColorElement {
 		if (name === "spaces") {
 			if (!this.groups) {
 				this._el.picker.innerHTML = Object.entries(this.spaces)
-					.map(([id, space]) => `<option label="${ this.getSpaceLabel?.(space) ?? space.name }" value="${ id }">${ space.name }</option>`)
+					.map(([id, space]) => `<option label="${ this.getSpaceLabel(space) }" value="${ id }">${ space.name }</option>`)
 					.join("\n");
 			}
 			else {
@@ -57,7 +57,7 @@ const Self = class SpacePicker extends ColorElement {
 				this._el.picker.innerHTML = groups.map(([type, spaces]) => `
 					<optgroup label="${type}">
 						${Object.entries(spaces)
-							.map(([id, space]) => `<option label="${ this.getSpaceLabel?.(space) ?? space.name }" value="${ id }">${ space.name }</option>`)
+							.map(([id, space]) => `<option label="${ this.getSpaceLabel(space) }" value="${ id }">${ space.name }</option>`)
 							.join("\n")}
 					</optgroup>
 				`).join("\n");
@@ -174,6 +174,9 @@ const Self = class SpacePicker extends ColorElement {
 			type: {
 				is: Function,
 				arguments: ["space"],
+			},
+			default () {
+				return space => space.name;
 			},
 			reflect: false,
 		},

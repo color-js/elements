@@ -93,7 +93,7 @@ All properties are reactive and can be set programmatically:
 | `value`   | `value`   | `string`                            | The first color space in `this.spaces`. | The current value of the picker.                                                                          |
 | `spaces`  | `spaces`  | `string` &#124; `Array<ColorSpace>` | All known color spaces.                 | Comma-separated list of color spaces to use.                                                              |
 | —         | `groupBy` | `Function`                          | —                                       | Function to group the color spaces. Takes a color space object as an argument and returns the group name. |
-| – | `getSpaceLabel` | `Function` | – | Function to get the label for a color space. Takes a color space object as an argument and returns its label. |
+| – | `getSpaceLabel` | `Function` | `space => space.name` | Function to get the label for a color space. Takes a color space object as an argument and returns its label. |
 
 ### Getters
 
