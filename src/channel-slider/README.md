@@ -25,8 +25,6 @@ The alpha channel is also supported:
 <channel-slider space="oklch" channel="alpha"></channel-slider>
 ```
 
-Warning: Using alpha requires Color.js v0.6.0 or higher.
-
 In most cases you’d also want to set a color to set the other channels and the initial value:
 
 ```html

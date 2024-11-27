@@ -21,11 +21,6 @@ const Self = class ChannelSlider extends ColorElement {
 
 		this._el = dom.named(this);
 		this._el.slot = this.shadowRoot.querySelector("slot");
-
-		// Starting from v0.6.0, Color.js supports the alpha channel.
-		// To detect whether we are on v0.6.0 or higher, we can check if color coords are plain number primitives.
-		// This was the change introduced in v0.6.0.
-		this.supportsAlpha = new Self.Color("rgb(none none none)").coords[0] === null;
 	}
 
 	connectedCallback () {
@@ -50,12 +45,7 @@ const Self = class ChannelSlider extends ColorElement {
 		let color = this.defaultColor.clone();
 
 		if (this.channel === "alpha") {
-			if (this.supportsAlpha) {
-				value /= 100;
-			}
-			else {
-				return color;
-			}
+			value /= 100;
 		}
 
 		try {
@@ -123,10 +113,6 @@ const Self = class ChannelSlider extends ColorElement {
 			if (name === "space" || name === "channel" || name === "min" || name === "max") {
 				this._el.channel_info.innerHTML = `${ this.channelName } <em>(${ this.min }&thinsp;&ndash;&thinsp;${ this.max })</em>`;
 			}
-		}
-
-		if (name === "channel" && this.channel === "alpha" && !this.supportsAlpha) {
-			console.warn("Using alpha requires Color.js v0.6.0 or higher.");
 		}
 	}
 
@@ -216,13 +202,8 @@ const Self = class ChannelSlider extends ColorElement {
 			type: Number,
 			default () {
 				if (this.channel === "alpha") {
-					if (this.supportsAlpha) {
-						let value = this.defaultColor.get(this.channel);
-						return value * 100;
-					}
-					else {
-						return 100;
-					}
+					let value = this.defaultColor.alpha;
+					return value * 100;
 				}
 				else {
 					return this.defaultColor.get(this.channel);
