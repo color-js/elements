@@ -21,6 +21,11 @@ const Self = class ChannelSlider extends ColorElement {
 
 		this._el = dom.named(this);
 		this._el.slot = this.shadowRoot.querySelector("slot");
+
+		// Starting from v0.6.0, Color.js supports the alpha channel.
+		// To detect whether we are on v0.6.0 or higher, we can check if color coords are plain number primitives.
+		// This was the change introduced in v0.6.0.
+		this.supportsAlpha = new Self.Color("rgb(none none none)").coords[0] === null;
 	}
 
 	connectedCallback () {
@@ -43,6 +48,16 @@ const Self = class ChannelSlider extends ColorElement {
 
 	colorAt (value) {
 		let color = this.defaultColor.clone();
+
+		if (this.channel === "alpha") {
+			if (this.supportsAlpha) {
+				value /= 100;
+			}
+			else {
+				return color;
+			}
+		}
+
 		try {
 			color.set(this.channel, value);
 		}
@@ -109,6 +124,10 @@ const Self = class ChannelSlider extends ColorElement {
 				this._el.channel_info.innerHTML = `${ this.channelName } <em>(${ this.min }&thinsp;&ndash;&thinsp;${ this.max })</em>`;
 			}
 		}
+
+		if (name === "channel" && this.channel === "alpha" && !this.supportsAlpha) {
+			console.warn("Using alpha requires Color.js v0.6.0 or higher.");
+		}
 	}
 
 	get channelName () {
@@ -152,6 +171,12 @@ const Self = class ChannelSlider extends ColorElement {
 		},
 		channelSpec: {
 			get () {
+				if (this.channel === "alpha") {
+					return {
+						name: "Alpha",
+					};
+				}
+
 				let channelSpec = this.space?.coords[this.channel];
 
 				if (!channelSpec && this.space) {
@@ -190,7 +215,18 @@ const Self = class ChannelSlider extends ColorElement {
 		defaultValue: {
 			type: Number,
 			default () {
-				return this.defaultColor.get(this.channel);
+				if (this.channel === "alpha") {
+					if (this.supportsAlpha) {
+						let value = this.defaultColor.get(this.channel);
+						return value * 100;
+					}
+					else {
+						return 100;
+					}
+				}
+				else {
+					return this.defaultColor.get(this.channel);
+				}
 			},
 			reflect: {
 				from: "value",
