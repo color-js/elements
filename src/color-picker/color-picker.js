@@ -49,7 +49,11 @@ const Self = class ColorPicker extends ColorElement {
 		if (this._el.sliders.contains(source)) {
 			// From sliders
 			let coords = [...this._el.sliders.children].map(el => el.value);
-			this.color = new Self.Color(this.space, coords);
+			let alpha = this.color.alpha;
+			if (coords.length > 3) {
+				alpha = coords.pop() / 100;
+			}
+			this.color = new Self.Color(this.space, coords, alpha);
 		}
 		else if (this._el.swatch.contains(source)) {
 			// From swatch
@@ -58,6 +62,11 @@ const Self = class ColorPicker extends ColorElement {
 				return;
 			}
 			this.color = this._el.swatch.color;
+
+			if (this.color.alpha < 1 && this.alpha === undefined) {
+				// Enable alpha if the color became semi-transparent
+				this.alpha = true;
+			}
 		}
 		else if (this._el.space_picker.contains(source) || this._slots.color_space.assignedElements().includes(source)) {
 			this.spaceId = event.target.value;
@@ -67,7 +76,7 @@ const Self = class ColorPicker extends ColorElement {
 	}
 
 	propChangedCallback ({name, prop, detail: change}) {
-		if (name === "space") {
+		if (name === "space" || name === "alpha") {
 			let space = this.space;
 
 			if (this.color.space !== space) {
@@ -75,7 +84,11 @@ const Self = class ColorPicker extends ColorElement {
 			}
 
 			let i = 0;
-			for (let channel in space.coords) {
+			let channels = [...Object.keys(this.space.coords)];
+			if (this.alpha || (this.alpha === undefined && this.color.alpha < 1)) {
+				channels.push("alpha");
+			}
+			for (let channel of channels) {
 				let slider = this._el.sliders.children[i++];
 
 				if (slider) {
@@ -85,6 +98,11 @@ const Self = class ColorPicker extends ColorElement {
 				else {
 					this._el.sliders.insertAdjacentHTML("beforeend", `<channel-slider space="${ space.id }" channel="${ channel }" part="channel-slider"></channel-slider>`);
 				}
+			}
+
+			if (this._el.sliders.children.length > channels.length) {
+				// Remove the slider for alpha
+				this._el.sliders.children[channels.length].remove();
 			}
 
 			for (let slider of this._el.sliders.children) {
@@ -100,6 +118,11 @@ const Self = class ColorPicker extends ColorElement {
 			if (!this._el.swatch.color || !this.color.equals(this._el.swatch.color)) {
 				// Avoid typing e.g. "red" and having it replaced with "rgb(100% 0% 0%)" under your caret
 				prop.applyChange(this._el.swatch, change);
+			}
+
+			if (this.color.alpha < 1 && this.alpha === undefined) {
+				// Enable alpha if the color became semi-transparent
+				this.alpha = true;
 			}
 		}
 	}
@@ -193,6 +216,26 @@ const Self = class ColorPicker extends ColorElement {
 			},
 			defaultProp: "defaultColor",
 			reflect: false,
+		},
+
+		alpha: {
+			parse (value) {
+				if (value === undefined || value === null) {
+					return;
+				}
+
+				if (value === false || value === "false") {
+					return false;
+				}
+
+				if (value === "" || value === "alpha" || value === true || value === "true") {
+					// Boolean attribute
+					return true;
+				}
+			},
+			reflect: {
+				from: true,
+			},
 		},
 	};
 

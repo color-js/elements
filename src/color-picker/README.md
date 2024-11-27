@@ -20,6 +20,26 @@ If no color space or color is provided, the default ones will be used: `oklch` f
 <color-picker></color-picker>
 ```
 
+### The `alpha` attribute
+
+Colors with the alpha channel are also supported:
+
+```html
+<color-picker space="oklch" color="oklch(60% 30% 180 / .6)"></color-picker>
+```
+
+Add the `alpha` boolean attribute to show the alpha channel permanently:
+
+```html
+<color-picker space="oklch" color="oklch(60% 30% 180)" alpha></color-picker>
+```
+
+Set this attribute to `false` to permanently hide the alpha channel (regardless of the color):
+
+```html
+<color-picker space="oklch" color="oklch(60% 30% 180 / .6)" alpha="false"></color-picker>
+```
+
 ### Slots
 
 ```html
@@ -95,6 +115,13 @@ All attributes are reactive:
 </style>
 ```
 
+```html
+<label>
+	<input type="checkbox" onchange="this.parentElement.nextElementSibling.alpha = this.checked" /> Alpha channel
+</label>
+<color-picker></color-picker>
+```
+
 ## Reference
 
 ### Slots
@@ -112,6 +139,7 @@ All attributes are reactive:
 | `space` | `spaceId` | `string` | `oklch` | The color space to use for interpolation. |
 | – | `space` | `ColorSpace` | `OKLCh` | Color space object corresponding to the `space` attribute. |
 | `color` | `color` | `Color` &#124; `string` | `oklch(50% 50% 180)` | The current color value. |
+| `alpha` | `alpha` | `boolean` &#124; `undefined` | `undefined` | Whether to show the alpha channel slider or not. If `undefined` and the color has an alpha channel, the slider will be shown regardless. |
 
 ### Events
 
