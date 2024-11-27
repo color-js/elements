@@ -203,8 +203,7 @@ const Self = class ChannelSlider extends ColorElement {
 			type: Number,
 			default () {
 				if (this.channel === "alpha") {
-					let value = this.defaultColor.alpha;
-					return value * 100;
+					return this.defaultColor.alpha * 100;
 				}
 				else {
 					return this.defaultColor.get(this.channel);
