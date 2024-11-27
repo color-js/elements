@@ -45,7 +45,8 @@ const Self = class ChannelSlider extends ColorElement {
 		let color = this.defaultColor.clone();
 
 		if (this.channel === "alpha") {
-			value /= 100;
+			color.alpha = value / 100;
+			return color;
 		}
 
 		try {
