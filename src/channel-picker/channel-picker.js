@@ -26,14 +26,14 @@ const Self = class ChannelPicker extends ColorElement {
 	connectedCallback () {
 		super.connectedCallback?.();
 
-		this._el.channels.addEventListener("input", this, {capture: true});
+		this._el.channels.addEventListener("input", this);
 	}
 
 	disconnectedCallback () {
 		super.disconnectedCallback?.();
 
 		this._el.space_picker.removeEventListener("spacechange", this);
-		this._el.channels.removeEventListener("input", this, {capture: true});
+		this._el.channels.removeEventListener("input", this);
 	}
 
 	get selectedSpace () {
