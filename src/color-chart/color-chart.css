@@ -28,6 +28,7 @@
 
 [part="color-channel"],
 slot[name="color-channel"]::slotted(*) {
+	/* <channel-picker>, or anything acting like one, should occupy the whole row above the chart so as not to mess up with the rest of the layout */
 	grid-column: 1 / -1;
 	justify-self: start;
 
