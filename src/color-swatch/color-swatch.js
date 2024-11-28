@@ -63,7 +63,7 @@ const Self = class ColorSwatch extends ColorElement {
 		return this._el.gamutIndicator.gamut;
 	}
 
-	get textContent () {
+	get swatchTextContent () {
 		// Children that are not assigned to another slot
 		return [...this.childNodes].filter(n => !n.slot).map(n => n.textContent).join("").trim();
 	}
@@ -109,7 +109,7 @@ const Self = class ColorSwatch extends ColorElement {
 		}
 
 		if (name === "label") {
-			if (this.label.length && this.label !== this.textContent) {
+			if (this.label.length && this.label !== this.swatchTextContent) {
 				this._el.label.textContent = this.label;
 			}
 			else {
@@ -171,7 +171,7 @@ const Self = class ColorSwatch extends ColorElement {
 					return this._el.input.value;
 				}
 
-				return this.textContent;
+				return this.swatchTextContent;
 			},
 			reflect: {
 				from: true,
@@ -180,7 +180,7 @@ const Self = class ColorSwatch extends ColorElement {
 		label: {
 			type: String,
 			default () {
-				return this.textContent;
+				return this.swatchTextContent;
 			},
 			convert (value) {
 				return value.trim();
