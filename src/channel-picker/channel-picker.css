@@ -15,7 +15,7 @@
 
 	display: flex;
 	gap: .3em;
-	align-items: baseline;
+	align-items: center;
 	inline-size: fit-content;
 }
 
@@ -63,13 +63,13 @@
 		border: var(--_border-width) solid var(--_border-color);
 		border-radius: var(--_border-radius);
 
-		font-size: 80%;
+		font-size: 70%;
 
 		label {
 			display: grid;
 			place-items: center;
 			min-inline-size: 5ch;
-			padding: .3em .5em;
+			padding: .3em 1.2em;
 
 			cursor: pointer;
 
