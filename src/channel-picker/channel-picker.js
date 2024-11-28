@@ -77,9 +77,9 @@ const Self = class ChannelPicker extends ColorElement {
 		let compact = this.compact;
 		this.classList.toggle("compact", compact);
 
-		let html = compact ? `<select part="picker">` : "";
-		// By default, the first channel is selected
-		html += Object.entries(coords)
+		let html = compact ? [`<select part="picker">`] : [];
+		html.push(...Object.entries(coords)
+			// By default, the first channel is selected
 			.map(([id, coord], index) => {
 				if (compact) {
 					return `<option value="${ id }" ${ index === 0 ? "selected" : "" }>${ coord.name }</option>`;
@@ -87,10 +87,11 @@ const Self = class ChannelPicker extends ColorElement {
 				else {
 					return `<label><input type="radio" name="channel" value="${ id }" ${ index === 0 ? "checked" : "" } class="sr-only" /> ${ coord.name }</label>`;
 				}
-			})
-			.join("\n");
-		html += compact ? "</select>" : "";
-		this._el.channels.innerHTML = html;
+			}));
+		if (compact) {
+			html.push("</select>");
+		}
+		this._el.channels.innerHTML = html.join("\n");
 
 		let [prevSpace, prevChannel] = this.value?.split(".") ?? [];
 		if (prevSpace && prevChannel) {
