@@ -46,15 +46,11 @@ const Self = class ChannelSlider extends ColorElement {
 
 		if (this.channel === "alpha") {
 			color.alpha = value / 100;
-			return color;
 		}
-
-		try {
+		else if (this.channel in color.space.coords) {
 			color.set(this.channel, value);
 		}
-		catch (e) {
-			console.warn(e);
-		}
+
 		return color;
 	}
 
@@ -205,8 +201,12 @@ const Self = class ChannelSlider extends ColorElement {
 				if (this.channel === "alpha") {
 					return this.defaultColor.alpha * 100;
 				}
-				else {
+				else if (this.channel in this.defaultColor.space.coords) {
 					return this.defaultColor.get(this.channel);
+				}
+				else {
+					let firstChannel = Object.keys(this.defaultColor.space.coords)[0];
+					return this.defaultColor.get(firstChannel);
 				}
 			},
 			reflect: {

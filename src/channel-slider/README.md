@@ -98,12 +98,12 @@ All attributes are reactive:
 	function fromSlider () {
 		space_select.value = dynamic_slider.space.id;
 		channel_select.innerHTML = [...Object.keys(dynamic_slider.space.coords).map(c => `<option>${c}</option>`), "<option>alpha</option>"].join('\n');
-		channel_select.value = dynamic_slider.channel;
+		channel_select.value = dynamic_slider.channel || channel_select.options[0].value;
 	}
 
 	function fromSelects () {
 		dynamic_slider.space = space_select.value;
-		dynamic_slider.channel = channel_select.value;
+		dynamic_slider.channel = channel_select.value || channel_select.options[0].value;
 	}
 
 	space_select.oninput = channel_select.oninput = fromSelects;
