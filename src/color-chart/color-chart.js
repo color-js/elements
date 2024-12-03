@@ -110,7 +110,6 @@ const Self = class ColorChart extends ColorElement {
 		let ret = {
 			element: colorScale,
 			swatches: new WeakMap(),
-			labels: new WeakMap(),
 			x: {min: Infinity, max: -Infinity, values: new WeakMap() },
 			y: {min: Infinity, max: -Infinity, values: new WeakMap()},
 			colors: colorScale.computedColors?.slice() ?? [],
@@ -147,15 +146,13 @@ const Self = class ColorChart extends ColorElement {
 					name = label.slice(0, -1).trim();
 				}
 
-				swatch.textContent = name;
+				swatch.label = name;
 
 				x = Number(x);
 			}
 			else {
 				x = index;
 			}
-
-			ret.labels.set(color, name);
 
 			let y = yAll[index];
 
@@ -235,16 +232,6 @@ const Self = class ColorChart extends ColorElement {
 		if (name === "info") {
 			for (let colorScale of this.children) {
 				colorScale.info = this.info;
-
-				// Update color labels
-				// (they might have changed to the default color name after the info object was set/updated)
-				let scale = this.series.get(colorScale);
-				if (scale) {
-					for (let color of scale.colors) {
-						let swatch = scale.swatches.get(color);
-						swatch.textContent = scale.labels.get(color);
-					}
-				}
 			}
 		}
 	}
