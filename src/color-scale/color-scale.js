@@ -81,11 +81,14 @@ const Self = class ColorScale extends ColorElement {
 		}
 
 		if (name === "edit") {
-			if (this.edit?.add) {
-				this._el.add_button.style.removeProperty("display");
+			if (!this.edit) {
+				this.classList.add("static");
 			}
 			else {
-				this._el.add_button.style.setProperty("display", "none");
+				this.classList.remove("static");
+				this.classList.toggle("no-add", !this.edit.add);
+				this.classList.toggle("no-delete", !this.edit.delete);
+				this.classList.toggle("no-reorder", !this.edit.reorder);
 			}
 
 			this.render();

@@ -29,6 +29,10 @@
 		color: var(--_background-color, canvas);
 		background-color: var(--_foreground-color, canvastext);
 	}
+
+	:host(.static) & {
+		display: none;
+	}
 }
 
 color-swatch {
@@ -75,6 +79,10 @@ color-swatch {
 		box-shadow: 0 .05em 1em -.7em black;
 
 		transition: opacity .2s;
+
+		:host(.no-delete) & {
+			display: none;
+		}
 	}
 }
 
@@ -89,6 +97,10 @@ color-swatch {
 	font: inherit;
 	font-size: 200%;
 	font-weight: bold;
+
+	:host(.no-add) & {
+		display: none;
+	}
 }
 
 @supports (grid-template-columns: subgrid) {
