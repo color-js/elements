@@ -19,6 +19,10 @@ color-swatch {
 		}
 	}
 
+	&::part(color) {
+		flex-direction: column;
+	}
+
 	.color-name, input.color {
 		--_border-color: var(--border-color, color-mix(in oklab, buttonborder 70%, oklab(none none none / 0%)));
 
