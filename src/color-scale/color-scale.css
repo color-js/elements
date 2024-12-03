@@ -39,20 +39,30 @@ color-swatch {
 
 	.delete-button {
 		--_foreground-color: red;
-		--_background-color: white;
+		--_background-color: canvas;
 
 		all: unset;
 
+		position: absolute;
+		inset-block-start: .3em;
+		inset-inline-end: .3em;
+
 		display: grid;
 		place-items: center;
-		inline-size: 1.5em;
+		inline-size: 1.2em;
 		aspect-ratio: 1;
 		padding: .2em;
 
 		color: var(--_foreground-color);
 		background-color: var(--_background-color);
 
-		border-radius: .3em;
+		border-radius: 50%;
+		border: 1px solid;
+		border-color: color-mix(
+			in oklab,
+			buttonborder 20%,
+			oklab(none none none / 0%)
+		);
 		box-shadow: 0 .05em 1em -.7em black;
 
 		cursor: pointer;
