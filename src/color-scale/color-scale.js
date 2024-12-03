@@ -131,7 +131,7 @@ const Self = class ColorScale extends ColorElement {
 		}
 
 		let colorNameElement = swatch.querySelector(".color-name");
-		let colorName = colorNameElement?.value ?? colorNameElement?.textContent ?? swatch.textContent;
+		let colorName = colorNameElement?.value ?? colorNameElement?.textContent ?? swatch.label;
 
 		this.colors = {...this.colors, [colorName]: color};
 
@@ -162,6 +162,7 @@ const Self = class ColorScale extends ColorElement {
 		let colors = Object.entries(this.colors);
 		let index = colors.findIndex(([name, color]) => color.equals(swatch.color));
 		colors.splice(index, 1, [newName, swatch.color]);
+		swatch.label = newName;
 
 		this.colors = Object.fromEntries(colors);
 	}
@@ -177,7 +178,7 @@ const Self = class ColorScale extends ColorElement {
 		}
 
 		let colorNameElement = swatch.querySelector(".color-name");
-		let colorName = colorNameElement?.value ?? colorNameElement?.textContent ?? swatch.textContent;
+		let colorName = colorNameElement?.value ?? colorNameElement?.textContent ?? swatch.label;
 
 		swatch.remove();
 
@@ -222,10 +223,6 @@ const Self = class ColorScale extends ColorElement {
 					// FIXME: What if there is content in the slot?
 					html += `<input slot="before" class="color-name editable" value="${ name }" />`;
 				}
-				else {
-					// FIXME: What if there is content in the slot?
-					html += `<span slot="before" class="color-name">${ name }</span>`;
-				}
 
 				if (this.editable.color) {
 					// FIXME: What if there is content in the slots?
@@ -239,11 +236,8 @@ const Self = class ColorScale extends ColorElement {
 
 				swatch.innerHTML = html;
 			}
-			else {
-				// FIXME: What if there is content in the slot?
-				swatch.innerHTML = `<span slot="before" class="color-name">${ name }</span>`;
-			}
 
+			swatch.label = name;
 			swatch.color = color;
 
 			if (this.info) {
