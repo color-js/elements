@@ -69,7 +69,19 @@ Issue: How to make them focusable??
 
 ### The `editable` attribute
 
-The `editable` attribute allows you to make the color scale editable, enabling the addition of new colors and editing or the removal of existing ones. You can specify whether the color names, color values, or both should be editable.
+The `editable` attribute allows you to make the color scale editable, enabling the addition of new colors and editing or the removal of existing ones.
+
+Use `editable` as a boolean attribute to make the color scale editable:
+
+```html
+<color-scale editable space="oklch" colors="
+	Gray 300: #d1d5db,
+	Gray 400: #9ca3af,
+	Gray 500: #6b7280
+"></color-scale>
+```
+
+You can specify whether the color names, color values, or both should be editable.
 
 Editing colors (including adding and removing):
 
@@ -87,16 +99,6 @@ Or both:
 
 ```html
 <color-scale editable="name color" space="oklch" colors="
-	Gray 300: #d1d5db,
-	Gray 400: #9ca3af,
-	Gray 500: #6b7280
-"></color-scale>
-```
-
-There is a shorter way to achieve the same result—use `editable` as a boolean attribute (or set it to `true` programmatically):
-
-```html
-<color-scale editable space="oklch" colors="
 	Gray 300: #d1d5db,
 	Gray 400: #9ca3af,
 	Gray 500: #6b7280
