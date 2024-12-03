@@ -71,7 +71,7 @@ const Self = class ColorScale extends ColorElement {
 	}
 
 	propChangedCallback ({name, prop, detail: change}) {
-		if (name === "computedColors" && !this.edit?.name && !this.edit?.color) {
+		if (name === "computedColors" && !this.edit) {
 			// Re-render swatches
 			// Only if nothing is being edited, otherwise the input would be lost
 			// or, e.g., "red" would be converted to "rgb(100%, 0%, 0%)" right after the typing is done
@@ -79,7 +79,7 @@ const Self = class ColorScale extends ColorElement {
 		}
 
 		if (name === "edit") {
-			if (this.edit?.color) {
+			if (this.edit?.add) {
 				this._el.add_button.style.removeProperty("display");
 			}
 			else {
@@ -115,8 +115,8 @@ const Self = class ColorScale extends ColorElement {
 			// Focus the new color input and select its content
 			let swatch = this._el.swatches.lastElementChild;
 			let input = swatch.querySelector("input.color.edit");
-			input.focus();
-			input.select();
+			input?.focus();
+			input?.select();
 		}
 	}
 
@@ -142,9 +142,9 @@ const Self = class ColorScale extends ColorElement {
 
 			// Preserve the cursor position — set it to the end of the input
 			let input = swatch.querySelector("input.color.edit");
-			let end = input.value.length;
-			input.setSelectionRange(end, end);
-			input.focus();
+			let end = input?.value.length;
+			input?.setSelectionRange(end, end);
+			input?.focus();
 		}
 	}
 
@@ -216,23 +216,14 @@ const Self = class ColorScale extends ColorElement {
 
 			swatch.classList[intermediate ? "add" : "remove"]("intermediate");
 
-			if (!intermediate && (this.edit?.name || this.edit?.color)) {
-				let html = "";
-
-				if (this.edit.name) {
-					html += `<input class="color-name edit" value="${ name }" />`;
-				}
-
-				if (this.edit.color) {
-					html += `<input class="color edit" value="${ color }" />`;
-					html += `<button class="delete-button" title="Delete color">
+			if (!intermediate && this.edit) {
+				if (this.edit.delete && !swatch.querySelector(".delete-button")) {
+					swatch.insertAdjacentHTML("beforeend", `<button class="delete-button" title="Delete color">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 							<path fill="currentColor" fill-rule="evenodd" d="m18.412 6.5l-.801 13.617A2 2 0 0 1 15.614 22H8.386a2 2 0 0 1-1.997-1.883L5.59 6.5H3.5v-1A.5.5 0 0 1 4 5h16a.5.5 0 0 1 .5.5v1zM10 2.5h4a.5.5 0 0 1 .5.5v1h-5V3a.5.5 0 0 1 .5-.5M9 9l.5 9H11l-.4-9zm4.5 0l-.5 9h1.5l.5-9z" />
 						</svg>
-					</button>`;
+					</button>`);
 				}
-
-				swatch.innerHTML = html;
 			}
 
 			swatch.label = name;
@@ -332,6 +323,7 @@ const Self = class ColorScale extends ColorElement {
 					return {
 						name: true,
 						color: true,
+						list: true,
 					};
 				}
 
@@ -347,6 +339,15 @@ const Self = class ColorScale extends ColorElement {
 
 				console.warn(`The specified value "${ value }" cannot be used as a value of the "edit" property.`);
 				return;
+			},
+			convert (value) {
+				if (value?.list) {
+					// Enable the list operations: add, delete, reorder, etc.
+					delete value.list;
+					return {...value, add: true, delete: true, reorder: true};
+				}
+
+				return value;
 			},
 			reflect: {
 				from: true,

@@ -69,7 +69,7 @@ Issue: How to make them focusable??
 
 ### The `edit` attribute
 
-The `edit` attribute allows you to make the color scale editable, enabling the addition of new colors and editing or the removal of existing ones.
+The `edit` attribute allows you to make the color scale editable: adding new colors and editing, reordering, or removing existing ones.
 
 Use `edit` as a boolean attribute to make the color scale editable:
 
@@ -83,7 +83,7 @@ Use `edit` as a boolean attribute to make the color scale editable:
 
 You can specify whether the color names, color values, or both should be editable.
 
-Editing colors (including adding and removing):
+Editing colors:
 
 ```html
 <color-scale edit="color" space="oklch" colors="#e3fafc, #c5f6fa, #99e9f2, #66d9e8, #3bc9db"></color-scale>
@@ -105,10 +105,22 @@ Or both:
 "></color-scale>
 ```
 
-Keep in mind that interpolated colors are generated automatically and are not editable:
+Add `list` to enable all list operations (add, delete, reorder) in one go:
 
 ```html
-<color-scale edit="color" colors="#e3fafc, #0b7285" steps="4" space="oklch"></color-scale>
+<color-scale edit="color list" space="oklch" colors="#c5f6fa, #99e9f2, #3bc9db"></color-scale>
+```
+
+For more granular control, specify operations to be enabled:
+
+```html
+<color-scale edit="add reorder" space="oklch" colors="#c5f6fa, #99e9f2, #3bc9db"></color-scale>
+```
+
+Keep in mind that interpolated colors are generated automatically, are not editable, and cannot be reordered or deleted:
+
+```html
+<color-scale edit="color reorder delete" colors="#e3fafc, #0b7285" steps="4" space="oklch"></color-scale>
 ```
 
 The `edit` attribute is reactive and can be set programmatically:
