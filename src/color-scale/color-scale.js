@@ -46,7 +46,7 @@ const Self = class ColorScale extends ColorElement {
 	handleEvent (event) {
 		let source = event.target;
 
-		if (event.type === "input" && (!this.editable?.name || !source.matches(".color-name.editable"))) {
+		if (event.type === "input" && (!this.edit?.name || !source.matches(".color-name.edit"))) {
 			// Ignore input events from the color input: the color changes are handled by the colorchange event
 			return;
 		}
@@ -71,15 +71,15 @@ const Self = class ColorScale extends ColorElement {
 	}
 
 	propChangedCallback ({name, prop, detail: change}) {
-		if (name === "computedColors" && !this.editable?.name && !this.editable?.color) {
+		if (name === "computedColors" && !this.edit?.name && !this.edit?.color) {
 			// Re-render swatches
 			// Only if nothing is being edited, otherwise the input would be lost
 			// or, e.g., "red" would be converted to "rgb(100%, 0%, 0%)" right after the typing is done
 			this.render();
 		}
 
-		if (name === "editable") {
-			if (this.editable?.color) {
+		if (name === "edit") {
+			if (this.edit?.color) {
 				this._el.add_button.style.removeProperty("display");
 			}
 			else {
@@ -111,10 +111,10 @@ const Self = class ColorScale extends ColorElement {
 		this.colors = {...this.colors, [name]: color};
 		this.render();
 
-		if (this.editable?.color) {
+		if (this.edit?.color) {
 			// Focus the new color input and select its content
 			let swatch = this._el.swatches.lastElementChild;
-			let input = swatch.querySelector("input.color.editable");
+			let input = swatch.querySelector("input.color.edit");
 			input.focus();
 			input.select();
 		}
@@ -141,7 +141,7 @@ const Self = class ColorScale extends ColorElement {
 			this.render();
 
 			// Preserve the cursor position — set it to the end of the input
-			let input = swatch.querySelector("input.color.editable");
+			let input = swatch.querySelector("input.color.edit");
 			let end = input.value.length;
 			input.setSelectionRange(end, end);
 			input.focus();
@@ -186,7 +186,7 @@ const Self = class ColorScale extends ColorElement {
 		delete colors[colorName];
 		this.colors = colors;
 
-		if (this.editable) {
+		if (this.edit) {
 			// If we are in the edit mode, we need to force re-render the swatches
 			this.render();
 		}
@@ -216,15 +216,15 @@ const Self = class ColorScale extends ColorElement {
 
 			swatch.classList[intermediate ? "add" : "remove"]("intermediate");
 
-			if (!intermediate && (this.editable?.name || this.editable?.color)) {
+			if (!intermediate && (this.edit?.name || this.edit?.color)) {
 				let html = "";
 
-				if (this.editable.name) {
-					html += `<input class="color-name editable" value="${ name }" />`;
+				if (this.edit.name) {
+					html += `<input class="color-name edit" value="${ name }" />`;
 				}
 
-				if (this.editable.color) {
-					html += `<input class="color editable" value="${ color }" />`;
+				if (this.edit.color) {
+					html += `<input class="color edit" value="${ color }" />`;
 					html += `<button class="delete-button" title="Delete color">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 							<path fill="currentColor" fill-rule="evenodd" d="m18.412 6.5l-.801 13.617A2 2 0 0 1 15.614 22H8.386a2 2 0 0 1-1.997-1.883L5.59 6.5H3.5v-1A.5.5 0 0 1 4 5h16a.5.5 0 0 1 .5.5v1zM10 2.5h4a.5.5 0 0 1 .5.5v1h-5V3a.5.5 0 0 1 .5-.5M9 9l.5 9H11l-.4-9zm4.5 0l-.5 9h1.5l.5-9z" />
@@ -321,13 +321,13 @@ const Self = class ColorScale extends ColorElement {
 			},
 			additionalDependencies: ["info"],
 		},
-		editable: {
+		edit: {
 			parse (value) {
 				if (value === undefined || value === null || value === false || value === "false") {
 					return;
 				}
 
-				if (value === "" || value === "editable" || value === true || value === "true") {
+				if (value === "" || value === "edit" || value === true || value === "true") {
 					// Boolean attribute
 					return {
 						name: true,
@@ -345,7 +345,7 @@ const Self = class ColorScale extends ColorElement {
 					return value;
 				}
 
-				console.warn(`The specified value "${ value }" cannot be used as a value of the "editable" property.`);
+				console.warn(`The specified value "${ value }" cannot be used as a value of the "edit" property.`);
 				return;
 			},
 			reflect: {

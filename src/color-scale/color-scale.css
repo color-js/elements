@@ -32,7 +32,7 @@ color-swatch {
 		border-radius: .2rem;
 		border: 1px solid var(--_border-color);
 
-		&:not(.editable) {
+		&:not(.edit) {
 			border-color: transparent;
 		}
 	}
