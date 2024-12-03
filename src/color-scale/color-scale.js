@@ -29,7 +29,7 @@ const Self = class ColorScale extends ColorElement {
 
 	connectedCallback () {
 		super.connectedCallback?.();
-		this._el.swatches.addEventListener("input", this, {capture: true});
+		this._el.swatches.addEventListener("input", this);
 		this._el.swatches.addEventListener("colorchange", this, {capture: true});
 		this._el.swatches.addEventListener("click", this, {capture: true});
 		this._slots.add_button.addEventListener("click", this);
@@ -37,7 +37,7 @@ const Self = class ColorScale extends ColorElement {
 
 	disconnectedCallback () {
 		this.#swatches = [];
-		this._el.swatches.removeEventListener("input", this, {capture: true});
+		this._el.swatches.removeEventListener("input", this);
 		this._el.swatches.removeEventListener("colorchange", this, {capture: true});
 		this._el.swatches.removeEventListener("click", this, {capture: true});
 		this._slots.add_button.removeEventListener("click", this);
