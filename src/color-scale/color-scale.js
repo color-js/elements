@@ -7,10 +7,12 @@ const Self = class ColorScale extends ColorElement {
 	static dependencies = new Set(["color-swatch"]);
 	static shadowStyle = true;
 	static shadowTemplate = `
-		<div id=swatches></div>
-		<slot name="add-button">
-			<button id="add-button" part="add-button">Add color</button>
-		</slot>
+		<div part="wrapper">
+			<div id=swatches></div>
+			<slot name="add-button">
+				<button id="add-button" part="add-button" title="Add color">+</button>
+			</slot>
+		</div>
 		<slot></slot>`;
 
 	constructor () {
