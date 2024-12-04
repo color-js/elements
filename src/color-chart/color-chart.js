@@ -240,10 +240,6 @@ const Self = class ColorChart extends ColorElement {
 	propChangedCallback (evt) {
 		let {name, prop, detail: change} = evt;
 
-		if (name === "y") {
-			this._el.channel_picker.value = change.value;
-		}
-
 		if (["yResolved", "yMinAsNumber", "yMaxAsNumber"].includes(name)) {
 			// Re-render swatches
 			this.render(evt);
@@ -259,19 +255,23 @@ const Self = class ColorChart extends ColorElement {
 	static props = {
 		y: {
 			default: "oklch.l",
+			convert (value) {
+				// Try setting the value to the channel picker. The picker will handle possible erroneous values.
+				this._el.channel_picker.value = value;
+
+				// If the value is not set, that means it's invalid.
+				// In that case, we are falling back to the picker's current value.
+				if (this._el.channel_picker.value !== value) {
+					return this._el.channel_picker.value;
+				}
+
+				return value;
+			},
 		},
 
 		yResolved: {
 			get () {
-				try {
-					return Self.Color.Space.resolveCoord(this.y, "oklch");
-				}
-				catch {
-					// Falling back to the channel picker's current value or the default one
-					let y = this._el.channel_picker?.value ?? "oklch.l";
-					this.y = y;
-					return Self.Color.Space.resolveCoord(y);
-				}
+				return Self.Color.Space.resolveCoord(this.y, "oklch");
 			},
 			// rawProp: "coord",
 		},
