@@ -231,8 +231,8 @@ const Self = class ColorScale extends ColorElement {
 				}
 			}
 
-			swatch.label = name;
 			swatch.color = color;
+			swatch.label = name;
 
 			if (this.info) {
 				swatch.info = this.info;
