@@ -123,6 +123,7 @@ Reactively setting/changing the colors:
 
 | Name | Description |
 |------|-------------|
+| `color-channel` | The default [`<channel-picker>`](../channel-picker/) element, used if the `color-channel` slot has no slotted elements. |
 | `axis` | The axis line |
 | `ticks` | The container of ticks |
 | `tick` | A tick mark |
