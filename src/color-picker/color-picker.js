@@ -62,11 +62,6 @@ const Self = class ColorPicker extends ColorElement {
 				return;
 			}
 			this.color = this._el.swatch.color;
-
-			if (this.color.alpha < 1 && this.alpha === undefined) {
-				// Enable alpha if the color became semi-transparent
-				this.alpha = true;
-			}
 		}
 		else if (this._el.space_picker.contains(source) || this._slots.color_space.assignedElements().includes(source)) {
 			this.spaceId = event.target.value;
@@ -85,7 +80,7 @@ const Self = class ColorPicker extends ColorElement {
 
 			let i = 0;
 			let channels = [...Object.keys(this.space.coords)];
-			if (this.alpha || (this.alpha === undefined && this.color.alpha < 1)) {
+			if (this.alpha) {
 				channels.push("alpha");
 			}
 			for (let channel of channels) {
@@ -118,11 +113,6 @@ const Self = class ColorPicker extends ColorElement {
 			if (!this._el.swatch.color || !this.color.equals(this._el.swatch.color)) {
 				// Avoid typing e.g. "red" and having it replaced with "rgb(100% 0% 0%)" under your caret
 				prop.applyChange(this._el.swatch, change);
-			}
-
-			if (this.color.alpha < 1 && this.alpha === undefined) {
-				// Enable alpha if the color became semi-transparent
-				this.alpha = true;
 			}
 		}
 	}
