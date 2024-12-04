@@ -13,57 +13,78 @@
 	--_border-color: var(--border-color, var(--_color-neutral-20a));
 	--_border-radius: var(--border-radius, .2em);
 
+	--_gap: 1.5rem;
+
 	display: flex;
-	gap: .3em;
+	gap: var(--_gap);
 	align-items: center;
 	inline-size: fit-content;
+
+	[part="space-picker"] {
+		position: relative;
+
+		font-size: 120%;
+
+		&::before,
+		&::after {
+			--_line-height: calc(1.6 * var(--_border-width));
+			position: absolute;
+			content: "";
+		}
+
+		/* Line */
+		&::before {
+			inset-block-start: calc(50% - var(--_line-height) / 2);
+			inset-inline-start: calc(100% + var(--_border-width));
+			inline-size: var(--_gap);
+			block-size: var(--_line-height);
+			background-color: var(--_border-color);
+		}
+
+		/* Circle */
+		&::after {
+			--_radius: .12em;
+
+			inset-block-start: calc(50% - var(--_radius));
+			inset-inline-start: calc(100% - var(--_border-width) / 4 + var(--_gap) - var(--_radius) / 2);
+			border-radius: 50%;
+			block-size: calc(2 * var(--_radius));
+			aspect-ratio: 1;
+			background-color: color-mix(in oklch, var(--_color-neutral) 30%, canvas);
+		}
+	}
+
+	#channels {
+		font-size: 75%;
+
+		color: inherit;
+		background: inherit;
+	}
 }
 
 :host(:is(.compact, [compact])) {
-	padding: .3em .5em;
-
-	border: var(--_border-width) solid var(--_border-color);
-	border-radius: var(--_border-radius);
-
-	[part="space-picker"] {
-		padding: initial;
-		padding-inline-end: .4em;
-		border-radius: 0;
-		border: none;
-		border-inline-end: var(--_border-width) solid var(--_border-color);
-	}
-
 	[part="picker"] {
-		font: inherit;
-		color: inherit;
-		background: inherit;
-		border: none;
-		field-sizing: content;
-		cursor: pointer;
+		padding-block: .65em;
+		padding-inline: .5em .4em;
 
-		&:focus:not(:focus-visible) {
-			outline: none;
-		}
+		border: var(--_border-width) solid var(--_border-color);
+		border-radius: var(--_border-radius);
+
+		font: inherit;
+
+		field-sizing: content;
+
+		cursor: pointer;
 	}
 }
 
 :host(:not(.compact, [compact])) {
-	[part="space-picker"] {
-		font-weight: 600;
-
-		&:not(:hover) {
-			border-color: transparent;
-		}
-	}
-
 	#channels {
 		display: flex;
 		inline-size: fit-content;
 
 		border: var(--_border-width) solid var(--_border-color);
 		border-radius: var(--_border-radius);
-
-		font-size: 70%;
 
 		label {
 			display: grid;
