@@ -123,6 +123,7 @@ Reactively setting/changing the colors:
 
 | Name | Description |
 |------|-------------|
+| `color-channel` | The color channel picker |
 | `axis` | The axis line |
 | `ticks` | The container of ticks |
 | `tick` | A tick mark |
