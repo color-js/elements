@@ -60,7 +60,7 @@ color-swatch {
 		border-radius: .2rem;
 		border: 1px solid var(--_border-color);
 
-		&:not(.edit) {
+		&:not(.editable) {
 			border-color: transparent;
 		}
 	}
