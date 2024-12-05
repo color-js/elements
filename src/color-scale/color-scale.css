@@ -10,7 +10,8 @@
 	display: contents;
 }
 
-[part="add-button"], .delete-button {
+[part="add-button"],
+.delete-button {
 	/* Common styles */
 	all: unset;
 
@@ -28,10 +29,6 @@
 	&:is(:hover, :focus) {
 		color: var(--_background-color, canvas);
 		background-color: var(--_foreground-color, canvastext);
-	}
-
-	:host(.static) & {
-		display: none;
 	}
 }
 
@@ -79,10 +76,6 @@ color-swatch {
 		box-shadow: 0 .05em 1em -.7em black;
 
 		transition: opacity .2s;
-
-		:host(.no-delete) & {
-			display: none;
-		}
 	}
 }
 
