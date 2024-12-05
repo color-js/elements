@@ -86,29 +86,25 @@ You can specify whether the color names, color values, or both should be editabl
 Editing colors:
 
 ```html
-<color-scale editable="color" space="oklch" colors="#e3fafc, #c5f6fa, #99e9f2, #66d9e8, #3bc9db"></color-scale>
+<color-scale editable="color" space="oklch" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd, Blue: #7bd3ea"></color-scale>
 ```
 
 Editing color names:
 
 ```html
-<color-scale editable="name" space="oklch" colors="#c5f6fa, #99e9f2, #3bc9db"></color-scale>
+<color-scale editable="name" space="oklch" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd, Blue: #7bd3ea"></color-scale>
 ```
 
 Or both:
 
 ```html
-<color-scale editable="name color" space="oklch" colors="
-	Gray 300: #d1d5db,
-	Gray 400: #9ca3af,
-	Gray 500: #6b7280
-"></color-scale>
+<color-scale editable="name color" space="oklch" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd, Blue: #7bd3ea"></color-scale>
 ```
 
 Add `list` to enable all list operations (add, delete, reorder) in one go:
 
 ```html
-<color-scale editable="color list" space="oklch" colors="#c5f6fa, #99e9f2, #3bc9db"></color-scale>
+<color-scale editable="name color list" space="oklch" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd, Blue: #7bd3ea"></color-scale>
 ```
 
 For more granular control, specify operations to be enabled:
@@ -120,7 +116,7 @@ For more granular control, specify operations to be enabled:
 Keep in mind that interpolated colors are generated automatically, are not editable, and cannot be reordered or deleted:
 
 ```html
-<color-scale editable="color reorder delete" colors="#e3fafc, #0b7285" steps="4" space="oklch"></color-scale>
+<color-scale editable="color reorder delete" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd" steps="1" space="oklch"></color-scale>
 ```
 
 The `editable` attribute is reactive and can be set programmatically:
