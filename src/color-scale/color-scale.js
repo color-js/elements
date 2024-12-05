@@ -9,9 +9,7 @@ const Self = class ColorScale extends ColorElement {
 	static shadowTemplate = `
 		<div part="wrapper">
 			<div id=swatches></div>
-			<slot name="add-button">
-				<button id="add-button" part="add-button" title="Add color">+</button>
-			</slot>
+			<slot name="add-button"></slot>
 		</div>
 		<slot></slot>`;
 
@@ -21,7 +19,6 @@ const Self = class ColorScale extends ColorElement {
 		this._el = {
 			slot: this.shadowRoot.querySelector("slot"),
 			swatches: this.shadowRoot.getElementById("swatches"),
-			add_button: this.shadowRoot.getElementById("add-button"),
 		};
 
 		this._slots = {
@@ -81,12 +78,22 @@ const Self = class ColorScale extends ColorElement {
 		}
 
 		if (name === "editable") {
+			if (this.editable?.add) {
+				if (!this._el.add_button) {
+					this._el.add_button = Object.assign(document.createElement("button"), {part: "add-button", title: "Add color", textContent: "+"});
+					this._slots.add_button.append(this._el.add_button);
+				}
+			}
+			else {
+				this._el.add_button?.remove();
+				this._el.add_button = null;
+			}
+
 			if (!this.editable) {
 				this.classList.add("static");
 			}
 			else {
 				this.classList.remove("static");
-				this.classList.toggle("no-add", !this.editable.add);
 				this.classList.toggle("no-delete", !this.editable.delete);
 				this.classList.toggle("no-reorder", !this.editable.reorder);
 			}

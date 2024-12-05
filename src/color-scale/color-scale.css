@@ -97,10 +97,6 @@ color-swatch {
 	font: inherit;
 	font-size: 200%;
 	font-weight: bold;
-
-	:host(.no-add) & {
-		display: none;
-	}
 }
 
 @supports (grid-template-columns: subgrid) {
