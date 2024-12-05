@@ -25,6 +25,20 @@ Unknown color spaces also work:
 <space-picker spaces="bar, oklch, p3, srgb, foo" value="foo"></space-picker>
 ```
 
+### Custom labels
+
+Do you need the picker to show something other than the default color space names, such as color space ids?
+Simply define the `getSpaceLabel()` method on the picker instance, and you are done.
+The method takes a color space object as an argument and returns a string that will be used as the space label.
+
+```html
+<space-picker id="custom_labels"></space-picker>
+
+<script>
+    custom_labels.getSpaceLabel = space => space.id;
+</script>
+```
+
 ### Grouping the color spaces
 
 You can group the color spaces the way you like by specifying the `groupBy` property. Its value is a function
@@ -79,6 +93,7 @@ All properties are reactive and can be set programmatically:
 | `value`   | `value`   | `string`                            | The first color space in `this.spaces`. | The current value of the picker.                                                                          |
 | `spaces`  | `spaces`  | `string` &#124; `Array<ColorSpace>` | All known color spaces.                 | Comma-separated list of color spaces to use.                                                              |
 | —         | `groupBy` | `Function`                          | —                                       | Function to group the color spaces. Takes a color space object as an argument and returns the group name. |
+| – | `getSpaceLabel` | `Function` | `space => space.name` | Function to get the label for a color space. Takes a color space object as an argument and returns its label. |
 
 ### Getters
 
