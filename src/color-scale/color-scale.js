@@ -253,7 +253,9 @@ const Self = class ColorScale extends ColorElement {
 
 		let colorName = swatch.label;
 
-		swatch.remove();
+		if (!this.steps) {
+			swatch.remove();
+		}
 
 		let colors = {...this.colors};
 		delete colors[colorName];
@@ -284,10 +286,11 @@ const Self = class ColorScale extends ColorElement {
 				swatch.setAttribute("size", "large");
 				swatch.setAttribute("part", "color-swatch");
 				swatch.setAttribute("exportparts", "swatch, info, gamut, label");
-				// We should ignore all labelchange and colorchange events until the color scale is fully rendered
-				swatch.classList.add("ignore-updates");
 				newSwatches.push(swatch);
 			}
+
+			// We should ignore all labelchange and colorchange events until the color scale is fully rendered
+			swatch.classList.add("ignore-updates");
 
 			swatch.classList[intermediate ? "add" : "remove"]("intermediate");
 
