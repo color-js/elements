@@ -48,20 +48,6 @@ color-swatch {
 		flex-direction: column;
 	}
 
-	.color-name, input.color {
-		--_border-color: var(--border-color, color-mix(in oklab, buttonborder 70%, oklab(none none none / 0%)));
-
-		font: inherit;
-		box-sizing: border-box;
-		padding: .1em .2em;
-		border-radius: .2rem;
-		border: 1px solid var(--_border-color);
-
-		&:not(.editable) {
-			border-color: transparent;
-		}
-	}
-
 	[part="delete-button"] {
 		--_foreground-color: red;
 
