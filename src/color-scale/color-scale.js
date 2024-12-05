@@ -50,11 +50,10 @@ const Self = class ColorScale extends ColorElement {
 			return;
 		}
 
-		if (event.type === "colorchange" && source.matches("color-swatch:not(.intermediate)")) {
-			// Update color if it’s not an intermediate one
+		if (event.type === "colorchange" && source.matches("color-swatch:not(.intermediate, .ignore-updates)")) {
 			this.updateColor(source);
 		}
-		else if (event.type === "labelchange") {
+		else if (event.type === "labelchange" && source.matches("color-swatch:not(.intermediate, .ignore-updates)")) {
 			this.updateColorName(source);
 		}
 		else if (event.type === "click" && source.closest("button[part=delete-button]")) {
@@ -285,6 +284,8 @@ const Self = class ColorScale extends ColorElement {
 				swatch.setAttribute("size", "large");
 				swatch.setAttribute("part", "color-swatch");
 				swatch.setAttribute("exportparts", "swatch, info, gamut, label");
+				// We should ignore all labelchange and colorchange events until the color scale is fully rendered
+				swatch.classList.add("ignore-updates");
 				newSwatches.push(swatch);
 			}
 
@@ -326,7 +327,6 @@ const Self = class ColorScale extends ColorElement {
 
 			swatch.color = color;
 			swatch.label = name;
-
 			if (this.info) {
 				swatch.info = this.info;
 			}
@@ -340,6 +340,9 @@ const Self = class ColorScale extends ColorElement {
 			// Remove but keep them around in this.#swatches
 			[...this._el.swatches.children].slice(colorCount).forEach(child => child.remove());
 		}
+
+		// The scale is fully rendered, so we no longer need to ignore labelchange and colorchange events from the swatches
+		[...this._el.swatches.children].forEach(swatch => swatch.classList.remove("ignore-updates"));
 	}
 
 	static props = {
