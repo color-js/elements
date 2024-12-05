@@ -23,6 +23,8 @@ const Self = class ColorSwatch extends ColorElement {
 			<slot name="after"></slot>
 		</div>`;
 
+	#initiallyStatic;
+
 	constructor () {
 		super();
 
@@ -37,6 +39,7 @@ const Self = class ColorSwatch extends ColorElement {
 		};
 
 		this.#updateStatic();
+		this.#initiallyStatic = this.static;
 		this._slots.default.addEventListener("slotchange", evt => this.#updateStatic());
 	}
 
@@ -116,6 +119,25 @@ const Self = class ColorSwatch extends ColorElement {
 				input.addEventListener("input", evt => {
 					this.label = evt.target.value;
 				});
+			}
+
+			if (this.editable?.color) {
+				if (!input) {
+					input = document.createElement("input");
+					input.classList.add("color", "editable");
+					input.value = this.value;
+
+					// TODO: If the value comes from the swatch content, move it to <input>.
+					// But how can it be restored afterward (when <input> is removed) without breaking (slotted) swatch content?
+					// if (this.value === this.swatchTextContent) {
+					// 	[...this.childNodes].filter(n => !n.slot).forEach(n => n.remove());
+					// }
+
+					this.append(input);
+				}
+			}
+			else if (this.#initiallyStatic) {
+				input?.remove();
 			}
 		}
 
