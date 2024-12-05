@@ -28,7 +28,7 @@ const Self = class ColorScale extends ColorElement {
 
 	connectedCallback () {
 		super.connectedCallback?.();
-		this._el.swatches.addEventListener("input", this);
+		this._el.swatches.addEventListener("labelchange", this, {capture: true});
 		this._el.swatches.addEventListener("colorchange", this, {capture: true});
 		this._el.swatches.addEventListener("click", this, {capture: true});
 		this._slots.add_button.addEventListener("click", this);
@@ -36,7 +36,7 @@ const Self = class ColorScale extends ColorElement {
 
 	disconnectedCallback () {
 		this.#swatches = [];
-		this._el.swatches.removeEventListener("input", this);
+		this._el.swatches.removeEventListener("labelchange", this, {capture: true});
 		this._el.swatches.removeEventListener("colorchange", this, {capture: true});
 		this._el.swatches.removeEventListener("click", this, {capture: true});
 		this._slots.add_button.removeEventListener("click", this);
@@ -44,11 +44,6 @@ const Self = class ColorScale extends ColorElement {
 
 	handleEvent (event) {
 		let source = event.target;
-
-		if (event.type === "input" && (!this.editable?.name || !source.matches(".color-name.editable"))) {
-			// Ignore input events from the color input: the color changes are handled by the colorchange event
-			return;
-		}
 
 		if (event.type === "click" && source === this._el.add_button || this._slots.add_button.assignedElements().includes(source)) {
 			this.addColor();
@@ -59,8 +54,8 @@ const Self = class ColorScale extends ColorElement {
 			// Update color if it’s not an intermediate one
 			this.updateColor(source);
 		}
-		else if (event.type === "input") {
-			this.updateColorName(source.closest("color-swatch"), source.value);
+		else if (event.type === "labelchange") {
+			this.updateColorName(source);
 		}
 		else if (event.type === "click" && source.closest("button[part=delete-button]")) {
 			this.deleteColor(source.closest("color-swatch"));
@@ -70,7 +65,7 @@ const Self = class ColorScale extends ColorElement {
 	}
 
 	propChangedCallback ({name, prop, detail: change}) {
-		if (name === "computedColors" && !this.editable) {
+		if (name === "computedColors" && !this.editable?.name && !this.editable?.color) {
 			// Re-render swatches
 			// Only if nothing is being edited, otherwise the input would be lost
 			// or, e.g., "red" would be converted to "rgb(100%, 0%, 0%)" right after the typing is done
@@ -151,9 +146,33 @@ const Self = class ColorScale extends ColorElement {
 		}
 	}
 
-	updateColorName (swatch, newName) {
-		if (!swatch || !newName) {
+	updateColorName (swatch, newName = swatch?.label) {
+		if (swatch === undefined || swatch === null) {
 			return;
+		}
+
+		if (typeof swatch === "number") {
+			// The index of a swatch is passed
+			if (!this._el.swatches.children.length) {
+				console.warn("There are no colors to update.");
+				return;
+			}
+
+			if (swatch < 0 || swatch >= this._el.swatches.children.length) {
+				console.warn(`No color with index "${ swatch }". The index should be between 0 and ${ this._el.swatches.children.length - 1 } (inclusively).`);
+				return;
+			}
+
+			swatch = this._el.swatches.children[swatch];
+
+			if (newName === undefined) {
+				console.warn("You should provide a new name for the color.");
+				return;
+			}
+			else if (swatch.label === newName) {
+				// Nothing to change
+				return;
+			}
 		}
 
 		if (swatch.matches(".intermediate")) {
@@ -161,13 +180,29 @@ const Self = class ColorScale extends ColorElement {
 			return;
 		}
 
-		// Update the name of the existing color preserving the colors order
-		let colors = Object.entries(this.colors);
-		let index = colors.findIndex(([name, color]) => color.equals(swatch.color));
-		colors.splice(index, 1, [newName, swatch.color]);
-		swatch.label = newName;
+		// In color scales, colors must have names: either the provided one or the default.
+		// If they are not supposed to be shown, they can be hidden with CSS.
+		newName ||= swatch.color.toString();
 
-		this.colors = Object.fromEntries(colors);
+		if (this.colors[newName]) {
+			// Name already exists
+			// Append a number to the name
+			// Why? Objects cannot have duplicate keys
+			let i = 1;
+			while (this.colors[`${ newName } ${ i }`]) {
+				i++;
+			}
+			newName = `${ newName } ${ i }`;
+		}
+
+		if (swatch.label !== newName) {
+			// This will trigger the labelchange event again, and the colors will be updated on the next tick
+			swatch.label = newName;
+		}
+		else {
+			// Update the name of the existing color preserving the colors order
+			this.colors = Object.fromEntries([...this._el.swatches.children].map(swatch => [swatch.label, swatch.color]));
+		}
 	}
 
 	deleteColor (swatch) {
@@ -213,7 +248,7 @@ const Self = class ColorScale extends ColorElement {
 				this.#swatches[i] = swatch = document.createElement("color-swatch");
 				swatch.setAttribute("size", "large");
 				swatch.setAttribute("part", "color-swatch");
-				swatch.setAttribute("exportparts", "swatch, info, gamut");
+				swatch.setAttribute("exportparts", "swatch, info, gamut, label");
 				newSwatches.push(swatch);
 			}
 
@@ -234,6 +269,22 @@ const Self = class ColorScale extends ColorElement {
 				}
 				else {
 					deleteButton?.remove();
+				}
+
+				// Make the swatch editable, if needed
+				let editable;
+				if (this.editable?.name) {
+					(editable ??= {}).label = true;
+				}
+				if (this.editable?.color) {
+					(editable ??= {}).color = true;
+				}
+
+				if (editable) {
+					swatch.editable = editable;
+				}
+				else {
+					swatch.editable = false;
 				}
 			}
 
