@@ -1,4 +1,6 @@
 :host {
+	--_transition-duration: .2s;
+
 	--border-width: 1px;
 	--border-color: rgb(0 0 0 / .2);
 	--border-radius: .2em;
@@ -22,10 +24,88 @@
 	}
 }
 
-#space_picker {
-	padding: initial;
-	padding-inline-end: .4em;
-	border-radius: 0;
-	border: none;
-	border-inline-end: var(--border-width) solid var(--border-color);
+:host(.no-space-picker) {
+	#space_picker_wrapper {
+		display: none;
+	}
+
+	#picker_wrapper {
+		display: inline-block;
+	}
+}
+
+:host(:not(.no-space-picker)) {
+	#space_picker_wrapper,
+	#picker_wrapper {
+		display: inline-grid;
+		grid-template-areas: "picker";
+		align-items: center;
+
+		&::after {
+			grid-area: picker;
+			justify-self: end;
+			content: "";
+			width: .65em;
+			height: .5em;
+			margin-block-start: -.15em;
+			background-color: color-mix(in oklch, currentColor, transparent 20%);
+			clip-path: polygon(90% 50%, 50% 95%, 10% 50%, 10% 30%, 50% 75%, 90% 30%); /* chevron-down */
+			transition-property: opacity;
+			transition-duration: var(--_transition-duration);
+		}
+
+		&:is(#space_picker_wrapper)::after {
+			margin-inline-end: .65em;
+		}
+
+		&:is(#picker_wrapper) {
+			margin-inline-start: .2em;
+		}
+
+		&:not(:hover, :focus-within) {
+			#picker {
+				margin-inline-end: 0;
+			}
+
+			#space_picker::part(picker) {
+				padding-inline-end: 0;
+			}
+
+			&::after {
+				opacity: 0;
+				transition: opacity 0s;
+			}
+		}
+	}
+
+	#space_picker {
+		grid-area: picker;
+		padding: initial;
+		border: none;
+
+		&::part(picker) {
+			appearance: none;
+			padding-inline-end: .6em;
+			transition-property: padding-inline-end;
+			transition-duration: var(--_transition-duration);
+		}
+
+		&::after {
+			display: inline-block;
+			content: "";
+			width: .8em;
+			aspect-ratio: 1;
+			vertical-align: -.055em;
+			background-color: color-mix(in oklch, currentColor, transparent 60%);
+			clip-path: polygon(75% 10%, 100% 50%, 75% 90%, 60% 90%, 85% 50%, 60% 10%); /* chevron-right */
+		}
+	}
+
+	#picker {
+		appearance: none;
+		margin-inline-end: .8em;
+		grid-area: picker;
+		transition-property: margin-inline-end;
+		transition-duration: var(--_transition-duration);
+	}
 }
