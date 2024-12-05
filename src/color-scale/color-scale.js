@@ -119,8 +119,32 @@ const Self = class ColorScale extends ColorElement {
 	}
 
 	updateColor (swatch, color = swatch?.color) {
-		if (!swatch) {
+		if (swatch === undefined || swatch === null) {
 			return;
+		}
+
+		if (typeof swatch === "number") {
+			// The index of a swatch is passed
+			if (!this._el.swatches.children.length) {
+				console.warn("There are no colors to update.");
+				return;
+			}
+
+			if (swatch < 0 || swatch >= this._el.swatches.children.length) {
+				console.warn(`No color with index "${ swatch }". The index should be between 0 and ${ this._el.swatches.children.length - 1 } (inclusively).`);
+				return;
+			}
+
+			swatch = this._el.swatches.children[swatch];
+
+			if (!color) {
+				console.warn("You should provide a new color for the color swatch.");
+				return;
+			}
+			else if (swatch.color.equals(color)) {
+				// Nothing to change
+				return;
+			}
 		}
 
 		if (swatch.matches(".intermediate")) {
@@ -128,10 +152,12 @@ const Self = class ColorScale extends ColorElement {
 			return;
 		}
 
-		let colorNameElement = swatch.querySelector(".color-name");
-		let colorName = colorNameElement?.value ?? colorNameElement?.textContent ?? swatch.label;
+		if (this.colors[swatch.label].equals(color)) {
+			// Nothing to update
+			return;
+		}
 
-		this.colors = {...this.colors, [colorName]: color};
+		this.colors = {...this.colors, [swatch.label]: color};
 
 		if (this.steps) {
 			// Update the UI to reflect the new intermediate colors
