@@ -42,7 +42,7 @@ const Self = class ColorSwatch extends ColorElement {
 
 	#updateStatic () {
 		let previousInput = this._el.input;
-		let input = this._el.input = this.querySelector("input:not([slot])");
+		let input = this._el.input = this.querySelector("input");
 
 		this.static = !input;
 
@@ -108,7 +108,18 @@ const Self = class ColorSwatch extends ColorElement {
 			}
 		}
 
-		if (name === "label") {
+		if (name === "editable") {
+			if (this.editable?.label) {
+				let input = Object.assign(document.createElement("input"), {value: this.label});
+				this._el.label.innerHTML = "";
+				this._el.label.append(input);
+				input.addEventListener("input", evt => {
+					this.label = evt.target.value;
+				});
+			}
+		}
+
+		if ((name === "label" || name === "editable") && !this.editable?.label) {
 			if (this.label.length && this.label !== this.swatchTextContent) {
 				this._el.label.textContent = this.label;
 			}
@@ -183,7 +194,7 @@ const Self = class ColorSwatch extends ColorElement {
 				return this.swatchTextContent;
 			},
 			convert (value) {
-				return value.trim();
+				return value?.trim();
 			},
 		},
 		color: {
@@ -235,6 +246,38 @@ const Self = class ColorSwatch extends ColorElement {
 				return ret;
 			},
 		},
+		editable: {
+			parse (value) {
+				if (value === undefined || value === null || value === false || value === "false") {
+					return;
+				}
+
+				if (value === "" || value === "editable" || value === true || value === "true") {
+					// Boolean attribute
+					return {
+						label: true,
+						color: true,
+					};
+				}
+
+				if (typeof value === "string") {
+					// Convert to object
+					let entries = value.split(/\s*[,\s]\s*/).map(key => [key.trim(), true]);
+					return Object.fromEntries(entries);
+				}
+
+				if (typeof value === "object") {
+					return value;
+				}
+
+				console.warn(`The specified value "${ value }" cannot be used as a value of the "editable" property.`);
+				return;
+			},
+			dependencies: ["label", "color"],
+			reflect: {
+				from: true,
+			},
+		},
 	};
 
 	static events = {
@@ -243,6 +286,9 @@ const Self = class ColorSwatch extends ColorElement {
 		},
 		valuechange: {
 			propchange: "value",
+		},
+		labelchange: {
+			propchange: "label",
 		},
 	};
 };
