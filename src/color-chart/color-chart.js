@@ -1,4 +1,5 @@
 import "../color-scale/color-scale.js";
+import "../channel-picker/channel-picker.js";
 import ColorElement from "../common/color-element.js";
 
 const Self = class ColorChart extends ColorElement {
@@ -6,6 +7,9 @@ const Self = class ColorChart extends ColorElement {
 	static url = import.meta.url;
 	static shadowStyle = true;
 	static shadowTemplate = `
+		<slot name="color-channel">
+			<channel-picker id="channel_picker" part="color-channel"></channel-picker>
+		</slot>
 		<div id="chart-container">
 			<div id="chart">
 				<slot></slot>
@@ -26,27 +30,39 @@ const Self = class ColorChart extends ColorElement {
 		super();
 
 		this._el = {
-			slot:   this.shadowRoot.querySelector("slot"),
+			slot:   this.shadowRoot.querySelector("slot:not([name])"),
+			channel_picker: this.shadowRoot.getElementById("channel_picker"),
 			chart:  this.shadowRoot.getElementById("chart"),
 			xTicks: this.shadowRoot.querySelector("#x_axis .ticks"),
 			yTicks: this.shadowRoot.querySelector("#y_axis .ticks"),
 			xLabel: this.shadowRoot.querySelector("#x_axis .label"),
 			yLabel: this.shadowRoot.querySelector("#y_axis .label"),
 		};
+
+		this._slots = {
+			color_channel: this.shadowRoot.querySelector("slot[name=color-channel]"),
+		};
 	}
 
 	connectedCallback () {
 		super.connectedCallback();
 		this._el.chart.addEventListener("colorschange", this, {capture: true});
+		this._slots.color_channel.addEventListener("input", this);
 	}
 
 	disconnectedCallback () {
 		this._el.chart.removeEventListener("colorschange", this, {capture: true});
+		this._slots.color_channel.removeEventListener("input", this);
 	}
 
 	handleEvent (evt) {
-		if (evt.target.tagName === "COLOR-SCALE" && evt.name === "computedColors") {
+		let source = evt.target;
+		if (source.tagName === "COLOR-SCALE" && evt.name === "computedColors") {
 			this.render(evt);
+		}
+
+		if (this._el.channel_picker === source || this._slots.color_channel.assignedElements().includes(source)) {
+			this.y = source.value;
 		}
 	}
 
@@ -239,6 +255,18 @@ const Self = class ColorChart extends ColorElement {
 	static props = {
 		y: {
 			default: "oklch.l",
+			convert (value) {
+				// Try setting the value to the channel picker. The picker will handle possible erroneous values.
+				this._el.channel_picker.value = value;
+
+				// If the value is not set, that means it's invalid.
+				// In that case, we are falling back to the picker's current value.
+				if (this._el.channel_picker.value !== value) {
+					return this._el.channel_picker.value;
+				}
+
+				return value;
+			},
 		},
 
 		yResolved: {
