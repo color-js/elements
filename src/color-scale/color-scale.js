@@ -62,7 +62,7 @@ const Self = class ColorScale extends ColorElement {
 		else if (event.type === "input") {
 			this.updateColorName(source.closest("color-swatch"), source.value);
 		}
-		else if (event.type === "click" && source.closest("button.delete-button")) {
+		else if (event.type === "click" && source.closest("button[part=delete-button]")) {
 			this.deleteColor(source.closest("color-swatch"));
 		}
 
@@ -220,11 +220,11 @@ const Self = class ColorScale extends ColorElement {
 			swatch.classList[intermediate ? "add" : "remove"]("intermediate");
 
 			if (!intermediate) {
-				let deleteButton = swatch.querySelector(".delete-button");
+				let deleteButton = swatch.querySelector("[part=delete-button]");
 				if (this.editable?.delete) {
 					if (!deleteButton) {
 						swatch.insertAdjacentHTML("beforeend", `
-							<button class="delete-button" title="Delete color">
+							<button part="delete-button" title="Delete color">
 								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 									<path fill="currentColor" fill-rule="evenodd" d="m18.412 6.5l-.801 13.617A2 2 0 0 1 15.614 22H8.386a2 2 0 0 1-1.997-1.883L5.59 6.5H3.5v-1A.5.5 0 0 1 4 5h16a.5.5 0 0 1 .5.5v1zM10 2.5h4a.5.5 0 0 1 .5.5v1h-5V3a.5.5 0 0 1 .5-.5M9 9l.5 9H11l-.4-9zm4.5 0l-.5 9h1.5l.5-9z" />
 								</svg>

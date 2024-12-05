@@ -11,7 +11,7 @@
 }
 
 [part="add-button"],
-.delete-button {
+[part="delete-button"] {
 	/* Common styles */
 	all: unset;
 
@@ -38,7 +38,7 @@ color-swatch {
 	flex: 1;
 
 	&:not(:hover, :focus-within) {
-		.delete-button {
+		[part="delete-button"] {
 			opacity: 0;
 			transition-duration: 0ms;
 		}
@@ -62,7 +62,7 @@ color-swatch {
 		}
 	}
 
-	.delete-button {
+	[part="delete-button"] {
 		--_foreground-color: red;
 
 		position: absolute;
