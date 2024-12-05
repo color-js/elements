@@ -15,13 +15,19 @@ the default `oklch.l` will be used:
 <channel-picker></channel-picker>
 ```
 
-You can hide the `space_picker` part with CSS to show only the coordinates of the specified space:
+If you need a more compact version of the picker, add the `compact` boolean attribute to get one:
+
+```html
+<channel-picker value="oklch.c" compact></channel-picker>
+```
+
+You can hide the `space-picker` part with CSS to show only the coordinates of the specified space:
 
 ```html
 <channel-picker id="picker" value="hsl.h"></channel-picker>
 
 <style>
-	#picker::part(space_picker) {
+	#picker::part(space-picker) {
 		display: none;
 	}
 </style>
@@ -46,12 +52,17 @@ All properties are reactive and can be set programmatically:
 <channel-picker></channel-picker>
 ```
 
+```html
+<label>
+	<input type="checkbox" onchange="this.parentElement.nextElementSibling.compact = this.checked" /> Compact picker
+</label>
+<channel-picker></channel-picker>
+```
+
 `<channel-picker>` plays nicely with other color elements, like [`<color-chart>`](../color-chart):
 
 ```html
-<label>Coord:
-	<channel-picker onvaluechange="this.parentNode.nextElementSibling.y = this.value"></channel-picker>
-</label>
+<channel-picker onvaluechange="this.nextElementSibling.y = this.value"></channel-picker>
 <color-chart>
 	<color-scale colors="Red 50: #fef2f2, Red 100: #fee2e2, Red 200: #fecaca, Red 300: #fca5a5, Red 400: #f87171, Red 500: #ef4444, Red 600: #dc2626, Red 700: #b91c1c, Red 800: #991b1b, Red 900: #7f1d1d, Red 950: #450a0a"></color-scale>
 	<color-scale colors="Orange 50: #fff7ed, Orange 100: #ffedd5, Orange 200: #fed7aa, Orange 300: #fdba74, Orange 400: #fb923c, Orange 500: #f97316, Orange 600: #ea580c, Orange 700: #c2410c, Orange 800: #9a3412, Orange 900: #7c2d12, Orange 950: #431407"></color-scale>
@@ -66,7 +77,7 @@ or [`<channel-slider>`](../channel-slider):
 <channel-slider id="channel_slider" color="oklch(50% 50% 180)"></channel-slider>
 
 <style>
-	#channel_picker::part(space_picker) {
+	#channel_picker::part(space-picker) {
 		display: none;
 	}
 </style>
@@ -89,6 +100,7 @@ or [`<channel-slider>`](../channel-slider):
 | Attribute | Property | Property type | Default value | Description                      |
 |-----------|----------|---------------|---------------|----------------------------------|
 | `value`   | `value`  | `string`      | `oklch.l`     | The current value of the picker. |
+| `compact` | `compact`  | `boolean` | `false` | Whether the picker should be rendered compact or not. |
 
 ### Getters
 
@@ -111,6 +123,7 @@ These properties are read-only.
 
 | Name           | Description                                          |
 |----------------|------------------------------------------------------|
-| `space_picker` | The internal `<space-picker>` element.               |
-| `space_select` | The internal `<select>` element of `<space-picker>`. |
-| `picker`       | The internal `<select>` element.                     |
+| `space-picker` | The internal [`<space-picker>`](../space-picker/) element.               |
+| `space-select` | The internal `<select>` element of [`<space-picker>`](../space-picker/). |
+| `channels` | The container that wraps the current color space channels.  |
+| `picker` | If the picker is compact, the internal `<select>` element used to render the channels.  |
