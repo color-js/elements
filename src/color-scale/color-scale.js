@@ -90,6 +90,20 @@ const Self = class ColorScale extends ColorElement {
 
 	#swatches = [];
 
+	#validIndex (index) {
+		if (!this._el.swatches.children.length) {
+			console.warn("There are no colors to work with.");
+			return false;
+		}
+
+		if (index < 0 || index >= this._el.swatches.children.length) {
+			console.warn(`No color with index "${ index }". The index should be from 0 up to but not including ${ this._el.swatches.children.length }.`);
+			return false;
+		}
+
+		return true;
+	}
+
 	addColor (color, name) {
 		let {name: defaultName, color: defaultColor} = this.defaultColor?.() ?? {};
 
@@ -125,13 +139,7 @@ const Self = class ColorScale extends ColorElement {
 
 		if (typeof swatch === "number") {
 			// The index of a swatch is passed
-			if (!this._el.swatches.children.length) {
-				console.warn("There are no colors to update.");
-				return;
-			}
-
-			if (swatch < 0 || swatch >= this._el.swatches.children.length) {
-				console.warn(`No color with index "${ swatch }". The index should be between 0 and ${ this._el.swatches.children.length - 1 } (inclusively).`);
+			if (!this.#validIndex(swatch)) {
 				return;
 			}
 
@@ -179,13 +187,7 @@ const Self = class ColorScale extends ColorElement {
 
 		if (typeof swatch === "number") {
 			// The index of a swatch is passed
-			if (!this._el.swatches.children.length) {
-				console.warn("There are no colors to update.");
-				return;
-			}
-
-			if (swatch < 0 || swatch >= this._el.swatches.children.length) {
-				console.warn(`No color with index "${ swatch }". The index should be between 0 and ${ this._el.swatches.children.length - 1 } (inclusively).`);
+			if (!this.#validIndex(swatch)) {
 				return;
 			}
 
@@ -232,8 +234,17 @@ const Self = class ColorScale extends ColorElement {
 	}
 
 	deleteColor (swatch) {
-		if (!swatch) {
+		if (swatch === undefined || swatch === null) {
 			return;
+		}
+
+		if (typeof swatch === "number") {
+			// The index of a swatch is passed
+			if (!this.#validIndex(swatch)) {
+				return;
+			}
+
+			swatch = this._el.swatches.children[swatch];
 		}
 
 		if (swatch.matches(".intermediate")) {
@@ -241,8 +252,7 @@ const Self = class ColorScale extends ColorElement {
 			return;
 		}
 
-		let colorNameElement = swatch.querySelector(".color-name");
-		let colorName = colorNameElement?.value ?? colorNameElement?.textContent ?? swatch.label;
+		let colorName = swatch.label;
 
 		swatch.remove();
 
