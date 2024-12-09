@@ -4,7 +4,7 @@ const Self = class SpacePicker extends ColorElement {
 	static tagName = "space-picker";
 	static url = import.meta.url;
 	static shadowStyle = true;
-	static shadowTemplate = `<select id="picker" part="picker"></select>`;
+	static shadowTemplate = `<select id="picker" part="base"></select>`;
 
 	constructor () {
 		super();
