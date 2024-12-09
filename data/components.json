@@ -6,5 +6,7 @@
 	"color-inline",
 	"channel-slider",
 	"color-slider",
-	"gamut-badge"
+	"gamut-badge",
+	"channel-picker",
+	"space-picker"
 ]
