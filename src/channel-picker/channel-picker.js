@@ -7,8 +7,8 @@ const Self = class ChannelPicker extends ColorElement {
 	static url = import.meta.url;
 	static shadowStyle = true;
 	static shadowTemplate = `
-		<space-picker part="space_picker" exportparts="picker:space_select" id="space_picker"></space-picker>
-		<select id="picker" part="picker"></select>`;
+		<space-picker part="color-space" exportparts="base: color-space-base" id="space_picker"></space-picker>
+		<select id="picker" part="color-channel-base"></select>`;
 
 	constructor () {
 		super();
