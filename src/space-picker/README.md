@@ -118,4 +118,4 @@ These properties are read-only.
 
 | Name     | Description                      |
 |----------|----------------------------------|
-| `picker` | The internal `<select>` element. |
+| `base` | The internal `<select>` element. |
