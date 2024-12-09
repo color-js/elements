@@ -20,7 +20,7 @@
 	align-items: center;
 	inline-size: fit-content;
 
-	[part="space-picker"] {
+	[part="color-space"] {
 		position: relative;
 
 		font-size: 120%;
@@ -63,7 +63,7 @@
 }
 
 :host(:is(.compact, [compact])) {
-	[part="picker"] {
+	[part="color-channel-base"] {
 		padding-block: .65em;
 		padding-inline: .5em .4em;
 

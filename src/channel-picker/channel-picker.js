@@ -56,7 +56,7 @@ const Self = class ChannelPicker extends ColorElement {
 	}
 
 	get #channelSelect () {
-		return this._el.channels.querySelector("select[part=picker]");
+		return this._el.channels.querySelector("select[part=color-channel-base]");
 	}
 
 	/**
@@ -77,7 +77,7 @@ const Self = class ChannelPicker extends ColorElement {
 		let compact = this.compact;
 		this.classList.toggle("compact", compact);
 
-		let html = compact ? [`<select part="picker">`] : [];
+		let html = compact ? [`<select part="color-channel-base">`] : [];
 		html.push(...Object.entries(coords)
 			// By default, the first channel is selected
 			.map(([id, coord], index) => {

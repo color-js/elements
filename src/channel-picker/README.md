@@ -8,17 +8,11 @@
 <channel-picker value="oklab.a"></channel-picker>
 ```
 
-If no color channel is provided (via the `value` attribute/property), the
-default `oklch.l` will be used:
+If no color channel is provided (via the `value` attribute/property),
+the default `oklch.l` will be used:
 
 ```html
 <channel-picker></channel-picker>
-```
-
-If you need a more compact version of the picker, add the `compact` boolean attribute to get one:
-
-```html
-<channel-picker value="oklch.c" compact></channel-picker>
 ```
 
 If you need a more compact version of the picker, add the `compact` boolean attribute to get one:
