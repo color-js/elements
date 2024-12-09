@@ -14,8 +14,7 @@ Plotting a single color scale:
 
 ```html
 <color-chart y="oklch.l">
-	<color-scale colors="#e3f2fd, #bbdefb, #90caf9, #64b5f6, #42a5f5, #2196f3, #1e88e5, #1976d2, #1565c0, #0d47a1"
-	info="L: oklch.l, C: oklch.c, H: oklch.h"></color-scale>
+	<color-scale colors="#e3f2fd, #bbdefb, #90caf9, #64b5f6, #42a5f5, #2196f3, #1e88e5, #1976d2, #1565c0, #0d47a1"></color-scale>
 </color-chart>
 ```
 
