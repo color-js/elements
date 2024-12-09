@@ -35,14 +35,11 @@ You can hide the `color-space` part with CSS to show only the coordinates of the
 
 ### Events
 
-You can listen to the `valuechange` event to get the current value (the `value`
-property). When a new color space is selected, the channel will be either
-preserved (if it is in the new space) or reset to the first available one:
+You can listen to the `valuechange` event to get the current value (the `value` property). When a new color space is selected,
+the channel will be either preserved (if it is in the new space) or reset to the first available one:
 
 ```html
-<channel-picker
-	onvaluechange="this.nextElementSibling.textContent = this.value"
-></channel-picker>
+<channel-picker onvaluechange="this.nextElementSibling.textContent = this.value"></channel-picker>
 <output></output>
 ```
 
@@ -62,8 +59,7 @@ All properties are reactive and can be set programmatically:
 <channel-picker></channel-picker>
 ```
 
-`<channel-picker>` plays nicely with other color elements, like
-[`<channel-slider>`](../channel-slider):
+`<channel-picker>` plays nicely with other color elements, like [`<channel-slider>`](../channel-slider):
 
 ```html
 <channel-picker id="channel_picker" value="oklch.c"></channel-picker>
@@ -91,7 +87,7 @@ All properties are reactive and can be set programmatically:
 ### Attributes & Properties
 
 | Attribute | Property | Property type | Default value | Description                      |
-| --------- | -------- | ------------- | ------------- | -------------------------------- |
+|-----------|----------|---------------|---------------|----------------------------------|
 | `value`   | `value`  | `string`      | `oklch.l`     | The current value of the picker. |
 | `compact` | `compact`  | `boolean` | `false` | Whether the picker should be rendered compact or not. |
 
@@ -99,18 +95,18 @@ All properties are reactive and can be set programmatically:
 
 These properties are read-only.
 
-| Property          | Type         | Description                                                         |
-| ----------------- | ------------ | ------------------------------------------------------------------- |
-| `selectedSpace`   | `ColorSpace` | Color space object corresponding to the space picker current value. |
-| `selectedChannel` | `object`     | The current channel metadata.                                       |
+| Property | Type | Description |
+|----------|------|-------------|
+| `selectedSpace` | `ColorSpace` | Color space object corresponding to the space picker current value. |
+| `selectedChannel` | `object` | The current channel metadata.|
 
 ### Events
 
-| Name          | Description                                                                  |
-| ------------- | ---------------------------------------------------------------------------- |
-| `input`       | Fired when the color space or channel changes due to user action.            |
-| `change`      | Fired when the color space or channel changes due to user action.            |
-| `valuechange` | Fired when the value changes for any reason, and once during initialization. |
+| Name            | Description                                                                    |
+|-----------------|--------------------------------------------------------------------------------|
+| `input`         | Fired when the color space or channel changes due to user action.              |
+| `change`        | Fired when the color space or channel changes due to user action.              |
+| `valuechange`   | Fired when the value changes for any reason, and once during initialization.   |
 
 ### Parts
 
@@ -118,5 +114,5 @@ These properties are read-only.
 |----------------|------------------------------------------------------|
 | `color-space` | The internal [`<space-picker>`](../space-picker/) element. |
 | `color-space-base` | The internal `<select>` element of [`<space-picker>`](../space-picker/). |
-| `channels` | The container that wraps the current color space channels. |
 | `color-channel-base` | If the picker is compact, the internal `<select>` element used to render the channels.  |
+| `channels` | The container that wraps the current color space channels. |
