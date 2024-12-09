@@ -176,6 +176,12 @@ slot {
 	gap: .2em;
 }
 
+[part=label] > * {
+	box-sizing: border-box;
+	inline-size: 100%;
+	font: inherit;
+}
+
 slot:not([name]) {
 	&::slotted(input) {
 		display: flex;
