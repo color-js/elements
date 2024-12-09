@@ -46,20 +46,7 @@ All properties are reactive and can be set programmatically:
 <channel-picker></channel-picker>
 ```
 
-`<channel-picker>` plays nicely with other color elements, like [`<color-chart>`](../color-chart):
-
-```html
-<label>Coord:
-	<channel-picker onvaluechange="this.parentNode.nextElementSibling.y = this.value"></channel-picker>
-</label>
-<color-chart>
-	<color-scale colors="Red 50: #fef2f2, Red 100: #fee2e2, Red 200: #fecaca, Red 300: #fca5a5, Red 400: #f87171, Red 500: #ef4444, Red 600: #dc2626, Red 700: #b91c1c, Red 800: #991b1b, Red 900: #7f1d1d, Red 950: #450a0a"></color-scale>
-	<color-scale colors="Orange 50: #fff7ed, Orange 100: #ffedd5, Orange 200: #fed7aa, Orange 300: #fdba74, Orange 400: #fb923c, Orange 500: #f97316, Orange 600: #ea580c, Orange 700: #c2410c, Orange 800: #9a3412, Orange 900: #7c2d12, Orange 950: #431407"></color-scale>
-	<color-scale colors="Yellow 50: #fefce8, Yellow 100: #fef9c3, Yellow 200: #fef08a, Yellow 300: #fde047, Yellow 400: #facc15, Yellow 500: #eab308, Yellow 600: #ca8a04, Yellow 700: #a16207, Yellow 800: #854d0e, Yellow 900: #713f12, Yellow 950: #422006"></color-scale>
-</color-chart>
-```
-
-or [`<channel-slider>`](../channel-slider):
+`<channel-picker>` plays nicely with other color elements, like [`<channel-slider>`](../channel-slider):
 
 ```html
 <channel-picker id="channel_picker" value="oklch.c"></channel-picker>
