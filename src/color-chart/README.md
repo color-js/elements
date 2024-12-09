@@ -44,15 +44,15 @@ _(Colors courtesy of Tailwind)_
 Hues will be shifted as needed to produce a better result:
 
 ```html
-<color-chart y="hsl.h" info="L: oklch.l, C: oklch.c, H: oklch.h">
+<color-chart y="hsl.h">
 	<color-scale colors="hsl(5 50% 50%), hsl(355 50% 50%), hsl(10 50% 50%), hsl(-10 50% 50%)"></color-scale>
 </color-chart>
 ```
 
 ```html
-<color-chart y="oklch.h" info="L: oklch.l, C: oklch.c, H: oklch.h">
-	<color-scale class="js" info="L: oklch.l, C: oklch.c, H: oklch.h" colors="10: #41031a, 20: #67082e, 30: #890e3f, 40: #ac1450, 50: #e01d6b, 60: #f2638c, 70: #fb8ea8, 80: #ffb4c5, 90: #ffdce3, 95: #ffeef1, 05: #2c0110" style="--color-count: 11;"></color-scale>
-	<color-scale class="wa" info="L: oklch.l, C: oklch.c, H: oklch.h" colors="10 (WA) / 10: #3e0817, 20 (WA) / 20: #630d29, 30 (WA) / 30: #88123b, 40 (WA) / 40: #ab174e, 50 (WA) / 50: #de1d6a, 60 (WA) / 60: #ee669b, 70 (WA) / 70: #f391b9, 80 (WA) / 80: #f7b8d3, 90 (WA) / 90: #fbdeeb, 95 (WA) / 95: #fdeef5, 05 (WA) / 05: #26050c" style="--color-count: 11;"></color-scale>
+<color-chart y="oklch.h">
+	<color-scale colors="05: #2c0110, 10: #41031a, 20: #67082e, 30: #890e3f, 40: #ac1450, 50: #e01d6b, 60: #f2638c, 70: #fb8ea8, 80: #ffb4c5, 90: #ffdce3, 95: #ffeef1"></color-scale>
+	<color-scale colors="05 (WA) / 05: #26050c, 10 (WA) / 10: #3e0817, 20 (WA) / 20: #630d29, 30 (WA) / 30: #88123b, 40 (WA) / 40: #ab174e, 50 (WA) / 50: #de1d6a, 60 (WA) / 60: #ee669b, 70 (WA) / 70: #f391b9, 80 (WA) / 80: #f7b8d3, 90 (WA) / 90: #fbdeeb, 95 (WA) / 95: #fdeef5"></color-scale>
 </color-chart>
 ```
 
