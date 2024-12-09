@@ -13,12 +13,12 @@ Use at your own risk, the API can change at any point.
 - [`<color-swatch>`](src/color-swatch/)
 - [`<color-inline>`](src/color-inline/)
 - [`<gamut-badge>`](src/gamut-badge/)
+- [`<channel-picker>`](src/channel-picker/)
+- [`<space-picker>`](src/space-picker/)
 
 ### Upcoming:
 
 - `<color-plane>`
-- `<space-picker>`
-- `<channel-picker>`
 
 ## Usage
 

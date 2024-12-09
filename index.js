@@ -6,3 +6,5 @@ export { default as ColorInline } from "./src/color-inline/color-inline.js";
 export { default as ChannelSlider } from "./src/channel-slider/channel-slider.js";
 export { default as ColorSlider } from "./src/color-slider/color-slider.js";
 export { default as GamutBadge } from "./src/gamut-badge/gamut-badge.js";
+export { default as ChannelPicker } from "./src/channel-picker/channel-picker.js";
+export { default as SpacePicker } from "./src/space-picker/space-picker.js";
