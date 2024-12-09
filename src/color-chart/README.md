@@ -73,13 +73,9 @@ The format of this attribute is analogous to the one of [`<color-swatch>`](../co
 Reactively changing the Y coordinate:
 
 ```html
-<label>Coord:
-	<select onchange="this.parentNode.nextElementSibling.y = this.value">
-		<option selected>oklch.l</option>
-		<option>oklch.c</option>
-		<option>oklch.h</option>
-	</select>
-</label>
+<button onclick="this.nextElementSibling.y = 'hwb.w'">
+	Switch to “HWB Whiteness”
+</button>
 <color-chart y="oklch.l">
 	<color-scale colors="Red 50: #fef2f2, Red 100: #fee2e2, Red 200: #fecaca, Red 300: #fca5a5, Red 400: #f87171, Red 500: #ef4444, Red 600: #dc2626, Red 700: #b91c1c, Red 800: #991b1b, Red 900: #7f1d1d, Red 950: #450a0a"></color-scale>
 	<color-scale colors="Orange 50: #fff7ed, Orange 100: #ffedd5, Orange 200: #fed7aa, Orange 300: #fdba74, Orange 400: #fb923c, Orange 500: #f97316, Orange 600: #ea580c, Orange 700: #c2410c, Orange 800: #9a3412, Orange 900: #7c2d12, Orange 950: #431407"></color-scale>
@@ -127,6 +123,7 @@ Reactively setting/changing the colors:
 
 | Name | Description |
 |------|-------------|
+| `color-channel` | The default [`<channel-picker>`](../channel-picker/) element, used if the `color-channel` slot has no slotted elements. |
 | `axis` | The axis line |
 | `ticks` | The container of ticks |
 | `tick` | A tick mark |
