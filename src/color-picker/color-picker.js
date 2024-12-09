@@ -11,7 +11,7 @@ const Self = class ColorPicker extends ColorElement {
 	static shadowStyle = true;
 	static shadowTemplate = `
 		<slot name="color-space">
-			<space-picker id="space_picker" part="color-space" exportparts="picker: color-space-base"></space-picker>
+			<space-picker id="space_picker" part="color-space" exportparts="base: color-space-base"></space-picker>
 		</slot>
 		<div id="sliders" part="sliders"></div>
 		<slot name="swatch">
