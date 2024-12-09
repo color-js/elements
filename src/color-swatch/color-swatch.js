@@ -130,7 +130,7 @@ const Self = class ColorSwatch extends ColorElement {
 			this.style.setProperty("--color", colorString);
 		}
 
-		if (name === "colorInfo") {
+		if (name === "colorInfo" || name === "vsInfo") {
 			if (!this.colorInfo) {
 				return;
 			}
@@ -140,21 +140,39 @@ const Self = class ColorSwatch extends ColorElement {
 				this._el.colorWrapper.after(this._el.info);
 			}
 
-			let info = [];
-			for (let coord of this.info) {
-				let [label, channel] = Object.entries(coord)[0];
+			let html = [];
+			for (let data of this.info) {
+				let [label, key] = Object.entries(data)[0];
 
-				let value = this.colorInfo[channel];
-				if (value === undefined) {
+				let rawValue = this.colorInfo[key] ?? this.vsInfo?.[key];
+				if (rawValue === undefined) {
 					continue;
 				}
 
-				value = typeof value === "number" ? Number(value.toPrecision(4)) : value;
+				let value = typeof rawValue === "number" ? Number(rawValue.toPrecision(4)) : rawValue;
+				let ret = `<div class="data"><dt>${ label }</dt><dd>${ value }</dd>`;
 
-				info.push(`<div class="coord"><dt>${ label }</dt><dd>${ value }</dd></div>`);
+				if (this.colorDeltas?.[key] && this.infoCoordsResolved?.[key]) {
+					let delta = this.colorDeltas[key];
+					let classes = delta > 0 ? "positive" : "negative";
+
+					if (this.infoCoordsResolved[key]?.type === "angle") {
+						classes += " angle";
+					}
+					else {
+						delta = delta / rawValue * 100;
+					}
+
+					delta = typeof delta === "number" ? Number(delta.toPrecision(4)) : delta;
+					ret += `<dd class="delta ${classes}">${ delta }</dd>`;
+				}
+
+				ret += "</div>";
+
+				html.push(ret);
 			}
 
-			this._el.info.innerHTML = info.join("\n");
+			this._el.info.innerHTML = html.join("\n");
 		}
 	}
 
@@ -188,17 +206,17 @@ const Self = class ColorSwatch extends ColorElement {
 		},
 		color: {
 			get type () {
-				return ColorSwatch.Color;
+				return Self.Color;
 			},
 			get () {
 				if (!this.value) {
 					return null;
 				}
 
-				return ColorSwatch.Color.get(this.value);
+				return Self.Color.get(this.value);
 			},
 			set (value) {
-				this.value = ColorSwatch.Color.get(value)?.display();
+				this.value = Self.Color.get(value)?.display();
 			},
 			reflect: false,
 		},
@@ -207,7 +225,19 @@ const Self = class ColorSwatch extends ColorElement {
 				is: Array,
 				values: {
 					is: Object,
-					defaultKey: (coord, i) => ColorSwatch.Color.Space.resolveCoord(coord)?.name,
+					defaultKey: (value, i) => {
+						if (value.startsWith("deltaE.") || value.startsWith("contrast.")) {
+							let [method, algorithm] = value.split(".");
+							let label = method === "deltaE" ? `ΔE ${algorithm}` : `${algorithm} Contrast`;
+							return label;
+						}
+						else if (value.includes(".")) {
+							return Self.Color.Space.resolveCoord(value)?.name;
+						}
+						else {
+							return value;
+						}
+					},
 				},
 			},
 			default: [],
@@ -215,20 +245,141 @@ const Self = class ColorSwatch extends ColorElement {
 				from: true,
 			},
 		},
-		colorInfo: {
+		infoCoords: {
 			get () {
-				if (!this.info.length || !this.color) {
+				if (!this.info.length) {
+					return;
+				}
+
+				let ret = [];
+				for (let data of this.info) {
+					let [key, value] = Object.entries(data)[0];
+					if (value.includes(".") && !value.startsWith("deltaE") && !value.startsWith("contrast")) {
+						ret.push(value);
+					}
+				}
+
+				return ret;
+			},
+		},
+		infoCoordsResolved: {
+			get () {
+				if (!this.infoCoords) {
 					return;
 				}
 
 				let ret = {};
-				for (let coord of this.info) {
-					let [label, channel] = Object.entries(coord)[0];
+				for (let coord of this.infoCoords) {
 					try {
-						ret[channel] = this.color.get(channel);
+						let { space, index } = Self.Color.Space.resolveCoord(coord);
+						ret[coord] = Object.values(space.coords)[index];
 					}
 					catch (e) {
 						console.error(e);
+					}
+				}
+
+				return ret;
+			},
+		},
+		infoOther: { // DeltaE, contrast, etc.
+			get () {
+				if (!this.info.length) {
+					return;
+				}
+
+				let ret = [];
+				for (let data of this.info) {
+					let [key, value] = Object.entries(data)[0];
+					if (!this.infoCoords.includes(value)) {
+						ret.push(value);
+					}
+				}
+
+				return ret;
+			},
+		},
+		colorInfo: {
+			get () {
+				if (!this.color || !this.infoCoords) {
+					return;
+				}
+
+				let ret = {};
+				for (let coord of this.infoCoords) {
+					try {
+						ret[coord] = this.color.get(coord);
+					}
+					catch (e) {
+						console.error(e);
+					}
+				}
+
+				return ret;
+			},
+		},
+		colorDeltas: {
+			get () {
+				if (!this.infoCoordsResolved || !this.vsInfo) {
+					return;
+				}
+
+				let ret = {};
+				for (let coord of this.infoCoords) {
+					let value = this.colorInfo[coord];
+					let vsValue = this.vsInfo[coord];
+
+					let isAngle = this.infoCoordsResolved[coord]?.type === "angle";
+					if (isAngle) {
+						// Constrain angles (shorter arc)
+						[value, vsValue] = [value, vsValue].map(v => ((v % 360) + 360) % 360);
+						let angleDiff = vsValue - value;
+						if (angleDiff > 180) {
+							value += 360;
+						}
+						else if (angleDiff < -180) {
+							vsValue += 360;
+						}
+					}
+
+					ret[coord] = value - vsValue;
+				}
+
+				return ret;
+			},
+		},
+		vs: {
+			get type () {
+				return Self.Color;
+			},
+		},
+		vsInfo: {
+			get () {
+				if (!this.color || !this.vs || !this.info.length) {
+					return;
+				}
+
+				let ret = {};
+
+				for (let coord of this.infoCoords) {
+					try {
+						ret[coord] = this.vs.get(coord);
+					}
+					catch (e) {
+						console.error(e);
+					}
+				}
+
+				for (let data of this.infoOther) {
+					let [method, algorithm] = data.split(".");
+
+					if (method && algorithm) {
+						try {
+							ret[data] = this.color[method](this.vs, algorithm);
+						}
+						catch (e) {
+							console.error(e);
+						}
 					}
 				}
 
