@@ -5,20 +5,30 @@ Use at your own risk, the API can change at any point.
 
 ## All elements
 
-- [`<color-picker>`](src/color-picker/)
-- [`<color-scale>`](src/color-scale)
-- [`<color-chart>`](src/color-chart/)
-- [`<color-slider>`](src/color-slider/)
-- [`<channel-slider>`](src/channel-slider/)
-- [`<color-swatch>`](src/color-swatch/)
-- [`<color-inline>`](src/color-inline/)
-- [`<gamut-badge>`](src/gamut-badge/)
-- [`<channel-picker>`](src/channel-picker/)
-- [`<space-picker>`](src/space-picker/)
+<section class="showcase">
+{% for name in components -%}
+<a href="{{ page | relative }}/src/{{ name }}/">
+<figure>
+	<img src="{{ page | relative }}/src/{{ name }}/{{ name }}.webp" alt="A screenshot showcasing the &lt;{{ name }}&gt; color element" />
+	<figcaption>
+		<h2>&lt;{{ name }}&gt;</h2>
+	</figcaption>
+</figure>
+</a>
+{% endfor %}
+</section>
 
-### Upcoming:
+### Upcoming
 
-- `<color-plane>`
+<section class="showcase upcoming">
+{% for name in ["color-plane"] -%}
+<figure>
+	<figcaption>
+		<h2>&lt;{{ name }}&gt;</h2>
+	</figcaption>
+</figure>
+{% endfor %}
+</section>
 
 ## Usage
 
