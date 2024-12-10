@@ -1,1 +1,77 @@
 @import url("https://colorjs.io/assets/css/style.css");
+@import url("https://colorjs.io/assets/css/docs.css");
+
+.showcase {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+	gap: 2rem;
+
+	figure {
+		display: grid;
+		grid-template-rows: 1fr auto;
+
+		inline-size: 100%;
+		margin: 0;
+		overflow: hidden;
+
+		border: 3px solid transparent;
+		border-radius: .2em;
+		background: var(--rainbow);
+		animation: var(--rainbow-scroll);
+
+		box-shadow: 0 .05em 1em -.7em hsl(var(--gray) 30%);
+
+		&:is(:hover, :focus-within) {
+			img {
+				scale: 1.1;
+			}
+		}
+
+		img {
+			inline-size: 100%;
+			aspect-ratio: 4 / 3;
+			object-fit: cover;
+			transition: scale .2s;
+		}
+
+		figcaption {
+			margin: 0;
+			background: hsl(0 0% 100% / .95);
+		}
+	}
+
+	&.upcoming {
+		figure {
+			block-size: revert;
+			background: transparent;
+			border-color: hsl(var(--gray) 85%);
+
+			&::before {
+				content: "";
+				box-sizing: border-box;
+				display: block;
+				inline-size: 30%;
+				aspect-ratio: 1;
+				margin-inline: auto;
+				margin-block: 2em .5em;
+
+				background: var(--rainbow);
+				animation: var(--rainbow-scroll);
+
+				/* Icon from: https://iconify.design/ */
+				mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="black" fill-rule="evenodd" d="M5.5 1a1.5 1.5 0 0 0-1.42 1.02c-.629.034-1.07.113-1.44.303a3.02 3.02 0 0 0-1.31 1.31c-.327.642-.327 1.48-.327 3.16v4.4c0 1.68 0 2.52.327 3.16a3.02 3.02 0 0 0 1.31 1.31c.642.327 1.48.327 3.16.327h2.54a5.5 5.5 0 0 1-1.08-1H5.8c-.857 0-1.44 0-1.89-.037c-.438-.036-.663-.101-.819-.18a2 2 0 0 1-.874-.874c-.08-.156-.145-.381-.18-.82c-.037-.45-.038-1.03-.038-1.89v-4.4c0-.856.001-1.44.038-1.89c.036-.437.101-.662.18-.818c.192-.376.498-.682.874-.874c.156-.08.381-.145.819-.18l.089-.007v.469a1.5 1.5 0 0 0 1.5 1.5h5a1.5 1.5 0 0 0 1.5-1.5v-.47l.089.008c.438.035.663.1.819.18c.376.192.682.498.874.874c.08.156.145.38.18.819c.034.414.037.94.038 1.69q.538.276 1 .657V6.79c0-1.68 0-2.52-.327-3.16a3 3 0 0 0-1.31-1.31c-.372-.19-.81-.27-1.44-.303a1.5 1.5 0 0 0-1.42-1.02h-.268c-.346-.598-.992-1-1.73-1h-1c-.74 0-1.39.402-1.73 1h-.268zm.989.75a.5.5 0 0 1-.433.25H5.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-.556a.5.5 0 0 1-.433-.25l-.144-.25A1 1 0 0 0 8.5.999h-1a1 1 0 0 0-.867.501z" clip-rule="evenodd"/><path fill="black" d="M12 9.5a.5.5 0 0 0-1 0v2a.5.5 0 0 0 .5.5H13a.5.5 0 0 0 0-1h-1z"/><path fill="black" fill-rule="evenodd" d="M11.5 16c2.49 0 4.5-2.01 4.5-4.5S13.99 7 11.5 7S7 9.01 7 11.5S9.01 16 11.5 16m0-1c1.93 0 3.5-1.57 3.5-3.5S13.43 8 11.5 8S8 9.57 8 11.5S9.57 15 11.5 15" clip-rule="evenodd"/></svg>');
+				mask-repeat: no-repeat;
+				mask-size: 100% 100%;
+			}
+		}
+
+		figcaption {
+			position: static;
+			translate: initial;
+		}
+
+		h2 {
+			color: hsl(var(--gray) 30%);
+		}
+	}
+}
