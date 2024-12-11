@@ -10,8 +10,7 @@
 	display: contents;
 }
 
-[part="add-button"],
-[part="delete-button"] {
+[part~="button"] {
 	/* Common styles */
 	all: unset;
 
@@ -38,7 +37,7 @@ color-swatch {
 	flex: 1;
 
 	&:not(:hover, :focus-within) {
-		[part="delete-button"] {
+		[part="delete button"] {
 			opacity: 0;
 			transition-duration: 0ms;
 		}
@@ -48,7 +47,7 @@ color-swatch {
 		flex-direction: column;
 	}
 
-	[part="delete-button"] {
+	[part="delete button"] {
 		--_foreground-color: red;
 
 		position: absolute;
@@ -65,7 +64,7 @@ color-swatch {
 	}
 }
 
-[part="add-button"] {
+[part="add button"] {
 	--_foreground-color: deeppink;
 
 	padding: .18em;
