@@ -6,12 +6,13 @@ Use at your own risk, the API can change at any point.
 ## All elements
 
 <section class="showcase">
-{% for name in components -%}
+{% for name, description in components -%}
 <a href="{{ page | relative }}/src/{{ name }}/">
 <figure>
 	<img src="{{ page | relative }}/src/{{ name }}/{{ name }}.webp" alt="A screenshot showcasing the &lt;{{ name }}&gt; color element" />
 	<figcaption>
 		<h2>&lt;{{ name }}&gt;</h2>
+		<p>{{ description | safe }}</p>
 	</figcaption>
 </figure>
 </a>

@@ -36,11 +36,20 @@
 
 		figcaption {
 			margin: 0;
+			padding: .5em .7em;
 			border-block-start: 1px solid var(--_border-color);
 			z-index: 1;
 
 			h2 {
 				font-size: 200%;
+
+				&:not(:only-child) {
+					margin-block-end: 0;
+				}
+			}
+
+			p {
+				text-wrap: balance;
 			}
 		}
 	}
