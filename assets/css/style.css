@@ -2,6 +2,8 @@
 @import url("https://colorjs.io/assets/css/docs.css");
 
 .showcase {
+	--_border-color: hsl(var(--gray) 85%);
+
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
 	gap: 2rem;
@@ -14,12 +16,10 @@
 		margin: 0;
 		overflow: hidden;
 
-		border: 3px solid transparent;
+		border: 1px solid var(--_border-color);
 		border-radius: .2em;
-		background: var(--rainbow);
-		animation: var(--rainbow-scroll);
 
-		box-shadow: 0 .05em 1em -.7em hsl(var(--gray) 30%);
+		box-shadow: 0 .02em .5em -.7em hsl(var(--gray) 30%);
 
 		&:is(:hover, :focus-within) {
 			img {
@@ -36,15 +36,18 @@
 
 		figcaption {
 			margin: 0;
-			background: hsl(0 0% 100% / .95);
+			border-block-start: 1px solid var(--_border-color);
+			z-index: 1;
+
+			h2 {
+				font-size: 200%;
+			}
 		}
 	}
 
 	&.upcoming {
 		figure {
 			block-size: revert;
-			background: transparent;
-			border-color: hsl(var(--gray) 85%);
 
 			&::before {
 				content: "";
@@ -71,7 +74,8 @@
 		}
 
 		h2 {
-			color: hsl(var(--gray) 30%);
+			color: initial;
+			font-weight: 200;
 		}
 	}
 }
