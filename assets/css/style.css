@@ -17,7 +17,7 @@
 		overflow: hidden;
 
 		border: 1px solid var(--_border-color);
-		border-radius: .2em;
+		border-radius: .5em;
 
 		box-shadow: 0 .02em .5em -.7em hsl(var(--gray) 30%);
 
@@ -35,8 +35,9 @@
 
 		figcaption {
 			margin: 0;
-			padding: .5em .7em;
+			padding: 0 .7em .5em;
 			border-block-start: 1px solid var(--_border-color);
+			background-color: hsl(var(--gray) 98%);
 			z-index: 1;
 
 			h2 {
