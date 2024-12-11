@@ -20,7 +20,7 @@
 	color: var(--_foreground-color, canvastext);
 	background-color: var(--_background-color, canvas);
 
-	border: 3px solid color-mix(in oklab, buttonborder 20%,oklab(none none none / 0%));
+	border: 3px solid color-mix(in oklab, oklab(50% 0 0) 20%, oklab(none none none / 0%));
 	border-radius: 50%;
 
 	cursor: pointer;
@@ -55,7 +55,6 @@ color-swatch {
 		inset-inline-end: .3em;
 
 		inline-size: 1.2em;
-		aspect-ratio: 1;
 		padding: .2em;
 
 		box-shadow: 0 .05em 1em -.7em black;
