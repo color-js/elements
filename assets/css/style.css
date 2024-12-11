@@ -30,7 +30,6 @@
 		img {
 			inline-size: 100%;
 			aspect-ratio: 4 / 3;
-			object-fit: cover;
 			transition: scale .2s;
 		}
 
@@ -56,8 +55,6 @@
 
 	&.upcoming {
 		figure {
-			block-size: revert;
-
 			&::before {
 				content: "";
 				inline-size: 100%;
@@ -75,11 +72,6 @@
 				mask-repeat: no-repeat;
 				mask-size: 100% 100%;
 			}
-		}
-
-		figcaption {
-			position: static;
-			translate: initial;
 		}
 
 		h2 {
