@@ -143,14 +143,19 @@ Or don't provide any of them. In that case, the added swatch will get the color 
 ```
 
 Don't want added swatches to get the color of the last one? No problem. You can change that, too.
-Add the `defaultColor()` method to the color scale and return an object with the desired color and (optional) name from it:
+Set the `defaultColor` property of the color scale to the desired color. If the value of the property is a color object,
+you can give the color a name by adding the `name` property to it:
 
 ```html
 <button onclick="this.nextElementSibling.addColor()">Add my color</button>
 <color-scale id="custom_color" space="oklch" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd"></color-scale>
 
-<script>
-	custom_color.defaultColor = () => ({ color: "#f06", name: "My awesome color" });
+<script type="module">
+	import Color from "https://colorjs.io/dist/color.js";
+
+	let color = new Color("#f06");
+	color.name = "My awesome color";
+	custom_color.defaultColor = color;
 </script>
 ```
 

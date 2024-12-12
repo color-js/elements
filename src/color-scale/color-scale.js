@@ -104,10 +104,8 @@ const Self = class ColorScale extends ColorElement {
 	}
 
 	addColor (color, name) {
-		let {name: defaultName, color: defaultColor} = this.defaultColor?.() ?? {};
-
-		name ??= defaultName ?? "New color";
-		color ??= defaultColor ?? this.computedColors.at(-1)?.color ?? new Self.Color("oklab", [0.5, 0, 0]);
+		color ??= this.defaultColor;
+		name ??= color?.name || "New color";
 
 		if (this.colors[name]) {
 			// Name already exists
@@ -459,8 +457,11 @@ const Self = class ColorScale extends ColorElement {
 			},
 		},
 		defaultColor: {
-			type: {
-				is: Function,
+			get type () {
+				return Self.Color;
+			},
+			default () {
+				return this.computedColors.at(-1)?.color ?? new Self.Color("oklab", [0.5, 0, 0]);
 			},
 			reflect: false,
 		},
