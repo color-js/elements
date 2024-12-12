@@ -107,7 +107,7 @@ const Self = class ColorScale extends ColorElement {
 		let {name: defaultName, color: defaultColor} = this.defaultColor?.() ?? {};
 
 		name ??= defaultName ?? "New color";
-		color ??= defaultColor ?? this.computedColors.at(-1)?.color ?? new Self.Color("#f06");
+		color ??= defaultColor ?? this.computedColors.at(-1)?.color ?? new Self.Color("oklab", [0.5, 0, 0]);
 
 		if (this.colors[name]) {
 			// Name already exists
