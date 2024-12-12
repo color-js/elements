@@ -122,6 +122,7 @@ const Self = class ColorSwatch extends ColorElement {
 			}
 
 			if (this.editable?.color) {
+				input ??= this.querySelector("input.color.editable");
 				if (!input) {
 					input = document.createElement("input");
 					input.classList.add("color", "editable");
