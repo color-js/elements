@@ -118,7 +118,9 @@ const Self = class ColorScale extends ColorElement {
 		}
 
 		this.colors = {...this.colors, [name]: color};
-		this.render();
+		if (this === document.activeElement) {
+			this.render();
+		}
 
 		if (this.editable?.color) {
 			// Focus the new color input and select its content
@@ -167,7 +169,9 @@ const Self = class ColorScale extends ColorElement {
 		if (this.steps) {
 			// Update the UI to reflect the new intermediate colors
 			// If there are no intermediate colors, the UI is already up-to-date
-			this.render();
+			if (this === document.activeElement) {
+				this.render();
+			}
 
 			// Preserve the cursor position — set it to the end of the input
 			let input = swatch.querySelector("input.color.editable");
@@ -259,7 +263,7 @@ const Self = class ColorScale extends ColorElement {
 		delete colors[colorName];
 		this.colors = colors;
 
-		if (this.editable) {
+		if (this === document.activeElement) {
 			// If we are in the edit mode, we need to force re-render the swatches
 			this.render();
 		}
