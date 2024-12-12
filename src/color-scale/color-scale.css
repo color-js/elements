@@ -47,6 +47,17 @@ color-swatch {
 		flex-direction: column;
 	}
 
+	&::part(label) {
+		min-inline-size: initial;
+
+		word-break: break-all;
+		overscroll-behavior: contain;
+	}
+
+	input {
+		min-inline-size: initial;
+	}
+
 	[part="delete button"] {
 		--_foreground-color: red;
 
