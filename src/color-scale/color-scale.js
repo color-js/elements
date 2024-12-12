@@ -64,7 +64,7 @@ const Self = class ColorScale extends ColorElement {
 	}
 
 	propChangedCallback ({name, prop, detail: change}) {
-		if (name === "computedColors" && !this.editable?.name && !this.editable?.color) {
+		if (name === "computedColors" && this !== document.activeElement) {
 			// Re-render swatches
 			// Only if nothing is being edited, otherwise the input would be lost
 			// or, e.g., "red" would be converted to "rgb(100%, 0%, 0%)" right after the typing is done
