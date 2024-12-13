@@ -1,19 +1,41 @@
 :host {
-	--_color-neutral: var(--neutral-color, hsl(0 0% 0%));
-	--_color-neutral-5a: color-mix(in oklch, var(--_color-neutral) 5%, oklch(none none none / 0));
-	--_color-neutral-7a: color-mix(in oklch, var(--_color-neutral) 7%, oklch(none none none / 0));
-	--_color-neutral-10a: color-mix(in oklch, var(--_color-neutral) 10%, oklch(none none none / 0));
-	--_color-neutral-20a: color-mix(in oklch, var(--_color-neutral) 20%, oklch(none none none / 0));
+	--_color-neutral: var(--color-neutral, oklch(50% 0.03 230));
+	--_color-neutral-5a: color-mix(in oklch, var(--_color-neutral) 5%, canvas);
+	--_color-neutral-10a: color-mix(in oklch, var(--_color-neutral) 10%, canvas);
+	--_color-neutral-15a: color-mix(in oklch, var(--_color-neutral) 15%, canvas);
+	--_color-neutral-20a: color-mix(in oklch, var(--_color-neutral) 20%, canvas);
+	--_color-neutral-30a: color-mix(in oklch, var(--_color-neutral) 30%, canvas);
+	--_color-neutral-40a: color-mix(in oklch, var(--_color-neutral) 40%, canvas);
+	--_color-neutral-50a: color-mix(in oklch, var(--_color-neutral) 50%, canvas);
+	--_color-neutral-70a: color-mix(in oklch, var(--_color-neutral) 70%, canvas);
+	--_color-neutral-90a: color-mix(in oklch, var(--_color-neutral) 90%, canvas);
 
-	--_accent-color: var(--accent-color, var(--_color-neutral-5a));
+	--_accent-color: var(--accent-color, var(--_color-neutral-15a));
 
-	--_selected-channel-background: var(--selected-channel-background, var(--_color-neutral-5a));
-	--_selected-channel-shadow: 0 .1em .2em var(--_color-neutral-10a) inset, 0 0 0 2em var(--_color-neutral-7a) inset;
+	--_selected-channel-background: var(--selected-channel-background, var(--_color-neutral-15a));
+	--_selected-channel-shadow: 0 .1em .2em var(--_color-neutral-40a) inset, 0 0 0 2em var(--_color-neutral-20a) inset;
+
+	--_border-color: var(--border-color, var(--_color-neutral-30a));
 	--_border-width: var(--border-width, 1px);
-	--_border-color: var(--border-color, var(--_color-neutral-20a));
 	--_border-radius: var(--border-radius, .2em);
 
 	--_gap: 1.5rem;
+
+	@supports (color: light-dark(white, black)) {
+		--_accent-color-light: var(--accent-color-light, var(--_color-neutral-5a));
+		--_accent-color-dark: var(--accent-color-dark, var(--_color-neutral-20a));
+		--_accent-color: light-dark(var(--_accent-color-light), var(--_accent-color-dark));
+
+		--_selected-channel-background-light: var(--selected-channel-background-light, var(--_color-neutral-5a));
+		--_selected-channel-background-dark: var(--selected-channel-background-dark, var(--_color-neutral-20a));
+		--_selected-channel-background: light-dark(var(--_selected-channel-background-light), var(--_selected-channel-background-dark));
+
+		--_selected-channel-shadow: 0 .1em .2em light-dark(var(--_color-neutral-20a), var(--_color-neutral-50a)) inset, 0 0 0 2em light-dark(var(--_color-neutral-10a), var(--_color-neutral-40a)) inset;
+
+		--_border-color-light: var(--border-color-light, var(--_color-neutral-30a));
+		--_border-color-dark: var(--border-color-dark, var(--_color-neutral-70a));
+		--_border-color: light-dark(var(--_border-color-light), var(--_border-color-dark));
+	}
 
 	display: flex;
 	gap: var(--_gap);
@@ -23,6 +45,7 @@
 	[part="color-space"] {
 		position: relative;
 
+		border-color: var(--_border-color);
 		font-size: 120%;
 
 		&::before,
@@ -50,7 +73,8 @@
 			border-radius: 50%;
 			block-size: calc(2 * var(--_radius));
 			aspect-ratio: 1;
-			background-color: color-mix(in oklch, var(--_color-neutral) 30%, canvas);
+			background-color: var(--_color-neutral-50a);
+			background-color: light-dark(var(--_color-neutral-30a), var(--_color-neutral-90a));
 		}
 	}
 
