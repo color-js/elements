@@ -1,1 +1,78 @@
 @import url("https://colorjs.io/assets/css/style.css");
+@import url("https://colorjs.io/assets/css/docs.css");
+
+.showcase {
+	--_border-color: hsl(var(--gray) 85%);
+
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+	gap: 2rem;
+
+	figure {
+		display: grid;
+		grid-template-rows: 1fr auto;
+
+		inline-size: 100%;
+		margin: 0;
+		overflow: hidden;
+
+		border: 1px solid var(--_border-color);
+		border-radius: .5em;
+
+		box-shadow: 0 .02em .5em -.7em hsl(var(--gray) 30%);
+
+		&:is(:hover, :focus-within) {
+			img {
+				scale: 1.1;
+			}
+		}
+
+		img {
+			inline-size: 100%;
+			aspect-ratio: 4 / 3;
+			transition: scale .2s;
+		}
+
+		figcaption {
+			margin: 0;
+			padding: 0 .7em .5em;
+			border-block-start: 1px solid var(--_border-color);
+			background-color: hsl(var(--gray) 98%);
+			z-index: 1;
+
+			h2 {
+				font-size: 200%;
+
+				&:not(:only-child) {
+					margin-block-end: 0;
+				}
+			}
+
+			p {
+				text-wrap: balance;
+			}
+		}
+	}
+
+	&.upcoming {
+		figure {
+			&::before {
+				content: "";
+				inline-size: 100%;
+				aspect-ratio: 4 / 3;
+
+				background: var(--rainbow);
+				animation: var(--rainbow-scroll);
+
+				mask-image: url('data:image/svg+xml,\
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 1080">\
+						<path fill="none" stroke="black" stroke-width="25" stroke-linecap="round" stroke-linejoin="round" d="M233 579a70 70 0 0 0 70 70h834a70 70 0 0 0 0-140H303a70 70 0 0 0-70 70Z"/>\
+						<path fill-rule="evenodd" d="M270 579a42 42 0 0 0 42 42h538v-84H312a42 42 0 0 0-42 42Z"/>\
+						<text xml:space="preserve" x="425.54" y="462" font-family="Impact" font-size="90" font-weight="800" letter-spacing="2.7">COMING SOON...</text>\
+					</svg>');
+				mask-repeat: no-repeat;
+				mask-size: 100% 100%;
+			}
+		}
+	}
+}

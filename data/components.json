@@ -1,12 +1,12 @@
-[
-	"color-picker",
-	"color-scale",
-	"color-chart",
-	"color-swatch",
-	"color-inline",
-	"channel-slider",
-	"color-slider",
-	"gamut-badge",
-	"channel-picker",
-	"space-picker"
-]
+{
+	"color-picker": "Select and adjust colors in any color space using sliders and input fields.",
+	"color-scale": "Display a list of colors. Primarily intended for color palettes.",
+	"color-chart": "Display lists of colors as a scatterplot or line chart.",
+	"color-swatch": "Display a visual representation of a color alongside the info about it.",
+	"color-inline": "Display a color swatch alone or alongside its textual representation.",
+	"channel-slider": "Display a <code>&lt;color-slider&gt;</code> for a specific channel.",
+	"color-slider": "Display a slider with a gradient background. Primarily intended for color picking.",
+	"gamut-badge": "Gamut indicator. Used internally by <code>&lt;color-swatch&gt;</code>.",
+	"channel-picker": "Select individual color channels within a specified color space.",
+	"space-picker": "Select a color space from a list of predefined or custom color spaces."
+}
