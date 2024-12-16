@@ -1,26 +1,94 @@
-:host {
+[part="wrapper"] {
+	display: grid;
 	gap: .3em;
+	grid-auto-flow: row;
+	grid-template-rows: auto auto;
+	grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
 }
 
 #swatches {
-	display: flex;
-	gap: inherit;
+	display: contents;
+}
+
+[part~="button"] {
+	/* Common styles */
+	all: unset;
+
+	display: grid;
+	place-items: center;
+
+	color: var(--_foreground-color, canvastext);
+	background-color: var(--_background-color, canvas);
+
+	border: 3px solid color-mix(in oklab, oklab(50% 0 0) 20%, oklab(none none none / 0%));
+	border-radius: 50%;
+
+	cursor: pointer;
+
+	&:is(:hover, :focus) {
+		color: var(--_background-color, canvas);
+		background-color: var(--_foreground-color, canvastext);
+	}
 }
 
 color-swatch {
+	position: relative;
 	margin: 0;
 	flex: 1;
+
+	&:not(:hover, :focus-within) {
+		[part="delete button"] {
+			opacity: 0;
+			transition-duration: 0ms;
+		}
+	}
+
+	&::part(color) {
+		flex-direction: column;
+	}
+
+	&::part(label) {
+		min-inline-size: initial;
+
+		word-break: break-all;
+		overscroll-behavior: contain;
+	}
+
+	input {
+		min-inline-size: initial;
+	}
+
+	[part="delete button"] {
+		--_foreground-color: red;
+
+		position: absolute;
+		inset-block-start: .3em;
+		inset-inline-end: .3em;
+
+		inline-size: 1.2em;
+		padding: .2em;
+
+		box-shadow: 0 .05em 1em -.7em black;
+
+		transition: opacity .2s;
+	}
+}
+
+[part="add button"] {
+	--_foreground-color: deeppink;
+
+	padding: .18em;
+
+	border-style: dashed;
+	border-radius: .2rem;
+
+	font: inherit;
+	font-size: 200%;
+	font-weight: bold;
 }
 
 @supports (grid-template-columns: subgrid) {
 	/* Avoid uneven swatch heights */
-	#swatches {
-		display: grid;
-		grid-auto-flow: row;
-		grid-template-rows: auto auto;
-		grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-	}
-
 	color-swatch {
 		width: 100%;
 		grid-row: 1 / span 2;
