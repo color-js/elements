@@ -245,6 +245,10 @@ const Self = class ColorSwatch extends ColorElement {
 				from: true,
 			},
 		},
+		/**
+		 * Specified coords
+		 * @example ["oklch.h", "oklch.c", "oklch.l"]
+		 */
 		infoCoords: {
 			get () {
 				if (!this.info.length) {
@@ -262,6 +266,7 @@ const Self = class ColorSwatch extends ColorElement {
 				return ret;
 			},
 		},
+		// We need this to correctly work (calculate and show in the UI) with coords of type "angle"
 		infoCoordsResolved: {
 			get () {
 				if (!this.infoCoords) {
@@ -282,7 +287,11 @@ const Self = class ColorSwatch extends ColorElement {
 				return ret;
 			},
 		},
-		infoOther: { // DeltaE, contrast, etc.
+		/**
+		 * Specified deltaE and contrast
+		 * @example ["deltaE.2000", "contrast.WCAG21"]
+		 */
+		infoOther: {
 			get () {
 				if (!this.info.length) {
 					return;
@@ -299,6 +308,10 @@ const Self = class ColorSwatch extends ColorElement {
 				return ret;
 			},
 		},
+		/**
+		 * Coords for `this.color`
+		 * @example {"oklch.l": 0.7,"oklch.c": 0.25, "oklch.h": 138}
+		 */
 		colorInfo: {
 			get () {
 				if (!this.color || !this.infoCoords) {
@@ -318,12 +331,17 @@ const Self = class ColorSwatch extends ColorElement {
 				return ret;
 			},
 		},
+		/**
+		 * Color deltas (between `this.color` and `this.vs`)
+		 * @example {"oklch.l": -0.3,"oklch.c": 0.35, "oklch.h": 108}
+		 */
 		colorDeltas: {
 			get () {
 				if (!this.infoCoordsResolved || !this.vsInfo) {
 					return;
 				}
 
+				// TODO: Use Color.js deltas() instead (when v0.6.0 is released)
 				let ret = {};
 				for (let coord of this.infoCoords) {
 					let value = this.colorInfo[coord];
@@ -348,11 +366,18 @@ const Self = class ColorSwatch extends ColorElement {
 				return ret;
 			},
 		},
+		/**
+		 * Color to compare `this.color` with
+		 */
 		vs: {
 			get type () {
 				return Self.Color;
 			},
 		},
+		/**
+		 * Coords, deltaE, contrast for `this.vs`
+		 * @example {"oklch.l": 1, "oklch.c": 0, "oklch.h": null, "deltaE.2000": 37.69, "contrast.WCAG21": 2.46}
+		 */
 		vsInfo: {
 			get () {
 				if (!this.color || !this.vs || !this.info.length) {
