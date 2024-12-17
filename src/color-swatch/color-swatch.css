@@ -7,6 +7,8 @@
 		0 0 / calc(2 * var(--_transparency-cell-size)) calc(2 * var(--_transparency-cell-size))
 		content-box border-box var(--_transparency-background)
 	);
+	--_positive-delta-color: var(--positive-delta-color, hsl(120, 80%, 25%));
+	--_negative-delta-color: var(--negative-delta-color, hsl(0, 85%, 40%));
 
 	position: relative;
 	display: inline-flex;
@@ -64,22 +66,29 @@ slot {
 [part="info"] {
 	margin: 0;
 	display: inline-flex;
-	display: none;
 	gap: .5em;
 
 	&:is(:host([size="large"]) &) {
 		display: grid;
-		grid-template-columns: max-content auto;
+		grid-template-columns: repeat(3, max-content);
 		gap: .1em .2em;
 		font-size: max(9px, 80%);
 		justify-content: start;
 
-		.coord {
+		& > * {
+			grid-column: 1 / -1;
+		}
+
+		.data {
 			display: contents;
+
+			dd:not(.delta, :has(~ dd)) {
+				grid-column: span 2;
+			}
 		}
 	}
 
-	.coord {
+	.data {
 		display: flex;
 		gap: .2em;
 
@@ -87,6 +96,34 @@ slot {
 			margin: 0;
 			font-weight: bold;
 			font-variant-numeric: tabular-nums;
+
+			&.delta {
+				color: var(--_delta-color);
+
+				&::before {
+					content: "(";
+				}
+
+				&::after {
+					content: ")";
+				}
+
+				&.positive {
+					--_delta-color: var(--_positive-delta-color);
+
+					&::before {
+						content: "(+";
+					}
+				}
+
+				&.negative {
+					--_delta-color: var(--_negative-delta-color);
+				}
+
+				&:not(.angle)::after {
+					content: "%)";
+				}
+			}
 		}
 	}
 }
