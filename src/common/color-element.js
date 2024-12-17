@@ -39,7 +39,7 @@ const Self = class ColorElement extends NudeElement {
 		// Hide elements before they are defined
 		let style = document.getElementById("color-element-styles")
 		          ?? Object.assign(document.createElement("style"), {id: "color-element-styles"});
-		style.textContent = `:is(${ colorTags.join(", ") }):not(:defined) {display: none}`;
+		style.textContent = `:is(${ colorTags.join(", ") }):is(:not(:defined), :not(:defined) *) {opacity: 0}`;
 		if (!style.parentNode) {
 			document.head.append(style);
 		}
