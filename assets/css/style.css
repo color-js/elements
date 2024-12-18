@@ -77,6 +77,25 @@
 	}
 }
 
+.scrollable {
+	--_transparent-canvas: color-mix(in oklab, canvas, oklab(none none none / 0%) 100%);
+	--_hint-color: color-mix(in oklab, canvastext 30%, var(--_transparent-canvas));
+
+	max-inline-size: 100%;
+	overflow-x: auto;
+
+	/**
+	* Scrolling hints (https://lea.verou.me/2012/04/background-attachment-local/)
+	*/
+
+	background: linear-gradient(to right, canvas 1em, var(--_transparent-canvas)) left / 3em 100%,
+	            linear-gradient(to right, var(--_hint-color), var(--_transparent-canvas) 70%) left / 1em 100%,
+	            linear-gradient(to left, canvas 1em, var(--_transparent-canvas)) right / 3em 100%,
+	            linear-gradient(to left, var(--_hint-color), var(--_transparent-canvas) 70%) right / 1em 100%;
+	background-repeat: no-repeat;
+	background-attachment: local, scroll, local, scroll;
+}
+
 /* Tables with demos */
 table:has(html-demo) {
 	display: grid;
