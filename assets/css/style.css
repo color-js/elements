@@ -76,3 +76,58 @@
 		}
 	}
 }
+
+/* Tables with demos */
+table:has(html-demo) {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+
+	thead,
+	tbody,
+	tfoot,
+	tr {
+		display: contents;
+	}
+
+	@media (width < 950px) {
+		/* Visually hide column headings on small screens */
+		thead th {
+			position: absolute;
+			left: -10000px;
+			top: auto;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+		}
+
+		:is(&, & th, & td) {
+			border: none;
+			background-color: transparent;
+		}
+	}
+
+	@media (width >= 950px) {
+		&:has(tbody > tr:first-of-type > td:last-child:nth-child(2)) {
+			/* Table has two columns */
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		&:has(tbody > tr:first-of-type > td:last-child:nth-child(3)) {
+			/* Table has three columns */
+			grid-template-columns: auto repeat(2, minmax(0, 1fr));
+		}
+
+		thead {
+			display: contents;
+		}
+
+		tbody {
+			th {
+				/* To save space, render row headers vertically */
+				text-align: center;
+				writing-mode: vertical-rl;
+				transform: rotate(.5turn);
+			}
+		}
+	}
+}
