@@ -230,7 +230,7 @@ const Self = class ChannelSlider extends ColorElement {
 				let coords = [];
 				for (let channel in this.space.coords) {
 					let spec = this.space.coords[channel];
-					let range = spec.refRange ?? spec.range;
+					let range = spec.refRange ?? spec.range ?? [0, 100];
 					coords.push((range[0] + range[1]) / 2);
 				}
 
