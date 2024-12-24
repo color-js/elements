@@ -76,3 +76,77 @@
 		}
 	}
 }
+
+.scrollable {
+	--_transparent-canvas: color-mix(in oklab, canvas, oklab(none none none / 0%) 100%);
+	--_hint-color: color-mix(in oklab, canvastext 30%, var(--_transparent-canvas));
+
+	max-inline-size: 100%;
+	overflow-x: auto;
+
+	/**
+	* Scrolling hints (https://lea.verou.me/2012/04/background-attachment-local/)
+	*/
+
+	background: linear-gradient(to right, canvas 1em, var(--_transparent-canvas)) left / 3em 100%,
+	            linear-gradient(to right, var(--_hint-color), var(--_transparent-canvas) 70%) left / 1em 100%,
+	            linear-gradient(to left, canvas 1em, var(--_transparent-canvas)) right / 3em 100%,
+	            linear-gradient(to left, var(--_hint-color), var(--_transparent-canvas) 70%) right / 1em 100%;
+	background-repeat: no-repeat;
+	background-attachment: local, scroll, local, scroll;
+}
+
+/* Tables with demos */
+table:has(html-demo) {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+
+	thead,
+	tbody,
+	tfoot,
+	tr {
+		display: contents;
+	}
+
+	@media (width < 950px) {
+		/* Visually hide column headings on small screens */
+		thead th {
+			position: absolute;
+			left: -10000px;
+			top: auto;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+		}
+
+		:is(&, & th, & td) {
+			border: none;
+			background-color: transparent;
+		}
+	}
+
+	@media (width >= 950px) {
+		&:has(tbody > tr:first-of-type > td:last-child:nth-child(2)) {
+			/* Table has two columns */
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		&:has(tbody > tr:first-of-type > td:last-child:nth-child(3)) {
+			/* Table has three columns */
+			grid-template-columns: auto repeat(2, minmax(0, 1fr));
+		}
+
+		thead {
+			display: contents;
+		}
+
+		tbody {
+			th {
+				/* To save space, render row headers vertically */
+				text-align: center;
+				writing-mode: vertical-rl;
+				transform: rotate(.5turn);
+			}
+		}
+	}
+}
