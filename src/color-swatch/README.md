@@ -213,6 +213,24 @@ The `info` attribute plays quite nicely with the `--details-style: compact` styl
 <color-swatch size="large" info="oklch.l, oklch.c, oklch.h" style="--details-style: compact">oklch(70% 0.25 138)</color-swatch>
 ```
 
+### The `editable` attribute
+
+Make static swatches editable by adding the `editable` boolean attribute:
+
+```html
+<color-swatch editable label="Turquoise" value="oklch(65% 0.15 210)" size="large"></color-swatch>
+```
+
+You can also specify whether the color itself or its label should be editable:
+
+```html
+<color-swatch editable="color" label="Turquoise" value="oklch(65% 0.15 210)" size="large"></color-swatch>
+```
+
+```html
+<color-swatch editable="label" label="Turquoise" value="oklch(65% 0.15 210)" size="large"></color-swatch>
+```
+
 ### With slot content
 
 Before and after:
@@ -320,6 +338,7 @@ If you don’t, the `<html>` element will be used.
 | `scope` | `scope` | `string` | `:root` | CSS selector to use as the scope for the specified CSS property. |
 | `gamuts` | `gamuts` | `string` | `srgb, p3, rec2020: P3+, prophoto: PP` | Comma-separated list of gamuts to be used by the gamut indicator. |
 | `open` | `open` | | `null` | Force the details popup open or closed. |
+| `editable` | `editable` | `boolean` &#124; `object`  | `undefined` | Force the static swatch (or its parts, e.g., label) to be editable. |
 
 ### Getters
 
@@ -357,3 +376,4 @@ These properties are read-only.
 | `valuechange` | Fired when the value changes for any reason, and once during initialization. |
 | `colorchange` | Fired when the color changes for any reason, and once during initialization. |
 | `gamutchange` | Fired when the gamut changes for any reason, and once during initialization. |
+| `labelchange` | Fired when the label changes for any reason, and once during initialization. |

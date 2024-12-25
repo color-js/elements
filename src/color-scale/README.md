@@ -67,6 +67,98 @@ You can also create compact color scales, by simply setting `--details-style: co
 
 Issue: How to make them focusable??
 
+### The `editable` attribute
+
+The `editable` attribute allows you to make the color scale editable: adding new colors and editing, reordering, or removing existing ones.
+
+Use `editable` as a boolean attribute to make the color scale editable:
+
+```html
+<color-scale editable space="oklch" colors="
+	Gray 300: #d1d5db,
+	Gray 400: #9ca3af,
+	Gray 500: #6b7280
+"></color-scale>
+```
+
+You can specify whether the color names, color values, or both should be editable.
+
+Editing colors:
+
+```html
+<color-scale editable="color" space="oklch" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd, Blue: #7bd3ea"></color-scale>
+```
+
+Editing color names:
+
+```html
+<color-scale editable="name" space="oklch" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd, Blue: #7bd3ea"></color-scale>
+```
+
+Or both:
+
+```html
+<color-scale editable="name color" space="oklch" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd, Blue: #7bd3ea"></color-scale>
+```
+
+Add `list` to enable all list operations (add, delete, reorder) in one go:
+
+```html
+<color-scale editable="name color list" space="oklch" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd, Blue: #7bd3ea"></color-scale>
+```
+
+For more granular control, specify operations to be enabled:
+
+```html
+<color-scale editable="add reorder" space="oklch" colors="#c5f6fa, #99e9f2, #3bc9db"></color-scale>
+```
+
+Keep in mind that interpolated colors are generated automatically, are not editable, and cannot be reordered or deleted:
+
+```html
+<color-scale editable="color reorder delete" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd" steps="1" space="oklch"></color-scale>
+```
+
+The `editable` attribute is reactive and can be set programmatically:
+
+```html
+<label>
+	<input type="checkbox" onchange="this.parentElement.nextElementSibling.editable = this.checked">Editable
+</label>
+<color-scale space="oklch" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd"></color-scale>
+```
+
+You can also add colors programmatically with the `addColor()` method, providing the color to add and, optionally, its name:
+
+```html
+<button onclick="this.nextElementSibling.addColor('#7bd3ea', 'Blue')">Add blue color</button>
+<color-scale space="oklch" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd"></color-scale>
+```
+
+Or don't provide any of them. In that case, the added swatch will get the color of the last one:
+
+```html
+<button onclick="this.nextElementSibling.addColor()">Add default color</button>
+<color-scale space="oklch" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd"></color-scale>
+```
+
+Don't want added swatches to get the color of the last one? No problem. You can change that, too.
+Set the `defaultColor` property of the color scale to the desired color. If the value of the property is a color object,
+you can give the color a name by adding the `name` property to it:
+
+```html
+<button onclick="this.nextElementSibling.addColor()">Add my color</button>
+<color-scale id="custom_color" space="oklch" colors="Peach: #f6d6d6, Yellow: #f6f7c4, Mint: #a1eebd"></color-scale>
+
+<script type="module">
+	import Color from "https://colorjs.io/dist/color.js";
+
+	let color = new Color("#f06");
+	color.name = "My awesome color";
+	custom_color.defaultColor = color;
+</script>
+```
+
 <!--
 If you want to insert interpolated colors only in specific places, you can use empty values:
 
