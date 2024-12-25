@@ -25,6 +25,14 @@
 <script src="{{ page | relative }}/index.js" type="module"></script>
 <script src="{{ name }}.js" type="module"></script>
 
+<aside id="toc">
+	<ul>
+	{% for name, description in components -%}
+	<li><a href="{{ page | relative }}/src/{{ name }}/"><code>&lt;{{ name }}&gt;</code></a></li>
+	{% endfor %}
+	</ul>
+</aside>
+
 {{ content | safe }}
 
 <section id="installation">
