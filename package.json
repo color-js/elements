@@ -36,7 +36,7 @@
     "nude-element": "latest"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^3.0.0-alpha.6",
+    "@11ty/eleventy": "^3.0.0",
     "@stylistic/eslint-plugin": "latest",
     "eslint": "latest",
     "globals": "latest",
