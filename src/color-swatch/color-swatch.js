@@ -111,9 +111,11 @@ const Self = class ColorSwatch extends ColorElement {
 		if (name === "label") {
 			if (this.label.length && this.label !== this.swatchTextContent) {
 				this._el.label.textContent = this.label;
+				this._el.label.title = this.label;
 			}
 			else {
 				this._el.label.textContent = "";
+				this._el.label.title = "";
 			}
 		}
 

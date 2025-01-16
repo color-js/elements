@@ -96,6 +96,9 @@ slot {
 	flex-flow: inherit;
 	gap: inherit;
 
+	/* Prevent flex items from overflowing */
+	min-inline-size: 0;
+
 	&.static {
 		&:is(:host([size="large"]) *) {
 			background: white;
@@ -174,6 +177,12 @@ slot {
 [part="color"] {
 	display: flex;
 	gap: .2em;
+}
+
+[part="label"] {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 slot:not([name]) {
