@@ -32,7 +32,7 @@ const Self = class ColorElement extends NudeElement {
 				let url = this.shadowStyle;
 				url = url === true ? `./${this.tagName}.css` : url;
 				url = new URL(url, this.url);
-				this.shadowTemplate = `<style>@import url("${ url }")</style>` + "\n" + this.shadowTemplate;
+				this.shadowTemplate = `<link rel="stylesheet" href="${ url }" />` + "\n" + this.shadowTemplate;
 			}
 		}
 
