@@ -8,7 +8,8 @@ const Self = class ChannelPicker extends ColorElement {
 	static shadowStyle = true;
 	static shadowTemplate = `
 		<space-picker part="color-space" exportparts="base: color-space-base" id="space_picker"></space-picker>
-		<select id="picker" part="color-channel-base"></select>`;
+		<div id="channels" part="channels"></div>
+	`;
 
 	constructor () {
 		super();
@@ -25,14 +26,14 @@ const Self = class ChannelPicker extends ColorElement {
 	connectedCallback () {
 		super.connectedCallback?.();
 
-		this._el.picker.addEventListener("input", this);
+		this._el.channels.addEventListener("input", this);
 	}
 
 	disconnectedCallback () {
 		super.disconnectedCallback?.();
 
 		this._el.space_picker.removeEventListener("spacechange", this);
-		this._el.picker.removeEventListener("input", this);
+		this._el.channels.removeEventListener("input", this);
 	}
 
 	get selectedSpace () {
@@ -40,7 +41,22 @@ const Self = class ChannelPicker extends ColorElement {
 	}
 
 	get selectedChannel () {
-		return this.selectedSpace.coords?.[this._el.picker.value];
+		return this.selectedSpace.coords?.[this.compact ? this.#channelSelect.value : this.#checkedChannel];
+	}
+
+	get #checkedChannel () {
+		return this._el.channels.querySelector("input[type=radio][name=channel]:checked")?.value;
+	}
+
+	set #checkedChannel (value) {
+		let input = this._el.channels.querySelector(`input[type=radio][name=channel][value="${ value }"]`);
+		if (input) {
+			input.checked = true;
+		}
+	}
+
+	get #channelSelect () {
+		return this._el.channels.querySelector("select[part=color-channel-base]");
 	}
 
 	/**
@@ -58,9 +74,24 @@ const Self = class ChannelPicker extends ColorElement {
 			return;
 		}
 
-		this._el.picker.innerHTML = Object.entries(coords)
-			.map(([id, coord]) => `<option value="${ id }">${ coord.name }</option>`)
-			.join("\n");
+		let compact = this.compact;
+		this.classList.toggle("compact", compact);
+
+		let html = compact ? [`<select part="color-channel-base">`] : [];
+		html.push(...Object.entries(coords)
+			// By default, the first channel is selected
+			.map(([id, coord], index) => {
+				if (compact) {
+					return `<option value="${ id }" ${ index === 0 ? "selected" : "" }>${ coord.name }</option>`;
+				}
+				else {
+					return `<label><input type="radio" name="channel" value="${ id }" ${ index === 0 ? "checked" : "" } class="sr-only" /> ${ coord.name }</label>`;
+				}
+			}));
+		if (compact) {
+			html.push("</select>");
+		}
+		this._el.channels.innerHTML = html.join("\n");
 
 		let [prevSpace, prevChannel] = this.value?.split(".") ?? [];
 		if (prevSpace && prevChannel) {
@@ -68,11 +99,21 @@ const Self = class ChannelPicker extends ColorElement {
 			let currentChannelName = coords[prevChannel]?.name;
 			if (prevChannelName === currentChannelName) {
 				// Preserve the channel if it exists in the new space and has the same name ("b" in "oklab" is not the same as "b" in "p3")
-				this._el.picker.value = prevChannel;
+				if (compact) {
+					this.#channelSelect.value = prevChannel;
+				}
+				else {
+					this.#checkedChannel = prevChannel;
+				}
 			}
 			else if (this.#history?.[space.id]) {
 				// Otherwise, try to restore the last channel used
-				this._el.picker.value = this.#history[space.id];
+				if (compact) {
+					this.#channelSelect.value = this.#history[space.id];
+				}
+				else {
+					this.#checkedChannel = this.#history[space.id];
+				}
 			}
 		}
 	}
@@ -82,8 +123,10 @@ const Self = class ChannelPicker extends ColorElement {
 			this.#render();
 		}
 
-		if ([this._el.space_picker, this._el.picker].includes(event.target)) {
-			let value = `${ this._el.space_picker.value }.${ this._el.picker.value }`;
+		if (this._el.space_picker === event.target || this.#channelSelect === event.target || event.target.matches("input[type=radio]")) {
+			let space = this._el.space_picker.value;
+			let channel = this.compact ? this.#channelSelect.value : this.#checkedChannel;
+			let value = `${ space }.${ channel }`;
 			if (value !== this.value) {
 				this.value = value;
 			}
@@ -95,7 +138,7 @@ const Self = class ChannelPicker extends ColorElement {
 			let [space, channel] = (this.value + "").split(".");
 
 			let currentSpace = this._el.space_picker.value;
-			let currentCoord = this._el.picker.value;
+			let currentCoord = this.compact ? this.#channelSelect?.value : this.#checkedChannel;
 			let currentValue = `${ currentSpace }.${ currentCoord }`;
 
 			if (!space || !channel) {
@@ -118,7 +161,12 @@ const Self = class ChannelPicker extends ColorElement {
 						let coords = Object.keys(this.selectedSpace.coords ?? {});
 
 						if (coords.includes(channel)) {
-							this._el.picker.value = channel;
+							if (this.compact) {
+								this.#channelSelect.value = channel;
+							}
+							else {
+								this.#checkedChannel = channel;
+							}
 						}
 						else {
 							currentCoord = coords.includes(currentCoord) ? currentCoord : coords[0];
@@ -138,23 +186,44 @@ const Self = class ChannelPicker extends ColorElement {
 				}
 			}
 		}
+
+		if (name === "compact") {
+			this.#render();
+		}
 	}
 
 	static props = {
 		value: {
 			default: "oklch.l",
 		},
+
+		compact: {
+			default: false,
+			parse (value) {
+				if (value === undefined || value === null || value === false || value === "false") {
+					return false;
+				}
+
+				if (value === "" || value === "compact" || value === true || value === "true") {
+					// Boolean attribute
+					return true;
+				}
+			},
+			reflect: {
+				from: true,
+			},
+		},
 	};
 
 	static events = {
 		change: {
 			from () {
-				return [this._el.space_picker, this._el.picker];
+				return [this._el.space_picker, this._el.channels];
 			},
 		},
 		input: {
 			from () {
-				return [this._el.space_picker, this._el.picker];
+				return [this._el.space_picker, this._el.channels];
 			},
 		},
 		valuechange: {
