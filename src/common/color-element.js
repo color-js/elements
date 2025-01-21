@@ -39,7 +39,16 @@ const Self = class ColorElement extends NudeElement {
 		// Hide elements before they are defined
 		let style = document.getElementById("color-element-styles")
 		          ?? Object.assign(document.createElement("style"), {id: "color-element-styles"});
-		style.textContent = `:is(${ colorTags.join(", ") }):not(:defined) {display: none}`;
+		style.textContent = `
+			:is(${ colorTags.join(", ") }) {
+				opacity: 0;
+
+				body:not(.loading-global-color-element-styles) &:defined {
+					opacity: 1;
+					transition: opacity .25s;
+				}
+			}
+		`;
 		if (!style.parentNode) {
 			document.head.append(style);
 		}
@@ -80,6 +89,23 @@ const Self = class ColorElement extends NudeElement {
 		}
 
 		customElements.define(this.tagName, this);
+
+		if (this.globalStyle) {
+			// NudeElement imports global styles using `@import url()` inside an `<style>` element with a `data-for` attribute equal to the element's tag name
+			let styleElement = document.head.querySelector(`style[data-for="${this.tagName}"]`);
+			if (styleElement) {
+				// Wait for the global stylesheet (e.g., `color-chart-global.css`) to be loaded and applied.
+				// If we don't do this, the global styles will be applied after the element is shown,
+				// causing a flash of weird artifacts during the element rendering.
+				document.body.classList.add("loading-global-color-element-styles");
+
+				styleElement.onload = async () => {
+					// Give the browser a chance to apply the downloaded styles
+					await wait(500);
+					document.body.classList.remove("loading-global-color-element-styles");
+				};
+			}
+		}
 	}
 };
 
