@@ -26,6 +26,10 @@
     "web components"
   ],
   "author": "Lea Verou",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/color"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/color-js/elements/issues"
