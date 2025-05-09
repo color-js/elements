@@ -15,6 +15,12 @@ the default `oklch.l` will be used:
 <channel-picker></channel-picker>
 ```
 
+If you need a more compact version of the picker, add the `compact` boolean attribute to get one:
+
+```html
+<channel-picker value="oklch.c" compact></channel-picker>
+```
+
 You can hide the `color-space` part with CSS to show only the coordinates of the specified space:
 
 ```html
@@ -46,6 +52,13 @@ All properties are reactive and can be set programmatically:
 <channel-picker></channel-picker>
 ```
 
+```html
+<label>
+	<input type="checkbox" onchange="this.parentElement.nextElementSibling.compact = this.checked" /> Compact picker
+</label>
+<channel-picker></channel-picker>
+```
+
 `<channel-picker>` plays nicely with other color elements, like [`<channel-slider>`](../channel-slider):
 
 ```html
@@ -64,7 +77,7 @@ All properties are reactive and can be set programmatically:
 		channel_slider.space = space;
 		channel_slider.channel = channel;
 	}
-	
+
 	channel_picker.onvaluechange = updateSlider;
 </script>
 ```
@@ -76,6 +89,7 @@ All properties are reactive and can be set programmatically:
 | Attribute | Property | Property type | Default value | Description                      |
 |-----------|----------|---------------|---------------|----------------------------------|
 | `value`   | `value`  | `string`      | `oklch.l`     | The current value of the picker. |
+| `compact` | `compact`  | `boolean` | `false` | Whether the picker should be rendered compact or not. |
 
 ### Getters
 
@@ -100,4 +114,5 @@ These properties are read-only.
 |----------------|------------------------------------------------------|
 | `color-space` | The internal [`<space-picker>`](../space-picker/) element. |
 | `color-space-base` | The internal `<select>` element of [`<space-picker>`](../space-picker/). |
-| `color-channel-base` | The internal `<select>` element. |
+| `color-channel-base` | If the picker is compact, the internal `<select>` element used to render the channels.  |
+| `channels` | The container that wraps the current color space channels. |
