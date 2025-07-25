@@ -3,7 +3,7 @@ import ColorElement from "../common/color-element.js";
 const Self = class GamutBadge extends ColorElement {
 	static tagName = "gamut-badge";
 	static url = import.meta.url;
-	static shadowStyle = true;
+	static styles = "./gamut-badge.css";
 	static shadowTemplate = `
 		<slot>
 			<span id="label" part="label"></span>

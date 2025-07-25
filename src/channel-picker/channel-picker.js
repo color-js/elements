@@ -5,7 +5,7 @@ import * as dom from "../common/dom.js";
 const Self = class ChannelPicker extends ColorElement {
 	static tagName = "channel-picker";
 	static url = import.meta.url;
-	static shadowStyle = true;
+	static styles = "./channel-picker.css";
 	static shadowTemplate = `
 		<space-picker part="color-space" exportparts="base: color-space-base" id="space_picker"></space-picker>
 		<select id="picker" part="color-channel-base"></select>`;

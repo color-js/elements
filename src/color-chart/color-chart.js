@@ -5,7 +5,8 @@ import ColorElement from "../common/color-element.js";
 const Self = class ColorChart extends ColorElement {
 	static tagName = "color-chart";
 	static url = import.meta.url;
-	static shadowStyle = true;
+	static styles = "./color-chart.css";
+	static globalStyles = "./color-chart-global.css";
 	static shadowTemplate = `
 		<slot name="color-channel">
 			<channel-picker id="channel_picker" part="color-channel"></channel-picker>
@@ -24,7 +25,6 @@ const Self = class ColorChart extends ColorElement {
 			<div class="ticks" part="x ticks"></div>
 		</div>`;
 	static dependencies = new Set(["color-scale"]);
-	static globalStyle = new URL("color-chart-global.css", import.meta.url);
 
 	constructor () {
 		super();

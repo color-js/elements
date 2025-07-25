@@ -9,7 +9,7 @@ let supports = {
 const Self = class ColorSlider extends ColorElement {
 	static tagName = "color-slider";
 	static url = import.meta.url;
-	static shadowStyle = true;
+	static styles = "./color-slider.css";
 	static shadowTemplate = `
 		<input type="range" class="color-slider" part="slider" min="0" max="1" step="0.01" />
 			<slot name="tooltip" class="slider-tooltip">

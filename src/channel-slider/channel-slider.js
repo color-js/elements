@@ -6,7 +6,7 @@ import { getStep } from "../common/util.js";
 const Self = class ChannelSlider extends ColorElement {
 	static tagName = "channel-slider";
 	static url = import.meta.url;
-	static shadowStyle = true;
+	static styles = "./channel-slider.css";
 	static shadowTemplate = `
 		<label class="color-slider-label" part="label">
 			<slot>

@@ -14,7 +14,8 @@
     "release": "release-it",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:html": "npx @11ty/eleventy --config=_build/eleventy.js",
-    "watch:html": "npx @11ty/eleventy --config=_build/eleventy.js --serve"
+    "serve": "npx @11ty/eleventy --config=_build/eleventy.js --serve",
+    "watch:html": "npx @11ty/eleventy --config=_build/eleventy.js --watch"
   },
   "repository": {
     "type": "git",
@@ -36,16 +37,16 @@
   },
   "homepage": "https://github.com/color-js/elements#readme",
   "dependencies": {
+    "@11ty/eleventy": "^3.1.2",
     "colorjs.io": "^0.5.0",
     "nude-element": "latest"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^3.0.0",
     "@stylistic/eslint-plugin": "latest",
     "eslint": "latest",
     "globals": "latest",
-    "markdown-it-attrs": "^4.1.6",
     "markdown-it-anchor": "^8",
+    "markdown-it-attrs": "^4.1.6",
     "npm-run-all": "^4.1.5",
     "release-it": "^17.2.0"
   }

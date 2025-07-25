@@ -8,7 +8,7 @@ const Self = class ColorPicker extends ColorElement {
 	static tagName = "color-picker";
 	static url = import.meta.url;
 	static dependencies = new Set(["channel-slider"]);
-	static shadowStyle = true;
+	static styles = "./color-picker.css";
 	static shadowTemplate = `
 		<slot name="color-space">
 			<space-picker id="space_picker" part="color-space" exportparts="base: color-space-base"></space-picker>

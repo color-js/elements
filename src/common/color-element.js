@@ -27,13 +27,6 @@ const Self = class ColorElement extends NudeElement {
 				this.dependencies ??= new Set();
 				this.dependencies.add(tag);
 			});
-
-			if (this.shadowStyle) {
-				let url = this.shadowStyle;
-				url = url === true ? `./${this.tagName}.css` : url;
-				url = new URL(url, this.url);
-				this.shadowTemplate = `<link rel="stylesheet" href="${ url }" />` + "\n" + this.shadowTemplate;
-			}
 		}
 
 		// Hide elements before they are defined

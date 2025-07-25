@@ -3,7 +3,7 @@ import ColorElement from "../common/color-element.js";
 const Self = class SpacePicker extends ColorElement {
 	static tagName = "space-picker";
 	static url = import.meta.url;
-	static shadowStyle = true;
+	static styles = "./space-picker.css";
 	static shadowTemplate = `<select id="picker" part="base"></select>`;
 
 	constructor () {
