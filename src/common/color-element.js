@@ -1,22 +1,91 @@
 import NudeElement from "../../node_modules/nude-element/src/Element.js";
-import { getType, wait } from "./util.js";
+import { getType, defer, wait, dynamicAll, noOpTemplateTag as css } from "./util.js";
+
+const baseGlobalStyles = css`
+@keyframes fade-in {
+	from { opacity: 0; }
+}
+
+:state(color-element) {
+	&:state(loading) {
+		content-visibility: hidden;
+		opacity: 0;
+
+		&, * {
+			transition-property: opacity !important;
+		}
+	}
+
+	&:not(:state(loading)) {
+		xanimation: fade-in 300ms both;
+	}
+}
+`;
+
 
 const Self = class ColorElement extends NudeElement {
+	static url = import.meta.url;
 	// TODO make lazy
 	static Color;
 	static all = {};
 	static dependencies = new Set();
 
+	static globalStyles = [{css: baseGlobalStyles}];
+
 	constructor () {
 		super();
 
-		if (this.constructor.shadowTemplate !== undefined) {
+		let Self = this.constructor;
+
+		if (Self.shadowTemplate !== undefined) {
 			this.attachShadow({mode: "open"});
-			this.shadowRoot.innerHTML = this.constructor.shadowTemplate;
+			this.shadowRoot.innerHTML = Self.shadowTemplate;
+		}
+
+		this._internals ??= this.attachInternals?.();
+		if (this._internals.states) {
+			this._internals.states.add("color-element");
+
+			this._internals.states.add("loading");
+			Self.whenReady.then(() => {
+				this._internals.states.delete("loading");
+			});
 		}
 	}
 
+	static init () {
+		let wasInitialized = super.init();
+
+		if (!wasInitialized) {
+			return wasInitialized;
+		}
+
+		if (this.fetchedStyles) {
+			this.ready.push(...this.fetchedStyles);
+		}
+
+		if (this.fetchedGlobalStyles) {
+			this.ready.push(...this.fetchedGlobalStyles	);
+		}
+
+
+		this.ready[0].resolve();
+
+		return wasInitialized;
+	}
+
+	static ready = [defer()];
+	static whenReady = dynamicAll(this.ready);
+
 	static async define () {
+		// Overwrite static properties, otherwise they will be shared across subclasses
+		this.ready = [defer()];
+		this.whenReady = dynamicAll(this.ready);
+
+		if (!Object.hasOwn(this, "dependencies")) {
+			this.dependencies = new Set();
+		}
+
 		Self.all[this.tagName] = this;
 		let colorTags = Object.keys(Self.all);
 
@@ -29,21 +98,13 @@ const Self = class ColorElement extends NudeElement {
 			});
 		}
 
-		// Hide elements before they are defined
-		let style = document.getElementById("color-element-styles")
-		          ?? Object.assign(document.createElement("style"), {id: "color-element-styles"});
-		style.textContent = `:is(${ colorTags.join(", ") }):not(:defined) {display: none}`;
-		if (!style.parentNode) {
-			document.head.append(style);
+		if (this.dependencies.size > 0) {
+			let whenDefined = [...this.dependencies].map(tag => customElements.whenDefined(tag).then(Class => Class.whenReady));
+			this.ready.push(...whenDefined);
 		}
 
-		if (this.dependencies.size > 0) {
-			await Promise.all([...this.dependencies].map(tag => customElements.whenDefined(tag)));
-		}
-		else {
-			// Give other code a chance to overwrite Self.Color
-			await wait();
-		}
+		// Give other code a chance to overwrite Self.Color
+		await wait();
 
 		if (!Self.Color) {
 			let specifier;

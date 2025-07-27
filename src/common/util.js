@@ -6,6 +6,61 @@ export async function wait (ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+export function defer (executor) {
+	let res, rej;
+
+	let promise = new Promise((resolve, reject) => {
+		res = resolve;
+		rej = reject;
+
+		executor?.(res, rej);
+	});
+
+	promise.resolve = res;
+	promise.reject = rej;
+
+	return promise;
+}
+
+/**
+ * Wait for all promises to resolve. Supports dynamically adding promises to the list after the initial call.
+ * @param {Promise[] | Set<Promise>} promises
+ * @returns {Promise}
+ */
+export async function dynamicAll (promises) {
+	let all = new Set([...promises]);
+	let unresolved = new Set();
+
+	for (let promise of promises) {
+		if (promise?.then) {
+			unresolved.add(promise);
+			promise.then(() => {
+				// Remove the promise from the list
+				unresolved.delete(promise);
+			});
+		}
+	}
+
+	return Promise.all(unresolved).then(resolved => {
+		// Check if the array has new items
+		for (let promise of promises) {
+			if (!all.has(promise)) {
+				all.add(promise);
+
+				if (promise?.then) {
+					unresolved.add(promise);
+				}
+			}
+		}
+
+		if (unresolved.size > 0) {
+			return dynamicAll(unresolved).then(r => [...resolved, ...r]);
+		}
+
+		return resolved;
+	});
+}
+
 /**
  * Compute the ideal step for a range, to be used as a default in spinners and sliders
  * @param {number} min
@@ -52,4 +107,14 @@ export function getType (value) {
 	}
 
 	return Object.prototype.toString.call(value).slice(8, -1);
+}
+
+/**
+ * Template tag that does nothing. Useful for importing under different names (e.g. `css`) for syntax highlighting.
+ * @param {string[]} strings
+ * @param {...any} values
+ * @returns {string}
+ */
+export function noOpTemplateTag (strings, ...values) {
+	return strings.reduce((acc, string, i) => acc + string + (values[i] ?? ""), "");
 }

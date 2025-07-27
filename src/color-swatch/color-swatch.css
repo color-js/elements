@@ -11,9 +11,9 @@
 	position: relative;
 	display: inline-flex;
 	gap: .3em;
-	width: fit-content;
+	width: var(--color-swatch-width, fit-content);
 	margin: .3em;
-	border-radius: .2rem;
+	border-radius: var(--color-swatch-radius, .2rem);
 }
 
 :host([size="large"]) {

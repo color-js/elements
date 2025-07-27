@@ -17,7 +17,7 @@ color-swatch {
 @supports (grid-template-columns: subgrid) {
 	/* Avoid uneven swatch heights */
 	color-swatch {
-		width: 100%;
+		max-width: 100%;
 		grid-row: 1 / span 2;
 		display: grid;
 		grid-template-rows: subgrid;

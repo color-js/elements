@@ -22,14 +22,18 @@
 	inherits: true;
 }
 
+color-chart {
+	--_point-size: var(--point-size, .6em);
+	--_line-width: var(--line-width, .2em);
+	--color-swatch-width: var(--color-swatch-width, var(--_point-size));
+	--color-swatch-radius: var(--color-swatch-radius, 50%);
+}
+
 color-chart > color-scale {
 	--extent-x: calc(var(--max-x) - var(--min-x));
 	--extent-y: calc(var(--max-y) - var(--min-y));
 
 	&::part(color-swatch) {
-		--_point-size: var(--point-size, .6em);
-		--_line-width: var(--line-width, .2em);
-
 		position: absolute;
 		top:  calc((1 - (var(--y) - var(--min-y)) / (var(--max-y) - var(--min-y))) * 100cqh);
 		left: calc( (var(--x) - var(--min-x)) / (var(--max-x) - var(--min-x)) * 100%);
@@ -39,8 +43,8 @@ color-chart > color-scale {
 		background: yellow;
 		min-block-size: 0;
 		translate: -50% -50%;
-		transition: 300ms;
-		transition-property: width;
+		transition: 300ms .01ms;
+		transition-property: width, opacity;
 	}
 
 	&::part(color-swatch):hover {
