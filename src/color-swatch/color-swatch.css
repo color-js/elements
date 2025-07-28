@@ -18,7 +18,7 @@
 
 :host([size="large"]) {
 	flex-flow: column;
-	inline-size: 11em;
+	inline-size: min(11em, 100%);
 	min-block-size: 6em;
 	contain: inline-size;
 	container-name: color-swatch;
