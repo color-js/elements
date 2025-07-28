@@ -49,6 +49,10 @@ slot[name="color-channel"]::slotted(*) {
 			translate: -50% 0;
 		}
 	}
+
+	.label {
+		margin-block-start: .75em;
+	}
 }
 
 #y_axis {
