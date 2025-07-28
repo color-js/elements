@@ -302,7 +302,6 @@ const Self = class ColorChart extends ColorElement {
 			get () {
 				return Self.Color.Space.resolveCoord(this.y, "oklch");
 			},
-			// rawProp: "coord",
 		},
 
 		yMin: {
@@ -348,7 +347,6 @@ const Self = class ColorChart extends ColorElement {
 				else {
 					this.yMin = value.toString();
 				}
-
 			},
 		},
 
@@ -385,7 +383,6 @@ const Self = class ColorChart extends ColorElement {
 				}
 
 				return Number(this.yMax);
-
 			},
 			set (value) {
 				value = Number(value);
@@ -396,7 +393,6 @@ const Self = class ColorChart extends ColorElement {
 				else {
 					this.yMax = value.toString();
 				}
-
 			},
 		},
 
