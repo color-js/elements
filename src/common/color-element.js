@@ -17,7 +17,7 @@ const baseGlobalStyles = css`
 	}
 
 	&:not(:state(loading)) {
-		xanimation: fade-in 300ms both;
+		animation: fade-in 300ms both;
 	}
 }
 `;
