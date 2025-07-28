@@ -56,7 +56,7 @@ You can also specify the X coordinate explicitly.
 You can customize the ranges of both X and Y axes independently:
 
 ```html
-<color-chart y="oklch.c" ymin="0" ymax="0.2" x="oklch.l" xmin="0.3" xmax="1">
+<color-chart y="oklch.c" ymin="0" ymax="0.2" x="oklch.l" xmin="0.3" xmax=".9">
 	<color-scale colors="#e3f2fd, #bbdefb, #90caf9, #64b5f6, #42a5f5, #2196f3, #1e88e5, #1976d2, #1565c0, #0d47a1"></color-scale>
 </color-chart>
 ```
@@ -131,11 +131,11 @@ Reactively setting/changing the colors:
 | Attribute | Property | Property type | Default value | Description |
 |-----------|----------|---------------|---------------|-------------|
 | `x` | `x` | `string` | `null` | The coord to plot on the X axis, if any |
-| `xmin` | `xMin` | `number` | - | The minimum value of the X axis. Defaults to the minimum value of the X coord. |
-| `xmax` | `xMax` | `number` | - | The maximum value of the X axis. Defaults to the maximum value of the X coord. |
+| `xmin` | `xMin` | `number` or `"coord"` or `"auto"` | - | The minimum value of the X axis. Defaults to the minimum value of the X coord. |
+| `xmax` | `xMax` | `number` or `"coord"` or `"auto"` | - | The maximum value of the X axis. Defaults to the maximum value of the X coord. |
 | `y` | `y` | `string` | `"oklch.l"` | The coord to plot on the Y axis, if any |
-| `ymin` | `yMin` | `number` | - | The minimum value of the Y axis. Defaults to the minimum value of the Y coord. |
-| `ymax` | `yMax` | `number` | - | The maximum value of the Y axis. Defaults to the maximum value of the Y coord. |
+| `ymin` | `yMin` | `number` or `"coord"` or `"auto"` | - | The minimum value of the Y axis. Defaults to the minimum value of the Y coord. |
+| `ymax` | `yMax` | `number` or `"coord"` or `"auto"` | - | The maximum value of the Y axis. Defaults to the maximum value of the Y coord. |
 | `info` | `info` | `string` | - | Comma-separated list of coords of the color point to be shown in the tooltip. |
 
 ### Events
