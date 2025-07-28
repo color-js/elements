@@ -165,7 +165,13 @@ slot {
 			clip-path: polygon(0 0, 0 100%, 100% 100%);
 		}
 
-		&:not(:is(:host(:hover), :host(:focus-within), :host(:active), :host(:target), :host([open])) *),
+		/*
+		 More straightforward selector:
+		 &:not(:is(:host(:hover), :host(:focus-within), :host(:active), :host(:target), :host([open])) *)
+		 doesn't work in Safari!
+		 See https://bugs.webkit.org/show_bug.cgi?id=296577
+		*/
+		&:is(:host(:not(:hover):not(:focus-within):not(:active):not(:target):not([open])) *),
 		&:is(:host([open=false]) *) {
 			display: none;
 			opacity: 0;
