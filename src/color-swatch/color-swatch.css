@@ -171,7 +171,7 @@ slot {
 		 doesn't work in Safari!
 		 See https://bugs.webkit.org/show_bug.cgi?id=296577
 		*/
-		&:not(:host(:hover) *):not(:host(:focus-within) *):not(:host(:active) *):not(:host(:target) *):not(:host([open]) *),
+		&:is(:host(:not(:hover):not(:focus-within):not(:active):not(:target):not([open])) *),
 		&:is(:host([open=false]) *) {
 			display: none;
 			opacity: 0;
