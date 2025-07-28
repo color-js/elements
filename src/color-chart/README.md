@@ -18,6 +18,8 @@ Plotting a single color scale:
 </color-chart>
 ```
 
+### Default X coordinate
+
 By default, the other coordinate would be the index of the color in the list, but you can specify it explicitly:
 
 ```html
@@ -26,7 +28,7 @@ By default, the other coordinate would be the index of the color in the list, bu
 </color-chart>
 ```
 
-You can also specify a whole label, and if it contains a number, the number will become the X coordinate:
+You can also specify a whole label, and if it contains a number, the number will become the default X coordinate:
 
 ```html
 <color-chart y="oklch.c">
@@ -40,7 +42,9 @@ _(Colors courtesy of Tailwind)_
 
 ### Plotting hues { #hues}
 
-Hues will be shifted as needed to produce a better result:
+Since hues are angles, there are often multiple ways they can be plotted.
+E.g. A hue of `10` could also be plotted as `-350` or `370`.
+`<color-chart>` will automatically shift the hue based on the other hues in the same scale to produce a nicer result.
 
 ```html
 <color-chart y="hsl.h">
@@ -105,7 +109,9 @@ Reactively setting/changing the colors:
 |-----------|----------|---------------|---------------|-------------|
 | `x` | `x` | `string` | `null` | The coord to plot on the X axis, if any |
 | `y` | `y` | `string` | `"oklch.l"` | The coord to plot on the Y axis, if any |
-| `info` | `info` | `string` | - | Comma-separated list of coords of the color point to be shown. |
+| `ymin` | `yMin` | `number` | - | The minimum value of the Y axis. Defaults to the minimum value of the Y coord. |
+| `ymax` | `yMax` | `number` | - | The maximum value of the Y axis. Defaults to the maximum value of the Y coord. |
+| `info` | `info` | `string` | - | Comma-separated list of coords of the color point to be shown in the tooltip. |
 
 ### Events
 
