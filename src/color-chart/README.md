@@ -5,6 +5,7 @@ Display lists of colors as a scatterplot or line chart.
 ## Features
 
 - Plot any coordinate, in any color space
+- Customize both X and Y axes independently
 
 ## Examples
 
@@ -17,6 +18,8 @@ Plotting a single color scale:
 	<color-scale colors="#e3f2fd, #bbdefb, #90caf9, #64b5f6, #42a5f5, #2196f3, #1e88e5, #1976d2, #1565c0, #0d47a1"></color-scale>
 </color-chart>
 ```
+
+_(Colors courtesy of Tailwind)_
 
 ### Default X coordinate
 
@@ -38,7 +41,27 @@ You can also specify a whole label, and if it contains a number, the number will
 </color-chart>
 ```
 
-_(Colors courtesy of Tailwind)_
+### Explicit X coordinate
+
+You can also specify the X coordinate explicitly.
+
+```html
+<color-chart y="oklch.c" x="oklch.l">
+	<color-scale colors="#e3f2fd, #bbdefb, #90caf9, #64b5f6, #42a5f5, #2196f3, #1e88e5, #1976d2, #1565c0, #0d47a1"></color-scale>
+</color-chart>
+```
+
+### Custom X and Y axis ranges
+
+You can customize the ranges of both X and Y axes independently:
+
+```html
+<color-chart y="oklch.c" ymin="0" ymax="0.2" x="oklch.l" xmin="0.3" xmax="1">
+	<color-scale colors="#e3f2fd, #bbdefb, #90caf9, #64b5f6, #42a5f5, #2196f3, #1e88e5, #1976d2, #1565c0, #0d47a1"></color-scale>
+</color-chart>
+```
+
+This can be useful when plotting data that changes dynamically, so that the axes are always the same size.
 
 ### Plotting hues { #hues}
 
@@ -77,7 +100,7 @@ Reactively changing the Y coordinate:
 
 ```html
 <button onclick="this.nextElementSibling.y = 'hwb.w'">
-	Switch to “HWB Whiteness”
+	Switch to "HWB Whiteness"
 </button>
 <color-chart y="oklch.l">
 	<color-scale colors="Red 50: #fef2f2, Red 100: #fee2e2, Red 200: #fecaca, Red 300: #fca5a5, Red 400: #f87171, Red 500: #ef4444, Red 600: #dc2626, Red 700: #b91c1c, Red 800: #991b1b, Red 900: #7f1d1d, Red 950: #450a0a"></color-scale>
@@ -108,6 +131,8 @@ Reactively setting/changing the colors:
 | Attribute | Property | Property type | Default value | Description |
 |-----------|----------|---------------|---------------|-------------|
 | `x` | `x` | `string` | `null` | The coord to plot on the X axis, if any |
+| `xmin` | `xMin` | `number` | - | The minimum value of the X axis. Defaults to the minimum value of the X coord. |
+| `xmax` | `xMax` | `number` | - | The maximum value of the X axis. Defaults to the maximum value of the X coord. |
 | `y` | `y` | `string` | `"oklch.l"` | The coord to plot on the Y axis, if any |
 | `ymin` | `yMin` | `number` | - | The minimum value of the Y axis. Defaults to the minimum value of the Y coord. |
 | `ymax` | `yMax` | `number` | - | The maximum value of the Y axis. Defaults to the maximum value of the Y coord. |

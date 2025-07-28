@@ -95,12 +95,20 @@ const Self = class ColorChart extends ColorElement {
 			maxY = Math.max(scale.y.max, maxY);
 		}
 
+		minX = this.xMin === "auto" || this.xMinAsNumber === undefined || Number.isNaN(this.xMinAsNumber) ? minX : this.xMinAsNumber;
+		maxX = this.xMax === "auto" || this.xMaxAsNumber === undefined || Number.isNaN(this.xMaxAsNumber) ? maxX : this.xMaxAsNumber;
+
 		if (isFinite(minX) && isFinite(maxX)) {
 			let xAxis = getAxis(minX, maxX, 10);
 			this._el.chart.style.setProperty("--min-x", xAxis.min);
 			this._el.chart.style.setProperty("--max-x", xAxis.max);
 			this._el.chart.style.setProperty("--steps-x", xAxis.steps);
 			this._el.xTicks.innerHTML = Array(xAxis.steps).fill().map((_, i) => "<div part='x tick'>" + +(xAxis.min + i * xAxis.step).toPrecision(15) + "</div>").join("\n");
+
+			// Set X axis label if we have a custom X coordinate
+			if (this.xResolved) {
+				this._el.xLabel.textContent = this.space.name + " " + this.xResolved.name;
+			}
 		}
 
 		minY = this.yMin === "auto" || this.yMinAsNumber === undefined || Number.isNaN(this.yMinAsNumber) ? minY : this.yMinAsNumber;
@@ -137,6 +145,20 @@ const Self = class ColorChart extends ColorElement {
 		let yMin = this.yMin === "auto" || this.yMinAsNumber === undefined || Number.isNaN(this.yMinAsNumber) ? -Infinity : this.yMinAsNumber;
 		let yMax = this.yMax === "auto" || this.yMaxAsNumber === undefined || Number.isNaN(this.yMaxAsNumber) ? Infinity : this.yMaxAsNumber;
 
+		// Calculate X coordinates if a custom X coordinate is specified
+		let xAll = null;
+		let xMin = -Infinity, xMax = Infinity;
+		if (this.xResolved) {
+			xAll = ret.colors.map(({color}) => color.to(this.space).get(this.x));
+			xMin = this.xMin === "auto" || this.xMinAsNumber === undefined || Number.isNaN(this.xMinAsNumber) ? -Infinity : this.xMinAsNumber;
+			xMax = this.xMax === "auto" || this.xMaxAsNumber === undefined || Number.isNaN(this.xMaxAsNumber) ? Infinity : this.xMaxAsNumber;
+
+			if (this.xResolved.type === "angle") {
+				// First, normalize
+				xAll = normalizeAngles(xAll);
+			}
+		}
+
 		if (this.yResolved.type === "angle") {
 			// First, normalize
 			yAll = normalizeAngles(yAll);
@@ -148,26 +170,32 @@ const Self = class ColorChart extends ColorElement {
 			ret.colors[index] = color = color.to(this.space);
 			ret.swatches.set(color, swatch);
 
-			// It's not always possible to use the last number in the color label as the X-coord;
-			// for example, the number “9” can't be interpreted as the X-coord in the “#90caf9” label.
-			// It might cause bugs with color order (see https://github.com/color-js/elements/issues/103).
-			// We expect the valid X-coord to be the only number in the color label (e.g., 50)
-			// or separated from the previous text with a space (e.g., Red 50 or Red / 50).
-			let x = name.match(/(?:^|\s)-?\d*\.?\d+$/)?.[0];
-			if (x !== undefined) {
-				// Transform `Label / X-coord` to `Label`
-				// (there should be at least one space before and after the slash so the number is treated as an X-coord)
-				let label = name.slice(0, -x.length).trim();
-				if (label.endsWith("/")) {
-					name = label.slice(0, -1).trim();
+			let x;
+			if (xAll !== null) {
+				// Use the calculated X coordinate from the specified coordinate
+				x = xAll[index];
+			} else {
+				// It's not always possible to use the last number in the color label as the X-coord;
+				// for example, the number "9" can't be interpreted as the X-coord in the "#90caf9" label.
+				// It might cause bugs with color order (see https://github.com/color-js/elements/issues/103).
+				// We expect the valid X-coord to be the only number in the color label (e.g., 50)
+				// or separated from the previous text with a space (e.g., Red 50 or Red / 50).
+				x = name.match(/(?:^|\s)-?\d*\.?\d+$/)?.[0];
+				if (x !== undefined) {
+					// Transform `Label / X-coord` to `Label`
+					// (there should be at least one space before and after the slash so the number is treated as an X-coord)
+					let label = name.slice(0, -x.length).trim();
+					if (label.endsWith("/")) {
+						name = label.slice(0, -1).trim();
+					}
+
+					swatch.label = name;
+
+					x = Number(x);
 				}
-
-				swatch.label = name;
-
-				x = Number(x);
-			}
-			else {
-				x = index;
+				else {
+					x = index;
+				}
 			}
 
 			let y = yAll[index];
@@ -175,7 +203,8 @@ const Self = class ColorChart extends ColorElement {
 			ret.x.values.set(color, x);
 			ret.y.values.set(color, y);
 
-			let outOfRange = (isFinite(yMin) && y < yMin) || (isFinite(yMax) && y > yMax);
+			let outOfRange = (isFinite(yMin) && y < yMin) || (isFinite(yMax) && y > yMax) ||
+				(isFinite(xMin) && x < xMin) || (isFinite(xMax) && x > xMax);
 			if (!outOfRange) {
 				// Only swatches that are in range participate in the min/max calculation
 				ret.x.min = Math.min(ret.x.min, x);
@@ -240,7 +269,7 @@ const Self = class ColorChart extends ColorElement {
 	propChangedCallback (evt) {
 		let {name, prop, detail: change} = evt;
 
-		if (["yResolved", "yMinAsNumber", "yMaxAsNumber"].includes(name)) {
+		if (["yResolved", "yMinAsNumber", "yMaxAsNumber", "xResolved", "xMinAsNumber", "xMaxAsNumber"].includes(name)) {
 			// Re-render swatches
 			this.render(evt);
 		}
@@ -368,6 +397,108 @@ const Self = class ColorChart extends ColorElement {
 					this.yMax = value.toString();
 				}
 
+			},
+		},
+
+		x: {
+			default: null,
+		},
+
+		xResolved: {
+			get () {
+				return this.x ? Self.Color.Space.resolveCoord(this.x, "oklch") : null;
+			},
+		},
+
+		xMin: {
+			default: "auto",
+			changed (change) {
+				let { value } = change;
+
+				if (value === "auto") {
+					// `this.xMinAsNumber` will become `undefined` (i.e., get a new value), and the chart will be re-rendered
+					this._el.chart.style.removeProperty("--min-x");
+				}
+			},
+			reflect: {
+				from: "xmin",
+			},
+		},
+
+		xMinAsNumber: {
+			get () {
+				if (this.xMin === "coord") {
+					let range = this.xResolved?.refRange ?? this.xResolved?.range ?? [0, 100];
+					return range[0];
+				}
+				else if (this.xMin === "auto") {
+					let minX = this._el.chart.style.getPropertyValue("--min-x");
+
+					if (minX !== "") {
+						return Number(minX);
+					}
+
+					// Intermediate state (the chart is not rendered yet)
+					return;
+				}
+
+				return Number(this.xMin);
+			},
+			set (value) {
+				value = Number(value);
+
+				if (Number.isNaN(value)) {
+					this.xMin = "auto";
+				}
+				else {
+					this.xMin = value.toString();
+				}
+			},
+		},
+
+		xMax: {
+			default: "auto",
+			changed (change) {
+				let { value } = change;
+
+				if (value === "auto") {
+					// `this.xMaxAsNumber` will become `undefined` (i.e., get a new value), and the chart will be re-rendered
+					this._el.chart.style.removeProperty("--max-x");
+				}
+			},
+			reflect: {
+				from: "xmax",
+			},
+		},
+
+		xMaxAsNumber: {
+			get () {
+				if (this.xMax === "coord") {
+					let range = this.xResolved?.refRange ?? this.xResolved?.range ?? [0, 100];
+					return range[1];
+				}
+				else if (this.xMax === "auto") {
+					let maxX = this._el.chart.style.getPropertyValue("--max-x");
+
+					if (maxX !== "") {
+						return Number(maxX);
+					}
+
+					// Intermediate state (the chart is not rendered yet)
+					return;
+				}
+
+				return Number(this.xMax);
+			},
+			set (value) {
+				value = Number(value);
+
+				if (Number.isNaN(value)) {
+					this.xMax = "auto";
+				}
+				else {
+					this.xMax = value.toString();
+				}
 			},
 		},
 
