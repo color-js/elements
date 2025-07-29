@@ -30,9 +30,9 @@ const Self = class ColorChart extends ColorElement {
 		super();
 
 		this._el = {
-			slot:   this.shadowRoot.querySelector("slot:not([name])"),
+			slot: this.shadowRoot.querySelector("slot:not([name])"),
 			channel_picker: this.shadowRoot.getElementById("channel_picker"),
-			chart:  this.shadowRoot.getElementById("chart"),
+			chart: this.shadowRoot.getElementById("chart"),
 			xTicks: this.shadowRoot.querySelector("#x_axis .ticks"),
 			yTicks: this.shadowRoot.querySelector("#y_axis .ticks"),
 			xLabel: this.shadowRoot.querySelector("#x_axis .label"),
@@ -46,13 +46,13 @@ const Self = class ColorChart extends ColorElement {
 
 	connectedCallback () {
 		super.connectedCallback();
-		this.renderScales();
-		this._el.chart.addEventListener("colorschange", this, {capture: true});
+		this.render();
+		this._el.chart.addEventListener("colorschange", this, { capture: true });
 		this._slots.color_channel.addEventListener("input", this);
 	}
 
 	disconnectedCallback () {
-		this._el.chart.removeEventListener("colorschange", this, {capture: true});
+		this._el.chart.removeEventListener("colorschange", this, { capture: true });
 		this._slots.color_channel.removeEventListener("input", this);
 	}
 
@@ -64,7 +64,10 @@ const Self = class ColorChart extends ColorElement {
 			this.renderScale(source);
 		}
 
-		if (this._el.channel_picker === source || this._slots.color_channel.assignedElements().includes(source)) {
+		if (
+			this._el.channel_picker === source ||
+			this._slots.color_channel.assignedElements().includes(source)
+		) {
 			this.y = source.value;
 		}
 	}
@@ -81,16 +84,15 @@ const Self = class ColorChart extends ColorElement {
 	 * (Re)render one of the axes
 	 * @param {string} axis "x" or "y"
 	 */
-	renderAxis(axis) {
-
-		let min =  this[`${axis}MinAsNumber`];
-		if (isNaN(min)) {
+	renderAxis (axis) {
+		let min = this[`${axis}MinAsNumber`];
+		if (isNaN(min) || !isFinite(min)) {
 			// auto, undefined, etc
 			min = this.bounds[axis].min;
 		}
 
 		let max = this[`${axis}MaxAsNumber`];
-		if (isNaN(max)) {
+		if (isNaN(max) || !isFinite(max)) {
 			// auto, undefined, etc
 			max = this.bounds[axis].max;
 		}
@@ -102,12 +104,17 @@ const Self = class ColorChart extends ColorElement {
 			this._el.chart.style.setProperty(`--max-${axis}`, axisData.max);
 			this._el.chart.style.setProperty(`--steps-${axis}`, axisData.steps);
 
-			const tickElements = Array(axisData.steps).fill().map((_, i) =>
-				`<div part='${axisLower} tick'>${+(axisData.min + i * axisData.step).toPrecision(15)}</div>`
-			).join("\n");
+			const tickElements = Array(axisData.steps)
+				.fill()
+				.map(
+					(_, i) =>
+						`<div part='${axis} tick'>${+(axisData.min + i * axisData.step).toPrecision(15)}</div>`,
+				)
+				.join("\n");
 
 			let ticksEl = this._el[`${axis}Ticks`];
-			ticksEl.innerHTML = axis === "y" ? tickElements.split("\n").reverse().join("\n") : tickElements;
+			ticksEl.innerHTML =
+				axis === "y" ? tickElements.split("\n").reverse().join("\n") : tickElements;
 		}
 
 		let resolved = this[`${axis}Resolved`];
@@ -116,21 +123,29 @@ const Self = class ColorChart extends ColorElement {
 		labelEl.textContent = resolved ? this.space.name + " " + resolved.name : "";
 	}
 
-	bounds = {x: {min: Infinity, max: -Infinity}, y: {min: Infinity, max: -Infinity}};
+	bounds = { x: { min: Infinity, max: -Infinity }, y: { min: Infinity, max: -Infinity } };
 
 	/** (Re)render all scales */
-	renderScales(evt) {
+	renderScales (evt) {
 		let colorScales = this.querySelectorAll("color-scale");
 
 		if (colorScales.length === 0) {
-			this.bounds = {x: {min: Infinity, max: -Infinity}, y: {min: Infinity, max: -Infinity}};
+			this.bounds = {
+				x: { min: Infinity, max: -Infinity },
+				y: { min: Infinity, max: -Infinity },
+			};
 			return;
 		}
 
 		for (let colorScale of colorScales) {
 			let scale = this.series.get(colorScale);
 
-			if (!scale || !evt || evt.target === colorScale || evt.target.nodeName !== "COLOR-SCALE") {
+			if (
+				!scale ||
+				!evt ||
+				evt.target === colorScale ||
+				evt.target.nodeName !== "COLOR-SCALE"
+			) {
 				scale = this.renderScale(colorScale);
 			}
 		}
@@ -146,26 +161,38 @@ const Self = class ColorChart extends ColorElement {
 		let ret = {
 			element: colorScale,
 			swatches: new WeakMap(),
-			x: {min: Infinity, max: -Infinity, values: new WeakMap() },
-			y: {min: Infinity, max: -Infinity, values: new WeakMap()},
+			x: { min: Infinity, max: -Infinity, values: new WeakMap() },
+			y: { min: Infinity, max: -Infinity, values: new WeakMap() },
 			colors: colorScale.computedColors?.slice() ?? [],
 		};
 
 		colorScale.style.setProperty("--color-count", ret.colors.length);
 
 		// Helper function to calculate coordinates for an axis
-		const calculateAxisCoords = (axis) => {
+		const calculateAxisCoords = axis => {
 			const resolved = this[`${axis}Resolved`];
-			if (!resolved) return null;
+			if (!resolved) {
+				return null;
+			}
 
-			const coords = ret.colors.map(({color}) => color.to(this.space).get(this[axis]));
+			const coords = ret.colors.map(({ color }) => color.to(this.space).get(this[axis]));
 			const minProp = `${axis}Min`;
 			const maxProp = `${axis}Max`;
 			const minAsNumberProp = `${axis}MinAsNumber`;
 			const maxAsNumberProp = `${axis}MaxAsNumber`;
 
-			const min = this[minProp] === "auto" || this[minAsNumberProp] === undefined || Number.isNaN(this[minAsNumberProp]) ? -Infinity : this[minAsNumberProp];
-			const max = this[maxProp] === "auto" || this[maxAsNumberProp] === undefined || Number.isNaN(this[maxAsNumberProp]) ? Infinity : this[maxAsNumberProp];
+			const min =
+				this[minProp] === "auto" ||
+				this[minAsNumberProp] === undefined ||
+				Number.isNaN(this[minAsNumberProp])
+					? -Infinity
+					: this[minAsNumberProp];
+			const max =
+				this[maxProp] === "auto" ||
+				this[maxAsNumberProp] === undefined ||
+				Number.isNaN(this[maxAsNumberProp])
+					? Infinity
+					: this[maxAsNumberProp];
 
 			if (resolved.type === "angle") {
 				// First, normalize
@@ -179,7 +206,7 @@ const Self = class ColorChart extends ColorElement {
 		const xAxis = calculateAxisCoords("x");
 
 		let index = 0;
-		for (let {name, color} of ret.colors) {
+		for (let { name, color } of ret.colors) {
 			let swatch = colorScale._el.swatches.children[index];
 			ret.colors[index] = color = color.to(this.space);
 			ret.swatches.set(color, swatch);
@@ -188,7 +215,8 @@ const Self = class ColorChart extends ColorElement {
 			if (xAxis) {
 				// Use the calculated X coordinate from the specified coordinate
 				x = xAxis.coords[index];
-			} else {
+			}
+			else {
 				// It's not always possible to use the last number in the color label as the X-coord;
 				// for example, the number "9" can't be interpreted as the X-coord in the "#90caf9" label.
 				// It might cause bugs with color order (see https://github.com/color-js/elements/issues/103).
@@ -217,8 +245,11 @@ const Self = class ColorChart extends ColorElement {
 			ret.x.values.set(color, x);
 			ret.y.values.set(color, y);
 
-			const yOutOfRange = (isFinite(yAxis.min) && y < yAxis.min) || (isFinite(yAxis.max) && y > yAxis.max);
-			const xOutOfRange = xAxis ? ((isFinite(xAxis.min) && x < xAxis.min) || (isFinite(xAxis.max) && x > xAxis.max)) : false;
+			const yOutOfRange =
+				(isFinite(yAxis.min) && y < yAxis.min) || (isFinite(yAxis.max) && y > yAxis.max);
+			const xOutOfRange = xAxis
+				? (isFinite(xAxis.min) && x < xAxis.min) || (isFinite(xAxis.max) && x > xAxis.max)
+				: false;
 			const outOfRange = yOutOfRange || xOutOfRange;
 
 			if (!outOfRange) {
@@ -233,7 +264,10 @@ const Self = class ColorChart extends ColorElement {
 			swatch.style.setProperty("--y", y);
 			swatch.style.setProperty("--index", index);
 
-			if (HTMLElement.prototype.hasOwnProperty("popover") && !swatch._el.wrapper.hasAttribute("popover")) {
+			if (
+				HTMLElement.prototype.hasOwnProperty("popover") &&
+				!swatch._el.wrapper.hasAttribute("popover")
+			) {
 				// The Popover API is supported
 				let popover = swatch._el.wrapper;
 				popover.setAttribute("popover", "");
@@ -263,7 +297,10 @@ const Self = class ColorChart extends ColorElement {
 			let swatch = ret.swatches.get(color);
 
 			if (prevColor !== undefined) {
-				prevColor.style.setProperty("--next-color", swatch.style.getPropertyValue("--color"));
+				prevColor.style.setProperty(
+					"--next-color",
+					swatch.style.getPropertyValue("--color"),
+				);
 				prevColor.style.setProperty("--next-x", ret.x.values.get(color));
 				prevColor.style.setProperty("--next-y", ret.y.values.get(color));
 			}
@@ -274,7 +311,8 @@ const Self = class ColorChart extends ColorElement {
 		if (prevColor !== undefined) {
 			// When we update colors, and we have fewer colors than before,
 			// we need to make sure the last swatch is not connected to the non-existent next swatch
-			["--next-color", "--next-x", "--next-y"].forEach(prop => prevColor.style.removeProperty(prop));
+			["--next-color", "--next-x", "--next-y"].forEach(prop =>
+				prevColor.style.removeProperty(prop));
 		}
 
 		this.series.set(colorScale, ret);
@@ -296,7 +334,7 @@ const Self = class ColorChart extends ColorElement {
 	}
 
 	propChangedCallback (evt) {
-		let {name, prop, detail: change} = evt;
+		let { name, prop, detail: change } = evt;
 
 		if (name.startsWith("x") || name.startsWith("y")) {
 			let axis = name[0];
@@ -537,7 +575,7 @@ function getAxis (min, max, initialSteps) {
 	let end = Math.ceil(max / step) * step;
 	let steps = Math.round((end - start) / step);
 
-	let ret = {min: start, max: end, step, steps};
+	let ret = { min: start, max: end, step, steps };
 	for (let prop in ret) {
 		ret[prop] = +ret[prop].toPrecision(15);
 	}
@@ -549,7 +587,11 @@ function normalizeAngles (angles) {
 	angles = angles.map(h => ((h % 360) + 360) % 360);
 
 	// Remove top and bottom 25% and find average
-	let averageHue = angles.toSorted((a, b) => a - b).slice(angles.length / 4, -angles.length / 4).reduce((a, b) => a + b, 0) / angles.length;
+	let averageHue =
+		angles
+			.toSorted((a, b) => a - b)
+			.slice(angles.length / 4, -angles.length / 4)
+			.reduce((a, b) => a + b, 0) / angles.length;
 
 	for (let i = 0; i < angles.length; i++) {
 		let h = angles[i];
