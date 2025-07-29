@@ -63,14 +63,17 @@ const Self = class ColorPicker extends ColorElement {
 			}
 			this.color = this._el.swatch.color;
 		}
-		else if (this._el.space_picker.contains(source) || this._slots.color_space.assignedElements().includes(source)) {
+		else if (
+			this._el.space_picker.contains(source) ||
+			this._slots.color_space.assignedElements().includes(source)
+		) {
 			this.spaceId = event.target.value;
 		}
 
-		this.dispatchEvent(new event.constructor(event.type, {...event}));
+		this.dispatchEvent(new event.constructor(event.type, { ...event }));
 	}
 
-	propChangedCallback ({name, prop, detail: change}) {
+	propChangedCallback ({ name, prop, detail: change }) {
 		if (name === "space" || name === "alpha") {
 			let space = this.space;
 
@@ -91,7 +94,10 @@ const Self = class ColorPicker extends ColorElement {
 					slider.channel = channel;
 				}
 				else {
-					this._el.sliders.insertAdjacentHTML("beforeend", `<channel-slider space="${ space.id }" channel="${ channel }" part="channel-slider"></channel-slider>`);
+					this._el.sliders.insertAdjacentHTML(
+						"beforeend",
+						`<channel-slider space="${space.id}" channel="${channel}" part="channel-slider"></channel-slider>`,
+					);
 				}
 			}
 
@@ -130,7 +136,7 @@ const Self = class ColorPicker extends ColorElement {
 
 				return value + "";
 			},
-			changed ({parsedValue, source, ...change}) {
+			changed ({ parsedValue, source, ...change }) {
 				if (!parsedValue && source !== "default") {
 					// Something went wrong. We should always have a value. Falling back to the current space
 					this.spaceId = this.space.id;
@@ -152,7 +158,7 @@ const Self = class ColorPicker extends ColorElement {
 				return this._el.space_picker.selectedSpace;
 			},
 			set: true,
-			changed ({parsedValue, ...change}) {
+			changed ({ parsedValue, ...change }) {
 				if (parsedValue === undefined) {
 					// this.spaceId changed
 					if (this._el.space_picker.value !== this.spaceId) {
@@ -167,7 +173,8 @@ const Self = class ColorPicker extends ColorElement {
 					return;
 				}
 
-				parsedValue = parsedValue instanceof Self.Color.Space ? parsedValue.id : parsedValue;
+				parsedValue =
+					parsedValue instanceof Self.Color.Space ? parsedValue.id : parsedValue;
 				if (this.spaceId !== parsedValue) {
 					this._el.space_picker.value = parsedValue;
 					this.spaceId = parsedValue;

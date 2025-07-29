@@ -19,10 +19,10 @@ const Self = class ColorInline extends ColorElement {
 
 	connectedCallback () {
 		super.connectedCallback?.();
-		Self.#mo.observe(this, {childList: true, subtree: true, characterData: true});
+		Self.#mo.observe(this, { childList: true, subtree: true, characterData: true });
 	}
 
-	propChangedCallback ({name, prop, detail: change}) {
+	propChangedCallback ({ name, prop, detail: change }) {
 		if (name === "color") {
 			let isValid = this.color !== null;
 			this._el.swatch.classList.toggle("invalid", !isValid);
@@ -78,7 +78,6 @@ const Self = class ColorInline extends ColorElement {
 		},
 	};
 };
-
 
 Self.define();
 

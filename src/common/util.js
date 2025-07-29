@@ -67,7 +67,7 @@ export async function dynamicAll (promises) {
  * @param {number} max
  * @param {options} options
  */
-export function getStep (min, max, {minSteps = 100, maxStep = 1} = {}) {
+export function getStep (min, max, { minSteps = 100, maxStep = 1 } = {}) {
 	let range = Math.abs(max - min);
 	let step = range / minSteps;
 

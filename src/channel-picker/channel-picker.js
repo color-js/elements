@@ -54,12 +54,12 @@ const Self = class ChannelPicker extends ColorElement {
 		let coords = space.coords;
 
 		if (space && !coords) {
-			console.warn(`Color space "${ space.name }" has no coordinates.`);
+			console.warn(`Color space "${space.name}" has no coordinates.`);
 			return;
 		}
 
 		this._el.picker.innerHTML = Object.entries(coords)
-			.map(([id, coord]) => `<option value="${ id }">${ coord.name }</option>`)
+			.map(([id, coord]) => `<option value="${id}">${coord.name}</option>`)
 			.join("\n");
 
 		let [prevSpace, prevChannel] = this.value?.split(".") ?? [];
@@ -83,30 +83,34 @@ const Self = class ChannelPicker extends ColorElement {
 		}
 
 		if ([this._el.space_picker, this._el.picker].includes(event.target)) {
-			let value = `${ this._el.space_picker.value }.${ this._el.picker.value }`;
+			let value = `${this._el.space_picker.value}.${this._el.picker.value}`;
 			if (value !== this.value) {
 				this.value = value;
 			}
 		}
 	}
 
-	propChangedCallback ({name, prop, detail: change}) {
+	propChangedCallback ({ name, prop, detail: change }) {
 		if (name === "value" && this.value) {
 			let [space, channel] = (this.value + "").split(".");
 
 			let currentSpace = this._el.space_picker.value;
 			let currentCoord = this._el.picker.value;
-			let currentValue = `${ currentSpace }.${ currentCoord }`;
+			let currentValue = `${currentSpace}.${currentCoord}`;
 
 			if (!space || !channel) {
-				console.warn(`Invalid value "${ this.value }". Expected format: "space.channel". Falling back to "${ currentValue }".`);
+				console.warn(
+					`Invalid value "${this.value}". Expected format: "space.channel". Falling back to "${currentValue}".`,
+				);
 				this.value = currentValue;
 			}
 			else {
 				let spaces = Object.keys(this._el.space_picker.spaces);
 
 				if (!spaces.includes(space)) {
-					console.warn(`No "${ space }" color space found. Choose one of the following: ${ spaces.join(", ") }. Falling back to "${ currentSpace }".`);
+					console.warn(
+						`No "${space}" color space found. Choose one of the following: ${spaces.join(", ")}. Falling back to "${currentSpace}".`,
+					);
 					this.value = currentValue;
 				}
 				else {
@@ -123,13 +127,13 @@ const Self = class ChannelPicker extends ColorElement {
 						else {
 							currentCoord = coords.includes(currentCoord) ? currentCoord : coords[0];
 
-							let message = `Color space "${ space }" has no coordinate "${ channel }".`;
+							let message = `Color space "${space}" has no coordinate "${channel}".`;
 							if (coords.length) {
-								message += ` Choose one of the following: ${ coords.join(", ") }.`;
+								message += ` Choose one of the following: ${coords.join(", ")}.`;
 							}
-							message += ` Falling back to "${ currentCoord }".`;
+							message += ` Falling back to "${currentCoord}".`;
 							console.warn(message);
-							this.value = `${ space }.${ currentCoord }`;
+							this.value = `${space}.${currentCoord}`;
 							channel = currentCoord;
 						}
 					}

@@ -21,19 +21,19 @@ const Self = class ColorScale extends ColorElement {
 
 	connectedCallback () {
 		super.connectedCallback?.();
-		this._el.swatches.addEventListener("colorchange", this, {capture: true});
+		this._el.swatches.addEventListener("colorchange", this, { capture: true });
 	}
 
 	disconnectedCallback () {
 		this.#swatches = [];
-		this._el.swatches.removeEventListener("colorchange", this, {capture: true});
+		this._el.swatches.removeEventListener("colorchange", this, { capture: true });
 	}
 
 	handleEvent (event) {
-		this.dispatchEvent(new event.constructor(event.type, {...event}));
+		this.dispatchEvent(new event.constructor(event.type, { ...event }));
 	}
 
-	propChangedCallback ({name, prop, detail: change}) {
+	propChangedCallback ({ name, prop, detail: change }) {
 		if (name === "computedColors") {
 			// Re-render swatches
 			this.render();
@@ -53,8 +53,8 @@ const Self = class ColorScale extends ColorElement {
 
 		let i = 0;
 		let newSwatches = [];
-		for (let {name, color} of colors) {
-			let swatch = this.#swatches[i] = this._el.swatches.children[i];
+		for (let { name, color } of colors) {
+			let swatch = (this.#swatches[i] = this._el.swatches.children[i]);
 
 			if (!swatch) {
 				this.#swatches[i] = swatch = document.createElement("color-swatch");
@@ -118,7 +118,7 @@ const Self = class ColorScale extends ColorElement {
 					return null;
 				}
 
-				let colors = Object.entries(this.colors).map(([name, color]) => ({name, color}));
+				let colors = Object.entries(this.colors).map(([name, color]) => ({ name, color }));
 
 				if (this.steps > 0) {
 					// Insert intermediate steps
@@ -127,11 +127,14 @@ const Self = class ColorScale extends ColorElement {
 					for (let i = 1; i < colors.length; i++) {
 						let start = colors[i - 1];
 						let end = colors[i];
-						let steps = ColorScale.Color.steps(start.color, end.color, { space: this.space, steps: this.steps + 2 });
+						let steps = ColorScale.Color.steps(start.color, end.color, {
+							space: this.space,
+							steps: this.steps + 2,
+						});
 
 						steps.shift();
 						steps.pop();
-						steps = steps.map(color => ({name: color + "", color}));
+						steps = steps.map(color => ({ name: color + "", color }));
 
 						tessellated.push(start, ...steps);
 

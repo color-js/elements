@@ -3,7 +3,7 @@
 
 	display: grid;
 	grid-template-columns: 1fr auto;
-	gap: .3em;
+	gap: 0.3em;
 	align-items: center;
 
 	em {
@@ -15,8 +15,15 @@
 		opacity: 0;
 	}
 
-	input[type=number] {
-		--_border-color: var(--border-color, color-mix(in oklab, currentcolor calc(var(--_current-color-percent, 30) * 1%), oklab(none none none / 0%)));
+	input[type="number"] {
+		--_border-color: var(
+			--border-color,
+			color-mix(
+				in oklab,
+				currentcolor calc(var(--_current-color-percent, 30) * 1%),
+				oklab(none none none / 0%)
+			)
+		);
 
 		all: unset;
 
@@ -24,8 +31,8 @@
 		width: calc(var(--content-width, 2ch) + 1.2em);
 		min-width: calc(2ch + 1.2em);
 		box-sizing: content-box;
-		padding: .1em .2em;
-		border-radius: .2em;
+		padding: 0.1em 0.2em;
+		border-radius: 0.2em;
 		border: 1px solid var(--_border-color);
 		text-align: center;
 		font-size: 90%;
@@ -33,7 +40,7 @@
 		transition-property: opacity, border-color;
 
 		&::-webkit-textfield-decoration-container {
-			gap: .2em;
+			gap: 0.2em;
 		}
 
 		&:not(:hover, :focus) {
@@ -44,7 +51,7 @@
 
 			&::-webkit-inner-spin-button {
 				/* Fade out the spin buttons in Chrome and Safari */
-				opacity: .35;
+				opacity: 0.35;
 				filter: contrast(2);
 			}
 		}
