@@ -85,6 +85,8 @@ const Self = class ColorChart extends ColorElement {
 	 * @param {string} axis "x" or "y"
 	 */
 	renderAxis (axis) {
+		axis = axis.toLowerCase();
+
 		let min = this[`${axis}MinAsNumber`];
 		if (isNaN(min) || !isFinite(min)) {
 			// auto, undefined, etc
