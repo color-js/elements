@@ -86,7 +86,7 @@ const Self = class ChannelSlider extends ColorElement {
 		return this._el.slider.progressAt(p);
 	}
 
-	propChangedCallback ({name, prop, detail: change}) {
+	propChangedCallback ({ name, prop, detail: change }) {
 		if (["space", "min", "max", "step", "value", "defaultValue"].includes(name)) {
 			prop.applyChange(this._el.slider, change);
 
@@ -104,11 +104,17 @@ const Self = class ChannelSlider extends ColorElement {
 			}
 		}
 
-		if (name === "defaultColor" || name === "space" || name === "channel" || name === "min" || name === "max") {
+		if (
+			name === "defaultColor" ||
+			name === "space" ||
+			name === "channel" ||
+			name === "min" ||
+			name === "max"
+		) {
 			this._el.slider.stops = this.stops;
 
 			if (name === "space" || name === "channel" || name === "min" || name === "max") {
-				this._el.channel_info.innerHTML = `${ this.channelName } <em>(${ this.min }&thinsp;&ndash;&thinsp;${ this.max })</em>`;
+				this._el.channel_info.innerHTML = `${this.channelName} <em>(${this.min}&thinsp;&ndash;&thinsp;${this.max})</em>`;
 			}
 		}
 	}
@@ -164,7 +170,9 @@ const Self = class ChannelSlider extends ColorElement {
 
 				if (!channelSpec && this.space) {
 					channelSpec = Object.values(this.space.coords)[0];
-					console.warn(`Unknown channel ${ this.channel } in space ${ this.space }. Using first channel (${ channelSpec.name }) instead.`);
+					console.warn(
+						`Unknown channel ${this.channel} in space ${this.space}. Using first channel (${channelSpec.name}) instead.`,
+					);
 				}
 
 				return channelSpec;

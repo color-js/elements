@@ -8,11 +8,6 @@
 		["_build/eleventy.js", "_build/eleventy-original.js"],
 		"_build/filters.js"
 	],
-	"scripts": [
-		"build:html",
-		"watch:html"
-	],
-	"packages": [
-		"@11ty/eleventy"
-	]
+	"scripts": ["build:html", "watch:html"],
+	"packages": ["@11ty/eleventy"]
 }

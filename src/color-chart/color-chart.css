@@ -32,7 +32,7 @@ slot[name="color-channel"]::slotted(*) {
 	grid-column: 1 / -1;
 	justify-self: start;
 
-	margin-block: .5em .7em;
+	margin-block: 0.5em 0.7em;
 	font-size: 130%;
 }
 
@@ -44,7 +44,7 @@ slot[name="color-channel"]::slotted(*) {
 		grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
 
 		> * {
-			padding-block-start: .5em;
+			padding-block-start: 0.5em;
 			margin-inline-end: auto;
 			translate: -50% 0;
 		}
@@ -59,20 +59,20 @@ slot[name="color-channel"]::slotted(*) {
 		align-items: end;
 
 		> * {
-			padding-inline-end: .5em;
-			translate: 0 .5lh;
+			padding-inline-end: 0.5em;
+			translate: 0 0.5lh;
 		}
 	}
 
 	.label {
 		writing-mode: vertical-lr;
-		rotate: .5turn;
-		margin-right: .5em;
+		rotate: 0.5turn;
+		margin-right: 0.5em;
 	}
 }
 
 @property --chart-width {
-	syntax: '<length-percentage>';
+	syntax: "<length-percentage>";
 	initial-value: 100%;
 	inherits: true;
 }
@@ -88,8 +88,11 @@ slot[name="color-channel"]::slotted(*) {
 	position: relative;
 	border: 1px solid gray;
 	min-height: 100%;
-	background: linear-gradient(to bottom, hsl(220 10% 50% / 40%) 0 1px, transparent 0) 0 -1px / 100% calc(100% / var(--steps-y, 10)),
-	            linear-gradient(to right, hsl(220 10% 50% / 30%) 0 1px, transparent 0) -1px 0 / calc(100% / var(--steps-x, 10)) 100%;
+	background:
+		linear-gradient(to bottom, hsl(220 10% 50% / 40%) 0 1px, transparent 0) 0 -1px / 100%
+			calc(100% / var(--steps-y, 10)),
+		linear-gradient(to right, hsl(220 10% 50% / 30%) 0 1px, transparent 0) -1px 0 /
+			calc(100% / var(--steps-x, 10)) 100%;
 
 	--chart-width: 100cqw;
 	--chart-height: 100cqh;

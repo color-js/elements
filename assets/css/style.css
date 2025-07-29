@@ -17,9 +17,9 @@
 		overflow: hidden;
 
 		border: 1px solid var(--_border-color);
-		border-radius: .5em;
+		border-radius: 0.5em;
 
-		box-shadow: 0 .02em .5em -.7em hsl(var(--gray) 30%);
+		box-shadow: 0 0.02em 0.5em -0.7em hsl(var(--gray) 30%);
 
 		&:is(:hover, :focus-within) {
 			img {
@@ -30,12 +30,12 @@
 		img {
 			inline-size: 100%;
 			aspect-ratio: 4 / 3;
-			transition: scale .2s;
+			transition: scale 0.2s;
 		}
 
 		figcaption {
 			margin: 0;
-			padding: 0 .7em .5em;
+			padding: 0 0.7em 0.5em;
 			border-block-start: 1px solid var(--_border-color);
 			background-color: hsl(var(--gray) 98%);
 			z-index: 1;

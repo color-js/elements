@@ -1,9 +1,9 @@
 :host {
 	--border-width: 1px;
-	--border-color: rgb(0 0 0 / .2);
-	--border-radius: .2em;
+	--border-color: rgb(0 0 0 / 0.2);
+	--border-radius: 0.2em;
 
-	padding: .3em .5em;
+	padding: 0.3em 0.5em;
 
 	border: var(--border-width) solid var(--border-color);
 	border-radius: var(--border-radius);
@@ -24,7 +24,7 @@
 
 #space_picker {
 	padding: initial;
-	padding-inline-end: .4em;
+	padding-inline-end: 0.4em;
 	border-radius: 0;
 	border: none;
 	border-inline-end: var(--border-width) solid var(--border-color);

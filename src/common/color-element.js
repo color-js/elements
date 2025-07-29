@@ -2,26 +2,28 @@ import NudeElement from "../../node_modules/nude-element/src/Element.js";
 import { getType, defer, wait, dynamicAll, noOpTemplateTag as css } from "./util.js";
 
 const baseGlobalStyles = css`
-@keyframes fade-in {
-	from { opacity: 0; }
-}
-
-:state(color-element) {
-	&:state(loading) {
-		content-visibility: hidden;
-		opacity: 0;
-
-		&, * {
-			transition-property: opacity !important;
+	@keyframes fade-in {
+		from {
+			opacity: 0;
 		}
 	}
 
-	&:not(:state(loading)) {
-		animation: fade-in 300ms both;
-	}
-}
-`;
+	:state(color-element) {
+		&:state(loading) {
+			content-visibility: hidden;
+			opacity: 0;
 
+			&,
+			* {
+				transition-property: opacity !important;
+			}
+		}
+
+		&:not(:state(loading)) {
+			animation: fade-in 300ms both;
+		}
+	}
+`;
 
 const Self = class ColorElement extends NudeElement {
 	static url = import.meta.url;
@@ -30,7 +32,7 @@ const Self = class ColorElement extends NudeElement {
 	static all = {};
 	static dependencies = new Set();
 
-	static globalStyles = [{css: baseGlobalStyles}];
+	static globalStyles = [{ css: baseGlobalStyles }];
 
 	constructor () {
 		super();
@@ -38,7 +40,7 @@ const Self = class ColorElement extends NudeElement {
 		let Self = this.constructor;
 
 		if (Self.shadowTemplate !== undefined) {
-			this.attachShadow({mode: "open"});
+			this.attachShadow({ mode: "open" });
 			this.shadowRoot.innerHTML = Self.shadowTemplate;
 		}
 
@@ -65,9 +67,8 @@ const Self = class ColorElement extends NudeElement {
 		}
 
 		if (this.fetchedGlobalStyles) {
-			this.ready.push(...this.fetchedGlobalStyles	);
+			this.ready.push(...this.fetchedGlobalStyles);
 		}
-
 
 		this.ready[0].resolve();
 
@@ -91,7 +92,7 @@ const Self = class ColorElement extends NudeElement {
 
 		if (this.shadowTemplate) {
 			// TODO find dependencies
-			let colorTagRegex = RegExp(`(?<=</)(${ colorTags.join("|") })(?=>)`, "g");
+			let colorTagRegex = RegExp(`(?<=</)(${colorTags.join("|")})(?=>)`, "g");
 			(this.shadowTemplate.match(colorTagRegex) ?? []).forEach(tag => {
 				this.dependencies ??= new Set();
 				this.dependencies.add(tag);
@@ -99,7 +100,8 @@ const Self = class ColorElement extends NudeElement {
 		}
 
 		if (this.dependencies.size > 0) {
-			let whenDefined = [...this.dependencies].map(tag => customElements.whenDefined(tag).then(Class => Class.whenReady));
+			let whenDefined = [...this.dependencies].map(tag =>
+				customElements.whenDefined(tag).then(Class => Class.whenReady));
 			this.ready.push(...whenDefined);
 		}
 
