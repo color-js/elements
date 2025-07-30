@@ -46,7 +46,6 @@ const Self = class ColorChart extends ColorElement {
 
 	connectedCallback () {
 		super.connectedCallback();
-		this.render();
 		this._el.chart.addEventListener("colorschange", this, { capture: true });
 		this._slots.color_channel.addEventListener("input", this);
 	}
@@ -328,11 +327,11 @@ const Self = class ColorChart extends ColorElement {
 			let axis = name[0];
 
 			if (!/^[xy](?:Resolved|(?:Min|Max)AsNumber)$/.test(name)) {
+				// Color space/channel changed, the corresponding bounds should be recalculated
+				this.bounds[axis].min = Infinity;
+				this.bounds[axis].max = -Infinity;
 				return;
 			}
-
-			this.bounds[axis].min = Infinity;
-			this.bounds[axis].max = -Infinity;
 
 			this.render(evt);
 		}
