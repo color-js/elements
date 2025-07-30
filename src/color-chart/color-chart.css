@@ -40,7 +40,10 @@ slot[name="color-channel"]::slotted(*) {
 	grid-column: 2;
 	grid-row: 3;
 
+	display: grid;
+
 	.ticks {
+		grid-row: 1;
 		grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
 
 		> * {
@@ -51,6 +54,7 @@ slot[name="color-channel"]::slotted(*) {
 	}
 
 	.label {
+		grid-row: 2;
 		margin-block-start: .75em;
 	}
 }
