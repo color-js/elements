@@ -473,11 +473,11 @@ const Self = class ColorChart extends ColorElement {
 
 		xMinAsNumber: {
 			get () {
-				if (this.xMin === "coord") {
+				if (this.x && this.xMin === "coord") {
 					let range = this.xResolved?.refRange ?? this.xResolved?.range ?? [0, 100];
 					return range[0];
 				}
-				else if (this.xMin === "auto") {
+				else if (!this.x || this.xMin === "auto") {
 					return this.bounds.x.min;
 				}
 
@@ -511,11 +511,11 @@ const Self = class ColorChart extends ColorElement {
 
 		xMaxAsNumber: {
 			get () {
-				if (this.xMax === "coord") {
+				if (this.x && this.xMax === "coord") {
 					let range = this.xResolved?.refRange ?? this.xResolved?.range ?? [0, 100];
 					return range[1];
 				}
-				else if (this.xMax === "auto") {
+				else if (!this.x || this.xMax === "auto") {
 					return this.bounds.x.max;
 				}
 
