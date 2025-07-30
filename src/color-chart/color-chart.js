@@ -327,9 +327,6 @@ const Self = class ColorChart extends ColorElement {
 			let axis = name[0];
 
 			if (!/^[xy](?:Resolved|(?:Min|Max)AsNumber)$/.test(name)) {
-				// Color space/channel changed, the corresponding bounds should be recalculated
-				this.bounds[axis].min = Infinity;
-				this.bounds[axis].max = -Infinity;
 				return;
 			}
 
@@ -346,6 +343,10 @@ const Self = class ColorChart extends ColorElement {
 	static props = {
 		y: {
 			default: "oklch.l",
+			changed (change) {
+				this.bounds.y.min = Infinity;
+				this.bounds.y.max = -Infinity;
+			},
 			convert (value) {
 				// Try setting the value to the channel picker. The picker will handle possible erroneous values.
 				this._el.channel_picker.value = value;
@@ -444,6 +445,10 @@ const Self = class ColorChart extends ColorElement {
 
 		x: {
 			default: null,
+			changed (change) {
+				this.bounds.x.min = Infinity;
+				this.bounds.x.max = -Infinity;
+			},
 		},
 
 		xResolved: {
