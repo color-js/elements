@@ -61,7 +61,7 @@ const Self = class ColorChart extends ColorElement {
 
 		if (source.tagName === "COLOR-SCALE" && evt.name === "computedColors") {
 			// TODO check if changed
-			this.render(source);
+			this.render(evt);
 		}
 
 		if (
@@ -145,7 +145,7 @@ const Self = class ColorChart extends ColorElement {
 				!scale ||
 				!evt ||
 				evt.target === colorScale ||
-				evt.target?.nodeName !== "COLOR-SCALE"
+				evt.target.nodeName !== "COLOR-SCALE"
 			) {
 				scale = this.renderScale(colorScale);
 
