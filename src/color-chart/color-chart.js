@@ -145,21 +145,23 @@ const Self = class ColorChart extends ColorElement {
 				!scale ||
 				!evt ||
 				evt.target === colorScale ||
-				evt.target.nodeName !== "COLOR-SCALE"
+				evt.target?.nodeName !== "COLOR-SCALE"
 			) {
 				scale = this.renderScale(colorScale);
 
-				if (scale.x.min < this.bounds.x.min) {
-					this.bounds.x.min = scale.x.min;
-				}
-				if (scale.x.max > this.bounds.x.max) {
-					this.bounds.x.max = scale.x.max;
-				}
-				if (scale.y.min < this.bounds.y.min) {
-					this.bounds.y.min = scale.y.min;
-				}
-				if (scale.y.max > this.bounds.y.max) {
-					this.bounds.y.max = scale.y.max;
+				if (scale) {
+					if (scale.x.min < this.bounds.x.min) {
+						this.bounds.x.min = scale.x.min;
+					}
+					if (scale.x.max > this.bounds.x.max) {
+						this.bounds.x.max = scale.x.max;
+					}
+					if (scale.y.min < this.bounds.y.min) {
+						this.bounds.y.min = scale.y.min;
+					}
+					if (scale.y.max > this.bounds.y.max) {
+						this.bounds.y.max = scale.y.max;
+					}
 				}
 			}
 		}
