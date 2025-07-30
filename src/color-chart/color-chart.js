@@ -129,12 +129,15 @@ const Self = class ColorChart extends ColorElement {
 	renderScales (evt) {
 		let colorScales = this.querySelectorAll("color-scale");
 
-		if (colorScales.length === 0) {
+		if (colorScales.length === 0 || evt.name === "computedColors") {
 			this.bounds = {
 				x: { min: Infinity, max: -Infinity },
 				y: { min: Infinity, max: -Infinity },
 			};
-			return;
+
+			if (colorScales.length === 0) {
+				return;
+			}
 		}
 
 		for (let colorScale of colorScales) {
