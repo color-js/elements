@@ -61,7 +61,7 @@ const Self = class ColorChart extends ColorElement {
 
 		if (source.tagName === "COLOR-SCALE" && evt.name === "computedColors") {
 			// TODO check if changed
-			this.renderScale(source);
+			this.render(source);
 		}
 
 		if (
@@ -73,6 +73,8 @@ const Self = class ColorChart extends ColorElement {
 	}
 
 	series = new WeakMap();
+
+	bounds = { x: { min: Infinity, max: -Infinity }, y: { min: Infinity, max: -Infinity } };
 
 	render (evt) {
 		this.renderScales(evt);
@@ -111,12 +113,11 @@ const Self = class ColorChart extends ColorElement {
 				.map(
 					(_, i) =>
 						`<div part='${axis} tick'>${+(axisData.min + i * axisData.step).toPrecision(15)}</div>`,
-				)
-				.join("\n");
+				);
 
 			let ticksEl = this._el[`${axis}Ticks`];
 			ticksEl.innerHTML =
-				axis === "y" ? tickElements.split("\n").reverse().join("\n") : tickElements;
+				axis === "y" ? tickElements.toReversed().join("\n") : tickElements.join("\n");
 		}
 
 		let resolved = this[`${axis}Resolved`];
@@ -124,8 +125,6 @@ const Self = class ColorChart extends ColorElement {
 		// Set axis label if we have a custom coordinate
 		labelEl.textContent = resolved ? this.space.name + " " + resolved.name : "";
 	}
-
-	bounds = { x: { min: Infinity, max: -Infinity }, y: { min: Infinity, max: -Infinity } };
 
 	/** (Re)render all scales */
 	renderScales (evt) {
@@ -149,6 +148,19 @@ const Self = class ColorChart extends ColorElement {
 				evt.target.nodeName !== "COLOR-SCALE"
 			) {
 				scale = this.renderScale(colorScale);
+
+				if (scale.x.min < this.bounds.x.min) {
+					this.bounds.x.min = scale.x.min;
+				}
+				if (scale.x.max > this.bounds.x.max) {
+					this.bounds.x.max = scale.x.max;
+				}
+				if (scale.y.min < this.bounds.y.min) {
+					this.bounds.y.min = scale.y.min;
+				}
+				if (scale.y.max > this.bounds.y.max) {
+					this.bounds.y.max = scale.y.max;
+				}
 			}
 		}
 	}
@@ -178,23 +190,8 @@ const Self = class ColorChart extends ColorElement {
 			}
 
 			const coords = ret.colors.map(({ color }) => color.to(this.space).get(this[axis]));
-			const minProp = `${axis}Min`;
-			const maxProp = `${axis}Max`;
-			const minAsNumberProp = `${axis}MinAsNumber`;
-			const maxAsNumberProp = `${axis}MaxAsNumber`;
-
-			const min =
-				this[minProp] === "auto" ||
-				this[minAsNumberProp] === undefined ||
-				Number.isNaN(this[minAsNumberProp])
-					? -Infinity
-					: this[minAsNumberProp];
-			const max =
-				this[maxProp] === "auto" ||
-				this[maxAsNumberProp] === undefined ||
-				Number.isNaN(this[maxAsNumberProp])
-					? Infinity
-					: this[maxAsNumberProp];
+			const min = this[`${axis}MinAsNumber`];
+			const max = this[`${axis}MaxAsNumber`];
 
 			if (resolved.type === "angle") {
 				// First, normalize
@@ -319,19 +316,6 @@ const Self = class ColorChart extends ColorElement {
 
 		this.series.set(colorScale, ret);
 
-		if (ret.x.min < this.bounds.x.min) {
-			this.bounds.x.min = ret.x.min;
-		}
-		if (ret.x.max > this.bounds.x.max) {
-			this.bounds.x.max = ret.x.max;
-		}
-		if (ret.y.min < this.bounds.y.min) {
-			this.bounds.y.min = ret.y.min;
-		}
-		if (ret.y.max > this.bounds.y.max) {
-			this.bounds.y.max = ret.y.max;
-		}
-
 		return ret;
 	}
 
@@ -345,7 +329,10 @@ const Self = class ColorChart extends ColorElement {
 				return;
 			}
 
-			this.renderAxis(axis);
+			this.bounds[axis].min = Infinity;
+			this.bounds[axis].max = -Infinity;
+
+			this.render(evt);
 		}
 
 		if (name === "info") {
@@ -384,8 +371,7 @@ const Self = class ColorChart extends ColorElement {
 				let { value } = change;
 
 				if (value === "auto") {
-					// `this.yMinAsNumber` will become `undefined` (i.e., get a new value), and the chart will be re-rendered
-					this._el.chart.style.removeProperty("--min-y");
+					this.bounds.y.min = Infinity;
 				}
 			},
 			reflect: {
@@ -423,8 +409,7 @@ const Self = class ColorChart extends ColorElement {
 				let { value } = change;
 
 				if (value === "auto") {
-					// `this.yMaxAsNumber` will become `undefined` (i.e., get a new value), and the chart will be re-rendered
-					this._el.chart.style.removeProperty("--max-y");
+					this.bounds.y.max = -Infinity;
 				}
 			},
 			reflect: {
@@ -472,8 +457,7 @@ const Self = class ColorChart extends ColorElement {
 				let { value } = change;
 
 				if (value === "auto") {
-					// `this.xMinAsNumber` will become `undefined` (i.e., get a new value), and the chart will be re-rendered
-					this._el.chart.style.removeProperty("--min-x");
+					this.bounds.x.min = Infinity;
 				}
 			},
 			reflect: {
@@ -511,8 +495,7 @@ const Self = class ColorChart extends ColorElement {
 				let { value } = change;
 
 				if (value === "auto") {
-					// `this.xMaxAsNumber` will become `undefined` (i.e., get a new value), and the chart will be re-rendered
-					this._el.chart.style.removeProperty("--max-x");
+					this.bounds.x.max = -Infinity;
 				}
 			},
 			reflect: {
