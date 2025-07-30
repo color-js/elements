@@ -5,9 +5,9 @@
 }
 
 #space_picker {
-	margin-inline-start: -.7em; /* align with the channel names */
+	margin-inline-start: -0.7em; /* align with the channel names */
 	font-size: 150%;
-	transition: border-color .2s;
+	transition: border-color 0.2s;
 
 	&:not(:hover) {
 		border-color: transparent;
@@ -24,7 +24,7 @@ slot[name="color-space"]::slotted(*) {
 	display: flex;
 	flex-flow: column;
 	justify-content: space-between;
-	gap: .3em;
+	gap: 0.3em;
 	min-inline-size: 10em;
 }
 

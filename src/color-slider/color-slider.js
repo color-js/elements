@@ -49,11 +49,11 @@ const Self = class ColorSlider extends ColorElement {
 				this.value = event.target.value;
 			}
 
-			this.dispatchEvent(new event.constructor(event.type, {...event}));
+			this.dispatchEvent(new event.constructor(event.type, { ...event }));
 		}
 	}
 
-	propChangedCallback ({name, prop, detail: change}) {
+	propChangedCallback ({ name, prop, detail: change }) {
 		if (["min", "max", "step", "value", "defaultValue"].includes(name)) {
 			prop.applyChange(this._el.slider, change);
 
@@ -64,10 +64,10 @@ const Self = class ColorSlider extends ColorElement {
 				}
 				else {
 					// Spinner values when tooltip is "progress"
-					value = ({ min: 1, max: 100, step: 1 })[name];
+					value = { min: 1, max: 100, step: 1 }[name];
 				}
 			}
-			prop.applyChange(this._el.spinner, {...change, value: +(+value).toPrecision(4)});
+			prop.applyChange(this._el.spinner, { ...change, value: +(+value).toPrecision(4) });
 		}
 
 		if (name === "stops") {
@@ -106,7 +106,7 @@ const Self = class ColorSlider extends ColorElement {
 		else if (name === "space" && supports.inSpace) {
 			let space = this.space;
 			let spaceId = space.id;
-			let supported = CSS.supports("background", `linear-gradient(in ${ spaceId }, red, tan)`);
+			let supported = CSS.supports("background", `linear-gradient(in ${spaceId}, red, tan)`);
 
 			if (!supported) {
 				spaceId = this.space.isPolar ? "oklch" : "oklab";
@@ -135,7 +135,9 @@ const Self = class ColorSlider extends ColorElement {
 				let values = this;
 				if (change.value === "progress") {
 					values = {
-						min: 1, max: 100, step: 1,
+						min: 1,
+						max: 100,
+						step: 1,
 						value: +(this.progress * 100).toPrecision(4),
 					};
 				}

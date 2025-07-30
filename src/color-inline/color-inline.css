@@ -1,39 +1,44 @@
 [part="swatch-wrapper"] {
 	display: inline-flex;
 	align-items: baseline;
-	gap: .2em;
-	margin-inline: .1em;
+	gap: 0.2em;
+	margin-inline: 0.1em;
 }
 
 #swatch {
-	--_transparency-cell-size: var(--transparency-cell-size, clamp(6px, .5em, 30px));
+	--_transparency-cell-size: var(--transparency-cell-size, clamp(6px, 0.5em, 30px));
 	--_transparency-background: var(--transparency-background, transparent);
 	--_transparency-darkness: var(--transparency-darkness, 5%);
-	--_transparency-grid: var(--transparency-grid,
-		repeating-conic-gradient(transparent 0 25%, rgb(0 0 0 / var(--_transparency-darkness)) 0 50%)
-		0 0 / calc(2 * var(--_transparency-cell-size)) calc(2 * var(--_transparency-cell-size))
-		content-box border-box var(--_transparency-background)
+	--_transparency-grid: var(
+		--transparency-grid,
+		repeating-conic-gradient(
+				transparent 0 25%,
+				rgb(0 0 0 / var(--_transparency-darkness)) 0 50%
+			)
+			0 0 / calc(2 * var(--_transparency-cell-size)) calc(2 * var(--_transparency-cell-size))
+			content-box border-box var(--_transparency-background)
 	);
 
 	--color-image: linear-gradient(var(--color), var(--color));
-	--border-width: clamp(2px, .15em, 16px);
-	--box-shadow-blur: clamp(2px, .1em, 5px);
-	--box-shadow-color: rgb(0 0 0 / .3);
+	--border-width: clamp(2px, 0.15em, 16px);
+	--box-shadow-blur: clamp(2px, 0.1em, 5px);
+	--box-shadow-color: rgb(0 0 0 / 0.3);
 
 	position: relative;
-	bottom: calc(-1 * var(--border-width) - .1em);
+	bottom: calc(-1 * var(--border-width) - 0.1em);
 	width: 1.2em;
 	height: 1.2em;
 	border: var(--border-width) solid white;
 	box-sizing: border-box;
 	background: var(--color-image, 0), var(--_transparency-grid, canvas);
-	box-shadow: calc(var(--box-shadow-blur) * .2) calc(var(--box-shadow-blur) * .2) var(--box-shadow-blur) var(--box-shadow-color);
-	border-radius: clamp(1px, .1em, 10px);
+	box-shadow: calc(var(--box-shadow-blur) * 0.2) calc(var(--box-shadow-blur) * 0.2)
+		var(--box-shadow-blur) var(--box-shadow-color);
+	border-radius: clamp(1px, 0.1em, 10px);
 }
 
 #swatch:hover {
 	transform: scale(1.5);
-	transition: .4s;
+	transition: 0.4s;
 }
 
 #swatch.invalid {
@@ -43,6 +48,6 @@
 
 @media (prefers-color-scheme: dark) {
 	#swatch {
-		--box-shadow-color: rgb(0 0 0 / .8);
+		--box-shadow-color: rgb(0 0 0 / 0.8);
 	}
 }

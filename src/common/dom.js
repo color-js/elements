@@ -1,6 +1,6 @@
 export function named (host, attributes = ["id", "part"]) {
 	let ret = {};
-	let selector = attributes.map(attr => `[${ attr }]`).join(", ");
+	let selector = attributes.map(attr => `[${attr}]`).join(", ");
 
 	for (let el of host.shadowRoot.querySelectorAll(selector)) {
 		// Get the value of the first attribute in attributes that has a value
@@ -27,7 +27,9 @@ export function slots (host) {
 
 export function toSlots ({
 	slots = this._slots,
-	slotElements = slots ? Object.values(slots) : Array.from(this.shadowRoot.querySelectorAll("slot")),
+	slotElements = slots
+		? Object.values(slots)
+		: Array.from(this.shadowRoot.querySelectorAll("slot")),
 }) {
 	let children = this.childNodes;
 	let assignments = new WeakMap();

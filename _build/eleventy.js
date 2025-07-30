@@ -5,8 +5,8 @@ import configOriginal from "./eleventy-original.js";
 import * as filters from "./filters-extra.js";
 
 let data = {
-	"permalink": "{{ page.filePathStem | replace('README', '') | replace('index', '') }}/index.html",
-	"body_classes": "cn-ignore",
+	permalink: "{{ page.filePathStem | replace('README', '') | replace('index', '') }}/index.html",
+	body_classes: "cn-ignore",
 };
 
 let md = markdownIt({
@@ -14,12 +14,12 @@ let md = markdownIt({
 	linkify: true,
 	typographer: true,
 })
-.disable("code")
-.use(markdownItAttrs)
-.use(markdownItAnchor, {
-	permalink: markdownItAnchor.permalink.headerLink(),
-	level: 2,
-});
+	.disable("code")
+	.use(markdownItAttrs)
+	.use(markdownItAnchor, {
+		permalink: markdownItAnchor.permalink.headerLink(),
+		level: 2,
+	});
 
 export default config => {
 	let ret = configOriginal(config);

@@ -1,19 +1,23 @@
 :host {
-	--_transparency-cell-size: var(--transparency-cell-size, .5em);
+	--_transparency-cell-size: var(--transparency-cell-size, 0.5em);
 	--_transparency-background: var(--transparency-background, transparent);
 	--_transparency-darkness: var(--transparency-darkness, 5%);
-	--_transparency-grid: var(--transparency-grid,
-		repeating-conic-gradient(transparent 0 25%, rgb(0 0 0 / var(--_transparency-darkness)) 0 50%)
-		0 0 / calc(2 * var(--_transparency-cell-size)) calc(2 * var(--_transparency-cell-size))
-		content-box border-box var(--_transparency-background)
+	--_transparency-grid: var(
+		--transparency-grid,
+		repeating-conic-gradient(
+				transparent 0 25%,
+				rgb(0 0 0 / var(--_transparency-darkness)) 0 50%
+			)
+			0 0 / calc(2 * var(--_transparency-cell-size)) calc(2 * var(--_transparency-cell-size))
+			content-box border-box var(--_transparency-background)
 	);
 
 	position: relative;
 	display: inline-flex;
-	gap: .3em;
+	gap: 0.3em;
 	width: var(--color-swatch-width, fit-content);
-	margin: .3em;
-	border-radius: var(--color-swatch-radius, .2rem);
+	margin: 0.3em;
+	border-radius: var(--color-swatch-radius, 0.2rem);
 }
 
 :host([size="large"]) {
@@ -37,7 +41,7 @@ slot {
 		position: absolute;
 		top: 0;
 		right: 0;
-		margin: .5rem;
+		margin: 0.5rem;
 	}
 
 	&:not(:host([size="large"]) *) {
@@ -46,15 +50,13 @@ slot {
 			font-size: 50%;
 			top: 0;
 			right: 0;
-			margin: .2rem;
+			margin: 0.2rem;
 		}
 
 		&:is(.static *) {
 			align-self: baseline;
 		}
 	}
-
-
 
 	&[style*="--gamut-level: 0"] {
 		display: none;
@@ -65,12 +67,12 @@ slot {
 	margin: 0;
 	display: inline-flex;
 	display: none;
-	gap: .5em;
+	gap: 0.5em;
 
 	&:is(:host([size="large"]) &) {
 		display: grid;
 		grid-template-columns: max-content auto;
-		gap: .1em .2em;
+		gap: 0.1em 0.2em;
 		font-size: max(9px, 80%);
 		justify-content: start;
 
@@ -81,7 +83,7 @@ slot {
 
 	.coord {
 		display: flex;
-		gap: .2em;
+		gap: 0.2em;
 
 		dd {
 			margin: 0;
@@ -114,8 +116,11 @@ slot {
 	}
 
 	@container style(--details-style: compact) {
-		--_border-color: var(--border-color, color-mix(in oklab, buttonborder 20%, oklab(none none none / 0%)));
-		--_pointer-height: var(--pointer-height, .5em);
+		--_border-color: var(
+			--border-color,
+			color-mix(in oklab, buttonborder 20%, oklab(none none none / 0%))
+		);
+		--_pointer-height: var(--pointer-height, 0.5em);
 		--_transition-duration: var(--transition-duration, 400ms);
 		--_details-popup-width: var(--details-popup-width, max-content);
 
@@ -124,13 +129,13 @@ slot {
 		z-index: 2;
 		translate: -50% 0;
 		bottom: 100%;
-		margin-bottom: calc(var(--_pointer-height) * .8);
+		margin-bottom: calc(var(--_pointer-height) * 0.8);
 		width: var(--_details-popup-width);
 		background: canvas;
 		border: 1px solid var(--_border-color);
-		padding: .6em 1em;
-		border-radius: .2rem;
-		box-shadow: 0 .05em 1em -.7em black;
+		padding: 0.6em 1em;
+		border-radius: 0.2rem;
+		box-shadow: 0 0.05em 1em -0.7em black;
 		transition: var(--_transition-duration) allow-discrete;
 		transition-property: all, display;
 		transition-delay: 0s, var(--_transition-duration);
@@ -165,8 +170,14 @@ slot {
 			clip-path: polygon(0 0, 0 100%, 100% 100%);
 		}
 
-		&:not(:is(:host(:hover), :host(:focus-within), :host(:active), :host(:target), :host([open])) *),
-		&:is(:host([open=false]) *) {
+		/*
+		 More straightforward selector:
+		 &:not(:is(:host(:hover), :host(:focus-within), :host(:active), :host(:target), :host([open])) *)
+		 doesn't work in Safari!
+		 See https://bugs.webkit.org/show_bug.cgi?id=296577
+		*/
+		&:is(:host(:not(:hover):not(:focus-within):not(:active):not(:target):not([open])) *),
+		&:is(:host([open="false"]) *) {
 			display: none;
 			opacity: 0;
 			scale: 0;
@@ -176,7 +187,7 @@ slot {
 
 [part="color"] {
 	display: flex;
-	gap: .2em;
+	gap: 0.2em;
 }
 
 [part="label"] {
@@ -199,25 +210,23 @@ slot:not([name]) {
 }
 
 [part="color-wrapper"],
-slot[name=swatch]::slotted(*),
+slot[name="swatch"]::slotted(*),
 #swatch {
 	border-radius: inherit;
 }
 
-slot[name=swatch]::slotted(*),
+slot[name="swatch"]::slotted(*),
 #swatch {
 	flex: 1;
 	display: flex;
 	flex-flow: column;
 	align-items: center;
 	justify-content: center;
-	padding: .5em;
+	padding: 0.5em;
 	display: flex;
 	flex-flow: column;
 	flex: 1;
-	background:
-		linear-gradient(var(--color) 0 100%),
-		var(--_transparency-grid);
+	background: linear-gradient(var(--color) 0 100%), var(--_transparency-grid);
 
 	&:is(:host([size="large"]) *) {
 		min-block-size: 3em;
@@ -232,7 +241,7 @@ slot[name=swatch]::slotted(*),
 	}
 }
 
-slot[name=swatch-content] {
+slot[name="swatch-content"] {
 	/* See https://lea.verou.me/blog/2024/contrast-color/ */
 	--l: clamp(0, (var(--l-threshold, 0.7) / l - 1) * infinity, 1);
 	color: oklch(from var(--color) var(--l) 0 h);

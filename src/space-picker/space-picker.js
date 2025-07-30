@@ -29,11 +29,14 @@ const Self = class SpacePicker extends ColorElement {
 		}
 	}
 
-	propChangedCallback ({name, prop, detail: change}) {
+	propChangedCallback ({ name, prop, detail: change }) {
 		if (name === "spaces") {
 			if (!this.groups) {
 				this._el.picker.innerHTML = Object.entries(this.spaces)
-					.map(([id, space]) => `<option value="${ id }">${ this.getSpaceLabel(space) }</option>`)
+					.map(
+						([id, space]) =>
+							`<option value="${id}">${this.getSpaceLabel(space)}</option>`,
+					)
 					.join("\n");
 			}
 			else {
@@ -42,7 +45,9 @@ const Self = class SpacePicker extends ColorElement {
 				// Remove empty groups
 				groups = Object.entries(groups).filter(([type, spaces]) => {
 					if (Object.keys(spaces).length === 0) {
-						console.warn(`Removed empty group of color spaces with the label "${type}."`);
+						console.warn(
+							`Removed empty group of color spaces with the label "${type}."`,
+						);
 						return false;
 					}
 
@@ -50,17 +55,26 @@ const Self = class SpacePicker extends ColorElement {
 				});
 
 				if (!groups.length) {
-					console.warn("All provided groups of color spaces are empty. Falling back to default grouping.");
+					console.warn(
+						"All provided groups of color spaces are empty. Falling back to default grouping.",
+					);
 					groups = [["All spaces", this.spaces]];
 				}
 
-				this._el.picker.innerHTML = groups.map(([type, spaces]) => `
+				this._el.picker.innerHTML = groups
+					.map(
+						([type, spaces]) => `
 					<optgroup label="${type}">
 						${Object.entries(spaces)
-							.map(([id, space]) => `<option value="${ id }">${ this.getSpaceLabel(space) }</option>`)
+							.map(
+								([id, space]) =>
+									`<option value="${id}">${this.getSpaceLabel(space)}</option>`,
+							)
 							.join("\n")}
 					</optgroup>
-				`).join("\n");
+				`,
+					)
+					.join("\n");
 			}
 
 			this._el.picker.value = this.value;
@@ -76,7 +90,9 @@ const Self = class SpacePicker extends ColorElement {
 					let currentSpace = this._el.picker.value;
 					let fallback = spaces.includes(currentSpace) ? currentSpace : firstSpace;
 
-					console.warn(`No color space found with id = "${ value }". Choose one of the following: ${ spaces.join(", ") }. Falling back to "${ fallback }".`);
+					console.warn(
+						`No color space found with id = "${value}". Choose one of the following: ${spaces.join(", ")}. Falling back to "${fallback}".`,
+					);
 					this.value = value = fallback;
 				}
 
@@ -140,7 +156,9 @@ const Self = class SpacePicker extends ColorElement {
 				return value;
 			},
 			stringify (value) {
-				return Object.entries(value).map(([id, space]) => id).join(", ");
+				return Object.entries(value)
+					.map(([id, space]) => id)
+					.join(", ");
 			},
 		},
 

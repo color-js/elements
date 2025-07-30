@@ -23,7 +23,7 @@ const Self = class GamutBadge extends ColorElement {
 		return this.gamutInfo?.label ?? "";
 	}
 
-	propChangedCallback ({name, prop, detail: change}) {
+	propChangedCallback ({ name, prop, detail: change }) {
 		if (name === "gamuts") {
 			this.style.setProperty("--gamut-count", this.gamuts.length - 1);
 		}
@@ -31,8 +31,8 @@ const Self = class GamutBadge extends ColorElement {
 		if (name === "gamutInfo") {
 			if (this.gamutInfo) {
 				this.style.setProperty("--gamut-level", this.gamutInfo.level);
-				this.style.setProperty("--gamut-label", `"${ this.gamutInfo.label }"`);
-				this.style.setProperty("--gamut-id", `"${ this.gamutInfo.id }"`);
+				this.style.setProperty("--gamut-label", `"${this.gamutInfo.label}"`);
+				this.style.setProperty("--gamut-id", `"${this.gamutInfo.id}"`);
 			}
 			else {
 				this.style.removeProperty("--gamut-level");
@@ -61,7 +61,7 @@ const Self = class GamutBadge extends ColorElement {
 				}
 				else if (!Array.isArray(gamuts) && typeof gamuts === "object") {
 					// Object
-					return Object.entries(gamuts).map(([id, label]) => ({id, label}));
+					return Object.entries(gamuts).map(([id, label]) => ({ id, label }));
 				}
 
 				let ret = gamuts.map((gamut, level) => {
@@ -73,7 +73,7 @@ const Self = class GamutBadge extends ColorElement {
 					gamut = gamut.trim().split(/\s*:\s*/);
 					let id = gamut[0];
 					let label = gamut[1] ?? Self.Color.spaces[id]?.name ?? id;
-					return {id, label, level};
+					return { id, label, level };
 				});
 
 				if (!ret.find(gamut => gamut.id === "none")) {
@@ -89,7 +89,7 @@ const Self = class GamutBadge extends ColorElement {
 				return ret;
 			},
 			stringify (gamuts) {
-				return gamuts.map(({id, label}) => `${ id }: ${ label }`).join(", ");
+				return gamuts.map(({ id, label }) => `${id}: ${label}`).join(", ");
 			},
 		},
 		gamutInfo: {
@@ -98,7 +98,9 @@ const Self = class GamutBadge extends ColorElement {
 					return null;
 				}
 
-				return this.gamuts?.find(gamut => gamut.id === "none" || this.color?.inGamut(gamut.id));
+				return this.gamuts?.find(
+					gamut => gamut.id === "none" || this.color?.inGamut(gamut.id),
+				);
 			},
 		},
 		gamut: {

@@ -42,7 +42,7 @@ const Self = class ColorSwatch extends ColorElement {
 
 	#updateStatic () {
 		let previousInput = this._el.input;
-		let input = this._el.input = this.querySelector("input");
+		let input = (this._el.input = this.querySelector("input"));
 
 		this.static = !input;
 
@@ -50,7 +50,9 @@ const Self = class ColorSwatch extends ColorElement {
 		this._el.wrapper.classList.toggle("static", this.static);
 
 		if (input && input !== previousInput) {
-			importIncrementable ??= import("https://incrementable.verou.me/incrementable.mjs").then(m => m.default);
+			importIncrementable ??= import("https://incrementable.verou.me/incrementable.mjs").then(
+				m => m.default,
+			);
 			importIncrementable?.then(Incrementable => new Incrementable(input));
 
 			input.addEventListener("input", evt => {
@@ -65,10 +67,14 @@ const Self = class ColorSwatch extends ColorElement {
 
 	get swatchTextContent () {
 		// Children that are not assigned to another slot
-		return [...this.childNodes].filter(n => !n.slot).map(n => n.textContent).join("").trim();
+		return [...this.childNodes]
+			.filter(n => !n.slot)
+			.map(n => n.textContent)
+			.join("")
+			.trim();
 	}
 
-	propChangedCallback ({name, prop, detail: change}) {
+	propChangedCallback ({ name, prop, detail: change }) {
 		let input = this._el.input;
 
 		if (name === "gamuts") {
@@ -91,9 +97,11 @@ const Self = class ColorSwatch extends ColorElement {
 					this._el.gamutIndicator.addEventListener("gamutchange", evt => {
 						let gamut = this._el.gamutIndicator.gamut;
 						this.setAttribute("gamut", gamut);
-						this.dispatchEvent(new CustomEvent("gamutchange", {
-							detail: gamut,
-						}));
+						this.dispatchEvent(
+							new CustomEvent("gamutchange", {
+								detail: gamut,
+							}),
+						);
 					});
 				}
 				else {
@@ -137,7 +145,7 @@ const Self = class ColorSwatch extends ColorElement {
 				return;
 			}
 
-			this._el.info ??= Object.assign(document.createElement("dl"), {part: "info"});
+			this._el.info ??= Object.assign(document.createElement("dl"), { part: "info" });
 			if (!this._el.info.parentNode) {
 				this._el.colorWrapper.after(this._el.info);
 			}
@@ -153,7 +161,7 @@ const Self = class ColorSwatch extends ColorElement {
 
 				value = typeof value === "number" ? Number(value.toPrecision(4)) : value;
 
-				info.push(`<div class="coord"><dt>${ label }</dt><dd>${ value }</dd></div>`);
+				info.push(`<div class="coord"><dt>${label}</dt><dd>${value}</dd></div>`);
 			}
 
 			this._el.info.innerHTML = info.join("\n");
