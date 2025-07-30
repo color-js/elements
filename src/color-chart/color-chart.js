@@ -348,7 +348,7 @@ const Self = class ColorChart extends ColorElement {
 			default: "oklch.l",
 			changed (change) {
 				this.bounds.y.min = Infinity;
-				this.bounds.y.max = -Infinity;
+				this.bounds.y = { min: Infinity, max: -Infinity };
 			},
 			convert (value) {
 				// Try setting the value to the channel picker. The picker will handle possible erroneous values.
