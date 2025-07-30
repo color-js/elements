@@ -347,7 +347,6 @@ const Self = class ColorChart extends ColorElement {
 		y: {
 			default: "oklch.l",
 			changed (change) {
-				this.bounds.y.min = Infinity;
 				this.bounds.y = { min: Infinity, max: -Infinity };
 			},
 			convert (value) {
@@ -449,8 +448,7 @@ const Self = class ColorChart extends ColorElement {
 		x: {
 			default: null,
 			changed (change) {
-				this.bounds.x.min = Infinity;
-				this.bounds.x.max = -Infinity;
+				this.bounds.x = { min: Infinity, max: -Infinity };
 			},
 		},
 
