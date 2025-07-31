@@ -94,10 +94,6 @@ slot {
 }
 
 [part="details"] {
-	/*
-		Why here and not in the style query below? Because Safari has issues with parsing nested rules inside style queries,
-		we need to duplicate some rules to achieve the desired effect. Moving custom properties here allows us to make the code a bit DRYer.
-	*/
 	--_border-color: var(
 		--border-color,
 		color-mix(in oklab, buttonborder 20%, oklab(none none none / 0%))
@@ -127,7 +123,64 @@ slot {
 		font-size: 80%;
 	}
 
-	@container style(--details-style: compact) {
+	/* Triangle pointer */
+	&::before {
+		content: "";
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		translate: -50% -50%;
+		aspect-ratio: 1;
+		height: calc(var(--_pointer-height) * sqrt(2));
+		background: inherit;
+		border: inherit;
+		rotate: -45deg;
+		clip-path: polygon(0 0, 0 100%, 100% 100%);
+	}
+
+	&[popover] {
+		/* Make the triangle pointer visible */
+		overflow: visible;
+
+		/* Bring the popover back on the screen */
+		position: fixed;
+		inset: unset;
+
+		&:popover-open {
+			/* And position it relative to the parent swatch */
+			left: var(--_popover-left);
+			top: var(--_popover-top);
+			translate: -50% -100%;
+
+			margin-bottom: calc(var(--_pointer-height) * 0.8);
+			width: var(--_details-popup-width);
+			background: canvas;
+			border: 1px solid var(--_border-color);
+			padding: 0.6em 1em;
+			border-radius: 0.2rem;
+			box-shadow: 0 0.05em 1em -0.7em canvastext;
+			transition: var(--_transition-duration) allow-discrete;
+			transition-property: all, display;
+			transition-delay: 0s, var(--_transition-duration);
+			transform-origin: 50% calc(100% + var(--_pointer-height));
+		}
+
+		&:not(:popover-open) {
+			display: none;
+		}
+	}
+
+	@starting-style {
+		/* Enable transitions */
+		&:popover-open {
+			opacity: 0;
+			scale: 0;
+		}
+	}
+}
+
+@container style(--details-style: compact) {
+	[part="details"]:not([popover]) {
 		position: absolute;
 		left: 50%;
 		z-index: 2;
@@ -145,21 +198,6 @@ slot {
 		transition-delay: 0s, var(--_transition-duration);
 		transform-origin: 50% calc(100% + var(--_pointer-height));
 
-		/* Triangle pointer */
-		&::before {
-			content: "";
-			position: absolute;
-			top: 100%;
-			left: 50%;
-			translate: -50% -50%;
-			aspect-ratio: 1;
-			height: calc(var(--_pointer-height) * sqrt(2));
-			background: inherit;
-			border: inherit;
-			rotate: -45deg;
-			clip-path: polygon(0 0, 0 100%, 100% 100%);
-		}
-
 		/*
 		 More straightforward selector:
 		 &:not(:is(:host(:hover), :host(:focus-within), :host(:active), :host(:target), :host([open])) *)
@@ -172,77 +210,13 @@ slot {
 			opacity: 0;
 			scale: 0;
 		}
-	}
 
-	&[popover] {
-		/* Make the triangle pointer visible */
-		overflow: visible;
-
-		/* Bring the popover back on the screen */
-		position: fixed;
-		inset: unset;
-
-		&:popover-open {
-			/* And position it relative to the parent swatch */
-			left: var(--_popover-left);
-			top: var(--_popover-top);
-			translate: -50% -100%;
-
-			/* We need to duplicate these rules from the style query rule because Safari refuses to pick them up. */
-			margin-bottom: calc(var(--_pointer-height) * 0.8);
-			width: var(--_details-popup-width);
-			background: canvas;
-			border: 1px solid var(--_border-color);
-			padding: 0.6em 1em;
-			border-radius: 0.2rem;
-			box-shadow: 0 0.05em 1em -0.7em canvastext;
-			transition: var(--_transition-duration) allow-discrete;
-			transition-property: all, display;
-			transition-delay: 0s, var(--_transition-duration);
-			transform-origin: 50% calc(100% + var(--_pointer-height));
-		}
-
-		&:not(:popover-open) {
-			/* Hide the popover when not open. This is also a workaround for Safari */
-			display: none;
-			opacity: 0;
-			scale: 0;
-		}
-	}
-
-	&[popover] {
-		/* Make the triangle pointer visible */
-		overflow: visible;
-
-		/* Bring the popover back on the screen */
-		position: fixed;
-		inset: unset;
-
-		&:popover-open {
-			/* And position it relative to the parent swatch */
-			left: var(--_popover-left);
-			top: var(--_popover-top);
-			translate: -50% -100%;
-
-			/* We need to duplicate these rules from the style query rule because Safari refuses to pick them up. */
-			margin-bottom: calc(var(--_pointer-height) * 0.8);
-			width: var(--_details-popup-width);
-			background: canvas;
-			border: 1px solid var(--_border-color);
-			padding: 0.6em 1em;
-			border-radius: 0.2rem;
-			box-shadow: 0 0.05em 1em -0.7em canvastext;
-			transition: var(--_transition-duration) allow-discrete;
-			transition-property: all, display;
-			transition-delay: 0s, var(--_transition-duration);
-			transform-origin: 50% calc(100% + var(--_pointer-height));
-		}
-
-		&:not(:popover-open) {
-			/* Hide the popover when not open. This is also a workaround for Safari */
-			display: none;
-			opacity: 0;
-			scale: 0;
+		@starting-style {
+			/* Enable transitions */
+			& {
+				opacity: 0;
+				scale: 0;
+			}
 		}
 	}
 }
