@@ -105,8 +105,7 @@ const Self = class ColorChart extends ColorElement {
 				min,
 				max,
 				initialSteps: 10,
-				rawMin: this[`${axis}Min`],
-				rawMax: this[`${axis}Max`],
+				force: { min: !isNaN(this[`${axis}Min`]), max: !isNaN(this[`${axis}Max`]) }, // follow the provided min/max values, if any
 			});
 
 			this._el.chart.style.setProperty(`--min-${axis}`, axisData.min);
@@ -555,7 +554,7 @@ Self.define();
 
 export default Self;
 
-function getAxis ({ min, max, initialSteps, rawMin, rawMax }) {
+function getAxis ({ min, max, initialSteps, force = { min: false, max: false } }) {
 	let range = max - min;
 	let step = range / initialSteps;
 	let magnitude = Math.floor(Math.log10(step));
@@ -569,9 +568,12 @@ function getAxis ({ min, max, initialSteps, rawMin, rawMax }) {
 		}
 	}
 
-	// Follow the provided min/max values, if any
-	let start = !isNaN(rawMin) ? min : Math.floor(min / step) * step;
-	let end = !isNaN(rawMax) ? max : Math.ceil(max / step) * step;
+	if (force === true) {
+		force = { min: true, max: true };
+	}
+
+	let start = force.min ? min : Math.floor(min / step) * step;
+	let end = force.max ? max : Math.ceil(max / step) * step;
 	let steps = Math.round((end - start) / step);
 
 	let ret = { min: start, max: end, step, steps };
