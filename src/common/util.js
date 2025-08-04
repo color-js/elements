@@ -118,3 +118,32 @@ export function getType (value) {
 export function noOpTemplateTag (strings, ...values) {
 	return strings.reduce((acc, string, i) => acc + string + (values[i] ?? ""), "");
 }
+
+/**
+ * Resolve a color value and cache it.
+ * @param {string} value Color value to resolve.
+ * @param {Element} element Element to get computed style from to resolve the color value.
+ * @param {Map<string, string>} cache
+ */
+export function resolveColor (value, element, cache) {
+	if (!value || !element || !(element instanceof Element) || !cache) {
+		return null;
+	}
+
+	if (cache.has(value)) {
+		return cache.get(value);
+	}
+
+	if (!CSS.supports("color", value)) {
+		// Not supported or invalid value
+		return null;
+	}
+
+	// One of the supported color values; resolve and cache it
+	element.style.backgroundColor = value;
+	let color = getComputedStyle(element).backgroundColor;
+	cache.set(value, color);
+	element.style.backgroundColor = "";
+
+	return color;
+}

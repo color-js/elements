@@ -1,4 +1,5 @@
 import ColorElement from "../common/color-element.js";
+import { resolveColor } from "../common/util.js";
 import "../gamut-badge/gamut-badge.js";
 
 let importIncrementable;
@@ -212,24 +213,8 @@ const Self = class ColorSwatch extends ColorElement {
 					return ColorSwatch.Color.get(this.value);
 				}
 				catch {
-					// Color.js can't parse the color value
-					let color = Self.resolvedColors.get(this.value);
-					if (color) {
-						return color;
-					}
-
-					if (CSS.supports("color", this.value)) {
-						// One of the supported color values; resolve and cache it
-						this._el.swatch.style.backgroundColor = this.value;
-						color = getComputedStyle(this._el.swatch).backgroundColor;
-						Self.resolvedColors.set(this.value, color);
-						this._el.swatch.style.backgroundColor = "";
-
-						return color;
-					}
-
-					// Not supported or invalid value
-					return null;
+					// Color.js can't parse the color value; possibly one of the values we can handle gracefully
+					return resolveColor(this.value, this._el.swatch, Self.resolvedColors);
 				}
 			},
 			set (value) {
