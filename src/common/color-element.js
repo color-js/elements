@@ -31,6 +31,7 @@ const Self = class ColorElement extends NudeElement {
 	static Color;
 	static all = {};
 	static dependencies = new Set();
+	static resolvedColors = new Map();
 
 	static globalStyles = [{ css: baseGlobalStyles }];
 
@@ -136,6 +137,36 @@ const Self = class ColorElement extends NudeElement {
 		}
 
 		customElements.define(this.tagName, this);
+	}
+
+	/**
+	 * Resolve a color value and cache it.
+	 * @param {string} value Color value to resolve.
+	 * @param {Element} element Element to get computed style from to resolve the color value.
+	 */
+	static resolveColor (value, element) {
+		try {
+			return Self.Color.get(value);
+		}
+		catch {
+			// Color.js can't parse the color value; possibly one of the values we can handle gracefully
+			if (Self.resolvedColors.has(value)) {
+				return Self.resolvedColors.get(value);
+			}
+
+			if (!CSS.supports("color", value)) {
+				// Not supported or invalid value
+				return null;
+			}
+
+			// One of the supported color values; resolve and cache it
+			element.style.backgroundColor = value;
+			let color = getComputedStyle(element).backgroundColor;
+			Self.resolvedColors.set(value, color);
+			element.style.backgroundColor = "";
+
+			return color;
+		}
 	}
 };
 

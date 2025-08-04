@@ -1,5 +1,4 @@
 import ColorElement from "../common/color-element.js";
-import { resolveColor } from "../common/util.js";
 import "../gamut-badge/gamut-badge.js";
 
 let importIncrementable;
@@ -23,8 +22,6 @@ const Self = class ColorSwatch extends ColorElement {
 			</div>
 			<slot name="after"></slot>
 		</div>`;
-
-	static resolvedColors = new Map();
 
 	constructor () {
 		super();
@@ -209,13 +206,7 @@ const Self = class ColorSwatch extends ColorElement {
 					return null;
 				}
 
-				try {
-					return ColorSwatch.Color.get(this.value);
-				}
-				catch {
-					// Color.js can't parse the color value; possibly one of the values we can handle gracefully
-					return resolveColor(this.value, this._el.swatch, Self.resolvedColors);
-				}
+				return ColorSwatch.resolveColor(this.value, this._el.swatch);
 			},
 			set (value) {
 				this.value = ColorSwatch.Color.get(value)?.display();
