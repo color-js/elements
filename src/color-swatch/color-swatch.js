@@ -23,10 +23,13 @@ const Self = class ColorSwatch extends ColorElement {
 			<slot name="after"></slot>
 		</div>`;
 
+	static resolvedColors = new Map();
+
 	constructor () {
 		super();
 
 		this._el = {
+			swatch: this.shadowRoot.querySelector("slot[name=swatch]::slotted(*), #swatch"),
 			wrapper: this.shadowRoot.querySelector("#wrapper"),
 			label: this.shadowRoot.querySelector("[part=label]"),
 			colorWrapper: this.shadowRoot.querySelector("[part=color]"),
@@ -205,7 +208,29 @@ const Self = class ColorSwatch extends ColorElement {
 					return null;
 				}
 
-				return ColorSwatch.Color.get(this.value);
+				try {
+					return ColorSwatch.Color.get(this.value);
+				}
+				catch {
+					// Color.js can't parse the color value
+					let color = Self.resolvedColors.get(this.value);
+					if (color) {
+						return color;
+					}
+
+					if (CSS.supports("color", this.value)) {
+						// One of the supported color values; resolve and cache it
+						this._el.swatch.style.backgroundColor = this.value;
+						color = getComputedStyle(this._el.swatch).backgroundColor;
+						Self.resolvedColors.set(this.value, color);
+						this._el.swatch.style.backgroundColor = "";
+
+						return color;
+					}
+
+					// Not supported or invalid value
+					return null;
+				}
 			},
 			set (value) {
 				this.value = ColorSwatch.Color.get(value)?.display();
