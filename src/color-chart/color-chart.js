@@ -87,17 +87,20 @@ const Self = class ColorChart extends ColorElement {
 	 */
 	renderAxis (axis) {
 		axis = axis.toLowerCase();
+		let force = { min: true, max: true };
 
 		let min = this[`${axis}MinAsNumber`];
 		if (isNaN(min) || !isFinite(min)) {
 			// auto, undefined, etc
 			min = this.bounds[axis].min;
+			force.min = false;
 		}
 
 		let max = this[`${axis}MaxAsNumber`];
 		if (isNaN(max) || !isFinite(max)) {
 			// auto, undefined, etc
 			max = this.bounds[axis].max;
+			force.max = false;
 		}
 
 		if (isFinite(min) && isFinite(max)) {
@@ -105,7 +108,7 @@ const Self = class ColorChart extends ColorElement {
 				min,
 				max,
 				initialSteps: 10,
-				force: { min: !isNaN(this[`${axis}Min`]), max: !isNaN(this[`${axis}Max`]) }, // follow the provided min/max values, if any
+				force, // follow the provided min/max values, if any
 			});
 
 			this._el.chart.style.setProperty(`--min-${axis}`, axisData.min);
