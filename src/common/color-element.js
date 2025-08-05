@@ -158,8 +158,8 @@ const Self = class ColorElement extends NudeElement {
 				return Self.Color.get(color);
 			}
 
-			if (!CSS.supports("color", value)) {
-				// Not supported or invalid value
+			if (!CSS.supports("color", value) || !element) {
+				// Not supported/invalid value, or no element to resolve the color value from
 				return null;
 			}
 
@@ -168,7 +168,7 @@ const Self = class ColorElement extends NudeElement {
 			let color = getComputedStyle(element).backgroundColor;
 			element.style.backgroundColor = "";
 
-			let resolvedColor = Self.resolveColor(color, element);
+			let resolvedColor = Self.resolveColor(color);
 			if (resolvedColor) {
 				Self.#resolvedColors.set(value, color);
 			}
