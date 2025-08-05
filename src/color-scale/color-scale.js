@@ -87,7 +87,13 @@ const Self = class ColorScale extends ColorElement {
 				is: Object,
 				// Support overriding the Color object
 				get values () {
-					return ColorScale.Color;
+					class Color extends ColorScale.Color {
+						constructor (value) {
+							let color = ColorScale.resolveColor(value, dummy);
+							super(color);
+						}
+					}
+					return Color;
 				},
 				defaultKey: (v, i) => v,
 			},
@@ -165,3 +171,9 @@ const Self = class ColorScale extends ColorElement {
 Self.define();
 
 export default Self;
+
+let dummy;
+if (document) {
+	dummy = document.createElement("div");
+	document.body.appendChild(dummy);
+}
