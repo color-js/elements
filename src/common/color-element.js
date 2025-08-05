@@ -158,7 +158,7 @@ const Self = class ColorElement extends NudeElement {
 				return Self.Color.get(color);
 			}
 
-			if (!CSS.supports("color", value) || !element) {
+			if (!globalThis.CSS?.supports("color", value) || !element) {
 				// Not supported/invalid value, or no element to resolve the color value from
 				return null;
 			}
