@@ -151,30 +151,30 @@ const Self = class ColorElement extends NudeElement {
 		try {
 			return Self.Color.get(value);
 		}
-		catch {
-			// Color.js can't parse the color value; possibly one of the values we can handle gracefully
-			if (Self.#resolvedColors.has(value)) {
-				let color = Self.#resolvedColors.get(value);
-				return Self.Color.get(color);
-			}
+		catch {}
 
-			if (!globalThis.CSS?.supports("color", value) || !element) {
-				// Not supported/invalid value, or no element to resolve the color value from
-				return null;
-			}
-
-			// One of the supported color values; resolve and cache it
-			element.style.backgroundColor = value;
-			let color = getComputedStyle(element).backgroundColor;
-			element.style.backgroundColor = "";
-
-			let resolvedColor = Self.resolveColor(color);
-			if (resolvedColor) {
-				Self.#resolvedColors.set(value, color);
-			}
-
-			return resolvedColor;
+		// Color.js can't parse the color value; possibly one of the values we can handle gracefully
+		if (Self.#resolvedColors.has(value)) {
+			let color = Self.#resolvedColors.get(value);
+			return Self.Color.get(color);
 		}
+
+		if (!globalThis.CSS?.supports("color", value) || !element) {
+			// Not supported/invalid value, or no element to resolve the color value from
+			return null;
+		}
+
+		// One of the supported color values; resolve and cache it
+		element.style.backgroundColor = value;
+		let color = getComputedStyle(element).backgroundColor;
+		element.style.backgroundColor = "";
+
+		let resolvedColor = Self.resolveColor(color);
+		if (resolvedColor) {
+			Self.#resolvedColors.set(value, color);
+		}
+
+		return resolvedColor;
 	}
 };
 
