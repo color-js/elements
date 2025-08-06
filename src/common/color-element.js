@@ -165,9 +165,10 @@ const Self = class ColorElement extends NudeElement {
 		}
 
 		// One of the supported color values; resolve and cache it
+		let backgroundColor = element.style.backgroundColor;
 		element.style.backgroundColor = value;
 		let color = getComputedStyle(element).backgroundColor;
-		element.style.backgroundColor = "";
+		element.style.backgroundColor = backgroundColor;
 
 		let resolvedColor = Self.resolveColor(color);
 		if (resolvedColor) {
