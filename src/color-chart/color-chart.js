@@ -75,6 +75,30 @@ const Self = class ColorChart extends ColorElement {
 
 	bounds = { x: { min: Infinity, max: -Infinity }, y: { min: Infinity, max: -Infinity } };
 
+	// Follow the provided min/max values, if any
+	get force () {
+		const ctx = this;
+
+		return {
+			x: {
+				get min () {
+					return !isNaN(ctx.xMin);
+				},
+				get max () {
+					return !isNaN(ctx.xMax);
+				},
+			},
+			y: {
+				get min () {
+					return !isNaN(ctx.yMin);
+				},
+				get max () {
+					return !isNaN(ctx.yMax);
+				},
+			},
+		};
+	}
+
 	render (evt) {
 		this.renderScales(evt);
 		this.renderAxis("x");
@@ -87,20 +111,17 @@ const Self = class ColorChart extends ColorElement {
 	 */
 	renderAxis (axis) {
 		axis = axis.toLowerCase();
-		let force = { min: true, max: true };
 
 		let min = this[`${axis}MinAsNumber`];
 		if (isNaN(min) || !isFinite(min)) {
 			// auto, undefined, etc
 			min = this.bounds[axis].min;
-			force.min = false;
 		}
 
 		let max = this[`${axis}MaxAsNumber`];
 		if (isNaN(max) || !isFinite(max)) {
 			// auto, undefined, etc
 			max = this.bounds[axis].max;
-			force.max = false;
 		}
 
 		if (isFinite(min) && isFinite(max)) {
@@ -108,7 +129,7 @@ const Self = class ColorChart extends ColorElement {
 				min,
 				max,
 				initialSteps: 10,
-				force, // follow the provided min/max values, if any
+				force: this.force[axis],
 			});
 
 			this._el.chart.style.setProperty(`--min-${axis}`, axisData.min);
@@ -486,7 +507,7 @@ const Self = class ColorChart extends ColorElement {
 					let range = this.xResolved?.refRange ?? this.xResolved?.range ?? [0, 100];
 					return range[0];
 				}
-				else if ((!this.x && isNaN(this.xMin)) || this.xMin === "auto") {
+				else if ((!this.x && !this.force.x.min) || this.xMin === "auto") {
 					return this.bounds.x.min;
 				}
 
@@ -524,7 +545,7 @@ const Self = class ColorChart extends ColorElement {
 					let range = this.xResolved?.refRange ?? this.xResolved?.range ?? [0, 100];
 					return range[1];
 				}
-				else if ((!this.x && isNaN(this.xMax)) || this.xMax === "auto") {
+				else if ((!this.x && !this.force.x.max) || this.xMax === "auto") {
 					return this.bounds.x.max;
 				}
 
