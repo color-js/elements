@@ -75,6 +75,30 @@ const Self = class ColorChart extends ColorElement {
 
 	bounds = { x: { min: Infinity, max: -Infinity }, y: { min: Infinity, max: -Infinity } };
 
+	// Follow the provided min/max values, if any
+	get force () {
+		const ctx = this;
+
+		return {
+			x: {
+				get min () {
+					return !isNaN(ctx.xMin);
+				},
+				get max () {
+					return !isNaN(ctx.xMax);
+				},
+			},
+			y: {
+				get min () {
+					return !isNaN(ctx.yMin);
+				},
+				get max () {
+					return !isNaN(ctx.yMax);
+				},
+			},
+		};
+	}
+
 	render (evt) {
 		this.renderScales(evt);
 		this.renderAxis("x");
@@ -101,7 +125,12 @@ const Self = class ColorChart extends ColorElement {
 		}
 
 		if (isFinite(min) && isFinite(max)) {
-			const axisData = getAxis(min, max, 10);
+			const axisData = getAxis({
+				min,
+				max,
+				initialSteps: 10,
+				force: this.force[axis],
+			});
 
 			this._el.chart.style.setProperty(`--min-${axis}`, axisData.min);
 			this._el.chart.style.setProperty(`--max-${axis}`, axisData.max);
@@ -474,11 +503,13 @@ const Self = class ColorChart extends ColorElement {
 
 		xMinAsNumber: {
 			get () {
+				let force = this.force;
+
 				if (this.x && this.xMin === "coord") {
 					let range = this.xResolved?.refRange ?? this.xResolved?.range ?? [0, 100];
 					return range[0];
 				}
-				else if (!this.x || this.xMin === "auto") {
+				else if ((!this.x && !force.x.min) || this.xMin === "auto") {
 					return this.bounds.x.min;
 				}
 
@@ -512,11 +543,13 @@ const Self = class ColorChart extends ColorElement {
 
 		xMaxAsNumber: {
 			get () {
+				let force = this.force;
+
 				if (this.x && this.xMax === "coord") {
 					let range = this.xResolved?.refRange ?? this.xResolved?.range ?? [0, 100];
 					return range[1];
 				}
-				else if (!this.x || this.xMax === "auto") {
+				else if ((!this.x && !force.x.max) || this.xMax === "auto") {
 					return this.bounds.x.max;
 				}
 
@@ -549,7 +582,7 @@ Self.define();
 
 export default Self;
 
-function getAxis (min, max, initialSteps) {
+function getAxis ({ min, max, initialSteps, force = { min: false, max: false } }) {
 	let range = max - min;
 	let step = range / initialSteps;
 	let magnitude = Math.floor(Math.log10(step));
@@ -563,8 +596,12 @@ function getAxis (min, max, initialSteps) {
 		}
 	}
 
-	let start = Math.floor(min / step) * step;
-	let end = Math.ceil(max / step) * step;
+	if (force === true) {
+		force = { min: true, max: true };
+	}
+
+	let start = force.min ? min : Math.floor(min / step) * step;
+	let end = force.max ? max : Math.ceil(max / step) * step;
 	let steps = Math.round((end - start) / step);
 
 	let ret = { min: start, max: end, step, steps };
