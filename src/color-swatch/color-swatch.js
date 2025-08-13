@@ -27,6 +27,7 @@ const Self = class ColorSwatch extends ColorElement {
 		super();
 
 		this._el = {
+			swatch: this.shadowRoot.querySelector("slot[name=swatch]::slotted(*), #swatch"),
 			wrapper: this.shadowRoot.querySelector("#wrapper"),
 			label: this.shadowRoot.querySelector("[part=label]"),
 			colorWrapper: this.shadowRoot.querySelector("[part=color]"),
@@ -205,7 +206,7 @@ const Self = class ColorSwatch extends ColorElement {
 					return null;
 				}
 
-				return ColorSwatch.Color.get(this.value);
+				return ColorSwatch.resolveColor(this.value, this._el.swatch);
 			},
 			set (value) {
 				this.value = ColorSwatch.Color.get(value)?.display();
