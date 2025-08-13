@@ -94,6 +94,14 @@ slot {
 }
 
 [part="details"] {
+	--_border-color: var(
+		--border-color,
+		color-mix(in oklab, buttonborder 20%, oklab(none none none / 0%))
+	);
+	--_pointer-height: var(--pointer-height, 0.5em);
+	--_transition-duration: var(--transition-duration, 400ms);
+	--_details-popup-width: var(--details-popup-width, max-content);
+
 	display: flex;
 	flex-flow: inherit;
 	gap: inherit;
@@ -115,15 +123,64 @@ slot {
 		font-size: 80%;
 	}
 
-	@container style(--details-style: compact) {
-		--_border-color: var(
-			--border-color,
-			color-mix(in oklab, buttonborder 20%, oklab(none none none / 0%))
-		);
-		--_pointer-height: var(--pointer-height, 0.5em);
-		--_transition-duration: var(--transition-duration, 400ms);
-		--_details-popup-width: var(--details-popup-width, max-content);
+	/* Triangle pointer */
+	&::before {
+		content: "";
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		translate: -50% -50%;
+		aspect-ratio: 1;
+		height: calc(var(--_pointer-height) * sqrt(2));
+		background: inherit;
+		border: inherit;
+		rotate: -45deg;
+		clip-path: polygon(0 0, 0 100%, 100% 100%);
+	}
 
+	&[popover] {
+		/* Make the triangle pointer visible */
+		overflow: visible;
+
+		/* Bring the popover back on the screen */
+		position: fixed;
+		inset: unset;
+
+		&:popover-open {
+			/* And position it relative to the parent swatch */
+			left: var(--_popover-left);
+			top: var(--_popover-top);
+			translate: -50% -100%;
+
+			margin-bottom: calc(var(--_pointer-height) * 0.8);
+			width: var(--_details-popup-width);
+			background: canvas;
+			border: 1px solid var(--_border-color);
+			padding: 0.6em 1em;
+			border-radius: 0.2rem;
+			box-shadow: 0 0.05em 1em -0.7em canvastext;
+			transition: var(--_transition-duration) allow-discrete;
+			transition-property: all, display;
+			transition-delay: 0s, var(--_transition-duration);
+			transform-origin: 50% calc(100% + var(--_pointer-height));
+		}
+
+		&:not(:popover-open) {
+			display: none;
+		}
+	}
+
+	@starting-style {
+		/* Enable transitions */
+		&:popover-open {
+			opacity: 0;
+			scale: 0;
+		}
+	}
+}
+
+@container style(--details-style: compact) {
+	[part="details"]:not([popover]) {
 		position: absolute;
 		left: 50%;
 		z-index: 2;
@@ -135,40 +192,11 @@ slot {
 		border: 1px solid var(--_border-color);
 		padding: 0.6em 1em;
 		border-radius: 0.2rem;
-		box-shadow: 0 0.05em 1em -0.7em black;
+		box-shadow: 0 0.05em 1em -0.7em canvastext;
 		transition: var(--_transition-duration) allow-discrete;
 		transition-property: all, display;
 		transition-delay: 0s, var(--_transition-duration);
 		transform-origin: 50% calc(100% + var(--_pointer-height));
-
-		&[popover] {
-			/* Make the triangle pointer visible */
-			overflow: visible;
-
-			/* Bring the popover back on the screen */
-			position: fixed;
-			inset: unset;
-
-			/* And position it relative to the parent swatch */
-			left: var(--_popover-left);
-			top: var(--_popover-top);
-			translate: -50% -100%;
-		}
-
-		/* Triangle pointer */
-		&::before {
-			content: "";
-			position: absolute;
-			top: 100%;
-			left: 50%;
-			translate: -50% -50%;
-			aspect-ratio: 1;
-			height: calc(var(--_pointer-height) * sqrt(2));
-			background: inherit;
-			border: inherit;
-			rotate: -45deg;
-			clip-path: polygon(0 0, 0 100%, 100% 100%);
-		}
 
 		/*
 		 More straightforward selector:
@@ -181,6 +209,14 @@ slot {
 			display: none;
 			opacity: 0;
 			scale: 0;
+		}
+
+		@starting-style {
+			/* Enable transitions */
+			& {
+				opacity: 0;
+				scale: 0;
+			}
 		}
 	}
 }
