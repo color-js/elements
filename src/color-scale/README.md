@@ -36,7 +36,6 @@ You can also give them optional names:
 "></color-scale>
 ```
 
-
 You can only specify your core colors, and insert steps via interpolation:
 
 ```html
@@ -58,7 +57,6 @@ You can specify the `info` attribute to show additional information about the co
 
 You can also create compact color scales, by simply setting `--details-style: compact`:
 
-
 ```html
 <color-scale space="oklch" info="L: oklch.l, C: oklch.c, H: oklch.h"
              style="--details-style: compact"
@@ -73,3 +71,45 @@ If you want to insert interpolated colors only in specific places, you can use e
 ```html
 <color-scale space="oklch" colors="#e3fafc, , , , , , , , , #0b7285"></color-scale>
 ``` -->
+
+## Reference
+
+### Attributes & Properties
+
+| Attribute | Property | Property type                         | Default value | Description                                                                                                                  |
+| --------- | -------- | ------------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `colors`  | `colors` | `{ [string]: Color }` &#124; `string` | -             | Object or comma-separated string defining the colors and their optional names.                                               |
+| `space`   | `space`  | `ColorSpace` &#124; `string`          | `oklch`       | The color space to use for interpolation.                                                                                    |
+| `steps`   | `steps`  | `number`                              | `0`           | Number of interpolated steps to insert between each pair of colors.                                                          |
+| `info`    | `info`   | `string`                              | -             | Comma-separated list of coords of the colors to be shown. Passed to generated [`<color-swatch>`](../color-swatch/) elements. |
+
+### Getters
+
+These properties are read-only.
+
+| Property         | Type                                                | Description                                                                                                          |
+| ---------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `computedColors` | `Array<{name: string, color: Color}>` &#124; `null` | The array of color objects after processing interpolation and steps. Returns `null` if `this.colors` is not defined. |
+
+### CSS variables
+
+The styling of `<color-scale>` is fully customizable via CSS variables provided by the [`<color-swatch>`](../color-swatch/#css-variables) elements it generates.
+
+| Name              | Type                                | Description                                                                                                    |
+| ----------------- | ----------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `--details-style` | `compact` &#124; `normal` (default) | Controls how color information is displayed. Inherited by child [`<color-swatch>`](../color-swatch/) elements. |
+
+### Parts
+
+| Name           | Description                                                                                         |
+| -------------- | --------------------------------------------------------------------------------------------------- |
+| `color-swatch` | Each individual [`<color-swatch>`](../color-swatch/) element generated for the colors in the scale. |
+
+The component also exports parts from its child `<color-swatch>` elements: `swatch`, `info`, `gamut`, and `swatch-label` (exported as `label`). See the [`<color-swatch>` parts table](../color-swatch/#parts) for details.
+
+### Events
+
+| Name           | Description                                                                                                        |
+| -------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `colorschange` | Fired when the computed colors change for any reason, and once during initialization.                              |
+| `colorchange`  | Fired when any individual color swatch changes (bubbled from child [`<color-swatch>`](../color-swatch/) elements). |
