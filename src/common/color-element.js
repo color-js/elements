@@ -1,4 +1,4 @@
-import NudeElement from "../../node_modules/nude-element/src/Element.js";
+import NudeElement from "nude-element/src/Element.js";
 import { getType, defer, wait, dynamicAll, noOpTemplateTag as css } from "./util.js";
 
 const baseGlobalStyles = css`
