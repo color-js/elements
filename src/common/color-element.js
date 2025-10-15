@@ -135,6 +135,13 @@ const Self = class ColorElement extends NudeElement {
 			}
 		}
 
+		// CRITICAL: Initialize the class BEFORE defining the custom element.
+		// This ensures mixins are applied and composed functions are created
+		// on the prototype before the browser caches references to lifecycle callbacks.
+		// Without this, the browser would register the unmodified inherited callbacks
+		// from parent classes instead of the composed versions created by mixins.
+		this.init();
+
 		customElements.define(this.tagName, this);
 	}
 };
