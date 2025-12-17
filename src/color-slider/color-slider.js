@@ -309,7 +309,7 @@ const Self = class ColorSlider extends ColorElement {
 		},
 	};
 
-	static formAssociated = {
+	static formBehavior = {
 		like: el => el._el.slider,
 		role: "slider",
 		valueProp: "value",

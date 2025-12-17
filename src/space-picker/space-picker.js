@@ -219,7 +219,7 @@ const Self = class SpacePicker extends ColorElement {
 		},
 	};
 
-	static formAssociated = {
+	static formBehavior = {
 		like: el => el._el.picker,
 		role: "combobox",
 		changeEvent: "change",
