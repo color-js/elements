@@ -1,5 +1,5 @@
 import NudeElement from "../../node_modules/nude-element/src/index.js";
-import statesPlugin from "../../node_modules/nude-element/src/states/toggle.js";
+import statesPlugin from "../../node_modules/nude-element/src/plugins/states/toggle.js";
 import { getType, defer, wait, dynamicAll, noOpTemplateTag as css } from "./util.js";
 
 const baseGlobalStyles = css`
