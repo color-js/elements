@@ -121,7 +121,7 @@ If you just want the styling of `<color-slider>` and not any of the API (or are 
 you *can* just use the CSS file:
 
 ```css
-@import url("https://elements.colorjs.io/src/color-slider/color-slider.css");
+@import url("https://esm.sh/color-elements/src/color-slider/color-slider.css");
 ```
 
 This is perfect for when the gradient is more of a visual aid than a functional part of your UI,

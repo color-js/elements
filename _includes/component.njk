@@ -42,16 +42,16 @@
 To install all color elements, check out the [instructions on the homepage](../).
 The rest of this section is about using _only_ `{{ tag | safe }}`.
 
-The quick and dirty way is straight from the CDN (kindly provided by [Netlify](https://www.netlify.com/)):
+The quick and dirty way is straight from a CDN:
 
 ```html
-<script src="https://elements.colorjs.io/src/{{ name }}/{{ name }}.js" type="module"></script>
+<script src="https://esm.sh/color-elements/src/{{ name }}/{{ name }}.js" type="module"></script>
 ```
 
 or in JS:
 
 ```js
-import "https://elements.colorjs.io/src/{{ name }}/{{ name }}.js";
+import "https://esm.sh/color-elements/src/{{ name }}/{{ name }}.js";
 ```
 
 If you are using npm to manage your dependencies, you can import it via:
