@@ -118,10 +118,18 @@ You can style it to look quite different:
 ### CSS-only usage
 
 If you just want the styling of `<color-slider>` and not any of the API (or are fine dealing with the lower level details on your own),
-you *can* just use the CSS file:
+you *can* just use the CSS file.
+
+If using a bundler that supports CSS imports:
 
 ```css
-@import url("https://esm.sh/color-elements/src/color-slider/color-slider.css");
+@import "color-elements/color-slider.css";
+```
+
+Otherwise, use a CDN:
+
+```css
+@import url("https://esm.sh/color-elements/color-slider.css");
 ```
 
 This is perfect for when the gradient is more of a visual aid than a functional part of your UI,
@@ -129,7 +137,7 @@ e.g. when picking a temperature:
 
 ```html
 <style>
-    @import url("color-slider.css");
+    @import "color-elements/color-slider.css";
 </style>
 <label>
     Temperature:

@@ -42,19 +42,7 @@
 To install all color elements, check out the [instructions on the homepage](../).
 The rest of this section is about using _only_ `{{ tag | safe }}`.
 
-The quick and dirty way is straight from a CDN:
-
-```html
-<script src="https://esm.sh/color-elements/src/{{ name }}/{{ name }}.js" type="module"></script>
-```
-
-or in JS:
-
-```js
-import "https://esm.sh/color-elements/src/{{ name }}/{{ name }}.js";
-```
-
-If you are using npm to manage your dependencies, you can import it via:
+If you are using npm, you can import it via a bare specifier:
 
 ```js
 import "color-elements/{{ name }}";
@@ -64,6 +52,12 @@ or:
 
 ```js
 import { {{ name | tag_to_class }} } from "color-elements";
+```
+
+If you don't use a bundler, you can use [esm.sh](https://esm.sh):
+
+```html
+<script src="https://esm.sh/color-elements/{{ name }}" type="module"></script>
 ```
 {% endmd %}
 </section>
