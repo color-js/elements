@@ -1,4 +1,5 @@
-import NudeElement from "../../node_modules/nude-element/src/Element.js";
+import NudeElement from "../../node_modules/nude-element/src/index.js";
+import { states } from "../../node_modules/nude-element/src/plugins/index.js";
 import { getType, defer, wait, dynamicAll, noOpTemplateTag as css } from "./util.js";
 
 const baseGlobalStyles = css`
@@ -33,6 +34,7 @@ const Self = class ColorElement extends NudeElement {
 	static dependencies = new Set();
 
 	static globalStyles = [{ css: baseGlobalStyles }];
+	static plugins = [states];
 
 	constructor () {
 		super();
@@ -44,35 +46,11 @@ const Self = class ColorElement extends NudeElement {
 			this.shadowRoot.innerHTML = Self.shadowTemplate;
 		}
 
-		this._internals ??= this.attachInternals?.();
-		if (this._internals.states) {
-			this._internals.states.add("color-element");
-
-			this._internals.states.add("loading");
-			Self.whenReady.then(() => {
-				this._internals.states.delete("loading");
-			});
-		}
-	}
-
-	static init () {
-		let wasInitialized = super.init();
-
-		if (!wasInitialized) {
-			return wasInitialized;
-		}
-
-		if (this.fetchedStyles) {
-			this.ready.push(...this.fetchedStyles);
-		}
-
-		if (this.fetchedGlobalStyles) {
-			this.ready.push(...this.fetchedGlobalStyles);
-		}
-
-		this.ready[0].resolve();
-
-		return wasInitialized;
+		this.toggleState("color-element", true);
+		this.toggleState("loading", true);
+		Self.whenReady.then(() => {
+			this.toggleState("loading");
+		});
 	}
 
 	static ready = [defer()];
@@ -136,6 +114,8 @@ const Self = class ColorElement extends NudeElement {
 		}
 
 		customElements.define(this.tagName, this);
+
+		this.ready[0].resolve();
 	}
 };
 
