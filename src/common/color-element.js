@@ -1,5 +1,5 @@
 import NudeElement from "../../node_modules/nude-element/src/index.js";
-import statesPlugin from "../../node_modules/nude-element/src/plugins/states/toggle.js";
+import { states } from "../../node_modules/nude-element/src/plugins/index.js";
 import { getType, defer, wait, dynamicAll, noOpTemplateTag as css } from "./util.js";
 
 const baseGlobalStyles = css`
@@ -34,7 +34,7 @@ const Self = class ColorElement extends NudeElement {
 	static dependencies = new Set();
 
 	static globalStyles = [{ css: baseGlobalStyles }];
-	static plugins = [statesPlugin];
+	static plugins = [states];
 
 	constructor () {
 		super();
