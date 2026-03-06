@@ -59,7 +59,7 @@ Each component also exports a standalone CSS file (for [CSS-only usage](src/colo
 
 ### Via CDN
 
-If you don’t use a bundler, you can use [esm.sh](https://esm.sh):
+If you don’t use a bundler or other workflow to enable specifiers (e.g. [Nudeps](https://nudeps.dev)), you can use a CDN such as [esm.sh](https://esm.sh):
 
 ```html
 <script src="https://esm.sh/color-elements" type="module"></script>
