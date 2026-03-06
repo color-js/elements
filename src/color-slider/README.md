@@ -126,6 +126,10 @@ If using a bundler that supports CSS imports:
 @import "color-elements/color-slider.css";
 ```
 
+If you’re using [Nudeps](https://nudeps.dev) to manage dependencies without a bundler, you can use something like:
+
+```css
+@import "/client_modules/color-elements/color-slider.css";
 Otherwise, use a CDN:
 
 ```css
