@@ -40,17 +40,6 @@ await new Promise(resolve => {
 	});
 });
 
-// Inject import map script into copied plain.njk, before the first script or </head>
-let njkPath = "_includes/plain.njk";
-let njk = readFileSync(njkPath, "utf8");
-let anchor = njk.match(/<script[\s>]/) ?? njk.match(/<\/head>/);
-let patched =
-	njk.slice(0, anchor.index) +
-	'<script src="/importmap.js"></script>\n' +
-	njk.slice(anchor.index);
-writeFileSync(njkPath, patched);
-console.log("Injected import map script into " + njkPath);
-
 // Make sure copied paths are in .gitignore
 let gitignore = readFileSync(".gitignore", "utf8").split("\n");
 let paths_added_to_gitignore = [];
