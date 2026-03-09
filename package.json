@@ -44,10 +44,8 @@
   },
   "homepage": "https://github.com/color-js/elements#readme",
   "dependencies": {
+    "colorjs.io": ">=0.6.1",
     "nude-element": "^0.1.1"
-  },
-  "peerDependencies": {
-    "colorjs.io": ">=0.6.1"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.2",
