@@ -6,7 +6,6 @@
   "type": "module",
   "exports": {
     ".": "./index.js",
-    "./color-chart-global.css": "./src/color-chart/color-chart-global.css",
     "./*": "./src/*/*.js",
     "./*.css": "./src/*/*.css"
   },
