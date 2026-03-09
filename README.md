@@ -33,7 +33,7 @@ Use at your own risk, the API can change at any point.
 
 ## Usage
 
-### Via npm
+### Via package manager
 
 ```bash
 npm i color-elements
