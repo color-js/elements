@@ -120,16 +120,16 @@ You can style it to look quite different:
 If you just want the styling of `<color-slider>` and not any of the API (or are fine dealing with the lower level details on your own),
 you *can* just use the CSS file.
 
-If using a bundler that supports CSS imports:
-
-```css
-@import "color-elements/color-slider.css";
-```
-
-If you’re using [Nudeps](https://nudeps.dev) to manage dependencies without a bundler, you can use something like:
+You can import the CSS using bare specifiers — with [Nudeps](https://nudeps.dev):
 
 ```css
 @import "/client_modules/color-elements/color-slider.css";
+```
+
+Or with a bundler that supports CSS imports:
+
+```css
+@import "color-elements/color-slider.css";
 ```
 
 Otherwise, use a CDN:
