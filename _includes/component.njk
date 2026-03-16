@@ -42,7 +42,7 @@
 To install all color elements, check out the [instructions on the homepage](../).
 The rest of this section is about using _only_ `{{ tag | safe }}`.
 
-If you are using npm, you can import it via a bare specifier:
+You can import it via a bare specifier:
 
 ```js
 import "color-elements/{{ name }}";
@@ -54,7 +54,7 @@ or:
 import { {{ name | tag_to_class }} } from "color-elements";
 ```
 
-If you don't use a bundler, [Nudeps](https://nudeps.dev) lets you use the same bare specifiers without one.
+Use these with [Nudeps](https://nudeps.dev) — no bundler needed — or with any bundler you already have.
 
 Otherwise, you can use a CDN such as [esm.sh](https://esm.sh):
 

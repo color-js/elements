@@ -33,7 +33,9 @@ Use at your own risk, the API can change at any point.
 
 ## Usage
 
-### Via package manager
+### Via bare specifiers
+
+Install via npm:
 
 ```bash
 npm i color-elements
@@ -57,12 +59,8 @@ Each component also exports a standalone CSS file (for [CSS-only usage](src/colo
 @import url("color-elements/COMPONENT_NAME.css");
 ```
 
-### Via Nudeps
-
-If you don’t use a bundler, [Nudeps](https://nudeps.dev) lets you use bare specifiers without one.
-In fact, this very website uses Nudeps to manage its dependencies.
-
-Once set up, your imports work just like with a bundler — no URLs needed.
+You can use these imports with [Nudeps](https://nudeps.dev) — no bundler needed
+(this website does) — or with any bundler you already have.
 
 ### Via CDN
 
