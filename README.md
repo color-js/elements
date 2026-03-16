@@ -57,9 +57,16 @@ Each component also exports a standalone CSS file (for [CSS-only usage](src/colo
 @import url("color-elements/COMPONENT_NAME.css");
 ```
 
+### Via Nudeps
+
+If you don’t use a bundler, [Nudeps](https://nudeps.dev) lets you use bare specifiers without one.
+In fact, this very website uses Nudeps to manage its dependencies.
+
+Once set up, your imports work just like with a bundler — no URLs needed.
+
 ### Via CDN
 
-If you don’t use a bundler or other workflow to enable specifiers (e.g. [Nudeps](https://nudeps.dev)), you can use a CDN such as [esm.sh](https://esm.sh):
+If you’d rather not set up any tooling, you can use a CDN such as [esm.sh](https://esm.sh):
 
 ```html
 <script src="https://esm.sh/color-elements" type="module"></script>

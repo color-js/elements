@@ -130,6 +130,9 @@ If you’re using [Nudeps](https://nudeps.dev) to manage dependencies without a 
 
 ```css
 @import "/client_modules/color-elements/color-slider.css";
+```
+
+Otherwise, use a CDN:
 
 ```css
 @import url("https://esm.sh/color-elements/color-slider.css");
