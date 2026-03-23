@@ -143,7 +143,7 @@ e.g. when picking a temperature:
 
 ```html
 <style>
-    @import "color-elements/color-slider.css";
+    @import "/client_modules/color-elements/color-slider.css";
 </style>
 <label>
     Temperature:
