@@ -5,8 +5,8 @@ import ColorElement from "../common/color-element.js";
 const Self = class ColorChart extends ColorElement {
 	static tagName = "color-chart";
 	static url = import.meta.url;
-	static styles = "./color-chart-shadow.css";
-	static globalStyles = "./color-chart-global.css";
+	static styles = new URL("./color-chart-shadow.css", import.meta.url);
+	static globalStyles = new URL("./color-chart-global.css", import.meta.url);
 	static shadowTemplate = `
 		<slot name="color-channel">
 			<channel-picker id="channel_picker" part="color-channel"></channel-picker>

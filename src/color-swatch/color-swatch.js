@@ -7,7 +7,7 @@ const Self = class ColorSwatch extends ColorElement {
 	static tagName = "color-swatch";
 	static url = import.meta.url;
 	static dependencies = new Set(["gamut-badge"]);
-	static styles = "./color-swatch.css";
+	static styles = new URL("./color-swatch.css", import.meta.url);
 	static shadowTemplate = `
 		<slot name="swatch">
 			<div id="swatch" part="swatch">
