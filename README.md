@@ -33,31 +33,15 @@ Use at your own risk, the API can change at any point.
 
 ## Usage
 
-### CDN
+### Via bare specifiers
 
-To include all components at once:
-
-```html
-<script src="https://elements.colorjs.io/index.js" type="module"></script>
-```
-
-To cherry-pick individual components, follow the instructions within the component’s page, but it generally looks like this:
-
-```html
-<script src="https://elements.colorjs.io/src/COMPONENT_NAME/COMPONENT_NAME.js" type="module"></script>
-```
-
-Each component imports its own dependencies and styles.
-
-### NPM
-
-As usual:
+Install via npm:
 
 ```bash
 npm i color-elements
 ```
 
-and then:
+To include all components at once:
 
 ```js
 import "color-elements";
@@ -68,3 +52,28 @@ You can also import individual components:
 ```js
 import "color-elements/COMPONENT_NAME";
 ```
+
+Each component also exports a standalone CSS file (for [CSS-only usage](src/color-slider/#css-only-usage)):
+
+```css
+@import url("color-elements/COMPONENT_NAME.css");
+```
+
+You can use these imports with [Nudeps](https://nudeps.dev) — no bundler needed
+(this website does) — or with any bundler you already have.
+
+### Via CDN
+
+If you’d rather not set up any tooling, you can use a CDN such as [esm.sh](https://esm.sh):
+
+```html
+<script src="https://esm.sh/color-elements" type="module"></script>
+```
+
+To cherry-pick individual components:
+
+```html
+<script src="https://esm.sh/color-elements/COMPONENT_NAME" type="module"></script>
+```
+
+Each component imports its own dependencies and styles.

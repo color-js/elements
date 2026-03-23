@@ -9,12 +9,14 @@ lib
 !lib/README.md
 index.html
 **/index.html
+client_modules/
+importmap.js
 
 # Copied
 _build/filters.js
 _includes/partials/_nav.njk
 _includes/page.njk
+_includes/plain-base.njk
 data/eleventyComputed.js
-_includes/plain.njk
 _build/eleventy-original.js
 package-lock.json

@@ -4,6 +4,11 @@
   "description": "A set of web components for working with color. A Color.js project.",
   "main": "index.js",
   "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./*.css": "./src/*/*.css",
+    "./*": "./src/*/*.js"
+  },
   "scripts": {
     "eslint": "npx eslint .",
     "eslint:fix": "npx eslint . --fix",
@@ -15,7 +20,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:html": "npx @11ty/eleventy --config=_build/eleventy.js",
     "serve": "npx @11ty/eleventy --config=_build/eleventy.js --serve",
-    "watch:html": "npx @11ty/eleventy --config=_build/eleventy.js --watch"
+    "watch:html": "npx @11ty/eleventy --config=_build/eleventy.js --serve",
+    "dependencies": "npx nudeps",
+    "prepare": "npx nudeps"
   },
   "repository": {
     "type": "git",
@@ -37,7 +44,7 @@
   },
   "homepage": "https://github.com/color-js/elements#readme",
   "dependencies": {
-    "colorjs.io": "^0.5.0",
+    "colorjs.io": ">=0.6.1",
     "nude-element": "^0.1.1"
   },
   "devDependencies": {
@@ -48,6 +55,7 @@
     "markdown-it-anchor": "^8",
     "markdown-it-attrs": "^4.1.6",
     "npm-run-all": "^4.1.5",
+    "nudeps": "^0.2.3",
     "prettier-plugin-brace-style": "latest",
     "prettier-plugin-merge": "latest",
     "prettier-plugin-space-before-function-paren": "latest",

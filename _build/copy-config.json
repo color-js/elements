@@ -3,7 +3,7 @@
 	"paths": [
 		"_includes/partials/_nav.njk",
 		"_includes/page.njk",
-		"_includes/plain.njk",
+		["_includes/plain.njk", "_includes/plain-base.njk"],
 		"data/eleventyComputed.js",
 		["_build/eleventy.js", "_build/eleventy-original.js"],
 		"_build/filters.js"

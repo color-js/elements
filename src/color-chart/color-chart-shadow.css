@@ -1,0 +1,123 @@
+:host {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-template-rows: auto 1fr auto;
+	height: clamp(0em, 20em, 100vh);
+	contain: size;
+	container-name: chart;
+	container-type: size;
+}
+
+.axis {
+	display: flex;
+
+	.ticks {
+		flex: 1;
+		display: grid;
+
+		> * {
+			font-size: 60%;
+			line-height: 1;
+		}
+	}
+
+	.label {
+		text-align: center;
+	}
+}
+
+[part="color-channel"],
+slot[name="color-channel"]::slotted(*) {
+	/* <channel-picker>, or anything acting like one, should occupy the whole row above the chart so as not to mess up with the rest of the layout */
+	grid-column: 1 / -1;
+	justify-self: start;
+
+	margin-block: 0.5em 0.7em;
+	font-size: 130%;
+}
+
+#x_axis {
+	grid-column: 2;
+	grid-row: 3;
+
+	display: grid;
+
+	.ticks {
+		grid-row: 1;
+		grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+
+		> * {
+			padding-block-start: 0.5em;
+			margin-inline-end: auto;
+			translate: -50% 0;
+		}
+	}
+
+	.label {
+		grid-row: 2;
+		margin-block-start: .75em;
+	}
+}
+
+#y_axis {
+	grid-column: 1;
+	grid-row: 2;
+
+	.ticks {
+		align-items: end;
+
+		> * {
+			padding-inline-end: 0.5em;
+			translate: 0 0.5lh;
+		}
+	}
+
+	.label {
+		writing-mode: vertical-lr;
+		rotate: 0.5turn;
+		margin-right: 0.5em;
+	}
+}
+
+@property --chart-width {
+	syntax: "<length-percentage>";
+	initial-value: 100%;
+	inherits: true;
+}
+
+#chart-container {
+	container-name: chart;
+	container-type: size;
+}
+
+#chart {
+	overflow: hidden;
+
+	position: relative;
+	border: 1px solid gray;
+	min-height: 100%;
+	background:
+		linear-gradient(to bottom, hsl(220 10% 50% / 40%) 0 1px, transparent 0) 0 -1px / 100%
+			calc(100% / var(--steps-y, 10)),
+		linear-gradient(to right, hsl(220 10% 50% / 30%) 0 1px, transparent 0) -1px 0 /
+			calc(100% / var(--steps-x, 10)) 100%;
+
+	--chart-width: 100cqw;
+	--chart-height: 100cqh;
+	--extent-x: calc(var(--max-x) - var(--min-x));
+	--extent-y: calc(var(--max-y) - var(--min-y));
+}
+
+::slotted(color-scale) {
+	--details-style: compact;
+
+	/*
+	  We want color scales to be easy to style: one can hide them, lower their opacity, etc.
+	  At the same time, we don't want their containers to mess up with other chart parts.
+	  For example, we don't want color scales to get the hover styles when one moves the cursor to the top left part of the chart,
+	  where all the color scale containers reside. So, we need to shrink them.
+	*/
+	display: block;
+	width: 0;
+	height: 0;
+}
