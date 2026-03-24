@@ -12,6 +12,9 @@ index.html
 client_modules/
 importmap.js
 
+# AI settings
+.claude/settings.local.json
+
 # Copied
 _build/filters.js
 _includes/partials/_nav.njk
