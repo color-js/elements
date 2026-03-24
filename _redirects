@@ -1,5 +1,5 @@
 # Backward compatibility (when used as a CDN)
-src/* https://esm.sh/color-elements@0.0.4/src/:splat 200
+/src/:tag/* https://esm.sh/color-elements@0.0.4/src/:tag/:splat 200
 
 # Specific versions
 node_modules/nude-element/* https://cdn.jsdelivr.net/npm/nude-element@0.1.1/:splat 200
