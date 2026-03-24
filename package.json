@@ -16,7 +16,7 @@
     "build": "npm run build:html",
     "watch": "run-p watch:*",
     "prepack": "npm run build",
-    "release": "release-it",
+    "release": "npm login && release-it",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:html": "npx @11ty/eleventy --config=_build/eleventy.js",
     "serve": "npx @11ty/eleventy --config=_build/eleventy.js --serve",
