@@ -4,7 +4,7 @@ import stylistic from "@stylistic/eslint-plugin";
 export default [
 	{
 		languageOptions: {
-			ecmaVersion: 2022,
+			ecmaVersion: "latest",
 			sourceType: "module",
 			globals: {
 				...globals.browser,
