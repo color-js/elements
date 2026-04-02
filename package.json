@@ -6,8 +6,9 @@
   "main": "index.js",
   "exports": {
     ".": "./index.js",
+    "./*": "./src/*/*.js",
     "./*.css": "./src/*/*.css",
-    "./*": "./src/*/*.js"
+    "./*.css.js": "./src/*/*.css.js"
   },
   "scripts": {
     "eslint": "npx eslint .",
