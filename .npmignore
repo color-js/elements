@@ -1,0 +1,39 @@
+# Build tooling & site
+_build/
+_includes/
+_headers
+_redirects
+assets/
+data/
+elements.11tydata.json
+*.html
+
+# Tests
+test/
+
+# Config / editor
+.editorconfig
+.prettierrc
+.vscode/
+eslint.config.js
+
+# AI / project config
+.claude/
+.nudeps/
+
+# Also in .gitignore, but .npmignore replaces it
+.DS_Store
+Thumbs.db
+lib/
+client_modules/
+importmap.js
+package-lock.json
+
+# Non-source files in src/
+*.webp
+*.njk
+src/src.json
+src/**/README.md
+
+# Misc
+logo.svg
