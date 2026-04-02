@@ -5,7 +5,7 @@ const Self = class ColorScale extends ColorElement {
 	static tagName = "color-scale";
 	static url = import.meta.url;
 	static dependencies = new Set(["color-swatch"]);
-	static styles = "./color-scale.css";
+	static styles = new URL("./color-scale.css", import.meta.url);
 	static shadowTemplate = `
 		<div id=swatches></div>
 		<slot></slot>`;
