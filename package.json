@@ -1,6 +1,6 @@
 {
   "name": "color-elements",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "A set of web components for working with color. A Color.js project.",
   "type": "module",
   "main": "index.js",
