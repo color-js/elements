@@ -52,26 +52,27 @@ const Self = class ChannelPicker extends ColorElement {
 
 	#render () {
 		let space = this.selectedSpace;
-		let coords = space.coords;
+		let coords = space?.coords;
 
 		if (space && !coords) {
 			console.warn(`Color space "${space.name}" has no coordinates.`);
 			return;
 		}
 
-		this._el.picker.innerHTML = Object.entries(coords)
+		this._el.picker.innerHTML = Object.entries(coords ?? {})
 			.map(([id, coord]) => `<option value="${id}">${coord.name}</option>`)
 			.join("\n");
 
 		let [prevSpace, prevChannel] = this.value?.split(".") ?? [];
 		if (prevSpace && prevChannel) {
-			let prevChannelName = this._el.space_picker.spaces[prevSpace].coords[prevChannel].name;
-			let currentChannelName = coords[prevChannel]?.name;
-			if (prevChannelName === currentChannelName) {
+			let prevChannelName =
+				this._el.space_picker.spaces?.[prevSpace]?.coords?.[prevChannel]?.name;
+			let currentChannelName = coords?.[prevChannel]?.name;
+			if (prevChannelName && prevChannelName === currentChannelName) {
 				// Preserve the channel if it exists in the new space and has the same name ("b" in "oklab" is not the same as "b" in "p3")
 				this._el.picker.value = prevChannel;
 			}
-			else if (this.#history?.[space.id]) {
+			else if (space && this.#history?.[space.id]) {
 				// Otherwise, try to restore the last channel used
 				this._el.picker.value = this.#history[space.id];
 			}
@@ -80,6 +81,11 @@ const Self = class ChannelPicker extends ColorElement {
 
 	handleEvent (event) {
 		if (event.type === "spacechange") {
+			if (event.oldValue === undefined) {
+				// The sub-elements are not ready yet
+				return;
+			}
+
 			this.#render();
 		}
 
@@ -91,8 +97,8 @@ const Self = class ChannelPicker extends ColorElement {
 		}
 	}
 
-	propChangedCallback ({ name, prop, detail: change }) {
-		if (name === "value" && this.value) {
+	updated ({ changed }) {
+		if (changed.has("value") && this.value) {
 			let [space, channel] = (this.value + "").split(".");
 
 			let currentSpace = this._el.space_picker.value;
@@ -106,9 +112,10 @@ const Self = class ChannelPicker extends ColorElement {
 				this.value = currentValue;
 			}
 			else {
-				let spaces = Object.keys(this._el.space_picker.spaces);
+				let spaces = this._el.space_picker.spaces;
 
-				if (!spaces.includes(space)) {
+				if (!(space in spaces)) {
+					spaces = Object.keys(spaces);
 					console.warn(
 						`No "${space}" color space found. Choose one of the following: ${spaces.join(", ")}. Falling back to "${currentSpace}".`,
 					);
@@ -120,7 +127,7 @@ const Self = class ChannelPicker extends ColorElement {
 					}
 
 					if (currentCoord && currentCoord !== channel) {
-						let coords = Object.keys(this.selectedSpace.coords ?? {});
+						let coords = Object.keys(spaces[space].coords ?? {});
 
 						if (coords.includes(channel)) {
 							this._el.picker.value = channel;
