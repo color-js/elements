@@ -24,12 +24,12 @@ const Self = class GamutBadge extends ColorElement {
 		return this.gamutInfo?.label ?? "";
 	}
 
-	propChangedCallback ({ name, prop, detail: change }) {
-		if (name === "gamuts") {
+	updated ({ changed }) {
+		if (changed.has("gamuts")) {
 			this.style.setProperty("--gamut-count", this.gamuts.length - 1);
 		}
 
-		if (name === "gamutInfo") {
+		if (changed.has("gamutInfo")) {
 			if (this.gamutInfo) {
 				this.style.setProperty("--gamut-level", this.gamutInfo.level);
 				this.style.setProperty("--gamut-label", `"${this.gamutInfo.label}"`);
