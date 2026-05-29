@@ -158,20 +158,14 @@ const Self = class ColorChart extends ColorElement {
 
 	/** (Re)render all scales */
 	renderScales (evt) {
-		let colorScales = this.querySelectorAll("color-scale");
+		// Reset every render: bounds depend on the current axes, so reusing them
+		// across axis/space changes leaks the previously charted channel's range.
+		this.bounds = {
+			x: { min: Infinity, max: -Infinity },
+			y: { min: Infinity, max: -Infinity },
+		};
 
-		if (colorScales.length === 0 || evt.name === "computedColors") {
-			this.bounds = {
-				x: { min: Infinity, max: -Infinity },
-				y: { min: Infinity, max: -Infinity },
-			};
-
-			if (colorScales.length === 0) {
-				return;
-			}
-		}
-
-		for (let colorScale of colorScales) {
+		for (let colorScale of this.querySelectorAll("color-scale")) {
 			let scale = this.series.get(colorScale);
 
 			if (
@@ -181,20 +175,21 @@ const Self = class ColorChart extends ColorElement {
 				evt.target.nodeName !== "COLOR-SCALE"
 			) {
 				scale = this.renderScale(colorScale);
+			}
 
-				if (scale) {
-					if (scale.x.min < this.bounds.x.min) {
-						this.bounds.x.min = scale.x.min;
-					}
-					if (scale.x.max > this.bounds.x.max) {
-						this.bounds.x.max = scale.x.max;
-					}
-					if (scale.y.min < this.bounds.y.min) {
-						this.bounds.y.min = scale.y.min;
-					}
-					if (scale.y.max > this.bounds.y.max) {
-						this.bounds.y.max = scale.y.max;
-					}
+			// Both fresh and cached scales contribute, since bounds were just reset.
+			if (scale) {
+				if (scale.x.min < this.bounds.x.min) {
+					this.bounds.x.min = scale.x.min;
+				}
+				if (scale.x.max > this.bounds.x.max) {
+					this.bounds.x.max = scale.x.max;
+				}
+				if (scale.y.min < this.bounds.y.min) {
+					this.bounds.y.min = scale.y.min;
+				}
+				if (scale.y.max > this.bounds.y.max) {
+					this.bounds.y.max = scale.y.max;
 				}
 			}
 		}
@@ -225,8 +220,11 @@ const Self = class ColorChart extends ColorElement {
 			}
 
 			const coords = ret.colors.map(({ color }) => color.to(this.space).get(this[axis]));
-			const min = this[`${axis}MinAsNumber`];
-			const max = this[`${axis}MaxAsNumber`];
+			// Only clip to an explicitly set range. For "auto", the AsNumber getters
+			// return `this.bounds` — which we're still computing — so clipping would
+			// make bounds depend on scale order (later scales clipped to earlier ones).
+			const min = this[`${axis}Min`] === "auto" ? -Infinity : this[`${axis}MinAsNumber`];
+			const max = this[`${axis}Max`] === "auto" ? Infinity : this[`${axis}MaxAsNumber`];
 
 			if (resolved.type === "angle") {
 				// First, normalize
@@ -585,6 +583,14 @@ Self.define();
 export default Self;
 
 function getAxis ({ min, max, initialSteps, force = { min: false, max: false } }) {
+	if (min === max) {
+		// Constant channel: pad so range > 0. Otherwise step is 0, the tick count
+		// is NaN, and `Array(NaN)` throws RangeError: Invalid array length.
+		let pad = Math.abs(min) || 1;
+		min -= pad;
+		max += pad;
+	}
+
 	let range = max - min;
 	let step = range / initialSteps;
 	let magnitude = Math.floor(Math.log10(step));
