@@ -30,8 +30,12 @@ const Self = class SpacePicker extends ColorElement {
 		}
 	}
 
-	propChangedCallback ({ name, prop, detail: change }) {
-		if (name === "spaces") {
+	updated ({ changed }) {
+		if (
+			changed.has("spaces") ||
+			changed.has("groups") ||
+			changed.has("getSpaceLabel")
+		) {
 			if (!this.groups) {
 				this._el.picker.innerHTML = Object.entries(this.spaces)
 					.map(
@@ -81,7 +85,7 @@ const Self = class SpacePicker extends ColorElement {
 			this._el.picker.value = this.value;
 		}
 
-		if (name === "value") {
+		if (changed.has("spaces") || changed.has("value")) {
 			let value = this.value;
 
 			if (value) {

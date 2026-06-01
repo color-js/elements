@@ -54,11 +54,15 @@ const Self = class ColorSlider extends ColorElement {
 		}
 	}
 
-	propChangedCallback ({ name, prop, detail: change }) {
-		if (["min", "max", "step", "value", "defaultValue"].includes(name)) {
-			prop.applyChange(this._el.slider, change);
+	updated ({ changed }) {
+		for (let name of ["min", "max", "step", "value", "defaultValue"]) {
+			if (!changed.has(name)) {
+				continue;
+			}
 
-			let value = change.value;
+			this._el.slider[name] = this[name];
+
+			let value = this[name];
 			if (this.tooltip === "progress") {
 				if (name === "value" || name === "defaultValue") {
 					value = +(this.progress * 100).toPrecision(4);
@@ -68,10 +72,10 @@ const Self = class ColorSlider extends ColorElement {
 					value = { min: 1, max: 100, step: 1 }[name];
 				}
 			}
-			prop.applyChange(this._el.spinner, { ...change, value: +(+value).toPrecision(4) });
+			this._el.spinner[name] = +(+value).toPrecision(4);
 		}
 
-		if (name === "stops") {
+		if (changed.has("stops")) {
 			// FIXME will fail if there are none values
 			let stops = this.stops;
 			let supported = stops.every(color => CSS.supports("color", color));
@@ -104,7 +108,8 @@ const Self = class ColorSlider extends ColorElement {
 
 			this.style.setProperty("--slider-color-stops", stops);
 		}
-		else if (name === "space" && supports.inSpace) {
+
+		if (changed.has("space") && supports.inSpace) {
 			let space = this.space;
 			let spaceId = space.id;
 			let supported = CSS.supports("background", `linear-gradient(in ${spaceId}, red, tan)`);
@@ -115,7 +120,8 @@ const Self = class ColorSlider extends ColorElement {
 
 			this.style.setProperty("--color-space", spaceId);
 		}
-		else if (name === "color" || name === "defaultColor") {
+
+		if (changed.has("color") || changed.has("defaultColor")) {
 			let color = this.color;
 
 			if (color) {
@@ -123,18 +129,20 @@ const Self = class ColorSlider extends ColorElement {
 				this.style.setProperty("--color", displayedColor);
 			}
 		}
-		else if (name === "value" || name === "min" || name === "max") {
+
+		if (changed.has("value") || changed.has("min") || changed.has("max")) {
 			this.style.setProperty("--progress", this.progress);
 
-			if (name === "value" && !supports.fieldSizing) {
+			if (changed.has("value") && !supports.fieldSizing) {
 				let valueStr = this.value + "";
 				this._el.spinner.style.setProperty("--value-length", valueStr.length);
 			}
 		}
-		else if (name === "tooltip") {
-			if (change.value !== undefined) {
+
+		if (changed.has("tooltip")) {
+			if (this.tooltip !== undefined) {
 				let values = this;
-				if (change.value === "progress") {
+				if (this.tooltip === "progress") {
 					values = {
 						min: 1,
 						max: 100,

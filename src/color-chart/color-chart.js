@@ -352,20 +352,15 @@ const Self = class ColorChart extends ColorElement {
 		return ret;
 	}
 
-	propChangedCallback (evt) {
-		let { name, prop, detail: change } = evt;
-
-		if (name.startsWith("x") || name.startsWith("y")) {
-			let axis = name[0];
-
-			if (!/^[xy](?:Resolved|(?:Min|Max)AsNumber)$/.test(name)) {
-				return;
+	updated ({ changed }) {
+		for (let name of changed.keys()) {
+			if (/^[xy](?:Resolved|(?:Min|Max)AsNumber)$/.test(name)) {
+				this.render();
+				break;
 			}
-
-			this.render(evt);
 		}
 
-		if (name === "info") {
+		if (changed.has("info")) {
 			for (let colorScale of this.children) {
 				colorScale.info = this.info;
 			}
@@ -377,14 +372,14 @@ const Self = class ColorChart extends ColorElement {
 			default: "oklch.l",
 			changed (change) {
 				this.bounds.y = { min: Infinity, max: -Infinity };
+				this._el.channel_picker.value = this.y;
 			},
 			convert (value) {
-				// Try setting the value to the channel picker. The picker will handle possible erroneous values.
-				this._el.channel_picker.value = value;
-
-				// If the value is not set, that means it's invalid.
-				// In that case, we are falling back to the picker's current value.
-				if (this._el.channel_picker.value !== value) {
+				// Validates here, not in changed(), because re-entrant sets cause infinite recursion
+				try {
+					Self.Color.Space.resolveCoord(value, "oklch");
+				}
+				catch {
 					return this._el.channel_picker.value;
 				}
 

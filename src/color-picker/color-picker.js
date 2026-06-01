@@ -74,8 +74,8 @@ const Self = class ColorPicker extends ColorElement {
 		this.dispatchEvent(new event.constructor(event.type, { ...event }));
 	}
 
-	propChangedCallback ({ name, prop, detail: change }) {
-		if (name === "space" || name === "alpha") {
+	updated ({ changed }) {
+		if (changed.has("space") || changed.has("alpha")) {
 			let space = this.space;
 
 			if (this.color.space !== space) {
@@ -112,14 +112,13 @@ const Self = class ColorPicker extends ColorElement {
 			}
 		}
 
-		if (name === "color") {
+		if (changed.has("color")) {
 			for (let slider of this._el.sliders.children) {
 				slider.color = this.color;
 			}
 
 			if (!this._el.swatch.color || !this.color.equals(this._el.swatch.color)) {
-				// Avoid typing e.g. "red" and having it replaced with "rgb(100% 0% 0%)" under your caret
-				prop.applyChange(this._el.swatch, change);
+				this._el.swatch.color = this.color;
 			}
 		}
 	}
@@ -137,16 +136,16 @@ const Self = class ColorPicker extends ColorElement {
 
 				return value + "";
 			},
-			changed ({ parsedValue, source, ...change }) {
-				if (!parsedValue && source !== "default") {
-					// Something went wrong. We should always have a value. Falling back to the current space
+			changed ({ value, source }) {
+				if (!value && source) {
+					// A user write (source === property/attribute) cleared the value. We should always
+					// have one, so fall back to the current space.
 					this.spaceId = this.space.id;
 					return;
 				}
 
-				if (this.props.space && this.props.space.id !== parsedValue) {
-					// The space object we have in the cache is outdated. We need to delete it so that the space getter returns the updated one
-					delete this.props.space;
+				if (this._el.space_picker.value !== value) {
+					this._el.space_picker.value = value;
 				}
 			},
 			reflect: {
@@ -159,8 +158,8 @@ const Self = class ColorPicker extends ColorElement {
 				return this._el.space_picker.selectedSpace;
 			},
 			set: true,
-			changed ({ parsedValue, ...change }) {
-				if (parsedValue === undefined) {
+			changed ({ value }) {
+				if (value === undefined) {
 					// this.spaceId changed
 					if (this._el.space_picker.value !== this.spaceId) {
 						this._el.space_picker.value = this.spaceId;
@@ -168,17 +167,16 @@ const Self = class ColorPicker extends ColorElement {
 
 					return;
 				}
-				else if (!parsedValue) {
+				else if (!value) {
 					// Something went wrong. We should always have a value. Falling back to the current space
 					this.space = this._el.space_picker.selectedSpace;
 					return;
 				}
 
-				parsedValue =
-					parsedValue instanceof Self.Color.Space ? parsedValue.id : parsedValue;
-				if (this.spaceId !== parsedValue) {
-					this._el.space_picker.value = parsedValue;
-					this.spaceId = parsedValue;
+				value = value instanceof Self.Color.Space ? value.id : value;
+				if (this.spaceId !== value) {
+					this._el.space_picker.value = value;
+					this.spaceId = value;
 				}
 			},
 			dependencies: ["spaceId"],

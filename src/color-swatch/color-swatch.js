@@ -75,10 +75,17 @@ const Self = class ColorSwatch extends ColorElement {
 			.trim();
 	}
 
-	propChangedCallback ({ name, prop, detail: change }) {
+	propChangedCallback ({ name }) {
+		// Synchronous so consumers (e.g., color-chart) can read --color in the same propchange cycle
+		if (name === "color") {
+			this.style.setProperty("--color", this.color?.display());
+		}
+	}
+
+	updated ({ changed }) {
 		let input = this._el.input;
 
-		if (name === "gamuts") {
+		if (changed.has("gamuts")) {
 			if (this.gamuts === "none") {
 				this._el.gamutIndicator?.remove();
 				this._el.gamutIndicator = null;
@@ -96,13 +103,9 @@ const Self = class ColorSwatch extends ColorElement {
 					this.shadowRoot.append(this._el.gamutIndicator);
 
 					this._el.gamutIndicator.addEventListener("gamutchange", evt => {
-						let gamut = this._el.gamutIndicator.gamut;
+						let gamut = evt.value;
 						this.setAttribute("gamut", gamut);
-						this.dispatchEvent(
-							new CustomEvent("gamutchange", {
-								detail: gamut,
-							}),
-						);
+						this.dispatchEvent(new evt.constructor("gamutchange", { value: gamut }));
 					});
 				}
 				else {
@@ -111,13 +114,13 @@ const Self = class ColorSwatch extends ColorElement {
 			}
 		}
 
-		if (name === "value") {
+		if (changed.has("value")) {
 			if (input && (!input.value || input.value !== this.value)) {
 				input.value = this.value;
 			}
 		}
 
-		if (name === "label") {
+		if (changed.has("label")) {
 			if (this.label.length && this.label !== this.swatchTextContent) {
 				this._el.label.textContent = this.label;
 				this._el.label.title = this.label;
@@ -128,7 +131,7 @@ const Self = class ColorSwatch extends ColorElement {
 			}
 		}
 
-		if (name === "color") {
+		if (changed.has("color")) {
 			let isValid = this.color !== null || !this.value;
 
 			input?.setCustomValidity(isValid ? "" : "Invalid color");
@@ -136,12 +139,9 @@ const Self = class ColorSwatch extends ColorElement {
 			if (this._el.gamutIndicator) {
 				this._el.gamutIndicator.color = this.color;
 			}
-
-			let colorString = this.color?.display();
-			this.style.setProperty("--color", colorString);
 		}
 
-		if (name === "colorInfo") {
+		if (changed.has("colorInfo")) {
 			if (!this.colorInfo) {
 				return;
 			}

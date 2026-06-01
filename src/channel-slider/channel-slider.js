@@ -87,12 +87,16 @@ const Self = class ChannelSlider extends ColorElement {
 		return this._el.slider.progressAt(p);
 	}
 
-	propChangedCallback ({ name, prop, detail: change }) {
-		if (["space", "min", "max", "step", "value", "defaultValue"].includes(name)) {
-			prop.applyChange(this._el.slider, change);
+	updated ({ changed }) {
+		for (let name of ["space", "min", "max", "step", "value", "defaultValue"]) {
+			if (!changed.has(name)) {
+				continue;
+			}
 
-			if (["min", "max", "step", "value", "defaultValue"].includes(name)) {
-				prop.applyChange(this._el.spinner, change);
+			this._el.slider[name] = this[name];
+
+			if (name !== "space") {
+				this._el.spinner[name] = this[name];
 
 				if (name === "value" && this.value !== undefined) {
 					this._el.spinner.value = Number(this.value.toPrecision(4));
@@ -106,15 +110,15 @@ const Self = class ChannelSlider extends ColorElement {
 		}
 
 		if (
-			name === "defaultColor" ||
-			name === "space" ||
-			name === "channel" ||
-			name === "min" ||
-			name === "max"
+			changed.has("defaultColor") ||
+			changed.has("space") ||
+			changed.has("channel") ||
+			changed.has("min") ||
+			changed.has("max")
 		) {
 			this._el.slider.stops = this.stops;
 
-			if (name === "space" || name === "channel" || name === "min" || name === "max") {
+			if (changed.has("space") || changed.has("channel") || changed.has("min") || changed.has("max")) {
 				this._el.channel_info.innerHTML = `${this.channelName} <em>(${this.min}&thinsp;&ndash;&thinsp;${this.max})</em>`;
 			}
 		}
