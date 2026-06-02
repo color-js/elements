@@ -76,3 +76,7 @@
 		}
 	}
 }
+
+body > footer {
+	padding-block-end: 1rem;
+}
