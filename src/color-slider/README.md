@@ -233,6 +233,7 @@ These properties are read-only.
 |----------|------|-------------|
 | `progress` | `number` | The slider value converted to a 0-1 number with `0` corresponding to the min of the range and `1` to the max. |
 | `inGamut` | `boolean` | Whether the currently selected `color` is inside the target [`gamut`](#attributes--properties). Always `true` when no gamut is set. |
+| `oogRanges` | `Array<[number, number]>` | The out-of-[`gamut`](#attributes--properties) ranges of the whole band, as `[start, end]` pairs in 0–1 progress (sorted, merged). Empty when no gamut is set or the band is entirely in gamut. |
 
 
 ### Events

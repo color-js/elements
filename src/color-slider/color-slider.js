@@ -200,53 +200,16 @@ const Self = class ColorSlider extends ColorElement {
 	}
 
 	/**
-	 * Build the value of the `--slider-gamut-overlay` custom property: gradient color stops that paint
-	 * `--_oog-color` over each out-of-gamut range of the band (from {@link getGamutBoundaries}) and are
-	 * transparent in between, with a hard edge at each gamut boundary.
+	 * Build the value of the `--slider-gamut-overlay` custom property from {@link ColorSlider#oogRanges}:
+	 * `--_oog-color` over each out-of-gamut range, transparent in between, with a hard edge at each
+	 * gamut boundary.
 	 *
 	 * @returns {string | null} Comma-separated overlay color stops, or null when nothing is out of gamut.
 	 */
 	#buildGamutOverlay () {
-		let scales = this.scales;
-		let bands = scales.length;
+		let oogRanges = this.oogRanges;
 
-		// Need at least one band (≥ 2 stops) to interpolate along.
-		if (bands === 0 || !this.gamut) {
-			return null;
-		}
-
-		// Scan each band (a single interpolation between two stops) independently. A non-polar one is
-		// ~monotone, so its endpoints + midpoint (samples = 2) suffice; a polar one can weave in and out
-		// of gamut, so it needs dense sampling.
-		// NOTE: an out-of-gamut → in → out island that misses the midpoint is still under-sampled.
-		let samples = this.space.isPolar ? 100 : 2;
-		let oogRanges = [];
-
-		for (let i = 0; i < bands; i++) {
-			let ranges = getGamutBoundaries(this.gamut, scales[i], { samples });
-
-			// No gamut at all: nothing to paint.
-			if (!ranges) {
-				return null;
-			}
-
-			// Place each band-local [0, 1] range into its slot in the whole track, merging with the
-			// previous range when they touch across a band boundary (both bands out of gamut there).
-			for (let [start, end] of ranges) {
-				let from = (i + start) / bands;
-				let to = (i + end) / bands;
-				let last = oogRanges.at(-1);
-
-				if (last && last[1] === from) {
-					last[1] = to;
-				}
-				else {
-					oogRanges.push([from, to]);
-				}
-			}
-		}
-
-		// The whole band is in gamut: nothing to paint.
+		// The whole band is in gamut (or no gamut set): nothing to paint.
 		if (oogRanges.length === 0) {
 			return null;
 		}
@@ -414,6 +377,50 @@ const Self = class ColorSlider extends ColorElement {
 				return scales;
 			},
 			dependencies: ["stops", "space"],
+		},
+		oogRanges: {
+			get () {
+				let scales = this.scales;
+				let bands = scales.length;
+
+				if (bands === 0 || !this.gamut) {
+					return [];
+				}
+
+				// Scan each band (one interpolation between two stops) independently. A non-polar one is
+				// ~monotone, so its endpoints + midpoint (samples = 2) suffice; a polar one can weave in
+				// and out of gamut, so it needs dense sampling.
+				// NOTE: an out-of-gamut → in → out island that misses the midpoint is still under-sampled.
+				let samples = this.space.isPolar ? 100 : 2;
+				let ranges = [];
+
+				for (let i = 0; i < bands; i++) {
+					let bandRanges = getGamutBoundaries(this.gamut, scales[i], { samples });
+
+					if (!bandRanges) {
+						// gamut is "none" or an unknown id: nothing out of gamut.
+						return [];
+					}
+
+					// Place each band-local [0, 1] range into its slot in the whole track, merging with
+					// the previous range when they touch across a band boundary (both out of gamut there).
+					for (let [start, end] of bandRanges) {
+						let from = (i + start) / bands;
+						let to = (i + end) / bands;
+						let last = ranges.at(-1);
+
+						if (last && last[1] === from) {
+							last[1] = to;
+						}
+						else {
+							ranges.push([from, to]);
+						}
+					}
+				}
+
+				return ranges;
+			},
+			dependencies: ["scales", "gamut"],
 		},
 
 		tooltip: {
