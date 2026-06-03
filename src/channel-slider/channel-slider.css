@@ -5,6 +5,7 @@
 	grid-template-columns: 1fr auto;
 	gap: 0.3em;
 	align-items: center;
+	text-align: start;
 
 	em {
 		opacity: 60%;
