@@ -110,6 +110,10 @@ const Self = class ChannelSlider extends ColorElement {
 			}
 		}
 
+		if (changed.has("gamut")) {
+			this._el.slider.gamut = this.gamut;
+		}
+
 		if (
 			changed.has("defaultColor") ||
 			changed.has("space") ||
@@ -149,6 +153,10 @@ const Self = class ChannelSlider extends ColorElement {
 			stringify (value) {
 				return value?.id;
 			},
+		},
+		gamut: {
+			type: String,
+			default: "",
 		},
 		channel: {
 			type: String,
