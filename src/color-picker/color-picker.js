@@ -110,6 +110,7 @@ const Self = class ColorPicker extends ColorElement {
 
 			for (let slider of this._el.sliders.children) {
 				slider.color = this.color;
+				slider.gamut = this.gamut;
 			}
 		}
 
@@ -232,6 +233,16 @@ const Self = class ColorPicker extends ColorElement {
 			},
 			reflect: {
 				from: true,
+			},
+		},
+
+		gamut: {
+			type: String,
+			default: "",
+			changed () {
+				for (let slider of this._el.sliders.children) {
+					slider.gamut = this.gamut;
+				}
 			},
 		},
 	};
