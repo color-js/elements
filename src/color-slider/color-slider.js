@@ -36,12 +36,6 @@ const Self = class ColorSlider extends ColorElement {
 			</slot>
 		<slot></slot>`;
 
-	// MediaQueryLists used to follow the display gamut while gamut="auto".
-	#gamutMedia;
-	#updateDisplayGamut = () => {
-		this.displayGamut = getDisplayGamut();
-	};
-
 	constructor () {
 		super();
 
@@ -56,28 +50,11 @@ const Self = class ColorSlider extends ColorElement {
 
 		this._el.slider.addEventListener("input", this);
 		this._el.spinner.addEventListener("input", this);
-
-		// Follow the display gamut so gamut="auto" updates if the display changes (e.g. the window
-		// moves to another monitor). The queries are cumulative, so the two widest cover all changes.
-		this.#gamutMedia = [
-			globalThis.matchMedia?.("(color-gamut: rec2020)"),
-			globalThis.matchMedia?.("(color-gamut: p3)"),
-		];
-
-		for (let mq of this.#gamutMedia) {
-			mq?.addEventListener("change", this.#updateDisplayGamut);
-		}
-
-		this.#updateDisplayGamut();
 	}
 
 	disconnectedCallback () {
 		this._el.slider.removeEventListener("input", this);
 		this._el.spinner.removeEventListener("input", this);
-
-		for (let mq of this.#gamutMedia ?? []) {
-			mq?.removeEventListener("change", this.#updateDisplayGamut);
-		}
 	}
 
 	handleEvent (event) {
@@ -154,12 +131,7 @@ const Self = class ColorSlider extends ColorElement {
 		// The color band itself is left untouched; this just layers the out-of-gamut color on top.
 		// Set on the slider (not the host) so the nested var(--_oog-color) in the overlay
 		// resolves where it's defined.
-		if (
-			changed.has("stops") ||
-			changed.has("space") ||
-			changed.has("gamut") ||
-			changed.has("displayGamut")
-		) {
+		if (changed.has("stops") || changed.has("space") || changed.has("gamut")) {
 			let overlay = this.#buildGamutOverlay();
 
 			if (overlay) {
@@ -241,11 +213,6 @@ const Self = class ColorSlider extends ColorElement {
 		}
 
 		return tessellated;
-	}
-
-	// The gamut to actually test against, resolving "auto" to the display's gamut.
-	#effectiveGamut () {
-		return this.gamut === "auto" ? this.displayGamut : this.gamut;
 	}
 
 	/**
@@ -384,13 +351,10 @@ const Self = class ColorSlider extends ColorElement {
 		gamut: {
 			type: String,
 			default: "",
-		},
-		displayGamut: {
-			type: String,
-			default () {
-				return getDisplayGamut();
+			// Resolve "auto" to the display's gamut, once, when the value is set.
+			convert (value) {
+				return value === "auto" ? getDisplayGamut() : value;
 			},
-			reflect: false,
 		},
 
 		color: {
@@ -404,21 +368,19 @@ const Self = class ColorSlider extends ColorElement {
 		},
 		inGamut: {
 			get () {
-				let gamut = this.#effectiveGamut();
-
-				if (!gamut || gamut === "none" || !this.color) {
+				if (!this.gamut || this.gamut === "none" || !this.color) {
 					return true;
 				}
 
 				try {
-					return this.color.inGamut(gamut);
+					return this.color.inGamut(this.gamut);
 				}
 				catch (error) {
 					// NOTE: invalid gamut id; treat the color as in-gamut.
 					return true;
 				}
 			},
-			dependencies: ["color", "gamut", "displayGamut"],
+			dependencies: ["color", "gamut"],
 		},
 		scales: {
 			get () {
@@ -440,7 +402,7 @@ const Self = class ColorSlider extends ColorElement {
 			get () {
 				let scales = this.scales;
 				let bands = scales.length;
-				let gamut = this.#effectiveGamut();
+				let gamut = this.gamut;
 
 				if (bands === 0 || !gamut) {
 					return [];
@@ -479,7 +441,7 @@ const Self = class ColorSlider extends ColorElement {
 
 				return ranges;
 			},
-			dependencies: ["scales", "gamut", "displayGamut"],
+			dependencies: ["scales", "gamut"],
 		},
 
 		tooltip: {

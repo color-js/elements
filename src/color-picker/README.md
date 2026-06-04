@@ -128,7 +128,7 @@ All attributes are reactive:
 | – | `space` | `ColorSpace` | `OKLCh` | Color space object corresponding to the `space` attribute. |
 | `color` | `color` | `Color` &#124; `string` | `oklch(50% 50% 180)` | The current color value. |
 | `alpha` | `alpha` | `boolean` &#124; `undefined` | `undefined` | Whether to show the alpha channel slider or not. |
-| `gamut` | `gamut` | `string` | `""` | A color gamut id (e.g. `srgb`, `p3`, `rec2020`), or `auto` to follow the display. Forwarded to every channel slider, marking the out-of-gamut parts of each band with [`--oog-color`](../color-slider/#css-variables). Empty or `none` disables it. |
+| `gamut` | `gamut` | `string` | `""` | A color gamut id (e.g. `srgb`, `p3`, `rec2020`), or `auto` to use the display's gamut. Forwarded to every channel slider, marking the out-of-gamut parts of each band with [`--oog-color`](../color-slider/#css-variables). Empty or `none` disables it. |
 
 ### Events
 
