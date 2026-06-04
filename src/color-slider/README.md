@@ -189,7 +189,7 @@ Then use a `color-slider` class on your slider element, and use [CSS variables](
 | `space` | `space` | `ColorSpace` &#124; `string` | `oklch` | The color space to use for interpolation. |
 | `color` | `color` | `Color` &#124; `string` | `oklch(50% 50% 180)` | The current color value. |
 | `stops` | `stops` | `String` &#124; `Array<Color>` | - | Comma-separated list of color stops. |
-| `gamut` | `gamut` | `string` | `""` | A color gamut id (`srgb`, `p3`, `rec2020`), or `auto` to follow the display's gamut (detected via the `color-gamut` media query, and updated if the display changes). When set, the portions of the band whose color falls outside this gamut are overlaid with [`--oog-color`](#css-variables), with a hard edge at each gamut boundary. Empty or `none` disables it. |
+| `gamut` | `gamut` | `string` | `""` | A color gamut id (`srgb`, `p3`, `rec2020`), or `auto` to use the display's gamut (detected once via the `color-gamut` media query). When set, the portions of the band whose color falls outside this gamut are overlaid with [`--oog-color`](#css-variables), with a hard edge at each gamut boundary. Empty or `none` disables it. |
 | `min` | `min` | `number` | 0 | The minimum value for the slider. |
 | `max` | `max` | `number` | 1 | The maximum value for the slider. |
 | `step` | `step` | `number` | Computed automatically based on `this.min` and `this.max`. | The granularity that the slider's current value must adhere to. |
@@ -234,7 +234,6 @@ These properties are read-only.
 | `progress` | `number` | The slider value converted to a 0-1 number with `0` corresponding to the min of the range and `1` to the max. |
 | `inGamut` | `boolean` | Whether the currently selected `color` is inside the target [`gamut`](#attributes--properties). Always `true` when no gamut is set. |
 | `oogRanges` | `Array<[number, number]>` | The out-of-[`gamut`](#attributes--properties) ranges of the whole band, as `[start, end]` pairs in 0–1 progress (sorted, merged). Empty when no gamut is set or the band is entirely in gamut. |
-| `displayGamut` | `string` | The display's gamut (`srgb`, `p3`, or `rec2020`), detected via the `color-gamut` media query and kept up to date. This is what `gamut="auto"` resolves to. |
 
 
 ### Events
