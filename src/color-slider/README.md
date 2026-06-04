@@ -219,7 +219,7 @@ If you’re only using the CSS file, you should set these yourself.
 | `--slider-thumb-border` | `<line-width>` &#124;&#124; `<line-style>` &#124;&#124; `<color>` | Border of the slider thumb. |
 | `--slider-thumb-border-active` | `<line-width>` &#124;&#124; `<line-style>` &#124;&#124; `<color>` | Border of the slider thumb in active state. |
 | `--slider-thumb-scale-active` | `<number>` | Scale transform applied to the slider thumb in active state. |
-| `--oog-color` | `<color>` | Color overlaid on the out-of-[`gamut`](#attributes--properties) parts of the band. Defaults to a light/dark-adaptive neutral gray. |
+| `--oog-color` | `<color>` | Color overlaid on the out-of-[`gamut`](#attributes-%26-properties) parts of the band. Defaults to a light/dark-adaptive neutral gray. |
 | `--tooltip-background` | `<color>` | Background color of the tooltip. |
 | `--tooltip-border-radius` | `<length>` | Border radius of the tooltip. |
 | `--tooltip-pointer-height` | `<length>` | Height of the tooltip pointer triangle. |
@@ -232,8 +232,8 @@ These properties are read-only.
 | Property | Type | Description |
 |----------|------|-------------|
 | `progress` | `number` | The slider value converted to a 0-1 number with `0` corresponding to the min of the range and `1` to the max. |
-| `inGamut` | `boolean` | Whether the currently selected `color` is inside the target [`gamut`](#attributes--properties). Always `true` when no gamut is set. |
-| `oogRanges` | `Array<[number, number]>` | The out-of-[`gamut`](#attributes--properties) ranges of the whole band, as `[start, end]` pairs in 0–1 progress (sorted, merged). Empty when no gamut is set or the band is entirely in gamut. |
+| `inGamut` | `boolean` | Whether the currently selected `color` is inside the target [`gamut`](#attributes-%26-properties). Always `true` when no gamut is set. |
+| `oogRanges` | `Array<[number, number]>` | The out-of-[`gamut`](#attributes-%26-properties) ranges of the whole band, as `[start, end]` pairs in 0–1 progress (sorted, merged). Empty when no gamut is set or the band is entirely in gamut. |
 
 
 ### Events
