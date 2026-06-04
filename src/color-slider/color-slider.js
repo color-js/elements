@@ -7,22 +7,6 @@ let supports = {
 	fieldSizing: CSS?.supports("field-sizing", "content"),
 };
 
-// Detect the display's color gamut via the color-gamut media query. The values are cumulative
-// (a wider display also matches narrower queries), so the widest match wins.
-function getDisplayGamut () {
-	let mm = globalThis.matchMedia;
-
-	if (mm?.("(color-gamut: rec2020)")?.matches) {
-		return "rec2020";
-	}
-
-	if (mm?.("(color-gamut: p3)")?.matches) {
-		return "p3";
-	}
-
-	return "srgb";
-}
-
 const Self = class ColorSlider extends ColorElement {
 	static tagName = "color-slider";
 	static url = import.meta.url;
@@ -353,7 +337,24 @@ const Self = class ColorSlider extends ColorElement {
 			default: "",
 			// Resolve "auto" to the display's gamut, once, when the value is set.
 			convert (value) {
-				return value === "auto" ? getDisplayGamut() : value;
+				if (value !== "auto") {
+					return value;
+				}
+
+				if (!globalThis.matchMedia) {
+					return "srgb";
+				}
+
+				// TODO listen to updates (can happen if window is moved to another screen)
+				if (matchMedia("(color-gamut: rec2020)").matches) {
+					return "rec2020";
+				}
+
+				if (matchMedia("(color-gamut: p3)").matches) {
+					return "p3";
+				}
+
+				return "srgb";
 			},
 		},
 
