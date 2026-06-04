@@ -252,7 +252,7 @@ These [custom states](https://developer.mozilla.org/en-US/docs/Web/API/CustomSta
 
 | Name | Description |
 |------|-------------|
-| `in-gamut` | Present while the currently selected `color` is inside the target [`gamut`](#attributes--properties) (and when no gamut is set). |
+| `in-gamut` | Present while the currently selected `color` is inside the target [`gamut`](#attributes-%26-properties) (and when no gamut is set). |
 
 ### Parts
 
