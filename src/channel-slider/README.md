@@ -139,7 +139,7 @@ All attributes are reactive:
 | Attribute | Property | Property type | Default value | Description |
 |-----------|----------|---------------|---------------|-------------|
 | `space` | `space` | `ColorSpace` &#124; `string` | `oklch` | The color space to use for interpolation. |
-| `gamut` | `gamut` | `string` | `""` | A color gamut id (`srgb`, `p3`, `rec2020`), or `auto` to use the display's gamut, forwarded to the underlying [`<color-slider>`](../color-slider/#attributes--properties): the out-of-gamut parts of the band are overlaid with [`--oog-color`](../color-slider/#css-variables). Empty or `none` disables it. |
+| `gamut` | `gamut` | `string` | `""` | A color gamut id (`srgb`, `p3`, `rec2020`), or `auto` to use the display's gamut, forwarded to the underlying [`<color-slider>`](../color-slider/#attributes-%26-properties): the out-of-gamut parts of the band are overlaid with [`--oog-color`](../color-slider/#css-variables). Empty or `none` disables it. |
 | `channel` | `channel` | `string` | `h` | The component to use for the gradient. |
 | `min` | `min` | `number` | `this.refRange[0]` | The minimum value for the slider. |
 | `max` | `max` | `number` | `this.refRange[1]` | The maximum value for the slider. |
