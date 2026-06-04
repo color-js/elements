@@ -3,8 +3,9 @@ import ColorElement from "../common/color-element.js";
 const Self = class ColorInline extends ColorElement {
 	static tagName = "color-inline";
 	static url = import.meta.url;
-	static styles = import("./color-inline.css", { with: { type: "css" } })
-		.catch(() => new URL("./color-inline.css", import.meta.url));
+	static styles = import("./color-inline.css", { with: { type: "css" } }).catch(
+		() => new URL("./color-inline.css", import.meta.url),
+	);
 	static shadowTemplate = `
 		<div part="swatch-wrapper">
 			<div id="swatch" part="swatch"></div>

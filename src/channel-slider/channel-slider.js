@@ -6,8 +6,9 @@ import { getStep } from "../common/util.js";
 const Self = class ChannelSlider extends ColorElement {
 	static tagName = "channel-slider";
 	static url = import.meta.url;
-	static styles = import("./channel-slider.css", { with: { type: "css" } })
-		.catch(() => new URL("./channel-slider.css", import.meta.url));
+	static styles = import("./channel-slider.css", { with: { type: "css" } }).catch(
+		() => new URL("./channel-slider.css", import.meta.url),
+	);
 	static shadowTemplate = `
 		<label class="color-slider-label" part="label">
 			<slot>
@@ -118,7 +119,12 @@ const Self = class ChannelSlider extends ColorElement {
 		) {
 			this._el.slider.stops = this.stops;
 
-			if (changed.has("space") || changed.has("channel") || changed.has("min") || changed.has("max")) {
+			if (
+				changed.has("space") ||
+				changed.has("channel") ||
+				changed.has("min") ||
+				changed.has("max")
+			) {
 				this._el.channel_info.innerHTML = `${this.channelName} <em>(${this.min}&thinsp;&ndash;&thinsp;${this.max})</em>`;
 			}
 		}

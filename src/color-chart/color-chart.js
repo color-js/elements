@@ -5,10 +5,12 @@ import ColorElement from "../common/color-element.js";
 const Self = class ColorChart extends ColorElement {
 	static tagName = "color-chart";
 	static url = import.meta.url;
-	static styles = import("./color-chart-shadow.css", { with: { type: "css" } })
-		.catch(() => new URL("./color-chart-shadow.css", import.meta.url));
-	static globalStyles = import("./color-chart-global.css", { with: { type: "css" } })
-		.catch(() => new URL("./color-chart-global.css", import.meta.url));
+	static styles = import("./color-chart-shadow.css", { with: { type: "css" } }).catch(
+		() => new URL("./color-chart-shadow.css", import.meta.url),
+	);
+	static globalStyles = import("./color-chart-global.css", { with: { type: "css" } }).catch(
+		() => new URL("./color-chart-global.css", import.meta.url),
+	);
 	static shadowTemplate = `
 		<slot name="color-channel">
 			<channel-picker id="channel_picker" part="color-channel"></channel-picker>
