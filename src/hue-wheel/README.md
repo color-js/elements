@@ -43,6 +43,43 @@ Slot `<color-swatch>` or `<color-scale>` elements to plot additional (non-editab
 </hue-wheel>
 ```
 
+## Building a basic custom color picker
+
+A `<hue-wheel>` covers two of a color's three coordinates: hue (the angle) and one radial channel (here, chroma). Pair it with a [`<channel-slider>`](../channel-slider) for the remaining channel (lightness) and a [`<space-picker>`](../space-picker) to switch polar spaces, and you have a full color picker. A [`<color-swatch>`](../color-swatch) shows the result.
+
+The wheel owns hue + chroma, the slider owns lightness, and the space picker switches the whole thing into another polar space (we list the polar spaces that have a lightness channel, since the slider is fixed to `l`). The wheel's radial channel is whatever's left over — the non-hue, non-lightness coordinate, so it's chroma in `oklch`/`lch` and saturation in `hsl`/`okhsl`. Each control mirrors its color to the others (and the swatch) on `input`:
+
+```html
+<div class="wheel-picker">
+	<label>
+		Space:
+		<space-picker id="cp_space" spaces="oklch, okhsl, lch, hsl" value="oklch"
+			oninput="let s = this.selectedSpace; cp_wheel.space = cp_lightness.space = s; cp_wheel.channel = Object.keys(s.coords).find(c => c !== 'l' && s.coords[c].type !== 'angle')"></space-picker>
+	</label>
+
+	<hue-wheel id="cp_wheel" space="oklch" channel="c" color="oklch(0.7 0.18 200)"
+		oninput="cp_lightness.color = cp_out.color = this.color"></hue-wheel>
+
+	<channel-slider id="cp_lightness" space="oklch" channel="l" color="oklch(0.7 0.18 200)"
+		oninput="cp_wheel.color = cp_out.color = this.color">Lightness</channel-slider>
+
+	<color-swatch id="cp_out" size="large">oklch(0.7 0.18 200)</color-swatch>
+</div>
+
+<style>
+	.wheel-picker {
+		display: flex;
+		flex-flow: column;
+		align-items: center;
+		gap: 1em;
+
+		channel-slider {
+			align-self: stretch;
+		}
+	}
+</style>
+```
+
 ## Notes
 
 - `space` must be **polar** (have a hue/angle coordinate); it throws otherwise.
