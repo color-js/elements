@@ -80,9 +80,19 @@ The wheel owns hue + chroma, the slider owns lightness, and the space picker swi
 </style>
 ```
 
+## Keyboard
+
+Focus the marker (with <kbd>Tab</kbd>) to adjust the color with the keyboard:
+
+- <kbd>←</kbd> / <kbd>→</kbd> nudge the hue.
+- <kbd>↑</kbd> / <kbd>↓</kbd> nudge the radial channel (when `channel` is set).
+- Hold <kbd>Shift</kbd> for a ×10 step.
+
+A `readonly` wheel's marker stays focusable (so its value is exposed to assistive tech) but can't be changed. The radial channel isn't yet a separate slider for assistive tech; its value is announced as part of the marker's value text.
+
 ## Notes
 
-- `space` must be **polar** (have a hue/angle coordinate); it throws otherwise.
+- `space` must be **polar** (have a hue/angle coordinate). The `space` setter throws for a non-polar space; a non-polar `space` **attribute** is ignored with a console warning, keeping the previous space.
 - The marker color, the painted field, and the radial axis are all expressed in `space`. `color` is always returned in `space`.
 - For color spaces the browser can't interpolate gradients in, the hue field is tessellated and interpolated in `oklch`, so the wheel still renders smoothly.
 
@@ -90,41 +100,41 @@ The wheel owns hue + chroma, the slider owns lightness, and the space picker swi
 
 ### Slots
 
-| Name | Description |
-|------|-------------|
+| Name        | Description                                                                                                                                                         |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | _(default)_ | Overlay content rendered on top of the wheel (used to build `<gamut-wheel>`). Slotted `<color-swatch>` / `<color-scale>` elements are also plotted as extra points. |
 
 ### Attributes & Properties
 
-| Attribute | Property | Property type | Default value | Description |
-|-----------|----------|---------------|---------------|-------------|
-| `space` | `spaceId` / `space` | `string` / `ColorSpace` | `oklch` | The polar color space of the wheel. The attribute and the `space` property accept a space id or `ColorSpace`; the `spaceId` property is always the id string. Throws if the space is not polar. |
-| `channel` | `channel` | `string` &#124; `null` | `null` | Coordinate shown on the radial axis. When omitted, the wheel shows only hue (as a ring). |
-| `color` | `color` | `Color` &#124; `null` | `null` | The current color (always in `space`). `null` when no color is set. |
-| - | `hueValue` | `number` | - | The current hue value. Read/write. |
-| - | `channelValue` | `number` &#124; `undefined` | - | The current channel value, if `channel` is set. Read/write. |
-| `readonly` | `readonly` | `boolean` | `false` | When set, the color cannot be added or edited. |
+| Attribute  | Property            | Property type               | Default value | Description                                                                                                                                                                                                                                                               |
+| ---------- | ------------------- | --------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `space`    | `spaceId` / `space` | `string` / `ColorSpace`     | `oklch`       | The polar color space of the wheel. The attribute and the `space` property accept a space id or `ColorSpace`; the `spaceId` property is always the id string. A non-polar value is rejected (the `space` setter throws; a non-polar attribute is ignored with a warning). |
+| `channel`  | `channel`           | `string` &#124; `null`      | `null`        | Coordinate shown on the radial axis. When omitted, the wheel shows only hue (as a ring).                                                                                                                                                                                  |
+| `color`    | `color`             | `Color` &#124; `null`       | `null`        | The current color (always in `space`). `null` when no color is set.                                                                                                                                                                                                       |
+| -          | `hueValue`          | `number`                    | -             | The current hue value. Read/write.                                                                                                                                                                                                                                        |
+| -          | `channelValue`      | `number` &#124; `undefined` | -             | The current channel value, if `channel` is set. Read/write.                                                                                                                                                                                                               |
+| `readonly` | `readonly`          | `boolean`                   | `false`       | When set, the color cannot be added or edited.                                                                                                                                                                                                                            |
 
 ### Events
 
-| Name | Description |
-|------|-------------|
-| `input` | Fired continuously while the color is being changed (drag, click, arrow keys). |
-| `change` | Fired when a change is committed (pointer release, or each arrow keypress). |
-| `colorchange` | Fired whenever the `color` property changes, for any reason. |
+| Name          | Description                                                                    |
+| ------------- | ------------------------------------------------------------------------------ |
+| `input`       | Fired continuously while the color is being changed (drag, click, arrow keys). |
+| `change`      | Fired when a change is committed (pointer release, or each arrow keypress).    |
+| `colorchange` | Fired whenever the `color` property changes, for any reason.                   |
 
 ### CSS variables
 
-| Variable | Type | Description |
-|----------|------|-------------|
-| `--size` | `<length>` | The diameter of the wheel. Defaults to `320px`. |
+| Variable           | Type       | Description                                                                                        |
+| ------------------ | ---------- | -------------------------------------------------------------------------------------------------- |
+| `--size`           | `<length>` | The diameter of the wheel. Defaults to `320px`.                                                    |
 | `--ring-thickness` | `<number>` | In ring mode (no `channel`), the ring's thickness as a fraction of the radius. Defaults to `0.35`. |
-| `--point-size` | `<length>` | The diameter of the extra points. Defaults to `0.7em`. |
+| `--point-size`     | `<length>` | The diameter of the extra points. Defaults to `0.7em`.                                             |
 
 ### Parts
 
-| Name | Description |
-|------|-------------|
-| `wheel` | The circular wheel container. |
-| `disc` | The painted hue/channel field. |
+| Name     | Description                                     |
+| -------- | ----------------------------------------------- |
+| `wheel`  | The circular wheel container.                   |
+| `disc`   | The painted hue/channel field.                  |
 | `marker` | The draggable marker showing the current color. |
