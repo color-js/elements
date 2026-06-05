@@ -338,6 +338,9 @@ const Self = class ColorSlider extends ColorElement {
 			// Resolve "auto" to the display's gamut, once, when the value is set.
 			convert (value) {
 				if (value !== "auto") {
+					if (value && value !== "none" && !(value in Self.Color.spaces)) {
+						return this.gamut;
+					}
 					return value;
 				}
 

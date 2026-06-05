@@ -153,6 +153,12 @@ const Self = class ChannelSlider extends ColorElement {
 		gamut: {
 			type: String,
 			default: "",
+			convert (value) {
+				if (value && value !== "auto" && value !== "none" && !(value in Self.Color.spaces)) {
+					return this.gamut;
+				}
+				return value;
+			},
 			changed () {
 				this._el.slider.gamut = this.gamut;
 			},
