@@ -20,12 +20,14 @@
 ```html
 <color-swatch>oklch(70% 0.25 138)</color-swatch>
 ```
+
 </td>
 <td>
 
 ```html
 <color-swatch size="large">oklch(70% 0.25 138)</color-swatch>
 ```
+
 </td>
 </tr>
 <tr>
@@ -37,6 +39,7 @@
 	<input value="oklch(70% 0.25 138)" />
 </color-swatch>
 ```
+
 </td>
 <td>
 
@@ -45,6 +48,7 @@
 	<input value="oklch(70% 0.25 138)" />
 </color-swatch>
 ```
+
 </td>
 </tr>
 </tbody>
@@ -58,6 +62,7 @@ You can use a `--details-style: compact` CSS property to only show the details o
 <color-swatch style="--details-style: compact">oklch(70% 0.25 138)</color-swatch>
 <color-swatch size="large" style="--details-style: compact">oklch(70% 0.25 138)</color-swatch>
 ```
+
 </html-demo>
 
 **Keyboard accessibility:** a compact swatch is not focusable on its own, so by default its details are only reachable by pointer. Add `tabindex="0"` (or otherwise place it in the tab order) to make it keyboard accessible, so the details show on focus as well as hover. Try tabbing to the swatch below:
@@ -67,6 +72,7 @@ You can use a `--details-style: compact` CSS property to only show the details o
 ```html
 <color-swatch size="large" style="--details-style: compact" tabindex="0">oklch(70% 0.25 138)</color-swatch>
 ```
+
 </html-demo>
 
 By default, the popup will be shown when the element is hovered, focused, `:active`, or the target of the URL hash.
@@ -80,6 +86,22 @@ You can also use `open="false"` to force it to be closed regardless of interacti
 	<color-swatch size="large" open="false">oklch(70% 0.25 138)</color-swatch>
 </div>
 ```
+
+### Dot mode
+
+Setting `--swatch-style: dot` renders a swatch as a small circular marker — handy when plotting swatches as points (this is how [`<hue-wheel>`](../hue-wheel) displays slotted swatches). It inherits, so setting it on a container switches a whole group at once. Size the dots with `--point-size` (default `0.7em`), and pair it with `--details-style: compact` so each dot's details surface in a hover/focus tooltip:
+
+<html-demo>
+
+```html
+<div style="--swatch-style: dot; --details-style: compact;">
+	<color-swatch>oklch(0.7 0.2 20)</color-swatch>
+	<color-swatch>oklch(0.7 0.2 140)</color-swatch>
+	<color-swatch>oklch(0.7 0.2 260)</color-swatch>
+</div>
+```
+
+</html-demo>
 
 ### The `value` attribute
 
@@ -114,6 +136,7 @@ If you don’t specify any content, no text will be shown.
 	<input />
 </color-swatch>
 ```
+
 </td>
 
 </tr>
@@ -153,12 +176,14 @@ You can provide the color label via the `label` attribute.
 ```html
 <color-swatch label="Turquoise">oklch(65% 0.15 210)</color-swatch>
 ```
+
 </td>
 <td>
 
 ```html
 <color-swatch label="Turquoise" size="large">oklch(65% 0.15 210)</color-swatch>
 ```
+
 </td>
 </tr>
 <tr>
@@ -170,6 +195,7 @@ You can provide the color label via the `label` attribute.
 	<input value="oklch(65% 0.15 210)" />
 </color-swatch>
 ```
+
 </td>
 <td>
 
@@ -178,6 +204,7 @@ You can provide the color label via the `label` attribute.
 	<input value="oklch(65% 0.15 210)" />
 </color-swatch>
 ```
+
 </td>
 </tr>
 </tbody>
@@ -210,7 +237,6 @@ but you can customize this by adding a label before the description of the data:
 	oklch(70% 0.25 138)
 </color-swatch>
 ```
-
 
 The `info` attribute plays quite nicely with the `--details-style: compact` style:
 
@@ -255,7 +281,7 @@ Adding text within the default swatch:
 
 Note that the text color will automatically switch from black to white to remain readable (using [this technique](https://lea.verou.me/blog/2024/contrast-color/)).
 
-----
+---
 
 Replacing the whole swatch with a custom element:
 
@@ -314,51 +340,53 @@ If you don’t, the `<html>` element will be used.
 
 ### Attributes & Properties
 
-| Attribute | Property | Property type | Default value | Description |
-|-----------|----------|---------------|---------------|-------------|
-| `color` | `color` | `Color` &#124; `string` | - | The current color value. |
-| `info` | `info` | `string` | - | Comma-separated list of coords of the current color to be shown. |
-| `value` | `value` | `string` | - | The current value of the swatch. |
-| `label` | `label` | `string` | - | The label of the swatch (e.g., color name). Defaults to the element text content. |
-| `size` | - | `large` | - | The size of the swatch. Currently, it is used only to make a large swatch. |
-| `property` | `property` | `string` | - | CSS property to bind to. |
-| `scope` | `scope` | `string` | `:root` | CSS selector to use as the scope for the specified CSS property. |
-| `gamuts` | `gamuts` | `string` | `srgb, p3, rec2020: P3+, prophoto: PP` | Comma-separated list of gamuts to be used by the gamut indicator. |
-| `open` | `open` | | `null` | Force the details popup open or closed. |
+| Attribute  | Property   | Property type           | Default value                          | Description                                                                       |
+| ---------- | ---------- | ----------------------- | -------------------------------------- | --------------------------------------------------------------------------------- |
+| `color`    | `color`    | `Color` &#124; `string` | -                                      | The current color value.                                                          |
+| `info`     | `info`     | `string`                | -                                      | Comma-separated list of coords of the current color to be shown.                  |
+| `value`    | `value`    | `string`                | -                                      | The current value of the swatch.                                                  |
+| `label`    | `label`    | `string`                | -                                      | The label of the swatch (e.g., color name). Defaults to the element text content. |
+| `size`     | -          | `large`                 | -                                      | The size of the swatch. Currently, it is used only to make a large swatch.        |
+| `property` | `property` | `string`                | -                                      | CSS property to bind to.                                                          |
+| `scope`    | `scope`    | `string`                | `:root`                                | CSS selector to use as the scope for the specified CSS property.                  |
+| `gamuts`   | `gamuts`   | `string`                | `srgb, p3, rec2020: P3+, prophoto: PP` | Comma-separated list of gamuts to be used by the gamut indicator.                 |
+| `open`     | `open`     |                         | `null`                                 | Force the details popup open or closed.                                           |
 
 ### Getters
 
 These properties are read-only.
 
-| Name | Type | Description |
-|----------|------|-------------|
+| Name    | Type     | Description                                |
+| ------- | -------- | ------------------------------------------ |
 | `gamut` | `string` | The id of the current gamut (e.g. `srgb`). |
 
 ### CSS variables
 
-| Name | Type | Description |
-|----------|---------------|-------------|
-| `--details-style` | `compact` &#124; `normal` (default) | |
-| `--transparency-grid` | `<image>` | Gradient used as a background for transparent parts of the swatch. |
-| `--transparency-cell-size` | `<length>` | The size of the cells of the transparency gradient. |
-| `--transparcency-background` | `<color>` | The background color of the transparency gradient. |
-| `--transparency-darkness` | `<percentage>` | The opacity of the black color used for dark parts of the transparency gradient. |
+| Name                         | Type                                | Description                                                                                                                                                                                                                                                                                                                                                 |
+| ---------------------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--details-style`            | `compact` &#124; `normal` (default) |                                                                                                                                                                                                                                                                                                                                                             |
+| `--swatch-style`             | `dot` &#124; `normal` (default)     | `dot` renders the swatch as a small circular marker (diameter `--point-size`), clipping its contents — used when plotting it as a point (e.g. inside [`<hue-wheel>`](../hue-wheel)). Set it on the swatch's host/ancestor (it inherits, so one declaration switches a whole group); pair with `--details-style: compact` to surface details on hover/focus. |
+| `--point-size`               | `<length>`                          | In dot mode, the diameter of the dot. Defaults to `0.7em`.                                                                                                                                                                                                                                                                                                  |
+| `--transparency-grid`        | `<image>`                           | Gradient used as a background for transparent parts of the swatch.                                                                                                                                                                                                                                                                                          |
+| `--transparency-cell-size`   | `<length>`                          | The size of the cells of the transparency gradient.                                                                                                                                                                                                                                                                                                         |
+| `--transparcency-background` | `<color>`                           | The background color of the transparency gradient.                                                                                                                                                                                                                                                                                                          |
+| `--transparency-darkness`    | `<percentage>`                      | The opacity of the black color used for dark parts of the transparency gradient.                                                                                                                                                                                                                                                                            |
 
 ### Parts
 
-| Name | Description |
-|------|-------------|
-| `swatch` | The swatch used to render the color. |
-| `details` | Wrapper around all non-swatch content (color name, info, etc) |
-| `label` | The label of the swatch |
-| `color-wrapper` | Wrapper around the color name itself |
-| `gamut` | Gamut indicator |
-| `info` | Any info generateed by the `info` attribute |
+| Name            | Description                                                   |
+| --------------- | ------------------------------------------------------------- |
+| `swatch`        | The swatch used to render the color.                          |
+| `details`       | Wrapper around all non-swatch content (color name, info, etc) |
+| `label`         | The label of the swatch                                       |
+| `color-wrapper` | Wrapper around the color name itself                          |
+| `gamut`         | Gamut indicator                                               |
+| `info`          | Any info generateed by the `info` attribute                   |
 
 ### Events
 
-| Name | Description |
-|------|-------------|
+| Name          | Description                                                                  |
+| ------------- | ---------------------------------------------------------------------------- |
 | `valuechange` | Fired when the value changes for any reason, and once during initialization. |
 | `colorchange` | Fired when the color changes for any reason, and once during initialization. |
 | `gamutchange` | Fired when the gamut changes for any reason, and once during initialization. |
