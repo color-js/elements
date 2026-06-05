@@ -1,7 +1,8 @@
-/* Positioning of the extra points lives in global styles because it targets the
-   ::part() of light-DOM children (<color-scale>'s swatches, or a direct
-   <color-swatch>) — parts only pierce a single shadow boundary from outside.
-   Mirrors how <color-chart> places its swatches. */
+/* The extra points are slotted from the light DOM (a <color-scale>'s swatches, or
+   a direct <color-swatch>), so they're positioned from the document scope, where
+   `hue-wheel color-scale::part(color-swatch)` reaches the exposed swatch part.
+   (::slotted() in shadow CSS can't chain into ::part().) The same way
+   <color-chart> places its swatches. */
 
 hue-wheel {
 	--_point-size: var(--point-size, 0.7em);
