@@ -1,20 +1,21 @@
-/* The extra points are slotted from the light DOM (a <color-scale>'s swatches, or
-   a direct <color-swatch>), so they're positioned from the document scope, where
-   `hue-wheel color-scale::part(color-swatch)` reaches the exposed swatch part.
-   (::slotted() in shadow CSS can't chain into ::part().) The same way
-   <color-chart> places its swatches. */
+/* A <color-scale>'s points are its swatches, exposed as the "color-swatch" part.
+   Those live in the scale's shadow tree, so hue-wheel can only reach them from the
+   document scope, where `hue-wheel color-scale::part(color-swatch)` resolves — a
+   shadow ::slotted() rule can't chain into ::part(). (A directly-slotted
+   <color-swatch> doesn't have this problem and is placed from hue-wheel.css via
+   ::slotted().) The dots' *appearance* comes from <color-swatch>'s own dot mode,
+   triggered by --swatch-style (inherited from the <hue-wheel> host); this file only
+   positions and sizes them. The same approach <color-chart> uses for its swatches. */
 
-hue-wheel {
-	--_point-size: var(--point-size, 0.7em);
-}
-
-/* Shared polar placement: --hue (angle) + --channel (raw value) → cartesian.
-   --channel-min / --channel-max are set on the <hue-wheel> host and inherit down. */
-hue-wheel color-scale::part(color-swatch),
-hue-wheel > color-swatch {
+/* Polar placement: --hue (angle) + --channel (raw value) → cartesian, offset by
+   half the dot's size so its centre lands on the point. --channel-min / --channel-max
+   are set on the <hue-wheel> host and inherit down. */
+hue-wheel color-scale::part(color-swatch) {
 	position: absolute;
 	top: 50%;
 	left: 50%;
+	margin: 0;
+	transition: 150ms scale;
 
 	--_frac: clamp(
 		0,
@@ -22,70 +23,26 @@ hue-wheel > color-swatch {
 		1
 	);
 	--_r: calc(var(--_frac) * 50cqi);
-	--_x: calc(var(--_r) * cos(var(--hue)));
-	--_y: calc(var(--_r) * sin(var(--hue)) * -1);
-	translate: calc(var(--_x) - 50%) calc(var(--_y) - 50%);
+	translate: calc(var(--_r) * cos(var(--hue)) - 50%) calc(var(--_r) * sin(var(--hue)) * -1 - 50%);
 }
 
 /* No channel → every point rides the middle of the ring. */
-hue-wheel[ring] color-scale::part(color-swatch),
-hue-wheel[ring] > color-swatch {
+hue-wheel[ring] color-scale::part(color-swatch) {
 	--_r: calc((1 - var(--ring-thickness, 0.35) / 2) * 50cqi);
 }
 
-/* <color-scale> points: render as small circular dots (the scale already
-   exposes its swatches as the "color-swatch" part). */
+/* Grow a point on hover so a cluster stays explorable; its details are in the
+   tooltip (color-swatch upgrades it to a popover). Scale (not width) so it grows
+   from its centre, keeping it anchored on its point. */
+hue-wheel color-scale::part(color-swatch):hover {
+	scale: 1.6;
+	z-index: 1;
+}
+
+/* Shrink the scale's own container to 0 so it doesn't take up layout space or
+   intercept hover between the dots. */
 hue-wheel color-scale {
-	&::part(color-swatch) {
-		width: var(--_point-size);
-		aspect-ratio: 1;
-		min-inline-size: 0;
-		min-block-size: 0;
-		border-radius: 50%;
-		background: var(--color);
-		/* White + dark ring so a point stays visible against a same-coloured field. */
-		box-shadow:
-			0 0 0 1px white,
-			0 0 0 2px rgb(0 0 0 / 0.4);
-		transition: 150ms width;
-	}
-
-	&::part(color-swatch):hover {
-		--_point-size: calc(var(--point-size, 0.7em) * 1.6);
-		z-index: 1;
-	}
-
-	&::part(swatch) {
-		min-block-size: 0;
-		padding: 0.2em;
-	}
-
-	/* The point is just a dot; its gamut/details live in the hover tooltip. */
-	&::part(gamut) {
-		display: none;
-	}
-
-	/* Show details as a hover tooltip; color-swatch upgrades it to a popover. */
-	--details-style: compact;
-
-	/* Shrink the scale's own container to 0 so it doesn't intercept hover. */
 	display: block;
 	width: 0;
 	height: 0;
-}
-
-/* A directly-slotted <color-swatch>: show just its swatch box as a dot. */
-hue-wheel > color-swatch {
-	--details-style: compact;
-
-	&::part(swatch) {
-		width: var(--_point-size);
-		aspect-ratio: 1;
-		min-inline-size: 0;
-		min-block-size: 0;
-		border-radius: 50%;
-		box-shadow:
-			0 0 0 1px white,
-			0 0 0 2px rgb(0 0 0 / 0.4);
-	}
 }

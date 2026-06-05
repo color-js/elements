@@ -5,6 +5,13 @@
 	/* Default ring thickness (fraction of the radius), used only when there's
 	   no channel and the disc renders as a ring. */
 	--ring-thickness: 0.35;
+
+	/* Render every slotted point (a <color-swatch>, or a <color-scale>'s swatches)
+	   as a compact dot with a hover/focus tooltip. Both properties inherit down to
+	   the slotted elements, which style themselves accordingly — hue-wheel only
+	   positions them (see ::slotted below and hue-wheel-global.css). */
+	--swatch-style: dot;
+	--details-style: compact;
 }
 
 #wheel {
@@ -12,9 +19,6 @@
 	aspect-ratio: 1;
 	container-type: inline-size;
 	border-radius: 50%;
-	/* Shows through wherever the painted hue field is transparent (out-of-gamut
-	   hues, or the hole of a ring). */
-	background: light-dark(#d8d8d8, #2c2c2c);
 	cursor: crosshair;
 	/* Suppress pan/zoom so dragging on touch doesn't scroll the page. */
 	touch-action: none;
@@ -90,4 +94,29 @@
 
 slot {
 	display: block;
+}
+
+/* Plotted points: a directly-slotted <color-swatch> is positioned by its own
+   hue/channel (set by JS) — the same polar → cartesian math as the marker, offset
+   by half its size so its centre lands on the point. ::slotted() reaches a slotted
+   swatch from here; a <color-scale>'s inner swatches are ::part()s and can't be
+   reached through ::slotted(), so those are placed in hue-wheel-global.css. */
+::slotted(color-swatch) {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: 0;
+
+	--_frac: clamp(
+		0,
+		(var(--channel) - var(--channel-min)) / (var(--channel-max) - var(--channel-min)),
+		1
+	);
+	--_r: calc(var(--_frac) * 50cqi);
+	translate: calc(var(--_r) * cos(var(--hue)) - 50%) calc(var(--_r) * sin(var(--hue)) * -1 - 50%);
+}
+
+/* No channel → the point rides the middle of the ring. */
+:host([ring]) ::slotted(color-swatch) {
+	--_r: calc((1 - var(--ring-thickness) / 2) * 50cqi);
 }
