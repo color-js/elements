@@ -4,6 +4,7 @@
 	"color-chart": "Display lists of colors as a scatterplot or line chart.",
 	"color-swatch": "Display a visual representation of a color alongside the info about it.",
 	"color-inline": "Display a color swatch alone or alongside its textual representation.",
+	"hue-wheel": "Display a polar color wheel for picking hue and an optional radial channel in any polar color space.",
 	"channel-slider": "Display a <code>&lt;color-slider&gt;</code> for a specific channel.",
 	"color-slider": "Display a slider with a gradient background. Primarily intended for color picking.",
 	"gamut-badge": "Gamut indicator. Used internally by <code>&lt;color-swatch&gt;</code>.",
