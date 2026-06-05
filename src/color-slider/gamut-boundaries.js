@@ -25,7 +25,13 @@ export function getGamutBoundaries (gamut, range, { min = 0, max = 1, samples = 
 
 	let inGamut = progress => Boolean(range(progress)?.inGamut(gamut));
 	let at = k => min + (k / samples) * (max - min);
-	let startsInside = inGamut(min);
+	let startsInside;
+	try {
+		startsInside = inGamut(min);
+	}
+	catch {
+		return null;
+	}
 
 	// Find every in/out transition, refined to a precise position.
 	let crossings = [];
