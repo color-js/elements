@@ -151,10 +151,11 @@ slot {
 			overflow: visible; /* show the triangle pointer */
 			position: fixed;
 			inset: auto;
+			bottom: anchor(top);
+			left: anchor(center);
+			translate: -50% 0;
 			margin: 0 0 calc(var(--_pointer-height) * 0.8);
-			translate: none;
 			position-anchor: --swatch;
-			position-area: top;
 			position-try-fallbacks: flip-block;
 			/* Query the active fallback so the pointer can flip with it (below). */
 			container-type: anchored;
