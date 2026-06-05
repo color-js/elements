@@ -61,6 +61,12 @@ slot {
 	&[style*="--gamut-level: 0"] {
 		display: none;
 	}
+
+	/* Dot mode: the swatch is a bare marker, so its gamut badge is dropped
+	   (details surface in the tooltip instead). */
+	@container style(--swatch-style: dot) {
+		display: none;
+	}
 }
 
 [part="info"] {
@@ -247,12 +253,27 @@ slot[name="swatch"]::slotted(*),
 		min-block-size: 3em;
 	}
 
-	&:not(:host([size="large"]) *) {
+	&:where(:not(:host([size="large"]) *)) {
 		display: flex;
 		min-inline-size: 2em;
 		min-block-size: 1em;
 		font-size: 65%;
 		flex: 1;
+	}
+
+	@container style(--swatch-style: dot) {
+		font-size: 1rem;
+		margin: 0;
+		inline-size: var(--point-size, 1em);
+		min-inline-size: 0;
+		min-block-size: 0;
+		aspect-ratio: 1;
+		overflow: hidden;
+		border-radius: 50%;
+		border: 0.3em solid white;
+		box-shadow:
+			0 0.04em 0.1em rgb(0 0 0 / 16%),
+			0 0.12em 0.3em -0.04em rgb(0 0 0 / 22%);
 	}
 }
 

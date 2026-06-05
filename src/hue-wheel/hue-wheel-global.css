@@ -1,0 +1,48 @@
+/* A <color-scale>'s points are its swatches, exposed as the "color-swatch" part.
+   Those live in the scale's shadow tree, so hue-wheel can only reach them from the
+   document scope, where `hue-wheel color-scale::part(color-swatch)` resolves — a
+   shadow ::slotted() rule can't chain into ::part(). (A directly-slotted
+   <color-swatch> doesn't have this problem and is placed from hue-wheel.css via
+   ::slotted().) The dots' *appearance* comes from <color-swatch>'s own dot mode,
+   triggered by --swatch-style (inherited from the <hue-wheel> host); this file only
+   positions and sizes them. The same approach <color-chart> uses for its swatches. */
+
+/* Polar placement: --hue (angle) + --channel (raw value) → cartesian, offset by
+   half the dot's size so its centre lands on the point. --channel-min / --channel-max
+   are set on the <hue-wheel> host and inherit down. */
+hue-wheel color-scale::part(color-swatch) {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: 0;
+	transition: 150ms scale;
+
+	--_frac: clamp(
+		0,
+		(var(--channel) - var(--channel-min)) / (var(--channel-max) - var(--channel-min)),
+		1
+	);
+	--_r: calc(var(--_frac) * 50cqi);
+	translate: calc(var(--_r) * cos(var(--hue)) - 50%) calc(var(--_r) * sin(var(--hue)) * -1 - 50%);
+}
+
+/* No channel → every point rides the middle of the ring. */
+hue-wheel[ring] color-scale::part(color-swatch) {
+	--_r: calc((1 - var(--ring-thickness, 0.35) / 2) * 50cqi);
+}
+
+/* Grow a point on hover so a cluster stays explorable; its details are in the
+   tooltip (color-swatch upgrades it to a popover). Scale (not width) so it grows
+   from its centre, keeping it anchored on its point. */
+hue-wheel color-scale::part(color-swatch):hover {
+	scale: 1.6;
+	z-index: 1;
+}
+
+/* Shrink the scale's own container to 0 so it doesn't take up layout space or
+   intercept hover between the dots. */
+hue-wheel color-scale {
+	display: block;
+	width: 0;
+	height: 0;
+}
