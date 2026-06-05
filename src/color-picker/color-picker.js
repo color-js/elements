@@ -239,6 +239,12 @@ const Self = class ColorPicker extends ColorElement {
 		gamut: {
 			type: String,
 			default: "",
+			convert (value) {
+				if (value && value !== "auto" && value !== "none" && !(value in Self.Color.spaces)) {
+					return this.gamut;
+				}
+				return value;
+			},
 			changed () {
 				for (let slider of this._el.sliders.children) {
 					slider.gamut = this.gamut;
