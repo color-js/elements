@@ -55,6 +55,18 @@ If you don’t want to show the whole range you can also specify `min` and `max`
 <channel-slider space="oklch" channel="l" color="red" min=".3" max=".95"></channel-slider>
 ```
 
+Set a `gamut` to mark the values whose color the gamut can’t reproduce — here, the high-chroma end of an oklch chroma slider isn’t reachable in sRGB, so it’s overlaid with gray (customize the color via `--oog-color`):
+
+```html
+<channel-slider space="oklch" channel="c" color="oklch(70% 0.2 30)" gamut="srgb"></channel-slider>
+```
+
+This can be more than one region — on a hue slider at a fixed lightness and chroma, only some hues are reachable in sRGB:
+
+```html
+<channel-slider space="oklch" channel="h" color="oklch(70% 0.2 30)" gamut="srgb"></channel-slider>
+```
+
 ### Dynamic
 
 You can listen to the `colorchange` event and grab the `color` property to get the current color value.
@@ -127,6 +139,7 @@ All attributes are reactive:
 | Attribute | Property | Property type | Default value | Description |
 |-----------|----------|---------------|---------------|-------------|
 | `space` | `space` | `ColorSpace` &#124; `string` | `oklch` | The color space to use for interpolation. |
+| `gamut` | `gamut` | `string` | `""` | A color gamut id (`srgb`, `p3`, `rec2020`), or `auto` to use the display's gamut, forwarded to the underlying [`<color-slider>`](../color-slider/#attributes-%26-properties): the out-of-gamut parts of the band are overlaid with [`--oog-color`](../color-slider/#css-variables). Empty or `none` disables it. |
 | `channel` | `channel` | `string` | `h` | The component to use for the gradient. |
 | `min` | `min` | `number` | `this.refRange[0]` | The minimum value for the slider. |
 | `max` | `max` | `number` | `this.refRange[1]` | The maximum value for the slider. |

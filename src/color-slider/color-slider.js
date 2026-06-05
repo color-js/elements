@@ -1,5 +1,6 @@
 import ColorElement from "../common/color-element.js";
 import { getStep } from "../common/util.js";
+import { getGamutBoundaries } from "./gamut-boundaries.js";
 
 let supports = {
 	inSpace: CSS?.supports("background", "linear-gradient(in oklab, red, tan)"),
@@ -110,6 +111,27 @@ const Self = class ColorSlider extends ColorElement {
 			this.style.setProperty("--slider-color-stops", stops);
 		}
 
+		// Paint a separate overlay over the parts of the band that fall outside the target gamut.
+		// The color band itself is left untouched; this just layers the out-of-gamut color on top.
+		// Set on the slider (not the host) so the nested var(--_oog-color) in the overlay
+		// resolves where it's defined.
+		if (changed.has("stops") || changed.has("space") || changed.has("gamut")) {
+			let overlay = this.#buildGamutOverlay();
+
+			if (overlay) {
+				this._el.slider.style.setProperty("--slider-gamut-overlay", overlay);
+			}
+			else {
+				this._el.slider.style.removeProperty("--slider-gamut-overlay");
+			}
+		}
+
+		// Reflect whether the currently selected color is within the target gamut,
+		// so it can be styled via :state(in-gamut).
+		if (changed.has("inGamut")) {
+			this.toggleState("in-gamut", this.inGamut);
+		}
+
 		if (changed.has("space") && supports.inSpace) {
 			let space = this.space;
 			let spaceId = space.id;
@@ -175,6 +197,42 @@ const Self = class ColorSlider extends ColorElement {
 		}
 
 		return tessellated;
+	}
+
+	/**
+	 * Build the value of the `--slider-gamut-overlay` custom property from {@link ColorSlider#oogRanges}:
+	 * `--_oog-color` over each out-of-gamut range, transparent in between, with a hard edge at each
+	 * gamut boundary.
+	 *
+	 * @returns {string | null} Comma-separated overlay color stops, or null when nothing is out of gamut.
+	 */
+	#buildGamutOverlay () {
+		let oogRanges = this.oogRanges;
+
+		// The whole band is in gamut (or no gamut set): nothing to paint.
+		if (oogRanges.length === 0) {
+			return null;
+		}
+
+		// Paint --_oog-color over each out-of-gamut range, transparent in between.
+		// Adjacent stops at the same position produce the hard edge at each boundary.
+		let pos = p => `${+(p * 100).toPrecision(4)}%`;
+		let stops = [];
+		let cursor = 0;
+
+		for (let [start, end] of oogRanges) {
+			if (start > cursor) {
+				stops.push(`transparent ${pos(cursor)} ${pos(start)}`);
+			}
+			stops.push(`var(--_oog-color) ${pos(start)} ${pos(end)}`);
+			cursor = end;
+		}
+
+		if (cursor < 1) {
+			stops.push(`transparent ${pos(cursor)} 100%`);
+		}
+
+		return stops.join(", ");
 	}
 
 	get progress () {
@@ -274,6 +332,35 @@ const Self = class ColorSlider extends ColorElement {
 			},
 		},
 
+		gamut: {
+			type: String,
+			default: "",
+			// Resolve "auto" to the display's gamut, once, when the value is set.
+			convert (value) {
+				if (value !== "auto") {
+					if (value && value !== "none" && !(value in Self.Color.spaces)) {
+						return this.gamut;
+					}
+					return value;
+				}
+
+				if (!globalThis.matchMedia) {
+					return "srgb";
+				}
+
+				// TODO listen to updates (can happen if window is moved to another screen)
+				if (matchMedia("(color-gamut: rec2020)").matches) {
+					return "rec2020";
+				}
+
+				if (matchMedia("(color-gamut: p3)").matches) {
+					return "p3";
+				}
+
+				return "srgb";
+			},
+		},
+
 		color: {
 			get type () {
 				return Self.Color;
@@ -282,6 +369,22 @@ const Self = class ColorSlider extends ColorElement {
 				return this.colorAt(this.value);
 			},
 			dependencies: ["scales", "value"],
+		},
+		inGamut: {
+			get () {
+				if (!this.gamut || this.gamut === "none" || !this.color) {
+					return true;
+				}
+
+				try {
+					return this.color.inGamut(this.gamut);
+				}
+				catch (error) {
+					// NOTE: invalid gamut id; treat the color as in-gamut.
+					return true;
+				}
+			},
+			dependencies: ["color", "gamut"],
 		},
 		scales: {
 			get () {
@@ -298,6 +401,51 @@ const Self = class ColorSlider extends ColorElement {
 				return scales;
 			},
 			dependencies: ["stops", "space"],
+		},
+		oogRanges: {
+			get () {
+				let scales = this.scales;
+				let bands = scales.length;
+				let gamut = this.gamut;
+
+				if (bands === 0 || !gamut) {
+					return [];
+				}
+
+				// Scan each band (one interpolation between two stops) independently. A non-polar one is
+				// ~monotone, so its endpoints + midpoint (samples = 2) suffice; a polar one can weave in
+				// and out of gamut, so it needs dense sampling.
+				// NOTE: an out-of-gamut → in → out island that misses the midpoint is still under-sampled.
+				let samples = this.space.isPolar ? 100 : 2;
+				let ranges = [];
+
+				for (let i = 0; i < bands; i++) {
+					let bandRanges = getGamutBoundaries(gamut, scales[i], { samples });
+
+					if (!bandRanges) {
+						// gamut is "none" or an unknown id: nothing out of gamut.
+						return [];
+					}
+
+					// Place each band-local [0, 1] range into its slot in the whole track, merging with
+					// the previous range when they touch across a band boundary (both out of gamut there).
+					for (let [start, end] of bandRanges) {
+						let from = (i + start) / bands;
+						let to = (i + end) / bands;
+						let last = ranges.at(-1);
+
+						if (last && last[1] === from) {
+							last[1] = to;
+						}
+						else {
+							ranges.push([from, to]);
+						}
+					}
+				}
+
+				return ranges;
+			},
+			dependencies: ["scales", "gamut"],
 		},
 
 		tooltip: {
@@ -316,6 +464,9 @@ const Self = class ColorSlider extends ColorElement {
 		},
 		colorchange: {
 			propchange: "color",
+		},
+		ingamutchange: {
+			propchange: "inGamut",
 		},
 	};
 
