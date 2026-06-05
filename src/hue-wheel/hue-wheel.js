@@ -74,12 +74,12 @@ const Self = class HueWheel extends ColorElement {
 	// ───────────────────────── Coordinate model (from metadata) ─────────────────────────
 
 	/**
-	 * The resolved color space. A plain accessor (not a reactive prop) so that the
-	 * polar check can throw — NudeElement swallows exceptions thrown inside computed
-	 * props. Reactivity still flows through `spaceId`, which every dependent reads.
+	 * The resolved color space. Always polar: non-polar values are rejected by
+	 * `spaceId`'s converter (and the `space` setter), so this never throws and is
+	 * safe to read from any render path.
 	 */
 	get space () {
-		return Self.assertPolar(Self.Color.Space.get(this.spaceId));
+		return Self.Color.Space.get(this.spaceId);
 	}
 
 	set space (value) {
@@ -89,59 +89,82 @@ const Self = class HueWheel extends ColorElement {
 
 	/** Guard that a space is polar (has a hue axis); throws otherwise. */
 	static assertPolar (space) {
-		if (!space.isPolar) {
-			throw new TypeError(`<hue-wheel>: color space "${space.id}" is not polar.`);
+		if (!space?.isPolar) {
+			throw new TypeError(`<hue-wheel>: color space "${space?.id}" is not polar.`);
 		}
 		return space;
 	}
 
-	/** The angle coord — the angular axis. A polar space always has exactly one. */
-	get hueCoord () {
+	/**
+	 * The wheel's axis assignment for the current space + channel: which coord is
+	 * the hue (angular axis), which is the radial channel (or null), and which are
+	 * held constant — plus each one's value range. Derived from space metadata and
+	 * cached, since some render paths read it hundreds of times per paint; it only
+	 * changes when `spaceId` or `channel` does.
+	 */
+	get axes () {
+		let key = `${this.spaceId}|${this.channel ?? ""}`;
+		if (key !== this.#axesKey) {
+			this.#axesKey = key;
+			this.#axes = this.#computeAxes();
+		}
+		return this.#axes;
+	}
+
+	#axes = null;
+	#axesKey = null;
+
+	#computeAxes () {
 		let coords = this.space.coords;
-		let id = Object.keys(coords).find(id => coords[id].type === "angle");
-		return this.#meta(id);
+		let ids = Object.keys(coords);
+		// A coord reduced to what the wheel needs: its id, name and value range.
+		let meta = (id, coord = coords[id]) => ({
+			id,
+			name: coord.name ?? id,
+			type: coord.type,
+			range: coord.refRange ?? coord.range ?? [0, 100],
+		});
+
+		// A polar space always has exactly one angle coord.
+		let hue = meta(ids.find(id => coords[id].type === "angle"));
+
+		let channel = null;
+		if (this.channel) {
+			try {
+				let coord = Self.Color.Space.resolveCoord(this.channel, this.space);
+				if (coord.type === "angle") {
+					console.warn(
+						`<hue-wheel> channel "${this.channel}" is the hue and can't be the radial axis.`,
+					);
+				}
+				else {
+					channel = meta(coord.id, coord);
+				}
+			}
+			catch (error) {
+				console.warn(`<hue-wheel> ${error.message}`);
+			}
+		}
+
+		let exclude = new Set([hue.id, channel?.id]);
+		let held = ids.filter(id => !exclude.has(id)).map(id => meta(id));
+
+		return { hue, channel, held, order: ids };
+	}
+
+	/** The angle coord — the angular axis. */
+	get hueCoord () {
+		return this.axes.hue;
 	}
 
 	/** The radial-axis coord, or null when `channel` is unset/invalid. */
 	get channelCoord () {
-		if (!this.channel) {
-			return null;
-		}
-
-		let coord;
-		try {
-			coord = Self.Color.Space.resolveCoord(this.channel, this.space);
-		}
-		catch (error) {
-			console.warn(`<hue-wheel> ${error.message}`);
-			return null;
-		}
-
-		if (coord.type === "angle") {
-			console.warn(
-				`<hue-wheel> channel "${this.channel}" is the hue and can't be the radial axis.`,
-			);
-			return null;
-		}
-
-		return coord;
+		return this.axes.channel;
 	}
 
 	/** Coords that are neither hue nor channel — held constant, sourced from `color`. */
 	get heldCoords () {
-		let exclude = new Set([this.hueCoord.id, this.channelCoord?.id]);
-		return Object.keys(this.space.coords)
-			.filter(id => !exclude.has(id))
-			.map(id => this.#meta(id));
-	}
-
-	#meta (id) {
-		let index = Object.keys(this.space.coords).indexOf(id);
-		return { id, index, ...this.space.coords[id] };
-	}
-
-	static #range (coord) {
-		return coord.refRange ?? coord.range ?? [0, 100];
+		return this.axes.held;
 	}
 
 	/** A coord's value: from `color` when present, else the midpoint of its range. */
@@ -150,7 +173,7 @@ const Self = class HueWheel extends ColorElement {
 			return this.color.get(coord.id);
 		}
 
-		let [min, max] = Self.#range(coord);
+		let [min, max] = coord.range;
 		return (min + max) / 2;
 	}
 
@@ -158,7 +181,7 @@ const Self = class HueWheel extends ColorElement {
 
 	/** Ordered coord array for `new Color(space, …)` from an `{id: value}` map. */
 	#coordArray (values) {
-		return Object.keys(this.space.coords).map(id => values[id]);
+		return this.axes.order.map(id => values[id]);
 	}
 
 	/** A fresh color at the held coords' current values + given hue/channel. */
@@ -174,21 +197,17 @@ const Self = class HueWheel extends ColorElement {
 		return new Self.Color(this.space, this.#coordArray(values));
 	}
 
-	/** Write a single coord, producing a new Color so change-detection fires. */
+	/**
+	 * Write a single coord, producing a new Color so change-detection fires.
+	 * No-op without a color: hueValue/channelValue describe the current color, and
+	 * `#fromPointer` is the only path that creates one from nothing.
+	 */
 	#setCoord (id, value) {
-		if (this.readonly) {
+		if (this.readonly || !this.color) {
 			return;
 		}
 
-		let color;
-		if (this.color) {
-			color = this.color.clone();
-		}
-		else {
-			let channel = this.channelCoord ? this.#valueOf(this.channelCoord) : undefined;
-			color = this.#colorAt(this.#valueOf(this.hueCoord), channel);
-		}
-
+		let color = this.color.clone();
 		color.set(id, value);
 		this.color = color;
 	}
@@ -231,7 +250,7 @@ const Self = class HueWheel extends ColorElement {
 		this.toggleAttribute("ring", !channel);
 
 		if (channel) {
-			let [min, max] = Self.#range(channel);
+			let [min, max] = channel.range;
 			this.style.setProperty("--channel-min", min);
 			this.style.setProperty("--channel-max", max);
 		}
@@ -272,7 +291,7 @@ const Self = class HueWheel extends ColorElement {
 		}
 
 		this._el.disc.style.background = "";
-		let [min, max] = Self.#range(channel);
+		let [min, max] = channel.range;
 		let layers = this.#ensureLayers();
 
 		for (let i = 0; i < LAYERS; i++) {
@@ -332,12 +351,19 @@ const Self = class HueWheel extends ColorElement {
 		}
 		marker.style.background = color.display();
 
-		// Expose the hue as the slider value; the full color goes in aria-valuetext.
-		let [hueMin, hueMax] = Self.#range(this.hueCoord);
+		// Expose the hue as the slider value. The radial axis isn't a second slider
+		// yet (a known a11y gap), so fold its value into aria-valuetext alongside the
+		// hue so screen-reader users still hear what ↑↓ changes.
+		let [hueMin, hueMax] = this.hueCoord.range;
 		marker.setAttribute("aria-valuemin", hueMin);
 		marker.setAttribute("aria-valuemax", hueMax);
 		marker.setAttribute("aria-valuenow", Math.round(this.hueValue ?? 0));
-		marker.setAttribute("aria-valuetext", color.display());
+
+		let valueText = `${this.hueCoord.name} ${Math.round(this.hueValue ?? 0)}`;
+		if (this.channelCoord) {
+			valueText += `, ${this.channelCoord.name} ${+this.channelValue.toPrecision(3)}`;
+		}
+		marker.setAttribute("aria-valuetext", valueText);
 
 		let editable = !this.readonly;
 		// Editable marker is in the tab order; read-only is still programmatically
@@ -441,7 +467,7 @@ const Self = class HueWheel extends ColorElement {
 
 		let channel = this.channelValue;
 		if (this.channelCoord) {
-			let [min, max] = Self.#range(this.channelCoord);
+			let [min, max] = this.channelCoord.range;
 			channel = min + r * (max - min);
 		}
 
@@ -456,7 +482,7 @@ const Self = class HueWheel extends ColorElement {
 
 		let hueCoord = this.hueCoord;
 		let channelCoord = this.channelCoord;
-		let hueStep = getStep(...Self.#range(hueCoord));
+		let hueStep = getStep(...hueCoord.range);
 		let delta = event.shiftKey ? 10 : 1;
 		let handled = true;
 
@@ -473,7 +499,7 @@ const Self = class HueWheel extends ColorElement {
 					handled = false;
 					break;
 				}
-				let [min, max] = Self.#range(channelCoord);
+				let [min, max] = channelCoord.range;
 				let step = getStep(min, max) * delta * (event.key === "ArrowUp" ? 1 : -1);
 				this.channelValue = Math.max(min, Math.min(max, this.channelValue + step));
 				break;
@@ -496,11 +522,29 @@ const Self = class HueWheel extends ColorElement {
 	static props = {
 		spaceId: {
 			default: "oklch",
+			// Resolve and validate here so `get space()` (read from every render path)
+			// always sees a known, polar space. Non-polar or unknown values are
+			// rejected with a warning, keeping the previous space.
 			convert (value) {
 				if (value === null || value === undefined) {
 					return value;
 				}
-				return value instanceof Self.Color.Space ? value.id : value + "";
+
+				let space;
+				try {
+					space = value instanceof Self.Color.Space ? value : Self.Color.Space.get(value);
+				}
+				catch (error) {
+					console.warn(`<hue-wheel>: ${error.message}`);
+					return this.spaceId ?? "oklch";
+				}
+
+				if (!space.isPolar) {
+					console.warn(`<hue-wheel>: color space "${space.id}" is not polar; ignoring.`);
+					return this.spaceId ?? "oklch";
+				}
+
+				return space.id;
 			},
 			reflect: { from: "space" },
 		},
