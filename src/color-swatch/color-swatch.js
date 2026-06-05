@@ -3,6 +3,8 @@ import "../gamut-badge/gamut-badge.js";
 
 let importIncrementable;
 
+const SUPPORTS_POPOVER = "popover" in HTMLElement.prototype;
+
 const Self = class ColorSwatch extends ColorElement {
 	static tagName = "color-swatch";
 	static url = import.meta.url;
@@ -36,10 +38,51 @@ const Self = class ColorSwatch extends ColorElement {
 
 		this._slots = {
 			default: this.shadowRoot.querySelector("slot:not([name])"),
+			swatch: this.shadowRoot.querySelector("slot[name=swatch]"),
 		};
+
+		this._el.swatch =
+			this._slots.swatch.assignedElements()[0] ?? this._slots.swatch.firstElementChild;
 
 		this.#updateStatic();
 		this._slots.default.addEventListener("slotchange", evt => this.#updateStatic());
+	}
+
+	connectedCallback () {
+		super.connectedCallback();
+
+		if (SUPPORTS_POPOVER) {
+			// Focus as well as hover, so the tooltip works by keyboard too (WCAG
+			// 1.4.13: content on hover *or focus*) if the consumer makes the swatch
+			// focusable.
+			for (let type of ["pointerenter", "pointerleave", "focusin", "focusout"]) {
+				this.addEventListener(type, this);
+			}
+		}
+	}
+
+	/** Whether the details are presented compactly (as a hover/focus tooltip). */
+	get #compact () {
+		return getComputedStyle(this).getPropertyValue("--details-style").trim() === "compact";
+	}
+
+	handleEvent (evt) {
+		let popover = this._el.wrapper;
+
+		if (!this.#compact) {
+			popover.removeAttribute("popover");
+			return;
+		}
+
+		if (!popover.hasAttribute("popover")) {
+			popover.setAttribute("popover", "hint");
+		}
+
+		// Show while hovered or focused; dismiss once neither holds. On a leave/blur
+		// event we check the *other* modality, so the tooltip stays open if the user
+		// is still hovering or still focused.
+		let show = this.matches(":focus-within, :hover");
+		popover.togglePopover({ force: show, source: this._el.swatch });
 	}
 
 	#updateStatic () {

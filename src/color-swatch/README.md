@@ -50,19 +50,24 @@
 </tbody>
 </table>
 
-You can use a `--details-style: compact` CSS property to only show the details on user interaction:
+You can use a `--details-style: compact` CSS property to only show the details on user interaction (hover or focus). Where supported, the details are shown as a top-layer [popover](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) anchored to the swatch, so they are never clipped by an ancestor:
+
+<html-demo>
 
 ```html
 <color-swatch style="--details-style: compact">oklch(70% 0.25 138)</color-swatch>
 <color-swatch size="large" style="--details-style: compact">oklch(70% 0.25 138)</color-swatch>
 ```
+</html-demo>
 
-Warning: This is not keyboard accessible by default.
-To make the element focusable and also show the popup when it is focused, you need to add `tabindex="0"` to your element:
+**Keyboard accessibility:** a compact swatch is not focusable on its own, so by default its details are only reachable by pointer. Add `tabindex="0"` (or otherwise place it in the tab order) to make it keyboard accessible, so the details show on focus as well as hover. Try tabbing to the swatch below:
+
+<html-demo>
 
 ```html
 <color-swatch size="large" style="--details-style: compact" tabindex="0">oklch(70% 0.25 138)</color-swatch>
 ```
+</html-demo>
 
 By default, the popup will be shown when the element is hovered, focused, `:active`, or the target of the URL hash.
 To circumvent user interaction and force the popup to be open use the `open` attribute.
