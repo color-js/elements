@@ -28,6 +28,14 @@ Colors with the alpha channel are also supported. Add the `alpha` boolean attrib
 <color-picker space="oklch" color="oklch(60% 30% 180 / 0.6)" alpha></color-picker>
 ```
 
+### Responsive layout
+
+```html
+<div style="resize: both; overflow: auto; padding: 1em;">
+	<color-picker></color-picker>
+</div>
+```
+
 ### Slots
 
 ```html
