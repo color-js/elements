@@ -9,45 +9,31 @@ Works in **any** polar color space: nothing is hardcoded, everything is derived 
 
 Basic use (just hue, rendered as a ring):
 
-<html-demo>
-
 ```html
 <hue-wheel space="oklch"></hue-wheel>
 ```
-</html-demo>
 
 Add a radial axis with `channel` (here, chroma) and a starting `color`:
-
-<html-demo>
 
 ```html
 <hue-wheel space="oklch" channel="c" color="oklch(0.7 0.15 200)"></hue-wheel>
 ```
-</html-demo>
 
 Any polar space works:
-
-<html-demo>
 
 ```html
 <hue-wheel space="hsl" channel="s" color="hsl(200 80% 50%)"></hue-wheel>
 ```
-</html-demo>
 
 Click or drag to set the color (or to add one if none is present); once the marker is focused, arrow keys nudge it (←→ hue, ↑↓ channel). Use `readonly` to display without editing:
-
-<html-demo>
 
 ```html
 <hue-wheel space="lch" channel="c" color="lch(60 50 120)" readonly></hue-wheel>
 ```
-</html-demo>
 
 ## Extra points
 
 Slot `<color-swatch>` or `<color-scale>` elements to plot additional (non-editable) points, positioned by their own hue and channel. Hovering a point reveals its details as a tooltip.
-
-<html-demo>
 
 ```html
 <hue-wheel space="oklch" channel="c" color="oklch(0.7 0.15 200)">
@@ -56,7 +42,6 @@ Slot `<color-swatch>` or `<color-scale>` elements to plot additional (non-editab
 	<color-swatch>oklch(0.8 0.1 90)</color-swatch>
 </hue-wheel>
 ```
-</html-demo>
 
 ## Notes
 
