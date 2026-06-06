@@ -15,6 +15,15 @@ hue-wheel color-scale::part(color-swatch) {
 	top: 50%;
 	left: 50%;
 	margin: 0;
+
+	/* <color-scale> sets size="large" on its swatches and uses subgrid +
+	   containment for even heights. Undo both so the dot shrinks to fit. */
+	display: inline-flex;
+	inline-size: fit-content;
+	min-block-size: 0;
+	contain: none;
+	container-type: normal;
+
 	transition: 150ms scale;
 
 	--_frac: clamp(
@@ -29,6 +38,13 @@ hue-wheel color-scale::part(color-swatch) {
 /* No channel → every point rides the middle of the ring. */
 hue-wheel[ring] color-scale::part(color-swatch) {
 	--_r: calc((1 - var(--ring-thickness, 0.35) / 2) * 50cqi);
+}
+
+/* Strip padding and min-height so the dot sizes to --point-size + border. */
+hue-wheel > color-swatch::part(swatch),
+hue-wheel color-scale::part(swatch) {
+	padding: 0;
+	min-block-size: 0;
 }
 
 /* Grow a point on hover so a cluster stays explorable; its details are in the
