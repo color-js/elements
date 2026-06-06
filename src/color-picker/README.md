@@ -30,6 +30,8 @@ Colors with the alpha channel are also supported. Add the `alpha` boolean attrib
 
 ### Responsive layout
 
+By default the sliders and swatch sit side by side, stacking vertically when the picker gets too narrow. This responds to the picker's own width, not the viewport, so it adapts wherever you drop it. Resize the box below to see it:
+
 ```html
 <div style="resize: both; overflow: auto; padding: 1em;">
 	<color-picker></color-picker>

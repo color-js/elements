@@ -2,6 +2,7 @@
 	display: grid;
 	grid-template-columns: 3fr 1fr;
 	gap: 1em;
+	container-type: inline-size;
 }
 
 #space_picker {
@@ -26,10 +27,23 @@ slot[name="color-space"]::slotted(*) {
 	justify-content: space-between;
 	gap: 0.3em;
 	min-inline-size: 10em;
+
+	/* Stacked by default; the sliders and swatch sit side by side once there's room. */
+	grid-column: 1 / -1;
+
+	@container (width > 25em) {
+		grid-column: 1;
+	}
 }
 
 [part="swatch"],
 slot[name="swatch"]::slotted(*) {
 	width: auto;
 	margin: 0;
+	grid-column: 1 / -1;
+
+	/* Enough room for the swatch to sit beside the sliders. */
+	@container (width > 25em) {
+		grid-column: 2;
+	}
 }
