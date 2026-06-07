@@ -150,7 +150,11 @@ All attributes are reactive:
 
 ### CSS variables
 
-The styling of `<color-picker>` is fully customizable via CSS variables provided by the [`<color-slider>`](../color-slider/#css-variables) and [`<color-swatch>`](../color-swatch/#css-variables).
+| Name | Values | Description |
+|------|--------|-------------|
+| `--orientation` | `vertical` | Set to `vertical` to always stack the sliders and swatch, overriding the width-based [responsive layout](#responsive-layout). When unset, the layout adapts to the picker's width. |
+
+Beyond these, the styling of `<color-picker>` is fully customizable via CSS variables provided by the [`<color-slider>`](../color-slider/#css-variables) and [`<color-swatch>`](../color-swatch/#css-variables).
 
 ### Parts
 
