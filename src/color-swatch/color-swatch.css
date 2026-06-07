@@ -11,6 +11,7 @@
 			0 0 / calc(2 * var(--_transparency-cell-size)) calc(2 * var(--_transparency-cell-size))
 			content-box border-box var(--_transparency-background)
 	);
+	--_dot-size: var(--dot-size, 1em);
 
 	position: relative;
 	display: inline-flex;
@@ -27,6 +28,7 @@
 	contain: inline-size;
 	container-name: color-swatch;
 	container-type: inline-size;
+	--_dot-size: var(--dot-size, 1.5em);
 }
 
 slot {
@@ -71,31 +73,33 @@ slot {
 
 [part="info"] {
 	margin: 0;
-	display: inline-flex;
+	/* Hidden in the inline details view; revealed (below) as a coord grid wherever
+	   there's room to show it. */
 	display: none;
-	gap: 0.5em;
-
-	&:is(:host([size="large"]) &) {
-		display: grid;
-		grid-template-columns: max-content auto;
-		gap: 0.1em 0.2em;
-		font-size: max(9px, 80%);
-		justify-content: start;
-
-		.coord {
-			display: contents;
-		}
-	}
+	grid-template-columns: max-content auto;
+	gap: 0.1em 0.2em;
+	font-size: max(9px, 80%);
+	justify-content: start;
 
 	.coord {
-		display: flex;
-		gap: 0.2em;
+		display: contents;
 
 		dd {
 			margin: 0;
 			font-weight: bold;
 			font-variant-numeric: tabular-nums;
 		}
+	}
+
+	/* Show the coords when the swatch has room for them: a large swatch, or a dot —
+	   where the dot itself carries no detail, so its coords surface in the (usually
+	   compact) tooltip. */
+	&:is(:host([size="large"]) &) {
+		display: grid;
+	}
+
+	@container style(--swatch-style: dot) {
+		display: grid;
 	}
 }
 
@@ -249,7 +253,7 @@ slot[name="swatch"]::slotted(*),
 		anchor-name: --swatch;
 	}
 
-	&:is(:host([size="large"]) *) {
+	&:where(:host([size="large"]) *) {
 		min-block-size: 3em;
 	}
 
@@ -264,16 +268,20 @@ slot[name="swatch"]::slotted(*),
 	@container style(--swatch-style: dot) {
 		font-size: 1rem;
 		margin: 0;
-		inline-size: var(--point-size, 1em);
+		/* A fixed circle, not a flex-stretched box (otherwise it elongates). */
+		flex: none;
+		inline-size: var(--_dot-size);
 		min-inline-size: 0;
 		min-block-size: 0;
 		aspect-ratio: 1;
 		overflow: hidden;
 		border-radius: 50%;
-		border: 0.3em solid white;
-		box-shadow:
+		border: var(--dot-border, clamp(2px, 0.3em, var(--_dot-size) / 10) solid white);
+		box-shadow: var(
+			--dot-shadow,
 			0 0.04em 0.1em rgb(0 0 0 / 16%),
-			0 0.12em 0.3em -0.04em rgb(0 0 0 / 22%);
+			0 0.12em 0.3em -0.04em rgb(0 0 0 / 22%)
+		);
 	}
 }
 

@@ -40,7 +40,7 @@
 }
 
 /* Ring mode: punch a circular hole so only an annulus of hue shows. */
-#wheel.ring #disc {
+:host(:state(ring)) #disc {
 	--_inner: calc((1 - var(--ring-thickness)) * 50cqi);
 	mask: radial-gradient(circle, transparent 0 var(--_inner), #000 var(--_inner));
 }
@@ -53,33 +53,74 @@
 	border-radius: 50%;
 }
 
-/* Current colour. Polar → cartesian math lives here so JS only passes the two
-   coordinates. */
-#marker {
+/* Polar placement, shared by the marker and slotted points. --hue (angle) +
+   --channel (raw value) come from JS. The point sits at angle --hue, --_r out from
+   the centre: go to the angle, move out, rotate back so it stays upright — no trig.
+   `translate` (applied before `transform` per spec order) centres the box on the
+   wheel centre first; `transform` then walks it out to the polar point. */
+#marker,
+::slotted(color-swatch) {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	width: 18px;
-	height: 18px;
-	margin: -9px 0 0 -9px;
-	border-radius: 50%;
-	border: 2px solid white;
-	box-shadow:
-		0 0 0 1px rgb(0 0 0 / 0.4),
-		0 1px 2px rgb(0 0 0 / 0.4);
-	cursor: grab;
-
-	--_frac: clamp(
+	margin: 0;
+	--_channel-progress: clamp(
 		0,
 		(var(--channel) - var(--channel-min)) / (var(--channel-max) - var(--channel-min)),
 		1
 	);
-	--_r: calc(var(--_frac) * 50cqi);
-	translate: calc(var(--_r) * cos(var(--hue))) calc(var(--_r) * sin(var(--hue)) * -1);
+	--_r: calc(var(--_channel-progress) * 50cqi);
+	translate: -50% -50%;
+	transform: rotate(calc(-1 * var(--hue))) translateX(var(--_r)) rotate(var(--hue));
 }
 
-/* No channel: the marker rides the middle of the ring. */
-#wheel.ring #marker {
+/* The built-in marker: the current colour as a <color-swatch> dot (dot mode comes
+   from the inherited --swatch-style), distinguished from plotted points by the dot
+   knobs, which reproduce the prominent white ring. To customise it (incl. adding a
+   tooltip), slot your own <color-swatch slot="marker"> instead. A slotted marker
+   stacks above the points like this one does. */
+#marker,
+::slotted([slot="marker"]) {
+	z-index: 2;
+}
+
+/* No colour selected → no marker. A bare `hidden` can't hide a <color-swatch> (its
+   own :host sets `display`), so hide it explicitly; otherwise it parks at the centre
+   and jumps to the first click. */
+#marker[hidden],
+::slotted([slot="marker"][hidden]) {
+	display: none;
+}
+
+#marker {
+	--dot-size: 1em;
+	--dot-border: 2px solid white;
+	--dot-shadow: 0 0 0 1px rgb(0 0 0 / 0.4), 0 1px 2px rgb(0 0 0 / 0.4);
+
+	/* No tooltip by default — the dot just marks the current colour. */
+	&::part(details) {
+		display: none;
+	}
+}
+
+/* Plotted points: a directly-slotted <color-swatch> is positioned by its own
+   hue/channel (set by JS) — the same polar placement as the marker (see above).
+   ::slotted() reaches a slotted swatch from here; a <color-scale>'s inner swatches
+   are ::part()s and can't be reached through ::slotted(), so those are placed in
+   hue-wheel-global.css. */
+
+:host(:not([readonly])) {
+	#marker {
+		cursor: grab;
+
+		&:active {
+			cursor: grabbing;
+		}
+	}
+}
+
+/* No channel → marker and points ride the middle of the ring. */
+:host(:state(ring)) :is(#marker, ::slotted(color-swatch)) {
 	--_r: calc((1 - var(--ring-thickness) / 2) * 50cqi);
 }
 
@@ -88,35 +129,6 @@
 	outline-offset: 2px;
 }
 
-:host([readonly]) #marker {
-	cursor: default;
-}
-
 slot {
 	display: block;
-}
-
-/* Plotted points: a directly-slotted <color-swatch> is positioned by its own
-   hue/channel (set by JS) — the same polar → cartesian math as the marker, offset
-   by half its size so its centre lands on the point. ::slotted() reaches a slotted
-   swatch from here; a <color-scale>'s inner swatches are ::part()s and can't be
-   reached through ::slotted(), so those are placed in hue-wheel-global.css. */
-::slotted(color-swatch) {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	margin: 0;
-
-	--_frac: clamp(
-		0,
-		(var(--channel) - var(--channel-min)) / (var(--channel-max) - var(--channel-min)),
-		1
-	);
-	--_r: calc(var(--_frac) * 50cqi);
-	translate: calc(var(--_r) * cos(var(--hue)) - 50%) calc(var(--_r) * sin(var(--hue)) * -1 - 50%);
-}
-
-/* No channel → the point rides the middle of the ring. */
-:host([ring]) ::slotted(color-swatch) {
-	--_r: calc((1 - var(--ring-thickness) / 2) * 50cqi);
 }
