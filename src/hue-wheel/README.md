@@ -43,6 +43,17 @@ Slot `<color-swatch>` or `<color-scale>` elements to plot additional (non-editab
 </hue-wheel>
 ```
 
+## Custom marker
+
+By default the current color is shown as a plain dot with no tooltip. To customize it, slot your own `<color-swatch slot="marker">` — hue-wheel keeps its `color` in sync, positions it, and makes it the slider, while you control its looks (and can re-enable a details tooltip via `info` + `--details-style: compact`):
+
+```html
+<hue-wheel space="oklch" channel="c" color="oklch(0.7 0.15 200)">
+	<color-swatch slot="marker" info="oklch.h, oklch.c"
+		style="--dot-size: 1.4em; --dot-border: 3px solid black; --details-style: compact"></color-swatch>
+</hue-wheel>
+```
+
 ## Building a basic custom color picker
 
 A `<hue-wheel>` covers two of a color's three coordinates: hue (the angle) and one radial channel (here, chroma). Pair it with a [`<channel-slider>`](../channel-slider) for the remaining channel (lightness) and a [`<space-picker>`](../space-picker) to switch polar spaces, and you have a full color picker. A [`<color-swatch>`](../color-swatch) shows the result.
@@ -100,9 +111,10 @@ A `readonly` wheel's marker stays focusable (so its value is exposed to assistiv
 
 ### Slots
 
-| Name        | Description                                                                                                                                                         |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| _(default)_ | Overlay content rendered on top of the wheel (used to build `<gamut-wheel>`). Slotted `<color-swatch>` / `<color-scale>` elements are also plotted as extra points. |
+| Name        | Description                                                                                                                                                                                                                                                 |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| _(default)_ | Overlay content rendered on top of the wheel (used to build `<gamut-wheel>`). Slotted `<color-swatch>` / `<color-scale>` elements are also plotted as extra points.                                                                                         |
+| `marker`    | The draggable marker for the current color. Defaults to a built-in dot; slot your own `<color-swatch slot="marker">` to fully control its appearance (and, e.g., add a details tooltip). hue-wheel sets its `color`, positions it, and makes it the slider. |
 
 ### Attributes & Properties
 
@@ -125,11 +137,11 @@ A `readonly` wheel's marker stays focusable (so its value is exposed to assistiv
 
 ### CSS variables
 
-| Variable           | Type       | Description                                                                                        |
-| ------------------ | ---------- | -------------------------------------------------------------------------------------------------- |
-| `--size`           | `<length>` | The diameter of the wheel. Defaults to `320px`.                                                    |
-| `--ring-thickness` | `<number>` | In ring mode (no `channel`), the ring's thickness as a fraction of the radius. Defaults to `0.35`. |
-| `--point-size`     | `<length>` | The diameter of the extra points. Defaults to `0.7em`.                                             |
+| Variable           | Type       | Description                                                                                            |
+| ------------------ | ---------- | ------------------------------------------------------------------------------------------------------ |
+| `--size`           | `<length>` | The diameter of the wheel. Defaults to `320px`.                                                        |
+| `--ring-thickness` | `<number>` | In ring mode (no `channel`), the ring's thickness as a fraction of the radius. Defaults to `0.35`.     |
+| `--dot-size`       | `<length>` | The diameter of the plotted points (passed through to their `<color-swatch>` dots). Defaults to `1em`. |
 
 ### Parts
 

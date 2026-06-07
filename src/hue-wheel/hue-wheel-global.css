@@ -7,42 +7,63 @@
    triggered by --swatch-style (inherited from the <hue-wheel> host); this file only
    positions and sizes them. The same approach <color-chart> uses for its swatches. */
 
-/* Polar placement: --hue (angle) + --channel (raw value) → cartesian, offset by
-   half the dot's size so its centre lands on the point. --channel-min / --channel-max
-   are set on the <hue-wheel> host and inherit down. */
+@property --_scale {
+	syntax: "<number>";
+	initial-value: 1;
+	inherits: false;
+}
+
+/* Polar placement: the same model as hue-wheel.css's marker/::slotted rule, here in
+   document scope. --hue (angle) + --channel (raw value) are set on each swatch by
+   JS; --channel-min / --channel-max are set on the <hue-wheel> host and inherit
+   down. Go to the angle, move out by --_r, rotate back so the dot stays upright. */
 hue-wheel color-scale::part(color-swatch) {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	margin: 0;
-	transition: 150ms scale;
-
-	--_frac: clamp(
+	/* A scale renders size="large" swatches, whose host is large, contains its own
+	   size, and is a flex column whose block size collapses below the dot. Undo all
+	   that and force the host square so it shrink-wraps its dot (like a default-size
+	   swatch) — then the centring translate below lands the *dot* (not just the host)
+	   on the point, and the host doesn't intercept hover between dots. ::part wins
+	   over the swatch's inner :host([size=large]) rules. */
+	contain: none;
+	container-type: normal;
+	inline-size: max-content;
+	min-inline-size: 0;
+	min-block-size: 0;
+	aspect-ratio: 1;
+	--_channel-progress: clamp(
 		0,
 		(var(--channel) - var(--channel-min)) / (var(--channel-max) - var(--channel-min)),
 		1
 	);
-	--_r: calc(var(--_frac) * 50cqi);
-	translate: calc(var(--_r) * cos(var(--hue)) - 50%) calc(var(--_r) * sin(var(--hue)) * -1 - 50%);
+	--_r: calc(var(--_channel-progress) * 50cqi);
+	translate: -50% -50%;
+	/* scale() is innermost so the hover-grow stays centred on the point. Folding it
+	   into the transform avoids the individual `scale` property (applied after
+	   `transform`), which would scale the position and fling the dot outward. Only
+	   --_scale transitions, so dot positions don't animate on (re)placement. */
+	transform: rotate(calc(-1 * var(--hue))) translateX(var(--_r)) rotate(var(--hue))
+		scale(var(--_scale));
+	transition: 150ms --_scale;
+
+	/* Grow a point on hover so a cluster stays explorable; its details are in the
+	   tooltip (color-swatch upgrades it to a popover). */
+	&:hover {
+		--_scale: 1.6;
+		z-index: 1;
+	}
 }
 
 /* No channel → every point rides the middle of the ring. */
-hue-wheel[ring] color-scale::part(color-swatch) {
+hue-wheel:state(ring) color-scale::part(color-swatch) {
 	--_r: calc((1 - var(--ring-thickness, 0.35) / 2) * 50cqi);
 }
 
-/* Grow a point on hover so a cluster stays explorable; its details are in the
-   tooltip (color-swatch upgrades it to a popover). Scale (not width) so it grows
-   from its centre, keeping it anchored on its point. */
-hue-wheel color-scale::part(color-swatch):hover {
-	scale: 1.6;
-	z-index: 1;
-}
-
-/* Shrink the scale's own container to 0 so it doesn't take up layout space or
-   intercept hover between the dots. */
+/* The scale itself generates no box, so it neither takes up layout space nor
+   intercepts hover between the dots; its points position against the wheel. */
 hue-wheel color-scale {
-	display: block;
-	width: 0;
-	height: 0;
+	display: contents;
 }

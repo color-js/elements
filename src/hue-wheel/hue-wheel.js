@@ -1,4 +1,5 @@
 import ColorElement from "../common/color-element.js";
+import "../color-swatch/color-swatch.js";
 import { getStep } from "../common/util.js";
 
 // Radial resolution of the painted disc: concentric layers whose outer edge maps
@@ -19,6 +20,7 @@ function supportsInterp (cssId) {
 const Self = class HueWheel extends ColorElement {
 	static tagName = "hue-wheel";
 	static url = import.meta.url;
+	static dependencies = new Set(["color-swatch"]);
 	static styles = import("./hue-wheel.css", { with: { type: "css" } }).catch(
 		() => new URL("./hue-wheel.css", import.meta.url),
 	);
@@ -28,7 +30,9 @@ const Self = class HueWheel extends ColorElement {
 	static shadowTemplate = `
 		<div id="wheel" part="wheel">
 			<div id="disc" part="disc"></div>
-			<div id="marker" part="marker" hidden tabindex="0" role="slider" aria-label="Color"></div>
+			<slot name="marker">
+				<color-swatch id="marker" part="marker" hidden tabindex="0" role="slider" aria-label="Color"></color-swatch>
+			</slot>
 			<slot></slot>
 		</div>`;
 
@@ -38,9 +42,19 @@ const Self = class HueWheel extends ColorElement {
 		this._el = {
 			wheel: this.shadowRoot.getElementById("wheel"),
 			disc: this.shadowRoot.getElementById("disc"),
-			marker: this.shadowRoot.getElementById("marker"),
-			slot: this.shadowRoot.querySelector("slot"),
+			// The built-in marker; used unless the consumer slots their own [slot=marker].
+			defaultMarker: this.shadowRoot.getElementById("marker"),
+			markerSlot: this.shadowRoot.querySelector("slot[name=marker]"),
+			slot: this.shadowRoot.querySelector("slot:not([name])"),
 		};
+	}
+
+	/**
+	 * The element acting as the marker: a consumer-slotted `[slot=marker]` if present
+	 * (they style/configure it however they like), otherwise the built-in dot.
+	 */
+	get marker () {
+		return this._el.markerSlot.assignedElements()[0] ?? this._el.defaultMarker;
 	}
 
 	connectedCallback () {
@@ -49,10 +63,12 @@ const Self = class HueWheel extends ColorElement {
 		for (let type of ["pointerdown", "pointermove", "pointerup", "pointercancel"]) {
 			this._el.wheel.addEventListener(type, this);
 		}
-		this._el.marker.addEventListener("keydown", this);
+		this.#wireMarker();
 
 		// Slotted <color-swatch>/<color-scale> are the extra points. Re-place them
-		// when the set changes or when a scale recomputes its colors.
+		// when the set changes or when a scale recomputes its colors. A separate slot
+		// holds the marker; a change there re-wires the marker (see handleEvent).
+		this._el.markerSlot.addEventListener("slotchange", this);
 		this._el.slot.addEventListener("slotchange", this);
 		this._el.wheel.addEventListener("colorschange", this, { capture: true });
 		this._el.wheel.addEventListener("colorchange", this, { capture: true });
@@ -65,10 +81,38 @@ const Self = class HueWheel extends ColorElement {
 		for (let type of ["pointerdown", "pointermove", "pointerup", "pointercancel"]) {
 			this._el.wheel.removeEventListener(type, this);
 		}
-		this._el.marker.removeEventListener("keydown", this);
+		this.#wiredMarker?.removeEventListener("keydown", this);
+		this.#wiredMarker = null;
+		this._el.markerSlot.removeEventListener("slotchange", this);
 		this._el.slot.removeEventListener("slotchange", this);
 		this._el.wheel.removeEventListener("colorschange", this, { capture: true });
 		this._el.wheel.removeEventListener("colorchange", this, { capture: true });
+	}
+
+	// The marker currently wired for keyboard, so we can move the listener if the
+	// consumer swaps the slotted marker in or out.
+	#wiredMarker = null;
+
+	/**
+	 * Make the active marker behave as the slider: hue-wheel owns the role and
+	 * keyboard handling; the consumer only supplies the element and its looks. Moves
+	 * the wiring off the previous marker when a slotted one is added or removed.
+	 */
+	#wireMarker () {
+		let marker = this.marker;
+		if (marker === this.#wiredMarker) {
+			return;
+		}
+
+		this.#wiredMarker?.removeEventListener("keydown", this);
+		this.#wiredMarker = marker;
+		marker.addEventListener("keydown", this);
+		marker.setAttribute("role", "slider");
+		if (!marker.hasAttribute("aria-label")) {
+			marker.setAttribute("aria-label", "Color");
+		}
+
+		this.#updateMarker();
 	}
 
 	// ───────────────────────── Coordinate model (from metadata) ─────────────────────────
@@ -245,9 +289,11 @@ const Self = class HueWheel extends ColorElement {
 	/** Reflect the channel axis into CSS and switch between disc and ring modes. */
 	#updateGeometry () {
 		let channel = this.channelCoord;
-		this._el.wheel.classList.toggle("ring", !channel);
-		// Host attribute so global styles can place slotted points on the ring.
-		this.toggleAttribute("ring", !channel);
+		// Ring mode = no resolved radial axis. A custom state (not a class or
+		// attribute) so it tracks the *resolved* channel and is visible to both the
+		// shadow sheet (:state(ring)) and the document sheet (hue-wheel:state(ring),
+		// for placing slotted points on the ring).
+		this.toggleState("ring", !channel);
 
 		if (channel) {
 			let [min, max] = channel.range;
@@ -337,7 +383,7 @@ const Self = class HueWheel extends ColorElement {
 
 	/** Position the marker from the current color and toggle its visibility/editability. */
 	#updateMarker () {
-		let marker = this._el.marker;
+		let marker = this.marker;
 		let color = this.color;
 
 		marker.hidden = !color;
@@ -349,7 +395,8 @@ const Self = class HueWheel extends ColorElement {
 		if (this.channelCoord) {
 			marker.style.setProperty("--channel", this.channelValue);
 		}
-		marker.style.background = color.display();
+		// The marker reflects the current color; a slotted <color-swatch> renders it too.
+		marker.color = color;
 
 		// Expose the hue as the slider value. The radial axis isn't a second slider
 		// yet (a known a11y gap), so fold its value into aria-valuetext alongside the
@@ -411,6 +458,14 @@ const Self = class HueWheel extends ColorElement {
 	handleEvent (event) {
 		switch (event.type) {
 			case "slotchange":
+				// The marker slot re-wires the marker; the default slot re-places points.
+				if (event.target === this._el.markerSlot) {
+					this.#wireMarker();
+				}
+				else {
+					this.#placePoints();
+				}
+				return;
 			case "colorschange":
 			case "colorchange":
 				this.#placePoints();
@@ -430,12 +485,16 @@ const Self = class HueWheel extends ColorElement {
 				if (event.button !== 0) {
 					return;
 				}
+				// preventDefault stops text selection but also the default focus, so
+				// focus the marker ourselves below — otherwise arrow keys would scroll
+				// the page instead of nudging the just-placed colour.
 				event.preventDefault();
 				this.#dragging = true;
 				// Capture only for the drag, so slotted points still get their own
 				// hover events (for their tooltips) the rest of the time.
 				this._el.wheel.setPointerCapture(event.pointerId);
 				this.#fromPointer(event);
+				this.marker.focus({ preventScroll: true });
 				this.#emit("input");
 				break;
 			case "pointermove":
@@ -472,6 +531,9 @@ const Self = class HueWheel extends ColorElement {
 		}
 
 		this.color = this.#colorAt(hue, channel);
+		// Reposition the marker synchronously: the reactive updated() cycle is
+		// microtask-batched, which lets the marker lag the cursor during a drag.
+		this.#updateMarker();
 	}
 
 	/** Arrow keys nudge the focused marker: ←→ hue, ↑↓ channel. */
