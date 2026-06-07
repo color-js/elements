@@ -124,7 +124,8 @@
 	--_r: calc((1 - var(--ring-thickness) / 2) * 50cqi);
 }
 
-#marker:focus-visible {
+#marker:focus-visible,
+::slotted([slot="marker"]:focus-visible) {
 	outline: 2px solid Highlight;
 	outline-offset: 2px;
 }
