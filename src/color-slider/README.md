@@ -88,7 +88,7 @@ If you want to show the progress instead, you can specify `"progress"` as the at
 <color-inline></color-inline>
 ```
 
-Set a `gamut` to mark the colors the gamut can't reproduce: out-of-gamut portions of the band are overlaid with gray. This is handy for showing which colors of a wide-gamut space are actually reachable in, say, sRGB:
+Set a `gamut` to mark the colors the gamut can't reproduce: out-of-gamut portions of the band are overlaid with diagonal hazard stripes, leaving the clipped color visible between them. This is handy for showing which colors of a wide-gamut space are actually reachable in, say, sRGB:
 
 ```html
 <color-slider space="oklch"
@@ -98,13 +98,13 @@ Set a `gamut` to mark the colors the gamut can't reproduce: out-of-gamut portion
 <color-inline></color-inline>
 ```
 
-The overlay color is customizable via `--oog-color` — use a translucent color to dim rather than hide the out-of-gamut colors:
+The overlay is customizable via `--oog-pattern` — override it with any background `<image>` (a different stripe angle, a denser pattern, etc.). For a flat fill use a solid `linear-gradient(<color>, <color>)`, since a bare `<color>` is not an image:
 
 ```html
 <color-slider space="oklch"
               stops="oklch(65% 0.2 0), oklch(65% 0.2 120), oklch(65% 0.2 240), oklch(65% 0.2 360)"
               gamut="srgb"
-              style="--oog-color: oklch(50% 0 0 / 0.6)"></color-slider>
+              style="--oog-pattern: repeating-linear-gradient(45deg, oklch(0% 0 0 / 0.4) 0 2px, transparent 2px 6px)"></color-slider>
 ```
 
 All properties are reactive and can be set programmatically:
@@ -189,7 +189,7 @@ Then use a `color-slider` class on your slider element, and use [CSS variables](
 | `space` | `space` | `ColorSpace` &#124; `string` | `oklch` | The color space to use for interpolation. |
 | `color` | `color` | `Color` &#124; `string` | `oklch(50% 50% 180)` | The current color value. |
 | `stops` | `stops` | `String` &#124; `Array<Color>` | - | Comma-separated list of color stops. |
-| `gamut` | `gamut` | `string` | `""` | A color gamut id (`srgb`, `p3`, `rec2020`), or `auto` to use the display's gamut (detected once via the `color-gamut` media query). When set, the portions of the band whose color falls outside this gamut are overlaid with [`--oog-color`](#css-variables), with a hard edge at each gamut boundary. Empty or `none` disables it. |
+| `gamut` | `gamut` | `string` | `""` | A color gamut id (`srgb`, `p3`, `rec2020`), or `auto` to use the display's gamut (detected once via the `color-gamut` media query). When set, the portions of the band whose color falls outside this gamut are overlaid with the [`--oog-pattern`](#css-variables) (diagonal stripes by default), with a hard edge at each gamut boundary. Empty or `none` disables it. |
 | `min` | `min` | `number` | 0 | The minimum value for the slider. |
 | `max` | `max` | `number` | 1 | The maximum value for the slider. |
 | `step` | `step` | `number` | Computed automatically based on `this.min` and `this.max`. | The granularity that the slider's current value must adhere to. |
@@ -219,7 +219,7 @@ If you’re only using the CSS file, you should set these yourself.
 | `--slider-thumb-border` | `<line-width>` &#124;&#124; `<line-style>` &#124;&#124; `<color>` | Border of the slider thumb. |
 | `--slider-thumb-border-active` | `<line-width>` &#124;&#124; `<line-style>` &#124;&#124; `<color>` | Border of the slider thumb in active state. |
 | `--slider-thumb-scale-active` | `<number>` | Scale transform applied to the slider thumb in active state. |
-| `--oog-color` | `<color>` | Color overlaid on the out-of-[`gamut`](#attributes-%26-properties) parts of the band. Defaults to a light/dark-adaptive neutral gray. |
+| `--oog-pattern` | `<image>` | Pattern painted over the out-of-[`gamut`](#attributes-%26-properties) parts of the band, one layer per range. Defaults to diagonal stripes with transparent gaps, so the clipped color shows through. Must be an `<image>`; for a flat fill use `linear-gradient(<color>, <color>)`. |
 | `--tooltip-background` | `<color>` | Background color of the tooltip. |
 | `--tooltip-border-radius` | `<length>` | Border radius of the tooltip. |
 | `--tooltip-pointer-height` | `<length>` | Height of the tooltip pointer triangle. |

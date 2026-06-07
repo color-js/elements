@@ -112,9 +112,9 @@ const Self = class ColorSlider extends ColorElement {
 		}
 
 		// Paint a separate overlay over the parts of the band that fall outside the target gamut.
-		// The color band itself is left untouched; this just layers the out-of-gamut color on top.
-		// Set on the slider (not the host) so the nested var(--_oog-color) in the overlay
-		// resolves where it's defined.
+		// The color band itself is left untouched; this just layers --_oog-pattern on top of each
+		// out-of-gamut range. Set on the slider (not the host) so the nested var(--_oog-pattern)
+		// in the overlay resolves where it's defined.
 		if (changed.has("stops") || changed.has("space") || changed.has("gamut")) {
 			let overlay = this.#buildGamutOverlay();
 
@@ -201,10 +201,13 @@ const Self = class ColorSlider extends ColorElement {
 
 	/**
 	 * Build the value of the `--slider-gamut-overlay` custom property from {@link ColorSlider#oogRanges}:
-	 * `--_oog-color` over each out-of-gamut range, transparent in between, with a hard edge at each
-	 * gamut boundary.
+	 * one background layer per out-of-gamut range, each painting `--_oog-pattern` confined to that range.
+	 * The range is sized and positioned in `cqi` (1cqi = 1% of the track width), so a `[start, end]`
+	 * fraction maps straight to background-position/-size with no percentage math. The layers end in a
+	 * trailing comma so the stylesheet can splice them ahead of the color band.
 	 *
-	 * @returns {string | null} Comma-separated overlay color stops, or null when nothing is out of gamut.
+	 * @returns {string | null} Comma-separated background layers (with a trailing comma), or null when
+	 *   nothing is out of gamut.
 	 */
 	#buildGamutOverlay () {
 		let oogRanges = this.oogRanges;
@@ -214,25 +217,17 @@ const Self = class ColorSlider extends ColorElement {
 			return null;
 		}
 
-		// Paint --_oog-color over each out-of-gamut range, transparent in between.
-		// Adjacent stops at the same position produce the hard edge at each boundary.
-		let pos = p => `${+(p * 100).toPrecision(4)}%`;
-		let stops = [];
-		let cursor = 0;
+		// 1cqi = 1% of the track width, so each range maps directly to a no-repeat layer sized and
+		// positioned along the track. Length offsets avoid the background-position percentage rule
+		// (which is relative to area − image, not the area).
+		let cqi = fraction => `${+(fraction * 100).toPrecision(4)}cqi`;
+		let layers = oogRanges.map(
+			([start, end]) =>
+				`var(--_oog-pattern) ${cqi(start)} / ${cqi(end - start)} 100% no-repeat`,
+		);
 
-		for (let [start, end] of oogRanges) {
-			if (start > cursor) {
-				stops.push(`transparent ${pos(cursor)} ${pos(start)}`);
-			}
-			stops.push(`var(--_oog-color) ${pos(start)} ${pos(end)}`);
-			cursor = end;
-		}
-
-		if (cursor < 1) {
-			stops.push(`transparent ${pos(cursor)} 100%`);
-		}
-
-		return stops.join(", ");
+		// Trailing comma so the layers splice in ahead of the color band.
+		return layers.join(", ") + ",";
 	}
 
 	get progress () {
