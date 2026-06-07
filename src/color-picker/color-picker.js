@@ -98,7 +98,7 @@ const Self = class ColorPicker extends ColorElement {
 				else {
 					this._el.sliders.insertAdjacentHTML(
 						"beforeend",
-						`<channel-slider space="${space.id}" channel="${channel}" part="channel-slider"></channel-slider>`,
+						`<channel-slider space="${space.id}" channel="${channel}" part="channel-slider" exportparts="color-slider, slider"></channel-slider>`,
 					);
 				}
 			}
@@ -240,7 +240,12 @@ const Self = class ColorPicker extends ColorElement {
 			type: String,
 			default: "",
 			convert (value) {
-				if (value && value !== "auto" && value !== "none" && !(value in Self.Color.spaces)) {
+				if (
+					value &&
+					value !== "auto" &&
+					value !== "none" &&
+					!(value in Self.Color.spaces)
+				) {
 					return this.gamut;
 				}
 				return value;
