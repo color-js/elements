@@ -6,17 +6,10 @@
 	   instead of percentages, sidestepping the "% is relative to area − image" rule. */
 	container-type: inline-size;
 
-	/* Pattern painted over each out-of-gamut range, one background layer per range. Transparent
-	   gaps let the clipped color show through. Override --oog-pattern with any <image>. */
+	--_oog-color: var(--oog-color, hsl(from canvas h s l / 90%));
 	--_oog-pattern: var(
 		--oog-pattern,
-		repeating-linear-gradient(
-			-45deg,
-			hsl(0 0 20 / 0.3) 0 1px,
-			hsl(0 0 90 / 0.5) 0 9px,
-			hsl(0 0 20 / 0.3) 0 10px,
-			transparent 0 14px
-		)
+		repeating-linear-gradient(-45deg, var(--_oog-color) 0 0.37em, transparent 0 0.57em)
 	);
 }
 
