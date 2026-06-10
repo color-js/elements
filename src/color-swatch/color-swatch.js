@@ -95,9 +95,7 @@ const Self = class ColorSwatch extends ColorElement {
 		this._el.wrapper.classList.toggle("static", this.static);
 
 		if (input && input !== previousInput) {
-			importIncrementable ??= import("https://incrementable.verou.me/incrementable.mjs").then(
-				m => m.default,
-			);
+			importIncrementable ??= import("incrementable").then(m => m.default).catch();
 			importIncrementable?.then(Incrementable => new Incrementable(input));
 
 			input.addEventListener("input", evt => {
