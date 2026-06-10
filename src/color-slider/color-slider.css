@@ -124,6 +124,16 @@
 	scale: var(--_slider-thumb-scale-active);
 }
 
+/* Hide the thumb until a value is seeded (the track still accepts clicks).
+   Separate rules: Chrome drops a combined vendor-prefixed pseudo-element selector list. */
+:host(:state(no-value)) .color-slider::-webkit-slider-thumb {
+	opacity: 0;
+}
+
+:host(:state(no-value)) .color-slider::-moz-range-thumb {
+	opacity: 0;
+}
+
 .slider-tooltip {
 	position: absolute;
 	left: clamp(

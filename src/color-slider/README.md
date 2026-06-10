@@ -264,6 +264,7 @@ These [custom states](https://developer.mozilla.org/en-US/docs/Web/API/CustomSta
 | Name       | Description                                                                                                                         |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | `in-gamut` | Present while the currently selected `color` is inside the target [`gamut`](#attributes-%26-properties) (and when no gamut is set). |
+| `no-value` | Present when `value` is `null` (e.g. a "none" channel like the hue of white in OKLCh). The slider thumb is hidden; the first interaction seeds a value. |
 
 ### Parts
 
