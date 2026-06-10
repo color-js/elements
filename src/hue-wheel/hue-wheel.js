@@ -386,17 +386,16 @@ const Self = class HueWheel extends ColorElement {
 		let marker = this.marker;
 		let color = this.color;
 
-		marker.hidden = !color;
-		if (!color) {
-			return;
-		}
+		marker.hidden = this.hueValue == null;
 
 		marker.style.setProperty("--hue", `${this.hueValue ?? 0}deg`);
-		if (this.channelCoord) {
+		if (this.channelCoord && this.channelValue != null) {
 			marker.style.setProperty("--channel", this.channelValue);
 		}
-		// The marker reflects the current color; a slotted <color-swatch> renders it too.
-		marker.color = color;
+		if (color) {
+			// The marker reflects the current color; a slotted <color-swatch> renders it too.
+			marker.color = color;
+		}
 
 		// Expose the hue as the slider value. The radial axis isn't a second slider
 		// yet (a known a11y gap), so fold its value into aria-valuetext alongside the
@@ -406,9 +405,10 @@ const Self = class HueWheel extends ColorElement {
 		marker.setAttribute("aria-valuemax", hueMax);
 		marker.setAttribute("aria-valuenow", Math.round(this.hueValue ?? 0));
 
-		let valueText = `${this.hueCoord.name} ${Math.round(this.hueValue ?? 0)}`;
+		// Announce "none" so screen readers don't claim a value that isn't there.
+		let valueText = `${this.hueCoord.name} ${this.hueValue == null ? "none" : Math.round(this.hueValue)}`;
 		if (this.channelCoord) {
-			valueText += `, ${this.channelCoord.name} ${+this.channelValue.toPrecision(3)}`;
+			valueText += `, ${this.channelCoord.name} ${this.channelValue == null ? "none" : +this.channelValue.toPrecision(3)}`;
 		}
 		marker.setAttribute("aria-valuetext", valueText);
 

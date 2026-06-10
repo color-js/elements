@@ -97,9 +97,10 @@ const Self = class ChannelSlider extends ColorElement {
 			this._el.slider[name] = this[name];
 
 			if (name !== "space") {
-				this._el.spinner[name] = this[name];
+				// Empty string is the native input's no-value form for "none" channels.
+				this._el.spinner[name] = this[name] ?? "";
 
-				if (name === "value" && this.value !== undefined) {
+				if (name === "value" && this.value != null) {
 					this._el.spinner.value = Number(this.value.toPrecision(4));
 
 					if (!CSS.supports("field-sizing", "content")) {

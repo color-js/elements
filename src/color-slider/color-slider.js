@@ -65,6 +65,13 @@ const Self = class ColorSlider extends ColorElement {
 			this._el.slider[name] = this[name];
 
 			let value = this[name];
+			// Empty string is the native input's no-value form; short-circuit so the
+			// tooltip-progress branch below doesn't coerce null into a misleading number.
+			if (value == null) {
+				this._el.spinner[name] = "";
+				continue;
+			}
+
 			if (this.tooltip === "progress") {
 				if (name === "value" || name === "defaultValue") {
 					value = +(this.progress * 100).toPrecision(4);
@@ -77,8 +84,11 @@ const Self = class ColorSlider extends ColorElement {
 			this._el.spinner[name] = +(+value).toPrecision(4);
 		}
 
+		if (changed.has("value")) {
+			this.toggleState("no-value", this.value == null);
+		}
+
 		if (changed.has("stops")) {
-			// FIXME will fail if there are none values
 			let stops = this.stops;
 			let supported = stops.every(color => CSS.supports("color", color));
 
@@ -105,6 +115,14 @@ const Self = class ColorSlider extends ColorElement {
 			if (!supported || farApart) {
 				stops = this.tessellateStops({ steps: 3 });
 			}
+
+			// Replace "none" with 0 so the gradient doesn't render CSS's missing-channel artifacts.
+			// FIXME: out-of-gamut stops gamut-map to misleading colors.
+			stops = stops.map(color => {
+				let fallback = color.clone();
+				fallback.coords = fallback.coords.map(coord => coord ?? 0);
+				return fallback;
+			});
 
 			stops = stops.map(color => color.display()).join(", ");
 
@@ -154,10 +172,11 @@ const Self = class ColorSlider extends ColorElement {
 		}
 
 		if (changed.has("value") || changed.has("min") || changed.has("max")) {
-			this.style.setProperty("--progress", this.progress);
+			// `progressAt(null)` would coerce to a misleading number; drop the property instead.
+			this.style.setProperty("--progress", this.value == null ? null : this.progress);
 
 			if (changed.has("value") && !supports.fieldSizing) {
-				let valueStr = this.value + "";
+				let valueStr = this._el.spinner.value;
 				this._el.spinner.style.setProperty("--value-length", valueStr.length);
 			}
 		}
@@ -243,6 +262,10 @@ const Self = class ColorSlider extends ColorElement {
 	}
 
 	colorAt (value) {
+		if (value == null) {
+			return null;
+		}
+
 		let progress = this.progressAt(value);
 		return this.colorAtProgress(progress);
 	}
