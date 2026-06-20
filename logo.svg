@@ -10,10 +10,10 @@ text {
 	stroke: hsl(220, 10%, 94%);
 	stroke-width: .1em;
 	stroke-linejoin: round;
-	font: 800 333px/1 system-ui, sans-serif;
+	font: 800 320px/1 system-ui, sans-serif;
 	text-anchor: middle;
 	dominant-baseline: middle;
-	letter-spacing: -.06em;
+	letter-spacing: -.065em;
 	paint-order: stroke fill;
 }
 
@@ -126,7 +126,7 @@ text {
   L 623.393  -506.491
   Z"/>
 
-<text x="44%" y="-55%">
+<text x="48.5%" y="-55%">
 	<tspan class="lt">&lt;</tspan>
 	<tspan class="slash">/</tspan>
 	<tspan class="gt">&gt;</tspan>
